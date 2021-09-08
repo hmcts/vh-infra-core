@@ -1,0 +1,54 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "databaseServerName": {
+      "type": "string"
+    },
+    "databases": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "databases": "[split(parameters('databases'),',')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+      "name": "[concat(parameters('databaseServerName'), '/', variables('databases')[copyIndex()], '/Default')]",
+      "tags": {
+        "displayName": "Database Backup"
+      },
+      "apiVersion": "2017-03-01-preview",
+      "location": "UK West",
+      "scale": null,
+      "properties": {
+        "retentionDays": 35
+      },
+      "copy": {
+        "name": "db-short",
+        "count": "[length(variables('databases'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+      "name": "[concat(parameters('databaseServerName'), '/', variables('databases')[copyIndex()], '/Default')]",
+      "tags": {
+        "displayName": "Database Backup"
+      },
+      "apiVersion": "2017-03-01-preview",
+      "location": "UK West",
+      "scale": null,
+      "properties": {
+        "weeklyRetention": "P8W",
+        "monthlyRetention": "P12M",
+        "yearlyRetention": "P5Y",
+        "weekOfYear": "1"
+      },
+      "copy": {
+        "name": "db-long",
+        "count": "[length(variables('databases'))]"
+      }
+    }
+  ]
+}
