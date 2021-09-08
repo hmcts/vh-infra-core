@@ -1,0 +1,6 @@
+location                        = "uksouth"
+admin_ssh_key_path              = "/home/vsts/work/_temp/wowza-ssh-public-key.pub"
+service_certificate_thumbprint  = "4BD1E66CA94EEF7EA2EAA66569C55EF56C3AE5AF"
+service_certificate_kv_url      = "https://vh-infra-core-sbox.vault.azure.net/secrets/wildcard-hearings-reform-hmcts-net/f7e780c2fb424f799d49ad55bd85e54f"
+dns_resource_group              = "vh-hearings-reform-hmcts-net-dns-zone"
+dns_zone_name                   = "hearings.reform.hmcts.net"
