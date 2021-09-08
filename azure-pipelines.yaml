@@ -70,7 +70,7 @@ stages:
             parameters:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
-              stack: 'video-hearing-core'
+              stack: '09-video-hearing-core'
               project: $(project)
               product: 'vh'
               builtFrom: $(Build.Repository.Name)
