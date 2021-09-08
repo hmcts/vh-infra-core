@@ -33,7 +33,7 @@ name: VH Shared Services AKS Azure Infrastructure Deployment Pipeline
 trigger:
   - none
 
-# is this needed?
+# is this needed? - yes probably
 variables:
   - name: gaServiceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
@@ -45,6 +45,7 @@ variables:
   - name: project
     value: application
   # same comment as above ^^
+  # this might need to be changed to HMCTS-CONTROL
   - name: serviceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
 
@@ -69,7 +70,7 @@ stages:
             parameters:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
-              stack: '09-video-hearing-core'
+              stack: 'video-hearing-core'
               project: $(project)
               product: 'vh'
               builtFrom: $(Build.Repository.Name)
@@ -78,22 +79,22 @@ stages:
               activity_name: Video_Hearing_Core
               run_stage: ${{ parameters.Run_Stage }}
 
-  - stage: Video_Hearing_Wowza
-    displayName: 'Video_Hearing_Wowza'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'CI'))
-    jobs:
-      - job: Video_Hearing_Wowza
-        steps:
-          - template: pipeline-steps/sshkey-download.yaml
-          - template: pipeline-steps/deploy-service-elevated.yaml
-            parameters:
-              environment: ${{ parameters.env }}
-              location: ${{ parameters.location }}
-              stack: 'video-hearing-wowza'
-              project: $(project)
-              product: 'wowza'
-              builtFrom: $(Build.Repository.Name)
-              tfversion: $(tfversion)
-              serviceConnection: $(serviceConnection)
-              activity_name: Video_Hearing_Wowza
-              run_stage: ${{ parameters.Run_Stage }}
+  #- stage: Video_Hearing_Wowza
+  #  displayName: 'Video_Hearing_Wowza'
+  #  condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'CI'))
+  #  jobs:
+  #    - job: Video_Hearing_Wowza
+  #      steps:
+  #        - template: pipeline-steps/sshkey-download.yaml
+  #        - template: pipeline-steps/deploy-service-elevated.yaml
+  #          parameters:
+  #            environment: ${{ parameters.env }}
+  #            location: ${{ parameters.location }}
+  #            stack: 'video-hearing-wowza'
+  #            project: $(project)
+  #            product: 'wowza'
+  #            builtFrom: $(Build.Repository.Name)
+  #            tfversion: $(tfversion)
+  #            serviceConnection: $(serviceConnection)
+  #            activity_name: Video_Hearing_Wowza
+  #            run_stage: ${{ parameters.Run_Stage }}
