@@ -47,7 +47,7 @@ variables:
   # same comment as above ^^
   # this might need to be changed to HMCTS-CONTROL
   - name: serviceConnection
-    value: HMCTS-CONTROL #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
+    value: DTS-SHAREDSERVICES-PROD #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
 
 stages:
 
