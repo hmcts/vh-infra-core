@@ -61,6 +61,7 @@ steps:
 
   - task: TerraformCLI@0
     displayName: terraform plan
+    publishPlanResults: vh-shared-infra.tfplan
     inputs:
           command: plan
           terraformVersion: ${{ parameters.tfversion }}
