@@ -1,0 +1,99 @@
+parameters:
+  - name: Run_Stage
+    displayName: Stage to Run
+    type: string
+    default: 'CI'
+    values:
+      - CI
+      - Video_Hearing_Core
+      - Video_Hearing_Wowza
+
+  - name: location
+    displayName: Location
+    type: string
+    default: 'UK South'
+    values:
+    - 'UK South'
+    - 'UK West'
+
+  - name: env
+    displayName: Environment
+    type: string
+    default: 'SBOX'
+    values:
+    - ITHC
+    - DEV
+    - DEMO
+    - SBOX
+    - TEST
+    - STG
+    - PROD
+
+name: VH Shared Services AKS Azure Infrastructure Deployment Pipeline
+trigger:
+  - none
+
+# is this needed?
+variables:
+  - name: gaServiceConnection
+    value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
+  - name: tfversion
+    value: 1.0.0
+  # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+  # but it might be better to template the pipeline more and have a different pipeline file
+  # so that someone doesn't pick the wrong var in the dropdown
+  - name: project
+    value: application
+  # same comment as above ^^
+  - name: serviceConnection
+    value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
+
+stages:
+
+  - stage: Video_Hearing_Core
+    displayName: 'Video_Hearing_Core'
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'CI'))
+    jobs:
+      - job: Video_Hearing_Core
+        variables:
+          - group: vh-tenant-creds
+        steps:
+          - template: pipeline-steps/vh-tenant-replacement.yaml
+            parameters:
+              vh_tenant_id: $(vh_tenant_id)
+              vh_client_secret: $(vh_client_secret)
+              vh_client_id: $(vh_client_id)
+              environment: ${{ parameters.env }}
+
+          - template: pipeline-steps/deploy-service-elevated.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: '09-video-hearing-core'
+              project: $(project)
+              product: 'vh'
+              builtFrom: $(Build.Repository.Name)
+              tfversion: $(tfversion)
+              serviceConnection: $(serviceConnection)
+              activity_name: Video_Hearing_Core
+              run_stage: ${{ parameters.Run_Stage }}
+
+  - stage: Video_Hearing_Wowza
+    displayName: 'Video_Hearing_Wowza'
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'CI'))
+    jobs:
+      - job: Video_Hearing_Wowza
+        steps:
+          - template: pipeline-steps/sshkey-download.yaml
+          - template: pipeline-steps/deploy-service-elevated.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: 'video-hearing-wowza'
+              project: $(project)
+              product: 'wowza'
+              builtFrom: $(Build.Repository.Name)
+              tfversion: $(tfversion)
+              serviceConnection: $(serviceConnection)
+              activity_name: Video_Hearing_Wowza
+              run_stage: ${{ parameters.Run_Stage }}
