@@ -29,7 +29,7 @@ resource "azurerm_key_vault_access_policy" "app_access_policy" {
 
   key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = "f7ee7f55-afc2-49f2-a8e3-75440df8477d"
+  object_id    = "52432a41-19d7-4372-b9d8-5703f0b4fc2d"
 
    certificate_permissions = [
       "backup",
@@ -103,7 +103,7 @@ resource "azurerm_key_vault_access_policy" "app_access_policy1" {
 
   key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = "13edb845-e00b-4801-8132-ee4150bce2d1"
+  object_id    = "4c5243b4-5106-4d45-8635-7c9b6ca5ab6c"
 
    certificate_permissions = [
       "backup",
@@ -284,7 +284,7 @@ resource "azurerm_key_vault_access_policy" "devops" {
 
   key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
   tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = "f7ee7f55-afc2-49f2-a8e3-75440df8477d"
+  object_id = "52432a41-19d7-4372-b9d8-5703f0b4fc2d"
 
     certificate_permissions = [
       "backup",
@@ -358,7 +358,7 @@ resource "azurerm_key_vault_access_policy" "devops1" {
 
   key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
   tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = "13edb845-e00b-4801-8132-ee4150bce2d1"
+  object_id = "4c5243b4-5106-4d45-8635-7c9b6ca5ab6c"
 
     certificate_permissions = [
       "backup",
