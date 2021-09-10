@@ -268,79 +268,79 @@ resource "azurerm_key_vault_access_policy" "dts_operations" {
     ]
 }
 
-resource "azurerm_key_vault_access_policy" "bootstrap" {
-  for_each = azurerm_key_vault.app_keyvaults
-
-  key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = "8e437d06-affa-4dca-a41a-1498238cb3b9"
-
-    certificate_permissions = [
-      "backup",
-      "create",
-      "delete",
-      "deleteissuers",
-      "get",
-      "getissuers",
-      "import",
-      "list",
-      "listissuers",
-      "managecontacts",
-      "manageissuers",
-      "purge",
-      "recover",
-      "restore",
-      "setissuers",
-      "update"
-    ]
-
-    key_permissions = [
-      "backup",
-      "create",
-      "decrypt",
-      "delete",
-      "encrypt",
-      "get",
-      "import",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "sign",
-      "unwrapKey",
-      "update",
-      "verify",
-      "wrapKey"
-    ]
-
-    secret_permissions = [
-      "backup",
-      "delete",
-      "get",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "set"
-    ]
-
-    storage_permissions = [
-      "backup",
-      "delete",
-      "deletesas",
-      "get",
-      "getsas",
-      "list",
-      "listsas",
-      "purge",
-      "recover",
-      "regeneratekey",
-      "restore",
-      "set",
-      "setsas",
-      "update"
-    ]
-}
+#resource "azurerm_key_vault_access_policy" "bootstrap" {
+#  for_each = azurerm_key_vault.app_keyvaults
+#
+#  key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
+#  tenant_id = data.azurerm_client_config.current.tenant_id
+#  object_id = "8e437d06-affa-4dca-a41a-1498238cb3b9"
+#
+#    certificate_permissions = [
+#      "backup",
+#      "create",
+#      "delete",
+#      "deleteissuers",
+#      "get",
+#      "getissuers",
+#      "import",
+#      "list",
+#      "listissuers",
+#      "managecontacts",
+#      "manageissuers",
+#      "purge",
+#      "recover",
+#      "restore",
+#      "setissuers",
+#      "update"
+#    ]
+#
+#    key_permissions = [
+#      "backup",
+#      "create",
+#      "decrypt",
+#      "delete",
+#      "encrypt",
+#      "get",
+#      "import",
+#      "list",
+#      "purge",
+#      "recover",
+#      "restore",
+#      "sign",
+#      "unwrapKey",
+#      "update",
+#      "verify",
+#      "wrapKey"
+#    ]
+#
+#    secret_permissions = [
+#      "backup",
+#      "delete",
+#      "get",
+#      "list",
+#      "purge",
+#      "recover",
+#      "restore",
+#      "set"
+#    ]
+#
+#    storage_permissions = [
+#      "backup",
+#      "delete",
+#      "deletesas",
+#      "get",
+#      "getsas",
+#      "list",
+#      "listsas",
+#      "purge",
+#      "recover",
+#      "regeneratekey",
+#      "restore",
+#      "set",
+#      "setsas",
+#      "update"
+#    ]
+#}
 
 resource "azurerm_key_vault" "vh-infra-core-ht" {
   name                        = data.azurerm_resource_group.vh-infra-core.name
