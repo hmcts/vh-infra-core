@@ -523,27 +523,6 @@ resource "azurerm_key_vault_access_policy" "azkvap" {
     ]
 }
 
-
-resource "azurerm_key_vault_access_policy" "kv_user_identity" {
-
-  key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = azurerm_user_assigned_identity.kvuser.principal_id
-
-    certificate_permissions = [
-      "get",
-    ]
-
-    key_permissions = [
-      "get",
-    ]
-
-    secret_permissions = [
-      "get",
-      "list",
-      "set"
-    ]
-}
 #temp addition only
 resource "azurerm_key_vault_access_policy" "bootstrap" {
 
