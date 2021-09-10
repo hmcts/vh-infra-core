@@ -523,6 +523,101 @@ resource "azurerm_key_vault_access_policy" "azkvap" {
     ]
 }
 
+
+resource "azurerm_key_vault_access_policy" "kv_user_identity" {
+
+  key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = azurerm_user_assigned_identity.kvuser.principal_id
+
+    certificate_permissions = [
+      "get",
+    ]
+
+    key_permissions = [
+      "get",
+    ]
+
+    secret_permissions = [
+      "get",
+      "list",
+      "set"
+    ]
+}
+#temp addition only
+resource "azurerm_key_vault_access_policy" "bootstrap" {
+
+  key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = data.azurerm_client_config.current.object_id
+
+    certificate_permissions = [
+      "backup",
+      "create",
+      "delete",
+      "deleteissuers",
+      "get",
+      "getissuers",
+      "import",
+      "list",
+      "listissuers",
+      "managecontacts",
+      "manageissuers",
+      "purge",
+      "recover",
+      "restore",
+      "setissuers",
+      "update"
+    ]
+
+    key_permissions = [
+      "backup",
+      "create",
+      "decrypt",
+      "delete",
+      "encrypt",
+      "get",
+      "import",
+      "list",
+      "purge",
+      "recover",
+      "restore",
+      "sign",
+      "unwrapKey",
+      "update",
+      "verify",
+      "wrapKey"
+    ]
+
+    secret_permissions = [
+      "backup",
+      "delete",
+      "get",
+      "list",
+      "purge",
+      "recover",
+      "restore",
+      "set"
+    ]
+
+    storage_permissions = [
+      "backup",
+      "delete",
+      "deletesas",
+      "get",
+      "getsas",
+      "list",
+      "listsas",
+      "purge",
+      "recover",
+      "regeneratekey",
+      "restore",
+      "set",
+      "setsas",
+      "update"
+    ]
+}
+
 data "azurerm_resource_group" "managed-identities-rg" {
     name = "managed-identities-${local.environment}-rg"
 }
