@@ -268,7 +268,7 @@ resource "azurerm_key_vault_access_policy" "dts_operations" {
     ]
 }
 
-resource "azurerm_key_vault_access_policy" "dts_operations" {
+resource "azurerm_key_vault_access_policy" "bootstrap" {
   for_each = azurerm_key_vault.app_keyvaults
 
   key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
