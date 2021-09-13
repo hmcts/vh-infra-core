@@ -35,7 +35,7 @@ trigger:
 
 variables:
   - name: gaServiceConnection
-    value: DTS-SHAREDSERVICES-SBOX-Video Hearings
+    value: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
   - name: tfversion
     value: 1.0.0
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
