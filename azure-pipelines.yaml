@@ -45,7 +45,7 @@ variables:
     value: application
   # same comment as above ^^
   - name: serviceConnection
-    value: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
+    value: DTS-SHAREDSERVICES-SBOX-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
 
 stages:
 
