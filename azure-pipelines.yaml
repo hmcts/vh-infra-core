@@ -76,6 +76,7 @@ stages:
               serviceConnection: $(serviceConnection)
               activity_name: Video_Hearing_Core
               run_stage: ${{ parameters.Run_Stage }}
+              gaServiceConnection: $(gaServiceConnection)
 
   #- stage: Video_Hearing_Wowza
   #  displayName: 'Video_Hearing_Wowza'
