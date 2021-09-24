@@ -83,7 +83,7 @@ resource "azurerm_key_vault_secret" "secret" {
   tags = var.tags
 }
 
-data "azurerm_key_vault" "vh-infra-core" {
+data  "vh-infra-core" {
   name = "vh-infra-core-${var.environment}"
   resource_group_name = var.resource_group_name
 }
