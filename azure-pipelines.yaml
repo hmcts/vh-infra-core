@@ -78,22 +78,22 @@ stages:
               run_stage: ${{ parameters.Run_Stage }}
               gaServiceConnection: $(gaServiceConnection)
 
-  #- stage: Video_Hearing_Wowza
-  #  displayName: 'Video_Hearing_Wowza'
-  #  condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'CI'))
-  #  jobs:
-  #    - job: Video_Hearing_Wowza
-  #      steps:
-  #        - template: pipeline-steps/sshkey-download.yaml
-  #        - template: pipeline-steps/deploy-service-elevated.yaml
-  #          parameters:
-  #            environment: ${{ parameters.env }}
-  #            location: ${{ parameters.location }}
-  #            stack: 'video-hearing-wowza'
-  #            project: $(project)
-  #            product: 'wowza'
-  #            builtFrom: $(Build.Repository.Name)
-  #            tfversion: $(tfversion)
-  #            serviceConnection: $(serviceConnection)
-  #            activity_name: Video_Hearing_Wowza
-  #            run_stage: ${{ parameters.Run_Stage }}
+  - stage: Video_Hearing_Wowza
+    displayName: 'Video_Hearing_Wowza'
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'CI'))
+    jobs:
+      - job: Video_Hearing_Wowza
+        steps:
+          - template: pipeline-steps/sshkey-download.yaml
+          - template: pipeline-steps/deploy-service-elevated.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: 'video-hearing-wowza'
+              project: $(project)
+              product: 'wowza'
+              builtFrom: $(Build.Repository.Name)
+              tfversion: $(tfversion)
+              serviceConnection: $(serviceConnection)
+              activity_name: Video_Hearing_Wowza
+              run_stage: ${{ parameters.Run_Stage }}
