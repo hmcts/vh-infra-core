@@ -66,3 +66,7 @@ variable "tags" {
   type = map(string)
   default = {}
 }
+
+variable "private_dns_zone_group" {}
+
+#variable "hearings_dns_zone" {}
