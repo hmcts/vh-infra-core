@@ -46,6 +46,7 @@ module "wowza" {
   key_vault_id                   = data.azurerm_key_vault.vh-infra-core.id
   address_space                  = lookup(var.workspace_to_address_space_map, var.environment, "")
   storage_msi_client_id          = lookup(var.workspace_to_storage_msi_map, var.environment, "")
+  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
   tags = local.common_tags
 }
 
