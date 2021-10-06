@@ -50,12 +50,12 @@ module "wowza" {
   tags = local.common_tags
 }
 
-#provider "azurerm" {
-#  alias = "private-endpoint-dns"
-#  features {}
-#  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
-#  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
-#}
+provider "azurerm" {
+  alias = "private-endpoint-dns"
+  features {}
+  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
+  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
+}
 
 # resource "azurerm_dns_a_record" "wowza" {
 #   provider = azurerm.dns
