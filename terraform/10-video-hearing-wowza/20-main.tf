@@ -56,7 +56,6 @@ module "wowza" {
   tags = local.common_tags
 
   #private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
-  #private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
   hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.id
 }
 
