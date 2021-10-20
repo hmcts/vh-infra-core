@@ -69,4 +69,4 @@ variable "tags" {
 
 variable "private_dns_zone_group" {}
 
-variable "hearings_dns_zone" {}
+#variable "hearings_dns_zone" {}
