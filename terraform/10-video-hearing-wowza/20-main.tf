@@ -35,11 +35,11 @@ data "azurerm_private_dns_zone" "core-infra-intsvc" {
   resource_group_name   = "core-infra-intsvc-rg"
 }
 
-data "azurerm_private_dns_zone" "reform-hearings-dns" {
-  provider              = azurerm.hearings-dns
-  name                  = "hearings.reform.hmcts.net"
-  resource_group_name   = "vh-hearings-reform-hmcts-net-dns-zone"
-}
+#data "azurerm_private_dns_zone" "reform-hearings-dns" {
+#  provider              = azurerm.hearings-dns
+#  name                  = "hearings.reform.hmcts.net"
+#  resource_group_name   = "vh-hearings-reform-hmcts-net-dns-zone"
+#}
 
 module "wowza" {
   source                         = "./modules/wowza"
@@ -56,16 +56,16 @@ module "wowza" {
   tags = local.common_tags
 
   #private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
-  hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id
+  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id
 }
 
-#provider "azurerm" {
-#  alias = "private-endpoint-dns"
-#  features {}
-#  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
-#  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
-#  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.name
-#}
+provider "azurerm" {
+  alias = "private-endpoint-dns"
+  features {}
+  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
+  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
+  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.name
+}
 
 # resource "azurerm_dns_a_record" "wowza" {
 #   provider = azurerm.dns
