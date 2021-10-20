@@ -29,6 +29,17 @@ output "certificate_thumbprint" {
 # VH - Wowza
 #--------------------------------------------------------------
 
+data "azurerm_private_dns_zone" "core-infra-intsvc" {
+  provider              = azurerm.private-endpoint-dns
+  name                  = "privatelink.blob.core.windows.net"
+  resource_group_name   = "core-infra-intsvc-rg"
+}
+
+#data "azurerm_private_dns_zone" "reform-hearings-dns" {
+#  provider              = azurerm.hearings-dns
+#  name                  = "hearings.reform.hmcts.net"
+#  resource_group_name   = "vh-hearings-reform-hmcts-net-dns-zone"
+#}
 
 module "wowza" {
   source                         = "./modules/wowza"
@@ -41,13 +52,20 @@ module "wowza" {
   key_vault_id                   = data.azurerm_key_vault.vh-infra-core.id
   address_space                  = lookup(var.workspace_to_address_space_map, var.environment, "")
   storage_msi_client_id          = lookup(var.workspace_to_storage_msi_map, var.environment, "")
+  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
   tags = local.common_tags
+
+  #private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
+  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id
 }
 
-provider "azurerm" {
-  alias = "private-endpoint-dns"
-  features {}
-}
+#provider "azurerm" {
+#  alias = "private-endpoint-dns"
+#  features {}
+#  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
+#  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
+#  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.name
+#}
 
 # resource "azurerm_dns_a_record" "wowza" {
 #   provider = azurerm.dns

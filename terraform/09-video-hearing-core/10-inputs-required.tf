@@ -188,6 +188,7 @@ locals {
 #    }
 #  )
 
+# new apps that need registration can be added as a block below
   app_conf = {
     vh-service-web = {
         available_to_other_tenants = false
