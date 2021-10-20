@@ -54,6 +54,8 @@ stages:
     condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'CI'))
     jobs:
       - job: Video_Hearing_Core
+        pool:
+          vmImage: 'Ubuntu 18.04'
         variables:
           - group: vh-tenant-creds
         steps:
@@ -83,6 +85,8 @@ stages:
     condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'CI'))
     jobs:
       - job: Video_Hearing_Wowza
+        pool:
+          vmImage: 'Ubuntu 18.04'
         steps:
           - template: pipeline-steps/sshkey-download.yaml
           - template: pipeline-steps/deploy-service-elevated.yaml
