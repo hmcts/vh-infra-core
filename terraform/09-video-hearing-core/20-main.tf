@@ -205,3 +205,23 @@ module appconfig {
   ]
   tags = local.common_tags
 }
+
+#--------------------------------------------------------------
+# VH - PrivateEndpoint
+#--------------------------------------------------------------
+
+module vh_endpoint {
+  source              = "./modules/PrivateEndpoint"
+  location            = azurerm_resource_group.vh-infra-core.location
+  resource_group_name = azurerm_resource_group.vh-infra-core.name
+  resources           = azurerm_key_vault.keyvault_id
+
+  depends_on = [
+    azurerm_resource_group.vh-infra-core,
+    module.KeyVaults,
+    module.VHDataServices,
+    module.Redis,
+    module.SignalR
+  ]
+  tags = local.common_tags
+}
