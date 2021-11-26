@@ -13,10 +13,6 @@ data "azurerm_subnet" "ss_subnet" {
   resource_group_name  = data.azurerm_resource_group.vh-infra-core.name
 }
 
-data "azurerm_private_link_service" "wowza" {
-    name                = var.
-}
-
 resource "azurerm_private_endpoint" "vh_endpoint" {
   for_each            = var.resources  
 
