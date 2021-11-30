@@ -221,6 +221,9 @@ module vh_endpoint {
     "KeyVaults" = {
       resource_id     = module.KeyVaults.keyvault_id
     }
+    "SQLServer" = {
+      resource_id     = module.VHDataServices.server_id
+    }
   }
   depends_on = [
     azurerm_resource_group.vh-infra-core,
