@@ -220,19 +220,18 @@ module vh_endpoint {
   resources = {
     "KeyVaults" = {
       resource_id     = module.KeyVaults.keyvault_id
-      resource_name   = module.KeyVaults.keyvault_name
+      resource_name   = "KeyVault"
     }
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
-      resource_name   = module.VHDataServices.server_name
-    }
+      resource_name   = "SQLServer"
     "RedisCache" = {
       resource_id     = module.Redis.redis_id
-      resource_name   = module.Redis.redis_name
+      resource_name   = "Redis"
     }
     "SignalR" = {
       resource_id     = module.SignalR.signalr_id
-      resource_name   = module.SignalR.signalr_name
+      resource_name   = "SignalR"
     }
   }
   depends_on = [
