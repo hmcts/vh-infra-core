@@ -21,7 +21,8 @@ variable "subnet_id" {
 
 variable "resources" {
   type = map(object({
-    resource_id = string
+    resource_id   = string
+    resource_name = string
   }))
   description = "VH Core Infra resources"
   default     = {}
