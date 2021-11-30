@@ -10,7 +10,7 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
 resource "azurerm_private_endpoint" "vh_endpoint" {
   for_each            = var.resources
 
-  name                = format("vh-endpoint-%s-%s", lookup(each.value, "resource_name"), ${var.environment})"
+  name                = format("vh-endpoint-%s-%s", lookup(each.value, "resource_name"), var.environment)
   location            = data.azurerm_resource_group.vh-infra-core.location
   resource_group_name = data.azurerm_resource_group.vh-infra-core.name
   subnet_id           = var.subnet_id

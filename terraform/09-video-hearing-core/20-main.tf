@@ -224,12 +224,15 @@ module vh_endpoint {
     }
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
+      resource_name   = module.VHDataServices.server_name
     }
     "RedisCache" = {
       resource_id     = module.Redis.redis_id
+      resource_name   = module.Redis.redis_name
     }
     "SignalR" = {
       resource_id     = module.SignalR.signalr_id
+      resource_name   = module.SignalR.signalr_name
     }
   }
   depends_on = [
