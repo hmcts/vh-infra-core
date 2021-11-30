@@ -221,18 +221,21 @@ module vh_endpoint {
     "KeyVaults" = {
       resource_id     = module.KeyVaults.keyvault_id
       resource_name   = "KeyVault"
+      resource_type   = "vault"
     }
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
       resource_name   = "SQLServer"
+      resource_type   = "sqlServer"
     }
-    "RedisCache" = {
-      resource_id     = module.Redis.redis_id
-      resource_name   = "Redis"
-    }
+    #"RedisCache" = {
+    #  resource_id     = module.Redis.redis_id
+    #  resource_name   = "Redis"
+    #}
     "SignalR" = {
       resource_id     = module.SignalR.signalr_id
       resource_name   = "SignalR"
+      resource_type   = "signalr"
     }
   }
   depends_on = [
