@@ -17,7 +17,7 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
 
   private_service_connection {
     name                                = "vh-${var.environment}-aksserviceconnection"
-    private_connection_resource_alias   = lookup(each.value, "resource_id")
+    private_connection_resource_id   = lookup(each.value, "resource_id")
     is_manual_connection                = false
   }
 }
