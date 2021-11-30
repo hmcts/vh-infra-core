@@ -1,5 +1,5 @@
 variable "location" {
-  type    = string
+  type = string
 }
 
 variable "build_agent_vnet" {

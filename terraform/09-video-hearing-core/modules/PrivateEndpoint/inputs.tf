@@ -23,6 +23,7 @@ variable "resources" {
   type = map(object({
     resource_id   = string
     resource_name = string
+    resource_type = string
   }))
   description = "VH Core Infra resources"
   default     = {}

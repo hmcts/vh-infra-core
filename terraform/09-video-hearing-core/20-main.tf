@@ -225,6 +225,7 @@ module vh_endpoint {
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
       resource_name   = "SQLServer"
+    }
     "RedisCache" = {
       resource_id     = module.Redis.redis_id
       resource_name   = "Redis"
