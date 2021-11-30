@@ -211,13 +211,17 @@ module appconfig {
 #--------------------------------------------------------------
 
 module vh_endpoint {
+
   source              = "./modules/PrivateEndpoint"
   location            = azurerm_resource_group.vh-infra-core.location
   resource_group_name = azurerm_resource_group.vh-infra-core.name
-  resources           = module.KeyVaults.keyvault_id
   environment         = "sandbox"
   subnet_id        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
-
+  resources = {
+    "KeyVaults" = {
+      resource_id     = module.KeyVaults.keyvault_id
+    }
+  }
   depends_on = [
     azurerm_resource_group.vh-infra-core,
     module.KeyVaults,
