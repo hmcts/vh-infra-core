@@ -228,10 +228,11 @@ module vh_endpoint {
       resource_name   = "SQLServer"
       resource_type   = "sqlServer"
     }
-    #"RedisCache" = {
-    #  resource_id     = module.Redis.redis_id
-    #  resource_name   = "Redis"
-    #}
+    "RedisCache" = {
+      resource_id     = module.Redis.redis_id
+      resource_name   = "Redis"
+      resource_type   = "redisCache"
+    }
     "SignalR" = {
       resource_id     = module.SignalR.signalr_id
       resource_name   = "SignalR"
