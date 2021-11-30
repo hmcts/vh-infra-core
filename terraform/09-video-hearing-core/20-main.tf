@@ -224,6 +224,12 @@ module vh_endpoint {
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
     }
+    "RedisCache" = {
+      resource_id     = module.Redis.redis_id
+    }
+    "SignalR" = {
+      resource_id     = module.SignalR.signalr_id
+    }
   }
   depends_on = [
     azurerm_resource_group.vh-infra-core,
