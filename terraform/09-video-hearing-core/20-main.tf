@@ -220,6 +220,7 @@ module vh_endpoint {
   resources = {
     "KeyVaults" = {
       resource_id     = module.KeyVaults.keyvault_id
+      resource_name   = module.KeyVaults.keyvault_name
     }
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
