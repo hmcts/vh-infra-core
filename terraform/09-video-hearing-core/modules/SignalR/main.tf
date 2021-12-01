@@ -19,10 +19,10 @@ resource "azurerm_signalr_service" "vh" {
   tags = var.tags
 }
 
-resource "azurerm_key_vault_secret" "signalr_connection_str" {
-   name         = "connectionstrings--signalr"
-   value        = azurerm_signalr_service.vh.primary_connection_string
-   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-   tags = var.tags
-}
+#resource "azurerm_key_vault_secret" "signalr_connection_str" {
+#   name         = "connectionstrings--signalr"
+#   value        = azurerm_signalr_service.vh.primary_connection_string
+#   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+#   tags = var.tags
+#}
 

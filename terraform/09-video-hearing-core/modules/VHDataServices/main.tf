@@ -89,40 +89,40 @@ resource "azurerm_sql_active_directory_administrator" "sqluser" {
 
 }
 
-resource "azurerm_key_vault_secret" "hvhearingsapiadmin" {
-  name         = "hvhearingsapiadmin"
-  value        = random_password.sqlpass.result
-  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-  tags = var.tags
-}
-
-resource "azurerm_key_vault_secret" "VhBookingsDatabaseConnectionString" {
-  name         = "connectionstrings--VhBookings"
-  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhbookings;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-  tags = var.tags
-}
-
-resource "azurerm_key_vault_secret" "VhVideoDatabaseConnectionString" {
-  name         = "connectionstrings--vhvideo"
-  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhvideo;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-  tags = var.tags
-}
-
-resource "azurerm_key_vault_secret" "VhNotificationDatabaseConnectionString" {
-  name         = "connectionstrings--vhnotificationsapi"
-  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhnotification;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-  tags = var.tags
-}
-
-resource "azurerm_key_vault_secret" "VhTestApiDatabaseConnectionString" {
-  name         = "connectionstrings--testapi"
-  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhtestapi;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-  tags = var.tags
-}
+#resource "azurerm_key_vault_secret" "hvhearingsapiadmin" {
+#  name         = "hvhearingsapiadmin"
+#  value        = random_password.sqlpass.result
+#  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+#  tags = var.tags
+#}
+#
+#resource "azurerm_key_vault_secret" "VhBookingsDatabaseConnectionString" {
+#  name         = "connectionstrings--VhBookings"
+#  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhbookings;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+#  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+#  tags = var.tags
+#}
+#
+#resource "azurerm_key_vault_secret" "VhVideoDatabaseConnectionString" {
+#  name         = "connectionstrings--vhvideo"
+#  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhvideo;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+#  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+#  tags = var.tags
+#}
+#
+#resource "azurerm_key_vault_secret" "VhNotificationDatabaseConnectionString" {
+#  name         = "connectionstrings--vhnotificationsapi"
+#  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhnotification;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+#  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+#  tags = var.tags
+#}
+#
+#resource "azurerm_key_vault_secret" "VhTestApiDatabaseConnectionString" {
+#  name         = "connectionstrings--testapi"
+#  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhtestapi;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+#  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+#  tags = var.tags
+#}
 
 resource "azurerm_sql_database" "vh-infra-core" {
   for_each = var.databases
@@ -160,17 +160,17 @@ resource "azurerm_servicebus_queue" "vh-infra-core" {
 }
 
 
-resource "azurerm_key_vault_secret" "servicebusqueue_connectionstring" {
-  name         = "servicebusqueue--connectionstring"
-  value        = azurerm_servicebus_namespace.vh-infra-core.default_primary_connection_string
-  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-  tags = var.tags
-}
-
-resource "azurerm_key_vault_secret" "connectionstrings--videoapi" {
-  name         = "connectionstrings--videoapi"
-  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhvideo;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-  tags = var.tags
-}
+#resource "azurerm_key_vault_secret" "servicebusqueue_connectionstring" {
+#  name         = "servicebusqueue--connectionstring"
+#  value        = azurerm_servicebus_namespace.vh-infra-core.default_primary_connection_string
+#  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+#  tags = var.tags
+#}
+#
+#resource "azurerm_key_vault_secret" "connectionstrings--videoapi" {
+#  name         = "connectionstrings--videoapi"
+#  value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhvideo;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+#  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+#  tags = var.tags
+#}
 
