@@ -218,13 +218,12 @@ module vh_endpoint {
   environment         = var.environment
   subnet_id        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
   resources = {
-    "KeyVaults" = [
-      for_each = {
-      resource_id     = lookup(each_value, module.KeyVaults.keyvault_id)
-      resource_name   = lookup(each_value, module.KeyVaults.keyvault_name)
-      }
+    "KeyVaults" = {
+      for_each = module.KeyVaults.app_keyvaults_out
+      resource_id     = each.value.id
+      resource_name   = each.value.name
       resource_type   = "vault"
-    ]
+    }
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
       resource_name   = "SQLServer"
