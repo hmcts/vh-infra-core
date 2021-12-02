@@ -219,8 +219,9 @@ module vh_endpoint {
   subnet_id        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
   resources = {
     "KeyVaults" = {
-      for_each = module.KeyVaults.app_keyvaults_out
+      for_each        = module.KeyVaults.keyvault_id
       resource_id     = each.value.id
+      for_each        = module.KeyVaults.keyvault_name
       resource_name   = each.value.name
       resource_type   = "vault"
     }
