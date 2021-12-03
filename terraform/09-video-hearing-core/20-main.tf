@@ -218,17 +218,6 @@ module vh_endpoint {
   environment         = var.environment
   subnet_id        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
   resources = {
-    "KeyVaults" = {
-      for_each = module.KeyVaults.keyvault_resource
-      resource_id     = each.value.id
-      resource_name   = each.value.name
-      resource_type   = each.value.type
-    }
-    #"KeyVaults" = {
-    #  resource_id     = module.KeyVaults.app_keyvaults.id
-    #  resource_name   = module.KeyVaults.app_keyvaults.id
-    #  resource_type   = "vault"
-    #}
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
       resource_name   = "SQLServer"
@@ -243,6 +232,34 @@ module vh_endpoint {
       resource_id     = module.SignalR.signalr_id
       resource_name   = "SignalR"
       resource_type   = "signalr"
+    }
+  }
+  depends_on = [
+    azurerm_resource_group.vh-infra-core,
+    module.KeyVaults,
+    module.VHDataServices,
+    module.Redis,
+    module.SignalR
+  ]
+  tags = local.common_tags
+}
+
+module vh_kv_endpoint {
+
+  source              = "./modules/PrivateEndpoint"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.vh-infra-core.name
+  environment         = var.environment
+  subnet_id        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
+  resources = {
+    for_each = module.KeyVaults.app_keyvaults_out
+    
+    "KeyVault" = {
+      
+       resource_id     = each.value.id
+       resource_name   = each.value.name
+       resource_type   = "vault"
+      
     }
   }
   depends_on = [
