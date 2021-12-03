@@ -218,7 +218,12 @@ module vh_endpoint {
   environment         = var.environment
   subnet_id        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
   resources = {
-    "KeyVaults" = module.KeyVaults.keyvault_resource
+    "KeyVaults" = {
+      for_each = module.KeyVaults.keyvault_resource
+      resource_id     = each.value.id
+      resource_name   = each.value.name
+      resource_type   = each.value.type
+    }
     #"KeyVaults" = {
     #  resource_id     = module.KeyVaults.app_keyvaults.id
     #  resource_name   = module.KeyVaults.app_keyvaults.id
