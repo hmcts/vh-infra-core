@@ -28,3 +28,12 @@ variable "resources" {
   description = "VH Core Infra resources"
   default     = {}
 }
+
+variable KV {
+    type = map(object({
+      id   = string
+      name = string
+      rtype = string
+  }))
+  default     = {}
+}
