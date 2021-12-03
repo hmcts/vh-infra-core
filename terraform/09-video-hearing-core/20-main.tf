@@ -221,7 +221,8 @@ module vh_endpoint {
     "KeyVaults" = {
       for_each        = module.KeyVaults.keyvaults_ids
       resource_id     = each.value.id
-      resource_name   = module.KeyVaults.app_keyvaults_out.name
+      for_each        = module.KeyVaults.keyvaults_names
+      resource_name   = each.value.id
       resource_type   = "vault"
     }
     "SQLServer" = {
