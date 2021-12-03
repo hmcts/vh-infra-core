@@ -12,15 +12,15 @@ output "keyvault_name" {
 }
 
 output "keyvaults_ids"{
-  value = {
+  value = tomap({
     for k,v in azurerm_key_vault.app_keyvaults : k => v.id
-  }
+  })
 }
 
 output "keyvaults_names" {
-  value = {
+  value = tomap({
     for k,v in azurerm_key_vault.app_keyvaults : k => v.name
-  }
+  })
 }
 
 output "app_keyvaults_out" {
