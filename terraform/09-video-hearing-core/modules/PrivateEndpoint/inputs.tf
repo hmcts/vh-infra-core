@@ -33,7 +33,7 @@ variable KV {
     type = map(object({
       id   = string
       name = string
-      rtype = string
+      type = string
   }))
   default     = {}
 }
