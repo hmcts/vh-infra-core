@@ -11,6 +11,18 @@ output "keyvault_name" {
   value = azurerm_key_vault.vh-infra-core-ht.name
 }
 
+output "keyvaults_ids"{
+  value = {
+    for k,v in azurerm_key_vault.app_keyvaults : k => v.id
+  }
+}
+
+output "keyvaults_names" {
+  value = {
+    for k,v in azurerm_key_vault.app_keyvaults : k => v.name
+  }
+}
+
 output "app_keyvaults_out" {
   value = azurerm_key_vault.app_keyvaults
 }
