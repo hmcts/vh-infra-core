@@ -220,7 +220,7 @@ module vh_endpoint {
   resources = {
     "KeyVaults" = {
       for_each        = module.KeyVaults.keyvaults_ids
-      resource_id     = each.value.id
+      resource_id     = each.value
       resource_name   = "sample"
       resource_type   = "vault"
     }
