@@ -251,15 +251,13 @@ module vh_kv_endpoint {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   environment         = var.environment
   subnet_id        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
-  resources = {
-    for_each = module.KeyVaults.app_keyvaults_out
+  resources = {   
     
-    "KeyVault" = {
-      
-       resource_id     = each.value.id
-       resource_name   = each.value.name
-       resource_type   = "vault"
-      
+    "KeyVault" = {      
+       for_each = {for vault in module.KeyVaults.keyvault_resource : vault.name => vault}
+       resource_id = "${each.value.id}"
+       resource_name = "${each.value.name}"
+       resource_type = "${each.value.type}"
     }
   }
   depends_on = [
