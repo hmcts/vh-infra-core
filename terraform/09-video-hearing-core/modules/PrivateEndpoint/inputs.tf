@@ -29,11 +29,6 @@ variable "resources" {
   default     = {}
 }
 
-variable KV {
-    type = map(object({
-      id   = string
-      name = string
-      type = string
-  }))
-  default     = {}
+variable "app_keyvaults_map" {
+    type = map(any)
 }

@@ -11,18 +11,6 @@ output "keyvault_name" {
   value = azurerm_key_vault.vh-infra-core-ht.name
 }
 
-output "keyvaults_ids"{
-  value = tomap({
-    for k,v in azurerm_key_vault.app_keyvaults : k => v.id
-  })
-}
-
-output "keyvaults_names" {
-  value = tomap({
-    for k,v in azurerm_key_vault.app_keyvaults : k => v.name
-  })
-}
-
 output "keyvault_resource" {
   value = tomap({
     for k, v in azurerm_key_vault.app_keyvaults : k => {
