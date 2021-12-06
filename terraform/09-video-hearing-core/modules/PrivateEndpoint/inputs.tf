@@ -17,6 +17,7 @@ variable "location" {
 
 variable "subnet_id" {
     type = string
+    default = " "
 }
 
 variable "resources" {
@@ -29,6 +30,3 @@ variable "resources" {
   default     = {}
 }
 
-variable "app_keyvaults_map" {
-    type = map(any)
-}
