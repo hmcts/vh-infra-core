@@ -39,7 +39,7 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
       echo "\n this is our key: ${{ parameters.location }}/${{ parameters.project }}/${{ parameters.environment }}/${{ parameters.stack }}/terraform.tfstate"
-      echo "\n this is our storage account $(controlStorageAccount)\n"
+      echo "\n this is our storage account $(controlStorageAccount) \n"
 
   - task: TerraformCLI@0
     displayName: terraform init
