@@ -30,6 +30,6 @@ variable "resources" {
   default     = {}
 }
 
-variable "app_map" {
-    type = map(any)
-}
+#variable "app_map" {
+#    type = map(any)
+#}
