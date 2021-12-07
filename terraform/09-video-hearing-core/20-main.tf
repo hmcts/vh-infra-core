@@ -216,7 +216,7 @@ module vh_endpoint {
   location            = var.location
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   environment         = var.environment
-  app_map = {
+  resources = {
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
       resource_name   = "SQLServer"
@@ -250,7 +250,7 @@ module vh_kv_endpoint {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   environment         = var.environment
   subnet_id           = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
-  app_map           = module.KeyVaults.keyvault_resource
+  resources             = module.KeyVaults.keyvault_resource
   
   depends_on = [
     azurerm_resource_group.vh-infra-core,
