@@ -14,7 +14,7 @@ data "azurerm_subnet" "ss_subnet" {
 }
 
 resource "azurerm_private_endpoint" "vh_endpoint" {
-  for_each            = var.resources
+  for_each            = var.app_map
 
   name                = format("vh-endpoint-%s-%s", lookup(each.value, "resource_name"), var.environment)
   location            = var.location
@@ -23,8 +23,9 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
 
   private_service_connection {
     name                                = "vh-${var.environment}-aksserviceconnection"
-    private_connection_resource_id      = lookup(each.value, "resource_id")
+    private_connection_resource_id      = var.app_map[each.key].resource_id 
     is_manual_connection                = false
-    subresource_names                   = [lookup(each.value, "resource_type")]
+    subresource_names                   = var.app_map[each.key].resource_type
   }
 }
+
