@@ -197,7 +197,7 @@ module VHDataServices {
 module appconfig {
   source               = "./modules/AppConfiguration"
   location             = azurerm_resource_group.vh-infra-core.location
-  resource_group_name = azurerm_resource_group.vh-infra-core.name
+  resource_group_name  = azurerm_resource_group.vh-infra-core.name
 
   depends_on = [
     azurerm_resource_group.vh-infra-core,
@@ -250,7 +250,7 @@ module vh_kv_endpoint {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   environment         = var.environment
   subnet_id           = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
-  resources             = module.KeyVaults.keyvault_resource
+  resources           = module.KeyVaults.keyvault_resource
   
   depends_on = [
     azurerm_resource_group.vh-infra-core,
