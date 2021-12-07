@@ -33,7 +33,7 @@ steps:
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
 
-  - task: bash@3
+  - task: Bash@3
     displayName: output vars
     scriptLocation: 'inlineScript'
     inlineScript: |
