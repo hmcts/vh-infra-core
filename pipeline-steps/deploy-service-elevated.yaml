@@ -33,7 +33,10 @@ steps:
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
 
-  - bash: |
+  - task: bash@3
+    displayName: output vars
+    scriptLocation: 'inlineScript'
+    inlineScript: |
     echo "\n this is our key: ${{ parameters.location }}/${{ parameters.project }}/${{ parameters.environment }}/${{ parameters.stack }}/terraform.tfstate"
     echo "\n this is our storage account $(controlStorageAccount)\n"
 
