@@ -42,7 +42,6 @@ steps:
           backendType: azurerm
           backendServiceArm: $(gaServiceConnection)
           backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
-          #backendAzureRmResourceGroupName: 'azure-control-sbox-rg'
           backendAzureRmResourceGroupLocation: ${{ parameters.location }}
           backendAzureRmStorageAccountName: $(controlStorageAccount)
           backendAzureRmStorageAccountSku: Standard_LRS
