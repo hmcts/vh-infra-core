@@ -33,6 +33,16 @@ steps:
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
 
+  - task: bash@3
+    displayName: validate init inputs
+    inputs:
+      targetType: Inline
+      script: |
+        echo "\n Our RG: 'azure-control-${{ parameters.environment }}-rg'"
+        echo "\n Our Storage account: $(controlStorageAccount)"
+        echo "\n Our backend Key: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform.tfstate' \n"
+      
+
   - task: TerraformCLI@0
     displayName: terraform init
     inputs:
