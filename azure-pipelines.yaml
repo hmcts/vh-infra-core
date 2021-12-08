@@ -7,6 +7,8 @@ parameters:
       - CI
       - Video_Hearing_Core
       - Video_Hearing_Wowza
+      - Destroy_Core
+      - Destroy_Wowza
 
   - name: location
     displayName: Location
@@ -101,3 +103,36 @@ stages:
               serviceConnection: $(serviceConnection)
               activity_name: Video_Hearing_Wowza
               run_stage: ${{ parameters.Run_Stage }}
+
+
+  - stage: Video_Hearing_Core
+    displayName: 'Video_Hearing_Core'
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Destory_Core'), contains('${{ parameters.Run_Stage }}', 'CI'), eq('{{ parameters.destroy }}'', 'true'))
+    jobs:
+      - job: Video_Hearing_Core
+        pool:
+          vmImage: 'Ubuntu 18.04'
+        variables:
+          - group: vh-tenant-creds
+        steps:
+          - template: pipeline-steps/vh-tenant-replacement.yaml
+            parameters:
+              vh_tenant_id: $(vh_tenant_id)
+              vh_client_secret: $(vh_client_secret)
+              vh_client_id: $(vh_client_id)
+              environment: ${{ parameters.env }}
+
+          - template: pipeline-steps/destroy-service-elevated.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: '09-video-hearing-core'
+              project: $(project)
+              product: 'vh'
+              builtFrom: $(Build.Repository.Name)
+              tfversion: $(tfversion)
+              serviceConnection: $(serviceConnection)
+              activity_name: Video_Hearing_Core
+              run_stage: ${{ parameters.Run_Stage }}
+              gaServiceConnection: $(gaServiceConnection)
+
