@@ -77,14 +77,6 @@ steps:
             -var activity_name=${{ parameters.activity_name }}
             -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
 
-  - task: ManualValidation@0
-    timeoutInMinutes: 1440 # task times out in 1 day
-    inputs:
-        notifyUsers: |
-           chris.connolly@hmcts.net
-        instructions: 'Please validate the destruction plan and resume'
-        onTimeout: 'resume'
-
   - task: TerraformCLI@0
     displayName: Terraform destroy
     condition: and(not(contains('${{ parameters.run_stage }}', 'CI')), not(contains('${{ parameters.environment }}', 'PROD')))
