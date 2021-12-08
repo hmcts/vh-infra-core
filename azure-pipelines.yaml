@@ -105,8 +105,8 @@ stages:
               run_stage: ${{ parameters.Run_Stage }}
 
 
-  - stage: Video_Hearing_Core
-    displayName: 'Video_Hearing_Core'
+  - stage: Destory_Video_Hearing_Core
+    displayName: 'Destroy Video_Hearing_Core'
     condition: contains('${{ parameters.Run_Stage }}', 'Destroy_Core')
     jobs:
       - job: Video_Hearing_Core
