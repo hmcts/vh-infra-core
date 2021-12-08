@@ -10,6 +10,7 @@ parameters:
   run_stage: ''
   builtFrom: ''
   product: ''
+  env_type: ''
 
 steps:
 
@@ -40,8 +41,9 @@ steps:
       script: |
         echo "\n Our RG: 'azure-control-${{ parameters.environment }}-rg'"
         echo "\n Our Storage account: $(controlStorageAccount)"
-        echo "\n Our backend Key: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform.tfstate' \n"
-      
+        echo "\n Our env_type is '${{ parameters.env_type }}'"
+        echo "\n Our backend Key: '${{ parameters.location }}/${{ parameters.project }}/${{ parameters.env_type }}/${{ parameters.stack }}/terraform.tfstate' \n"
+        
 
   - task: TerraformCLI@0
     displayName: terraform init
