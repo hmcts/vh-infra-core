@@ -107,7 +107,7 @@ stages:
 
   - stage: Video_Hearing_Core
     displayName: 'Video_Hearing_Core'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Destory_Core'), contains('${{ parameters.Run_Stage }}', 'CI'), eq('{{ parameters.destroy }}'', 'true'))
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Destroy_Core'))
     jobs:
       - job: Video_Hearing_Core
         pool:

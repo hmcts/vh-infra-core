@@ -76,7 +76,7 @@ steps:
             -var product=${{ parameters.product }}
             -var activity_name=${{ parameters.activity_name }}
             -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
-
+            
   #- task: TerraformCLI@0
   #  displayName: Terraform apply
   #  #condition: and(always(), ne(variables['Build.Reason'], 'PullRequest'))
