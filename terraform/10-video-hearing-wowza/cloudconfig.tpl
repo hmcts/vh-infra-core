@@ -65,7 +65,7 @@ write_files:
                               <ObjectList>Server,VHost,VHostItem,Application,ApplicationInstance,MediaCaster,Module,IdleWorker</ObjectList>
                       </AdminInterface>
                       <Stats>
-                              <Enable>true</Enable>
+                              <Enable>false</Enable>
                       </Stats>
                       <!-- JMXUrl: service:jmx:rmi://localhost:8084/jndi/rmi://localhost:8085/jmxrmi -->
                       <JMXRemoteConfiguration>
