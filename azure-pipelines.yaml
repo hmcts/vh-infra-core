@@ -70,10 +70,6 @@ stages:
 
           - template: pipeline-steps/deploy-service-elevated.yaml
             parameters:
-              ${{ if or(eq( 'parameters.env', 'PROD'), eq( 'parameters.env', 'STG')) }}:
-                env_type: "prod"
-              ${{ if or(ne('parameters.env', 'PROD'), ne('parameters.env', 'STG')) }}:
-                env_type: "non-prod"
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
               stack: '09-video-hearing-core'

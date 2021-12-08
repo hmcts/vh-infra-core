@@ -10,7 +10,6 @@ parameters:
   run_stage: ''
   builtFrom: ''
   product: ''
-  env_type: ''
 
 steps:
 
