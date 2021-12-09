@@ -13,8 +13,6 @@ parameters:
     type: string
   - name: serviceConnection
     type: string
-  - name: gaServiceConnection
-    type: string
   - name: run_stage
     type: string
   - name: builtFrom
@@ -26,7 +24,7 @@ steps:
 
   - template: keyvault-read.yaml
     parameters:
-      serviceConnection: $(serviceConnection)
+      serviceConnection: ${{ parameters.serviceConnection }} 
       environment: ${{ parameters.environment }}
 
 # lowercase $env variable comes from the above template
@@ -51,7 +49,7 @@ steps:
           terraformVersion: ${{ parameters.tfversion }}
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
           backendType: azurerm
-          backendServiceArm: $(gaServiceConnection)
+          backendServiceArm: ${{ parameters.serviceConnection }} 
           backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
           backendAzureRmResourceGroupLocation: ${{ parameters.location }}
           backendAzureRmStorageAccountName: $(controlStorageAccount)
@@ -70,30 +68,11 @@ steps:
 
 
   - task: TerraformCLI@0
-    displayName: terraform destroy plan
-    inputs:
-          command: plan
-          terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-          environmentServiceName: $(gaServiceConnection)
-          publishPlanResults: vh-shared-infra-destroy.tfplan
-          commandOptions: >
-            -destroy
-            -out tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}
-            -var control_vault=$(controlKeyVault)
-            -var environment=$(env)
-            -var project=${{ parameters.project }}
-            -var builtFrom=${{ parameters.builtFrom }}
-            -var product=${{ parameters.product }}
-            -var activity_name=${{ parameters.activity_name }}
-            -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
-
-  - task: TerraformCLI@0
     displayName: Terraform destroy
     condition: and(not(contains('${{ parameters.run_stage }}', 'CI')), not(contains('${{ parameters.environment }}', 'PROD')))
     inputs:
       command: destroy
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-      environmentServiceName: $(gaServiceConnection)
+      environmentServiceName: ${{ parameters.serviceConnection }} 
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
