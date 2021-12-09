@@ -69,12 +69,12 @@ steps:
           workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
 
 
-  #- task: TerraformCLI@0
-  #  displayName: Terraform destroy
-  #  condition: and(not(contains('${{ parameters.run_stage }}', 'CI')), not(contains('${{ parameters.environment }}', 'PROD')))
-  #  inputs:
-  #    command: destroy
-  #    terraformVersion: ${{ parameters.tfversion }}
-  #    workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-  #    environmentServiceName: ${{ parameters.serviceConnection }} 
-  #    commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
+  - task: TerraformCLI@0
+    displayName: Terraform destroy
+    condition: and(not(contains('${{ parameters.run_stage }}', 'CI')), not(contains('${{ parameters.environment }}', 'PROD')))
+    inputs:
+      command: destroy
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+      environmentServiceName: ${{ parameters.serviceConnection }} 
+      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
