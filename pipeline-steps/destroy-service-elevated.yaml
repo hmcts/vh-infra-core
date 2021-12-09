@@ -1,15 +1,26 @@
 parameters:
-  environment: ''
-  location: ''
-  stack: ''
-  project: ''
-  tfversion: ''
-  activity_name: ''
-  serviceConnection: ''
-  gaServiceConnection: ''
-  run_stage: ''
-  builtFrom: ''
-  product: ''
+  - name: environment
+    type: string
+  - name: location
+    type: string
+  - name: stack
+    type: string
+  - name: project
+    type: string
+  - name: tfversion
+    type: string
+  - name: activity_name
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: gaServiceConnection
+    type: string
+  - name: run_stage
+    type: string
+  - name: builtFrom
+    type: string
+  - name: product
+    type: string
 
 steps:
 

@@ -88,7 +88,7 @@ stages:
     jobs:
       - job: Video_Hearing_Wowza
         pool:
-          vmImage: 'Ubuntu 18.04'
+          vmImage: latest
         steps:
           - template: pipeline-steps/sshkey-download.yaml
           - template: pipeline-steps/deploy-service-elevated.yaml
