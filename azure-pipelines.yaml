@@ -111,7 +111,7 @@ stages:
     jobs:
       - job: Video_Hearing_Core
         pool:
-          vmImage: latest
+          vmImage: 'latest'
         variables:
           - group: vh-tenant-creds
         steps:
