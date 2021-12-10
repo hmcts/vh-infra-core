@@ -19,7 +19,7 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
   name                = format("vh-endpoint-%s-%s", lookup(each.value, "resource_name"), var.environment)
   location            = var.location
   resource_group_name = data.azurerm_resource_group.vh-infra-core.name
-  subnet_id           = data.azurerm_subnet.ss_subnet.id
+  subnet_id           = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
 
   private_service_connection {
     name                                = "vh-${var.environment}-aksserviceconnection"
