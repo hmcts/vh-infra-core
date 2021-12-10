@@ -1,7 +1,10 @@
 parameters:
-  serviceConnection: ''
-  keyvaultName: ''
-  environment: ''
+  - name: serviceConnection
+    type: string  
+  - name: keyvaultName
+    type: string
+  - name: environment
+    type: string
 
 steps:
 

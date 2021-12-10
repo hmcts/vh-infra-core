@@ -1,15 +1,26 @@
 parameters:
-  environment: ''
-  location: ''
-  stack: ''
-  project: ''
-  tfversion: ''
-  activity_name: ''
-  serviceConnection: ''
-  gaServiceConnection: ''
-  run_stage: ''
-  builtFrom: ''
-  product: ''
+  - name: environment
+    type: string
+  - name: location
+    type: string
+  - name: stack
+    type: string
+  - name: project
+    type: string
+  - name: tfversion
+    type: string
+  - name: activity_name
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: run_stage
+    type: string
+  - name: builtFrom
+    type: string
+  - name: product
+    type: string
+  - name: state_sub 
+    type: string
 
 steps:
 
@@ -24,7 +35,7 @@ steps:
     displayName: 'Subscription Replacement'
     inputs:
       targetType: 'inline'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{parameters.stack}}'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
 
@@ -40,14 +51,14 @@ steps:
           terraformVersion: ${{ parameters.tfversion }}
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
           backendType: azurerm
-          backendServiceArm: $(gaServiceConnection)
+          backendServiceArm: ${{ parameters.serviceConnection }}
           backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
           backendAzureRmResourceGroupLocation: ${{ parameters.location }}
           backendAzureRmStorageAccountName: $(controlStorageAccount)
           backendAzureRmStorageAccountSku: Standard_LRS
           backendAzureRmContainerName: subscription-tfstate
-          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform.tfstate'
-          commandOptions: '-backend-config=subscription_id=04d27a32-7a07-48b3-95b8-3c8691e1a263'
+          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+          commandOptions: '-backend-config=subscription_id=${{ parameters.state_sub }}'
 
 
   - task: TerraformCLI@0
@@ -64,12 +75,12 @@ steps:
           command: plan
           terraformVersion: ${{ parameters.tfversion }}
           workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-          environmentServiceName: $(gaServiceConnection)
+          environmentServiceName: ${{ parameters.serviceConnection }}
           publishPlanResults: vh-shared-infra.tfplan
           commandOptions: >
-            -out tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}
+            -out tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}
             -var control_vault=$(controlKeyVault)
-            -var environment=$(env)
+            -var environment=${{ lower(parameters.environment) }}
             -var project=${{ parameters.project }}
             -var builtFrom=${{ parameters.builtFrom }}
             -var product=${{ parameters.product }}
@@ -84,5 +95,5 @@ steps:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-      environmentServiceName: $(gaServiceConnection)
-      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
+      environmentServiceName: ${{ parameters.serviceConnection }}
+      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}'
