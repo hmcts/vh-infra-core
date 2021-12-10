@@ -105,6 +105,8 @@ stages:
       - job: Video_Hearing_Wowza
         pool:
           vmImage: 'Ubuntu 18.04'
+        variables:
+            - group: vh-tenant-creds
         steps:
           - template: pipeline-steps/sshkey-download.yaml
           - template: pipeline-steps/deploy-service-elevated.yaml
