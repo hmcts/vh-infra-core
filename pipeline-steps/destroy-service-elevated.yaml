@@ -1,0 +1,80 @@
+parameters:
+  - name: environment
+    type: string
+  - name: location
+    type: string
+  - name: stack
+    type: string
+  - name: project
+    type: string
+  - name: tfversion
+    type: string
+  - name: activity_name
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: run_stage
+    type: string
+  - name: builtFrom
+    type: string
+  - name: product
+    type: string
+  - name: state_sub 
+    type: string
+
+steps:
+
+  - template: keyvault-read.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }} 
+      environment: ${{ parameters.environment }}
+
+# lowercase $env variable comes from the above template
+
+  - task: Bash@3
+    displayName: 'Subscription Replacement'
+    inputs:
+      targetType: 'inline'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{parameters.stack}}'
+      script: |
+            sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
+
+  - task: TerraformInstaller@0
+    displayName: 'Install Terraform ${{ parameters.tfversion }}'
+    inputs:
+          terraformVersion: ${{ parameters.tfversion }}
+
+  - task: TerraformCLI@0
+    displayName: terraform init
+    inputs:
+          command: init
+          terraformVersion: ${{ parameters.tfversion }}
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+          backendType: azurerm
+          backendServiceArm: ${{ parameters.serviceConnection }} 
+          backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
+          backendAzureRmResourceGroupLocation: ${{ parameters.location }}
+          backendAzureRmStorageAccountName: $(controlStorageAccount)
+          backendAzureRmStorageAccountSku: Standard_LRS
+          backendAzureRmContainerName: subscription-tfstate
+          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+          commandOptions: '-backend-config=subscription_id=${{ parameters.state_sub }}'
+
+
+  - task: TerraformCLI@0
+    displayName: terraform validate
+    inputs:
+          command: validate
+          terraformVersion: ${{ parameters.tfversion }}
+          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+
+
+  - task: TerraformCLI@0
+    displayName: Terraform destroy
+    condition: and(not(contains('${{ parameters.run_stage }}', 'CI')), not(contains('${{ parameters.environment }}', 'PROD')))
+    inputs:
+      command: destroy
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+      environmentServiceName: ${{ parameters.serviceConnection }} 
+      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
