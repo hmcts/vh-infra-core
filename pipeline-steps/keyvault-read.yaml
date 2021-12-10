@@ -3,6 +3,7 @@ parameters:
     type: string  
   - name: keyvaultName
     type: string
+    default: ''
   - name: environment
     type: string
 
