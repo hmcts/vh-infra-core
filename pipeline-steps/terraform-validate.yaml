@@ -1,6 +1,8 @@
 parameters:
   - name: terraformPath
     type: string
+  - name: tfversion
+    type: string
 
 jobs:
 - job: TerraformValidate
