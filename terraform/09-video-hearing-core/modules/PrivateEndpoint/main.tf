@@ -19,7 +19,7 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
   name                = format("vh-endpoint-%s-%s", lookup(each.value, "resource_name"), var.environment)
   location            = var.location
   resource_group_name = data.azurerm_resource_group.vh-infra-core.name
-  subnet_id           = "data.azurerm_subnet.ss_subnet.id"
+  subnet_id           = data.azurerm_subnet.ss_subnet.id
 
   private_service_connection {
     name                                = "vh-${var.environment}-aksserviceconnection"
