@@ -47,7 +47,7 @@ variables:
   - name: gaServiceConnection
     value: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
   - name: tfversion
-    value: 1.0.0
+    value: 1.1.0
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
   # but it might be better to template the pipeline more and have a different pipeline file
   # so that someone doesn't pick the wrong var in the dropdown
@@ -145,7 +145,10 @@ stages:
             parameters:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
-              stack: '09-video-hearing-core'
+              ${{ if eq(${{ parameters.Run_Stage }}, 'Video_Hearing_Core') }}:
+                stack: '09-video-hearing-core'
+              ${{ if eq(${{ parameters.Run_Stage }}, 'Video_Hearing_Wowza') }}:
+                stack: '10-video-hearing-wowza'
               project: $(project)
               product: 'vh'
               builtFrom: $(Build.Repository.Name)
