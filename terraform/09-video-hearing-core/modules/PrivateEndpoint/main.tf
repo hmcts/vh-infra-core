@@ -9,8 +9,8 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
 
 data "azurerm_subnet" "ss_subnet" {
   name                  = "vh_private_endpoints"
-  virtual_network_name  = "ss-${var.environment}-vnet"
-  resource_group_name   = "ss-${var.environment}-network-rg"
+  virtual_network_name  = "ss-sbox-vnet"
+  resource_group_name   = "ss-sbox-network-rg"
 }
 
 resource "azurerm_private_endpoint" "vh_endpoint" {
@@ -19,7 +19,7 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
   name                = format("vh-endpoint-%s-%s", lookup(each.value, "resource_name"), var.environment)
   location            = var.location
   resource_group_name = data.azurerm_resource_group.vh-infra-core.name
-  subnet_id           = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
+  subnet_id           = "data.azurerm_subnet.ss_subnet.id"
 
   private_service_connection {
     name                                = "vh-${var.environment}-aksserviceconnection"
