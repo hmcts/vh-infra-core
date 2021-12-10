@@ -119,9 +119,7 @@ stages:
               serviceConnection: $(serviceConnection)
               activity_name: Video_Hearing_Wowza
               run_stage: ${{ parameters.Run_Stage }}
-<<<<<<< HEAD
               state_sub: $(vh_tf_state_sub)
-=======
 
 
   - stage: Destory_Video_Hearing_Core
@@ -155,4 +153,3 @@ stages:
               run_stage: ${{ parameters.Run_Stage }}
               state_sub: $(vh_tf_state_sub)
 
->>>>>>> origin/master
