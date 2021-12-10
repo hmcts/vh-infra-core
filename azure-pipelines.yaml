@@ -146,9 +146,9 @@ stages:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
               ${{ if eq(parameters.Run_Stage, 'Video_Hearing_Core') }}:
-                - stack: '09-video-hearing-core'
+                stack: '09-video-hearing-core'
               ${{ if eq(parameters.Run_Stage, 'Video_Hearing_Wowza') }}:
-                - stack: '10-video-hearing-wowza'
+                stack: '10-video-hearing-wowza'
               project: $(project)
               product: 'vh'
               builtFrom: $(Build.Repository.Name)
