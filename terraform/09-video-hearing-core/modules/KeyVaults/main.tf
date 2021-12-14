@@ -10,7 +10,6 @@ data "azurerm_client_config" "current" {}
 
 #### Per App Key Vault
 resource "azurerm_key_vault" "app_keyvaults" {
-  #tfsec:ignore:no-purge
   for_each = var.keyvaults
 
   name                        = "${each.key}-${var.environment}"
@@ -19,7 +18,7 @@ resource "azurerm_key_vault" "app_keyvaults" {
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
-  purge_protection_enabled    = false
+  purge_protection_enabled    = false #tfsec:ignore:no-purge
 
   sku_name = "standard"
   tags = var.tags
@@ -270,13 +269,13 @@ resource "azurerm_key_vault_access_policy" "dts_operations" {
 }
 
 resource "azurerm_key_vault" "vh-infra-core-ht" {
-  #tfsec:ignore:no-purge
   name                        = data.azurerm_resource_group.vh-infra-core.name
   resource_group_name         = data.azurerm_resource_group.vh-infra-core.name
   location                    = data.azurerm_resource_group.vh-infra-core.location
   enabled_for_disk_encryption = false
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   enabled_for_deployment      = true
+  #tfsec:ignore:no-purge
 
   sku_name = "standard"
   tags = var.tags
