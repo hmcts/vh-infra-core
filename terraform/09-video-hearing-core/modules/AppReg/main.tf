@@ -94,7 +94,7 @@ data "azurerm_key_vault" "videoweb" {
 }
 
 data "azurerm_key_vault_secret" "videoweb-clientid" {
-   name         = "azuread--clientid"
+  name         = "azuread--clientid"
   key_vault_id = data.azurerm_key_vault.videoweb.id
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
