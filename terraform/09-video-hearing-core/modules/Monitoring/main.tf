@@ -27,6 +27,8 @@ resource "azurerm_key_vault_secret" "applicationinsights" {
   name         = "applicationinsights--instrumentationkey"
   value        = azurerm_application_insights.vh-infra-core.instrumentation_key
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 
@@ -34,6 +36,8 @@ resource "azurerm_key_vault_secret" "appinsightskey" {
   name         = "azuread--appinsightskey"
   value        = azurerm_application_insights.vh-infra-core.instrumentation_key
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 

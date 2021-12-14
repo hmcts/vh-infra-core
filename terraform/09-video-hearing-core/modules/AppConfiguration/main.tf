@@ -20,6 +20,8 @@ resource "azurerm_key_vault_secret" "connectionstrings_appconfig" {
   name         = "connectionstrings--appconfig"
   value        = azurerm_app_configuration.vh.primary_write_key[0].connection_string
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 
