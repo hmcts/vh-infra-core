@@ -36,6 +36,7 @@ resource "azurerm_storage_account" "vh-infra-core" {
   name                = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   location            = azurerm_resource_group.vh-infra-core.location
+   min_tls_version    = "TLS1_2"
 
   access_tier                       = "Hot"
   account_kind                      = "StorageV2"
