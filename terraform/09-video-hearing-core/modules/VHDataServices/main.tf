@@ -94,7 +94,8 @@ resource "azurerm_key_vault_secret" "hvhearingsapiadmin" {
   value        = random_password.sqlpass.result
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
   # FromTFSec
-  content_type = "secret"
+  content_type     = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -113,7 +114,8 @@ resource "azurerm_key_vault_secret" "VhVideoDatabaseConnectionString" {
   value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhvideo;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -122,7 +124,8 @@ resource "azurerm_key_vault_secret" "VhNotificationDatabaseConnectionString" {
   value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhnotification;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -131,7 +134,8 @@ resource "azurerm_key_vault_secret" "VhTestApiDatabaseConnectionString" {
   value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhtestapi;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -176,7 +180,8 @@ resource "azurerm_key_vault_secret" "servicebusqueue_connectionstring" {
   value        = azurerm_servicebus_namespace.vh-infra-core.default_primary_connection_string
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -185,7 +190,8 @@ resource "azurerm_key_vault_secret" "connectionstrings--videoapi" {
   value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhvideo;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
