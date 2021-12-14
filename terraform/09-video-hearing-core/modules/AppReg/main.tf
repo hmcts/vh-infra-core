@@ -72,7 +72,8 @@ resource "azurerm_key_vault_secret" "client_id" {
   #key_vault_id = data.azurerm_key_vault.key_vault[each.key].id
   key_vault_id = var.app_keyvaults_map[each.key].id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -83,7 +84,8 @@ resource "azurerm_key_vault_secret" "secret" {
   #key_vault_id = data.azurerm_key_vault.key_vault[each.key].id
   key_vault_id = var.app_keyvaults_map[each.key].id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -101,7 +103,8 @@ data "azurerm_key_vault_secret" "videoweb-clientid" {
   name         = "azuread--clientid"
   key_vault_id = data.azurerm_key_vault.videoweb.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -111,7 +114,8 @@ resource "azurerm_key_vault_secret" "azuread-vhvideowebclientid" {
   value        = data.azurerm_key_vault_secret.videoweb-clientid.value
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -120,7 +124,8 @@ resource "azurerm_key_vault_secret" "services-vhvideowebclientid" {
   value        = data.azurerm_key_vault_secret.videoweb-clientid.value
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -133,7 +138,8 @@ data "azurerm_key_vault_secret" "userapi-clientid" {
    name         = "azuread--clientid"
   key_vault_id = data.azurerm_key_vault.userapi.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -141,7 +147,8 @@ data "azurerm_key_vault_secret" "userapi-clientsecret" {
    name         = "azuread--clientsecret"
   key_vault_id = data.azurerm_key_vault.userapi.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -151,7 +158,8 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientid" {
   value        = data.azurerm_key_vault_secret.userapi-clientid.value
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
@@ -160,7 +168,8 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   value        = data.azurerm_key_vault_secret.userapi-clientsecret.value
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
