@@ -10,6 +10,7 @@ data "azurerm_client_config" "current" {}
 
 #### Per App Key Vault
 resource "azurerm_key_vault" "app_keyvaults" {
+  #tfsec:ignore:no-purge
   for_each = var.keyvaults
 
   name                        = "${each.key}-${var.environment}"
@@ -269,6 +270,7 @@ resource "azurerm_key_vault_access_policy" "dts_operations" {
 }
 
 resource "azurerm_key_vault" "vh-infra-core-ht" {
+  #tfsec:ignore:no-purge
   name                        = data.azurerm_resource_group.vh-infra-core.name
   resource_group_name         = data.azurerm_resource_group.vh-infra-core.name
   location                    = data.azurerm_resource_group.vh-infra-core.location
