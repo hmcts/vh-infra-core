@@ -71,6 +71,8 @@ resource "azurerm_key_vault_secret" "client_id" {
   value        = azuread_application.app_reg[each.key].application_id
   #key_vault_id = data.azurerm_key_vault.key_vault[each.key].id
   key_vault_id = var.app_keyvaults_map[each.key].id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 
@@ -80,6 +82,8 @@ resource "azurerm_key_vault_secret" "secret" {
   value        = azuread_application_password.create_secret[each.key].value
   #key_vault_id = data.azurerm_key_vault.key_vault[each.key].id
   key_vault_id = var.app_keyvaults_map[each.key].id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 
@@ -96,6 +100,8 @@ data "azurerm_key_vault" "videoweb" {
 data "azurerm_key_vault_secret" "videoweb-clientid" {
   name         = "azuread--clientid"
   key_vault_id = data.azurerm_key_vault.videoweb.id
+  # FromTFSec
+  content_type = "secret"
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -104,6 +110,8 @@ resource "azurerm_key_vault_secret" "azuread-vhvideowebclientid" {
   name         = "azuread--vhvideowebclientid"
   value        = data.azurerm_key_vault_secret.videoweb-clientid.value
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 
@@ -111,6 +119,8 @@ resource "azurerm_key_vault_secret" "services-vhvideowebclientid" {
   name         = "services--videowebclientid"
   value        = data.azurerm_key_vault_secret.videoweb-clientid.value
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 
@@ -122,12 +132,16 @@ data "azurerm_key_vault" "userapi" {
 data "azurerm_key_vault_secret" "userapi-clientid" {
    name         = "azuread--clientid"
   key_vault_id = data.azurerm_key_vault.userapi.id
+  # FromTFSec
+  content_type = "secret"
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
 data "azurerm_key_vault_secret" "userapi-clientsecret" {
    name         = "azuread--clientsecret"
   key_vault_id = data.azurerm_key_vault.userapi.id
+  # FromTFSec
+  content_type = "secret"
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -136,6 +150,8 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientid" {
   name         = "azuread--userapiclientid"
   value        = data.azurerm_key_vault_secret.userapi-clientid.value
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 
@@ -143,6 +159,8 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   name         = "azuread--userapiclientsecret"
   value        = data.azurerm_key_vault_secret.userapi-clientsecret.value
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
+  # FromTFSec
+  content_type = "secret"
   tags = var.tags
 }
 
