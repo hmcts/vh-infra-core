@@ -1,3 +1,4 @@
+# Uncomment defaults to run locally/supply values
 variable "location" {
   type = string
 }
@@ -19,7 +20,7 @@ variable "vh_client_id" {
 
 variable "vh_client_secret" {
   type    = string
-  default = ""
+  #default = ""
 }
 
 variable "dns_tenant_id" {
@@ -34,7 +35,7 @@ variable "dns_client_id" {
 
 variable "dns_client_secret" {
   type    = string
-  default = ""
+  #default = ""
 }
 
 variable "dns_subscription_id" {
