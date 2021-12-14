@@ -103,7 +103,8 @@ resource "azurerm_key_vault_secret" "VhBookingsDatabaseConnectionString" {
   value        = "Server=tcp:${azurerm_sql_server.vh-infra-core.name}.database.windows.net,1433;Initial Catalog=vhbookings;Persist Security Info=False;User ID=${azurerm_sql_server.vh-infra-core.administrator_login};Password=${random_password.sqlpass.result};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
   # FromTFSec
-  content_type = "secret"
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
