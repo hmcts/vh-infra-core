@@ -765,9 +765,62 @@ write_files:
       # Publish password file (format [username][space][password])
       #username password
       wowza ${streamPassword}
+
+  - owner: wowza:wowza
+    permissions: 0775
+    path: /home/wowza/log4j-fix.sh
+    content: |
+        #!/bin/bash
+
+        home_dir="/home/wowza"
+        wowza_version="4.8.10"
+
+        ## Vars
+        log4core_name="log4j-core-2.15.0.jar"
+        log4api_name="log4j-api-2.15.0.jar"
+
+        lof4j_zip_name="apache-log4j-2.15.0-bin"
+        lof4j_zip_url="https://dlcdn.apache.org/logging/log4j/2.15.0/$lof4j_zip_name.zip"
+
+        wowza_dir="/usr/local/WowzaStreamingEngine-$wowza_version"
+        wowza_lib_dir="$wowza_dir/lib"
+        wowza_tune_dir="$wowza_dir/conf/Tune.xml"
+        wowza_startmgr_dir="$wowza_dir/manager/bin/startmgr.sh"
+
+        ## Installs
+        sudo apt install curl
+        sudo apt install unzip
+
+        ## Patch Directory
+        patch_dir="$home_dir/patch"
+        mkdir $patch_dir
+        cd $patch_dir
+
+        ## Download ZIP
+        curl -O $lof4j_zip_url
+        unzip $lof4j_zip_name -d .
+
+        ## Stop Wowza
+        sudo service WowzaStreamingEngine stop
+
+        ## Delete old files
+        sudo mv "$wowza_lib_dir/log4j-core-2.13.3.jar" "$home_dir/patch"
+        sudo mv "$wowza_lib_dir/log4j-api-2.13.3.jar" "$home_dir/patch"
+
+        ## Move new files
+        sudo mv "$home_dir/patch/$lof4j_zip_name/$log4core_name" "$wowza_lib_dir"
+        sudo mv "$home_dir/patch/$lof4j_zip_name/$log4api_name" "$wowza_lib_dir"
+        chmod 775 "$wowza_lib_dir/$log4core_name"
+        chmod 775 "$wowza_lib_dir/$log4api_name"
+
+        ## Start Wowza
+        sudo service WowzaStreamingEngine start
+
+
 runcmd:
   - 'chmod +x /etc/rc.local && systemctl enable rc-local.service && systemctl start rc-local.service'
   - 'bash /home/wowza/migrateWowzaToDisk.sh'
+  - 'bash /home/wowza/log4j-fix.sh'
   - 'wget https://www.wowza.com/downloads/forums/collection/wse-plugin-autorecord.zip && unzip wse-plugin-autorecord.zip && mv lib/wse-plugin-autorecord.jar /usr/local/WowzaStreamingEngine/lib/ && chown wowza: /usr/local/WowzaStreamingEngine/lib/wse-plugin-autorecord.jar'
   - 'secretsname=$(find /var/lib/waagent/ -name "${certThumbprint}.prv" | cut -c -57)'
   - 'openssl pkcs12 -export -out $secretsname.pfx -inkey $secretsname.prv -in $secretsname.crt -passin pass: -passout pass:${certPassword}'

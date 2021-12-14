@@ -9,8 +9,8 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
 
 data "azurerm_subnet" "ss_subnet" {
   name                  = "vh_private_endpoints"
-  virtual_network_name  = "ss-sbox-vnet"
-  resource_group_name   = "ss-sbox-network-rg"
+  virtual_network_name  = "ss-${var.environment}-vnet"
+  resource_group_name   = "ss-${var.environment}-network-rg"
 }
 
 resource "azurerm_private_endpoint" "vh_endpoint" {
