@@ -18,8 +18,6 @@ jobs:
     displayName: terraform init
     inputs:
           command: init
-          terraformVersion: ${{ parameters.tfversion }}
-          backendType: azurerm
 
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
