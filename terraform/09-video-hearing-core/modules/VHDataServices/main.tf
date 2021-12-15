@@ -60,6 +60,9 @@ resource "azurerm_sql_server" "vh-infra-core" {
   administrator_login          = "hvhearingsapiadmin"
   administrator_login_password = random_password.sqlpass.result
 
+  # From TFSec
+  extended_auditing_policy = {}
+  
   tags = merge({displayName = "Virtual Courtroom SQL Server"}, var.tags)
 }
 
