@@ -14,6 +14,11 @@ jobs:
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
+  - task: TerraformCLI@0
+    displayName: terraform init
+    inputs:
+          command: init
+
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
       terraformPath: ${{ parameters.terraformPath }}

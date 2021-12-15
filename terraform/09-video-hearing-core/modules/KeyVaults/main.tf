@@ -11,6 +11,7 @@ data "azurerm_client_config" "current" {}
 #### Per App Key Vault
 
 #tfsec:ignore:azure-keyvault-no-purge
+#tfsec:ignore:azure-keyvault-specify-network-acl
 resource "azurerm_key_vault" "app_keyvaults" {
   for_each = var.keyvaults
 
@@ -25,11 +26,7 @@ resource "azurerm_key_vault" "app_keyvaults" {
   sku_name = "standard"
   tags = var.tags
 
-  #TFSec
-  network_acls {
-        bypass = "AzureServices"
-        default_action = "Deny"
-    }
+
 }
 
 resource "azurerm_key_vault_access_policy" "app_access_policy" {
@@ -277,6 +274,7 @@ resource "azurerm_key_vault_access_policy" "dts_operations" {
 }
 
 #tfsec:ignore:azure-keyvault-no-purge
+#tfsec:ignore:azure-keyvault-specify-network-acl
 resource "azurerm_key_vault" "vh-infra-core-ht" {
   name                        = data.azurerm_resource_group.vh-infra-core.name
   resource_group_name         = data.azurerm_resource_group.vh-infra-core.name
@@ -288,11 +286,6 @@ resource "azurerm_key_vault" "vh-infra-core-ht" {
   sku_name = "standard"
   tags = var.tags
 
-  # From TFSec
-  network_acls {
-        bypass = "AzureServices"
-        default_action = "Deny"
-    }
 }
 
 resource "azurerm_key_vault_access_policy" "devops" {
