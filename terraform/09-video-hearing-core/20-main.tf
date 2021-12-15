@@ -51,6 +51,7 @@ resource "azurerm_storage_account" "vh-infra-core" {
 # Or do a tfsec:ignore:azure-storage-default-action-deny
 resource "azurerm_storage_account_network_rules" "vh-infra-core" {
 
+  storage_account_name        = azurerm_storage_account.vh-infra-core.id
   #default_action             = "Deny"
   #ip_rules                   = ["127.0.0.1"]
   #virtual_network_subnet_ids = [azurerm_subnet.test.id]
