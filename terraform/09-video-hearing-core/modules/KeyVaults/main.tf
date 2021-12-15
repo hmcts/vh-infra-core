@@ -24,6 +24,12 @@ resource "azurerm_key_vault" "app_keyvaults" {
 
   sku_name = "standard"
   tags = var.tags
+
+  #TFSec
+  network_acls {
+        bypass = "AzureServices"
+        default_action = "Deny"
+    }
 }
 
 resource "azurerm_key_vault_access_policy" "app_access_policy" {
@@ -281,6 +287,12 @@ resource "azurerm_key_vault" "vh-infra-core-ht" {
 
   sku_name = "standard"
   tags = var.tags
+
+  # From TFSec
+  network_acls {
+        bypass = "AzureServices"
+        default_action = "Deny"
+    }
 }
 
 resource "azurerm_key_vault_access_policy" "devops" {

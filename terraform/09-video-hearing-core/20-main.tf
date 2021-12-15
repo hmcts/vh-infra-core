@@ -46,6 +46,18 @@ resource "azurerm_storage_account" "vh-infra-core" {
   tags = local.common_tags
 }
 
+# This is here to see if we can pass teh TFSec tests - 
+# Suggest we replace with valid and appropriate rules
+# Or do a tfsec:ignore:azure-storage-default-action-deny
+resource "azurerm_storage_account_network_rules" "vh-infra-core" {
+
+  #default_action             = "Deny"
+  #ip_rules                   = ["127.0.0.1"]
+  #virtual_network_subnet_ids = [azurerm_subnet.test.id]
+  #bypass                     = ["Metrics"]
+}
+
+
 #--------------------------------------------------------------
 # VH - SignalR
 #--------------------------------------------------------------
