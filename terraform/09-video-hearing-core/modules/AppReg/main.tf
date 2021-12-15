@@ -104,7 +104,6 @@ data "azurerm_key_vault_secret" "videoweb-clientid" {
   key_vault_id = data.azurerm_key_vault.videoweb.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = timeadd(timestamp(), "8760h")
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -139,7 +138,6 @@ data "azurerm_key_vault_secret" "userapi-clientid" {
   key_vault_id = data.azurerm_key_vault.userapi.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = timeadd(timestamp(), "8760h")
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -148,7 +146,6 @@ data "azurerm_key_vault_secret" "userapi-clientsecret" {
   key_vault_id = data.azurerm_key_vault.userapi.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = timeadd(timestamp(), "8760h")
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -159,7 +156,6 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientid" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
