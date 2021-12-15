@@ -19,7 +19,6 @@ jobs:
     inputs:
           command: init
           terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
           backendType: azurerm
 
   - template: templates/tests/terraform/allTests.yaml@templates
