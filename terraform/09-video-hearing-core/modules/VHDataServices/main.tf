@@ -59,15 +59,6 @@ resource "azurerm_sql_server" "vh-infra-core" {
   version                      = "12.0"
   administrator_login          = "hvhearingsapiadmin"
   administrator_login_password = random_password.sqlpass.result
-
-  # From TFSec
-  extended_auditing_policy = {
-    database_id                             = azurerm_sql_server.vh-infra-core.id
-    #storage_endpoint                        = azurerm_storage_account.example.primary_blob_endpoint
-    #storage_account_access_key              = azurerm_storage_account.example.primary_access_key
-    #torage_account_access_key_is_secondary = false
-    #retention_in_days                       = 6
-  }
   
   tags = merge({displayName = "Virtual Courtroom SQL Server"}, var.tags)
 }
@@ -162,6 +153,19 @@ resource "azurerm_sql_database" "vh-infra-core" {
 
   tags = var.tags
 }
+
+# From TFSec
+resource "azurerm_mssql_database_extended_auditing_policy" "example" {
+
+  for_each = var.databases
+
+  database_id                             = azurerm_sql_server.vh-infra-core.id
+  #storage_endpoint                        = azurerm_storage_account.example.primary_blob_endpoint
+  #storage_account_access_key              = azurerm_storage_account.example.primary_access_key
+  #storage_account_access_key_is_secondary = false
+  #retention_in_days                       = 6
+}
+
 
 resource "azurerm_servicebus_namespace" "vh-infra-core" {
   name                = "${var.resource_prefix}-${local.environment}"
