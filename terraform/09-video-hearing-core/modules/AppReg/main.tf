@@ -102,8 +102,7 @@ data "azurerm_key_vault" "videoweb" {
 data "azurerm_key_vault_secret" "videoweb-clientid" {
   name         = "azuread--clientid"
   key_vault_id = data.azurerm_key_vault.videoweb.id
-  # FromTFSec
-  content_type    = "secret"
+  
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
@@ -136,16 +135,12 @@ data "azurerm_key_vault" "userapi" {
 data "azurerm_key_vault_secret" "userapi-clientid" {
    name         = "azuread--clientid"
   key_vault_id = data.azurerm_key_vault.userapi.id
-  # FromTFSec
-  content_type    = "secret"
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
 data "azurerm_key_vault_secret" "userapi-clientsecret" {
    name         = "azuread--clientsecret"
   key_vault_id = data.azurerm_key_vault.userapi.id
-  # FromTFSec
-  content_type    = "secret"
 
   depends_on = [ azurerm_key_vault_secret.client_id, azurerm_key_vault_secret.secret ]
 }
