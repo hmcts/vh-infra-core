@@ -156,6 +156,7 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientid" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
 
