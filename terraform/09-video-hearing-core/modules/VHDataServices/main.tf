@@ -63,6 +63,11 @@ resource "azurerm_sql_server" "vh-infra-core" {
   tags = merge({displayName = "Virtual Courtroom SQL Server"}, var.tags)
 }
 
+# From TFSec
+resource "azurerm_mssql_server_extended_auditing_policy" "vh-infra-core-sec-pol" {
+  server_id = azurerm_sql_server.vh-infra-core.id
+}
+
 resource "azurerm_template_deployment" "sqlbackup" {
   count = terraform.workspace == "Prod" ? 1 : 0
 
@@ -153,19 +158,6 @@ resource "azurerm_sql_database" "vh-infra-core" {
 
   tags = var.tags
 }
-
-# From TFSec
-resource "azurerm_mssql_database_extended_auditing_policy" "example" {
-
-  for_each = var.databases
-
-  database_id                             = azurerm_sql_server.vh-infra-core.id
-  #storage_endpoint                        = azurerm_storage_account.example.primary_blob_endpoint
-  #storage_account_access_key              = azurerm_storage_account.example.primary_access_key
-  #storage_account_access_key_is_secondary = false
-  #retention_in_days                       = 6
-}
-
 
 resource "azurerm_servicebus_namespace" "vh-infra-core" {
   name                = "${var.resource_prefix}-${local.environment}"
