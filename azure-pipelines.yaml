@@ -12,6 +12,7 @@ parameters:
     type: string
     default: 'CI'
     values:
+      - TFSec
       - CI
       - Video_Hearing_Core
       - Video_Hearing_Wowza

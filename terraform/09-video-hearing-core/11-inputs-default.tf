@@ -1,3 +1,4 @@
+# Uncomment defaults to run locally/supply values
 variable "location" {
   type = string
 }
@@ -17,6 +18,7 @@ variable "vh_client_id" {
   default = ""
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "vh_client_secret" {
   type    = string
   default = ""
@@ -32,6 +34,7 @@ variable "dns_client_id" {
   default = ""
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "dns_client_secret" {
   type    = string
   default = ""

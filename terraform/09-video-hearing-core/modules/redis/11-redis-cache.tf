@@ -32,5 +32,8 @@ resource "azurerm_key_vault_secret" "rediscache_connection_str" {
   name         = "connectionstrings--rediscache"
   value        = azurerm_redis_cache.redis_cache_standard.primary_connection_string
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+  # FromTFSec
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
   tags = var.tags
 }
