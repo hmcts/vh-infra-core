@@ -18,9 +18,10 @@ variable "vh_client_id" {
   default = ""
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "vh_client_secret" {
   type    = string
-  #default = ""
+  default = ""
 }
 
 variable "dns_tenant_id" {
@@ -33,9 +34,10 @@ variable "dns_client_id" {
   default = ""
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "dns_client_secret" {
   type    = string
-  #default = ""
+  default = ""
 }
 
 variable "dns_subscription_id" {
