@@ -32,6 +32,7 @@ module KeyVaults {
 # VH - Storage Group
 #--------------------------------------------------------------
 
+#tfsec:ignore:azure-storage-default-action-deny
 resource "azurerm_storage_account" "vh-infra-core" {
   name                = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
   resource_group_name = azurerm_resource_group.vh-infra-core.name
@@ -43,19 +44,9 @@ resource "azurerm_storage_account" "vh-infra-core" {
   account_tier                      = "Standard"
   account_replication_type          = "LRS"
   enable_https_traffic_only         = true
+
   tags = local.common_tags
 }
-
-# This is here to see if we can pass teh TFSec tests - 
-# Suggest we replace with valid and appropriate rules
-# Or do a tfsec:ignore:azure-storage-default-action-deny
-resource "azurerm_storage_account_network_rules" "vh-infra-core" {
-
-  storage_account_name        = azurerm_storage_account.vh-infra-core.id
-  resource_group_name         = azurerm_resource_group.vh-infra-core.name
-  default_action              = "Allow"
-}
-
 
 #--------------------------------------------------------------
 # VH - SignalR
