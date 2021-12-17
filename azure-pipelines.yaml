@@ -126,8 +126,8 @@ stages:
               run_stage: ${{ parameters.Run_Stage }}
               state_sub: $(vh_tf_state_sub)
 
-      - job: Wowza-Cert-Gen
-        displayName: 'Generate Certificate for ${{parameters.env}}'
+      - job: WowzaCertGen
+        displayName: 'Generate Certificate for ${{ parameters.env }}'
         steps:
           - template: templates\Azure\Certificates\Request.yaml@templates
             parameters:
