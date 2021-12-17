@@ -131,7 +131,7 @@ stages:
         steps:
           - template: templates\Azure\Certificates\Request.yaml@templates
             parameters:
-              subscriptionName: DTS-SHAREDSERVICES-${{ parameters.env }}
+              subscriptionName: $(serviceConnection)
               product: "vh"
               environment: ${{ lower(parameters.env) }}
               domain: "${{ variables.dns }}"
