@@ -768,6 +768,33 @@ write_files:
 
   - owner: wowza:wowza
     permissions: 0775
+    path: /home/wowza/backup-wowza.sh
+    content: |
+        #!/bin/bash
+        cronTaskPath="/home/wowza/backup-wowza.txt"
+        sudo touch $cronTaskPath
+        sudo chmod 777 $cronTaskPath
+
+        echo "0 19 * * * hostvar=$(hostname) ; cp -r -n /usr/local/WowzaStreamingEngine/{content,applications,conf} /wowzadata/azurecopy/$hostvar'_backup'
+        " > $cronTaskPath
+
+        sudo -u wowza bash -c "crontab $cronTaskPath"
+        
+  - owner: wowza:wowza
+    permissions: 0775
+    path: /home/wowza/purge-wowza-backup.sh
+    content: |
+        #!/bin/bash
+        cronTaskPath="/home/wowza/purge-wowza-backup.txt"
+        sudo touch $cronTaskPath
+        sudo chmod 777 $cronTaskPath
+
+        echo "0 0 * * * hostvar=$(hostname) ; cp -r -n /usr/local/WowzaStreamingEngine/{content,applications,conf} /wowzadata/azurecopy/$hostvar'_backup'
+        " > $cronTaskPath
+
+        sudo -u wowza bash -c "crontab $cronTaskPath"
+  - owner: wowza:wowza
+    permissions: 0775
     path: /home/wowza/log4j-fix.sh
     content: |
         #!/bin/bash
