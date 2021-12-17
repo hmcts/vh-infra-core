@@ -129,7 +129,7 @@ stages:
       - job: Wowza-Cert-Gen
         displayName: 'Generate Certificate for ${{parameters.env}}'
         steps:
-          - template: templates\Azure\Certificates\Request.yaml@azTemplates
+          - template: templates\Azure\Certificates\Request.yaml@templates
             parameters:
               subscriptionName: DTS-SHAREDSERVICES-${{ parameters.env }}
               product: "vh"
