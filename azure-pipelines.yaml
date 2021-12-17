@@ -54,6 +54,8 @@ variables:
   # so that someone doesn't pick the wrong var in the dropdown
   - name: project
     value: application
+  - name: dns
+    value: hearings.reform.hmcts.net
   # same comment as above ^^
   - name: serviceConnection
     value: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
@@ -123,6 +125,17 @@ stages:
               activity_name: Video_Hearing_Wowza
               run_stage: ${{ parameters.Run_Stage }}
               state_sub: $(vh_tf_state_sub)
+
+      - job: Wowza-Cert-Gen
+        displayName: 'Generate Certificate for ${{parameters.env}}'
+        steps:
+          - template: templates\Azure\Certificates\Request.yaml@azTemplates
+            parameters:
+              subscriptionName: DTS-SHAREDSERVICES-${{ parameters.env }}
+              product: "vh"
+              environment: ${{ lower(parameters.env) }}
+              domain: "${{ variables.dns }}"
+              keyVaultName: "vh-infra-core-${{ lower(parameters.env) }}" 
 
 
   - stage: Destory_Video_Hearing_Core
