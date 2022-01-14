@@ -44,6 +44,9 @@ data "template_file" "cloudconfig" {
     msiClientId          = var.storage_msi_client_id
     restPassword         = md5("wowza:Wowza:${random_password.restPassword.result}")
     streamPassword       = md5("wowza:Wowza:${random_password.streamPassword.result}")
+    keyVaultName         = "vh-infra-core-${var.environment}" 
+    certName             = "vh-${var.environment}-le-cert"
+    domain               = "hearings.reform.hmcts.net"
   }
 }
 
