@@ -37,7 +37,6 @@ resource "azurerm_key_vault_secret" "configPassword" {
 data "azurerm_user_assigned_identity" "mi" {
   name                  = "vh-vault-${var.environment}-mi"
   resource_group_name   = "managed-identities-${var.environment}-rg"
-  location              = "${var.location}"
 }
 data "template_file" "cloudconfig" {
   template = file(var.cloud_init_file)
