@@ -41,7 +41,6 @@ resource "azurerm_key_vault_secret" "wowza-ssh-key" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type     = "secret"
-  tags = var.tags
 }
 
 
