@@ -37,7 +37,7 @@ data "azurerm_private_dns_zone" "core-infra-intsvc" {
 
 resource "azurerm_key_vault_secret" "wowza-ssh-key" {
   name         = "vh-wowza-${var.environment}-key"
-  value        = var.admin_ssh_key_path
+  value        = file(var.admin_ssh_key_path)
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type     = "secret"
