@@ -21,7 +21,7 @@ parameters:
     type: string
   - name: state_sub 
     type: string
-    
+
 steps:
 
   - template: keyvault-read.yaml
@@ -122,7 +122,7 @@ steps:
             -var product=${{ parameters.product }}
             -var activity_name=${{ parameters.activity_name }}
             -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
-            ${variables}
+            $(echo ${variables})
 
   - task: TerraformCLI@0
     displayName: Terraform apply
