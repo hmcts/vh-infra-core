@@ -21,9 +21,7 @@ parameters:
     type: string
   - name: state_sub 
     type: string
-  - name: variableName
-    type: string
-
+    
 steps:
 
   - template: keyvault-read.yaml
