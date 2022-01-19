@@ -55,8 +55,8 @@ resource "azurerm_network_security_group" "wowza" {
 }
 
 resource "azurerm_virtual_network_peering" "vh-to-hub" {
-
-  name                         = var.initiator_peer_name
+ 
+  name                         = var.service_name
   resource_group_name          = azurerm_resource_group.wowza.name
   virtual_network_name         = azurerm_virtual_network.wowza.name
   remote_virtual_network_id    = data.azurerm_virtual_network.hub.id
@@ -66,7 +66,8 @@ resource "azurerm_virtual_network_peering" "vh-to-hub" {
 }
 
 resource "azurerm_virtual_network_peering" "hub-to-vh" {
-  
+  provider = azurerm.peering_target
+
   name                         = data.azurerm_virtual_network.hub.name
   resource_group_name          = data.azurerm_virtual_network.hub.resource_group_name
   virtual_network_name         = data.azurerm_virtual_network.hub.id
