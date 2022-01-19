@@ -53,6 +53,9 @@ module "wowza" {
   address_space                  = lookup(var.workspace_to_address_space_map, var.environment, "")
   storage_msi_client_id          = lookup(var.workspace_to_storage_msi_map, var.environment, "")
   private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
+  network_client_id              = var.network_client_id
+  network_client_secret          = var.network_client_secret
+  network_tenant_id              = var.network_tenant_id
   tags = local.common_tags
 
   #private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
