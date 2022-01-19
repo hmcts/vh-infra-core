@@ -76,13 +76,6 @@ steps:
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
 
-
-  - bash: |
-      echo "ENV var set to: "
-      echo $(variableName)
-    displayName: 'TestOutput'
-    name: testoutput
-
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
