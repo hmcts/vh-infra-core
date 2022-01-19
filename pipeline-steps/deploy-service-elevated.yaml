@@ -79,7 +79,7 @@ steps:
 
   - bash: |
       echo "ENV var set to: "
-      echo ${variableName}
+      echo $(variableName)
     displayName: 'TestOutput'
     name: testoutput
 
