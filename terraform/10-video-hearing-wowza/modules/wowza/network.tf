@@ -1,3 +1,8 @@
+data "azurerm_virtual_network" "hub" {
+  name = "hmcts-hub-sbox-int"
+  resource_group_name = "hmcts-hub-sbox-int"
+}
+
 resource "azurerm_virtual_network" "wowza" {
   name          = var.service_name
   address_space = [var.address_space]
@@ -47,4 +52,27 @@ resource "azurerm_network_security_group" "wowza" {
     destination_address_prefix = "*"
   }
   tags = var.tags
+}
+
+resource "azurerm_virtual_network_peering" "vh-to-hub" {
+
+  name                         = var.initiator_peer_name
+  resource_group_name          = azurerm_resource_group.wowza.name
+  virtual_network_name         = azurerm_virtual_network.wowza.name
+  remote_virtual_network_id    = data.azurerm_virtual_network.hub.id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+
+}
+
+resource "azurerm_virtual_network_peering" "hub-to-vh" {
+  provider = azurerm.target
+
+  name                         = data.azurerm_virtual_network.hub.name
+  resource_group_name          = data.azurerm_virtual_network.hub.resource_group_name
+  virtual_network_name         = data.azurerm_virtual_network.hub.id
+  remote_virtual_network_id    = azurerm_resource_group.wowza.name
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+
 }
