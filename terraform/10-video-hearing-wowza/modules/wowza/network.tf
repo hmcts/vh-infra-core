@@ -1,8 +1,9 @@
-data "azurerm_virtual_network" "hub" {
-  name = "hmcts-hub-sbox-int"
-  resource_group_name = "hmcts-hub-sbox-int"
-}
 
+locals {
+  dns_zone_name        = var.environment == "prod" ? "platform.hmcts.net" : "staging.platform.hmcts.net"
+  peering_vnets        = var.environment != "prod" && var.environment != "stg" ? ["hmcts-hub-prod-int", "ukw-hub-prod-int"] : []
+  peering_subscription = "0978315c-75fe-4ada-9d11-1eb5e0e0b214"
+}
 resource "azurerm_virtual_network" "wowza" {
   name          = var.service_name
   address_space = [var.address_space]
@@ -55,11 +56,13 @@ resource "azurerm_network_security_group" "wowza" {
 }
 
 resource "azurerm_virtual_network_peering" "vh-to-hub" {
- 
+  provider = azurerm.peering_client
+  for_each                     = toset(local.peering_vnets)
+
   name                         = var.service_name
   resource_group_name          = azurerm_resource_group.wowza.name
   virtual_network_name         = azurerm_virtual_network.wowza.name
-  remote_virtual_network_id    = data.azurerm_virtual_network.hub.id
+  remote_virtual_network_id    = "/subscriptions/${local.peering_subscription}/resourceGroups/${each.value}/providers/Microsoft.Network/virtualNetworks/${each.value}"
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
 
@@ -67,11 +70,12 @@ resource "azurerm_virtual_network_peering" "vh-to-hub" {
 
 resource "azurerm_virtual_network_peering" "hub-to-vh" {
   provider = azurerm.peering_target
+  for_each                     = toset(local.peering_vnets)
 
-  name                         = data.azurerm_virtual_network.hub.name
-  resource_group_name          = data.azurerm_virtual_network.hub.resource_group_name
-  virtual_network_name         = data.azurerm_virtual_network.hub.id
-  remote_virtual_network_id    = azurerm_resource_group.wowza.name
+  name                         = azurerm_virtual_network.wowza.name
+  resource_group_name          = each.value
+  virtual_network_name         = each.value
+  remote_virtual_network_id    = azurerm_resource_group.wowza.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
 
