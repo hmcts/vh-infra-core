@@ -21,6 +21,8 @@ parameters:
     type: string
   - name: state_sub 
     type: string
+  - name: variableName
+    type: string
 
 steps:
 
@@ -58,14 +60,13 @@ steps:
         Write-Host "Subscription ID: $subscriptionId"
 
   - bash: |
-      variableName="${{ parameters.variableName }}"
+      variableName="vars"
       
       variables=""
-      variables="-var-file=\"$(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars""
       variables="${variables} -var \"network_client_id=${GNP_CLIENT_ID} \""
       variables="${variables} -var \"network_client_secret=${GNP_CLIENT_SECRET} \""
       variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
-      
+
       echo "Variables set as: "
       echo "${variables}"
       echo "##vso[task.setvariable variable=$variableName;isOutput=true]${variables}"
@@ -123,6 +124,7 @@ steps:
             -var product=${{ parameters.product }}
             -var activity_name=${{ parameters.activity_name }}
             -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
+            ${variables}
 
   - task: TerraformCLI@0
     displayName: Terraform apply
