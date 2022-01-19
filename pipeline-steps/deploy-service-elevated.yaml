@@ -68,14 +68,20 @@ steps:
       echo "Variables set as: "
       echo "${variables}"
       echo "##vso[task.setvariable variable=$variableName;isOutput=true]${variables}"
-      echo "ENV var set to: "
-      echo $(vars)
+
     displayName: 'Set Shared Services TF Variables'
     name: tfVariables
     env:
       GNP_CLIENT_ID: $(GlobalNetworkPeering.GNP_CLIENT_ID) 
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
+
+
+  - bash: |
+      echo "ENV var set to: "
+      echo $(vars)
+    displayName: 'TestOutput'
+    name: testoutput
 
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
