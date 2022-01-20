@@ -77,7 +77,7 @@ resource "azurerm_virtual_network_peering" "hub-to-vh" {
   name                         = azurerm_virtual_network.wowza.name
   resource_group_name          = each.value
   virtual_network_name         = each.value
-  remote_virtual_network_id    = azurerm_resource_group.wowza.id
+  remote_virtual_network_id    = azurerm_virtual_network.wowza.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
 
