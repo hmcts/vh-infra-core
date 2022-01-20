@@ -48,13 +48,13 @@ variable "service_certificate_thumbprint" {
 # }
 
 # # DNS
-# variable "dns_zone_name" {
-#   type = string
-# }
+variable "dns_zone_name" {
+  type = string
+}
 
-# variable "dns_resource_group" {
-#   type = string
-# }
+variable "dns_resource_group" {
+  type = string
+}
 
 variable "dev_group" {
   type = string
