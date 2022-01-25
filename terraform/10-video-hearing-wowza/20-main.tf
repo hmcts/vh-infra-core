@@ -62,13 +62,13 @@ module "wowza" {
   hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id
 }
 
-provider "azurerm" {
-  alias = "private-endpoint-dns"
-  features {}
-  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
-  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
-  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.name
-}
+#provider "azurerm" {
+#  alias = "private-endpoint-dns"
+#  features {}
+#  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
+#  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
+#  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.name
+#}
 
 #commented out as I'd rather make these changes in a new PR
 #resource "azurerm_dns_a_record" "wowza" {
