@@ -105,6 +105,11 @@ variable "network_tenant_id" {
   type        = string
 }
 
+variable "peering_target_subscription_id" {
+  description = "hub network for peering subscription ID"
+  type        = "string"
+}
+
 locals {
   common_tags = module.ctags.common_tags
 }

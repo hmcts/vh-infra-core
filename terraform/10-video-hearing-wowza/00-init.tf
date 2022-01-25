@@ -44,7 +44,7 @@ provider "azurerm" {
 provider "azurerm" {
   features {}
   alias           = "peering_target"
-  subscription_id = "ea3a8c1e-af9d-4108-bc86-a7e2d267f49c"
+  subscription_id = var.peering_target_subscription_id
   client_id       = var.network_client_id
   client_secret   = var.network_client_secret
   tenant_id       = var.network_tenant_id
