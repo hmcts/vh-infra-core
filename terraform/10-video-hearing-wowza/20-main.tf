@@ -35,11 +35,11 @@ data "azurerm_private_dns_zone" "core-infra-intsvc" {
   resource_group_name   = "core-infra-intsvc-rg"
 }
 
-data "azurerm_private_dns_zone" "reform-hearings-dns" {
-  provider              = azurerm.hearings-dns
-  name                  = "hearings.reform.hmcts.net"
-  resource_group_name   = "vh-hearings-reform-hmcts-net-dns-zone"
-}
+#data "azurerm_private_dns_zone" "reform-hearings-dns" {
+#  provider              = azurerm.hearings-dns
+#  name                  = "hearings.reform.hmcts.net"
+#  resource_group_name   = "vh-hearings-reform-hmcts-net-dns-zone"
+#}
 
 module "wowza" {
   source                         = "./modules/wowza"
