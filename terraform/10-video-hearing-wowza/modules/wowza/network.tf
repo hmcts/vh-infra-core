@@ -1,9 +1,14 @@
 data "azurerm_client_config" "current" {
 }
+
+data "azurerm_subscription" "peering_target" {
+    provider = azurerm.peering_target
+}
+
 locals {
-  dns_zone_name        = var.environment == "prod" ? "platform.hmcts.net" : "staging.platform.hmcts.net"
+  dns_zone_name        = var.environment == "prod" ? "platform.hmcts.net" : "sandbox.platform.hmcts.net"
   peering_vnets        = ["hmcts-hub-sbox-int"] #var.environment != "prod" && var.environment != "stg" ? ["hmcts-hub-prod-int", "ukw-hub-prod-int"] : []
-  peering_subscription = "ea3a8c1e-af9d-4108-bc86-a7e2d267f49c"
+  peering_subscription = data.azurerm_subscription.peering_target.subscription_id #"ea3a8c1e-af9d-4108-bc86-a7e2d267f49c"
 }
 
 resource "azurerm_virtual_network" "wowza" {
