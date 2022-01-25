@@ -892,6 +892,9 @@ write_files:
 runcmd:
   - 'chmod +x /etc/rc.local && systemctl enable rc-local.service && systemctl start rc-local.service'
   - 'bash /home/wowza/migrateWowzaToDisk.sh'
+  - 'sudo curl -sL https://aka.ms/InstallAzureCLIDeb'
+  - 'sudo bash /home/wowza/renew-cert.sh'
+  - 'sudo bash /home/wowza/schedule-cert.sh'
   - 'bash /home/wowza/log4j-fix.sh'
   - 'wget https://www.wowza.com/downloads/forums/collection/wse-plugin-autorecord.zip && unzip wse-plugin-autorecord.zip && mv lib/wse-plugin-autorecord.jar /usr/local/WowzaStreamingEngine/lib/ && chown wowza: /usr/local/WowzaStreamingEngine/lib/wse-plugin-autorecord.jar'
   #- 'secretsname=$(find /var/lib/waagent/ -name "${certThumbprint}.prv" | cut -c -57)'
