@@ -107,7 +107,7 @@ variable "network_tenant_id" {
 
 variable "peering_target_subscription_id" {
   description = "hub network for peering subscription ID"
-  type        = "string"
+  type        = string
 }
 
 locals {
