@@ -62,20 +62,22 @@ module "wowza" {
   hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id
 }
 
-#provider "azurerm" {
-#  alias = "private-endpoint-dns"
-#  features {}
-#  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
-#  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
-#  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.name
-#}
-
-resource "azurerm_dns_a_record" "wowza" {
-  provider = azurerm.dns
-
-  name                = "vh-infra-wowza-${var.environment}"
-  zone_name           = var.dns_zone_name
-  resource_group_name = var.dns_resource_group
-  ttl                 = 300
-  records             = [module.wowza.public_ip_address]
+provider "azurerm" {
+  alias = "private-endpoint-dns"
+  features {}
+  hearings_dns_zone              = data.azurerm_private_dns_zone.hearings-dns.name
+  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
+  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.name
 }
+
+#commented out as I'd rather make these changes in a new PR
+#resource "azurerm_dns_a_record" "wowza" {
+#  provider = azurerm.dns
+#
+#  name                = "vh-infra-wowza-${var.environment}"
+#  zone_name           = var.dns_zone_name
+#  resource_group_name = var.dns_resource_group
+#  ttl                 = 300
+#  records             = [module.wowza.public_ip_address]
+#}
+#
