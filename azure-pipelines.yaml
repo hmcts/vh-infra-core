@@ -127,6 +127,8 @@ stages:
               state_sub: $(vh_tf_state_sub)
 
       - job: WowzaCertGen
+        pool:
+          vmImage: 'Ubuntu 18.04'
         displayName: 'Generate Certificate for ${{ parameters.env }}'
         steps:
           - template: templates\Azure\Certificates\Request.yaml@templates
