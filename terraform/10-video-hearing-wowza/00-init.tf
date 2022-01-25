@@ -40,3 +40,21 @@ provider "azurerm" {
   skip_provider_registration = "true"
   subscription_id = "4bb049c8-33f3-4860-91b4-9ee45375cc18"
 }
+
+provider "azurerm" {
+  features {}
+  alias           = "peering_target"
+  subscription_id = "ea3a8c1e-af9d-4108-bc86-a7e2d267f49c"
+  client_id       = var.network_client_id
+  client_secret   = var.network_client_secret
+  tenant_id       = var.network_tenant_id
+}
+
+provider "azurerm" {
+  features {}
+  alias           = "peering_client"
+  subscription_id = data.azurerm_client_config.current.subscription_id
+  client_id       = var.network_client_id
+  client_secret   = var.network_client_secret
+  tenant_id       = var.network_tenant_id
+}
