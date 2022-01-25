@@ -59,7 +59,7 @@ module "wowza" {
   tags = local.common_tags
 
 
-  hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id
+  #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id
 }
 
 #provider "azurerm" {
