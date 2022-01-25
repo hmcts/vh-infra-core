@@ -48,13 +48,13 @@ variable "service_certificate_thumbprint" {
 # }
 
 # # DNS
-# variable "dns_zone_name" {
-#   type = string
-# }
+variable "dns_zone_name" {
+  type = string
+}
 
-# variable "dns_resource_group" {
-#   type = string
-# }
+variable "dns_resource_group" {
+  type = string
+}
 
 variable "dev_group" {
   type = string
@@ -88,6 +88,26 @@ variable "workspace_to_storage_msi_map" {
     sbox    = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/vh-infra-wowza-sbox/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-sbox"
     ithc    = "/subscriptions/ba71a911-e0d6-4776-a1a6-079af1df7139/resourceGroups/vh-infra-wowza-ithc/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-ithc"
   }
+}
+
+# Networking Client Details
+variable "network_client_id" {
+  description = "Client ID of the GlobalNetworkPeering SP"
+  type        = string
+}
+variable "network_client_secret" {
+  description = "Client Secret of the GlobalNetworkPeering SP"
+  type        = string
+  sensitive   = true
+}
+variable "network_tenant_id" {
+  description = "Client Tenant ID of the GlobalNetworkPeering SP"
+  type        = string
+}
+
+variable "peering_target_subscription_id" {
+  description = "hub network for peering subscription ID"
+  type        = string
 }
 
 locals {
