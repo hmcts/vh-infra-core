@@ -61,7 +61,7 @@ resource "azurerm_virtual_network_peering" "vh-to-hub" {
   provider = azurerm.peering_client
   for_each                     = toset(local.peering_vnets)
 
-  name                         = var.service_name
+  name                         = each.value
   resource_group_name          = azurerm_resource_group.wowza.name
   virtual_network_name         = azurerm_virtual_network.wowza.name
   remote_virtual_network_id    = "/subscriptions/${local.peering_subscription}/resourceGroups/${each.value}/providers/Microsoft.Network/virtualNetworks/${each.value}"
