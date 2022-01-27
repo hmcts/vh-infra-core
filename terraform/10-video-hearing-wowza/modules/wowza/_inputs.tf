@@ -67,7 +67,7 @@ variable "tags" {
   default = {}
 }
 
-variable "private_dns_zone_group" {}
+variable "private_dns_zone_group_name" {}
 
 #variable "hearings_dns_zone" {}
 
