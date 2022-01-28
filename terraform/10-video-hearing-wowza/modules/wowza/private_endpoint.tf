@@ -82,7 +82,7 @@ resource "azurerm_private_endpoint" "wowza_storage_endpoint_aks" {
 resource "azurerm_dns_a_record" "wowza_storage_endpoint_dns" {
   provider            = azurerm.private-endpoint-dns
   name                = "vh-wowza-storage-${var.environment}"
-  zone_name           = var.private_dns_zone_group
+  zone_name           = var.private_dns_zone_group_name
   resource_group_name = "core-infra-intsvc-rg" #"vh-hearings-reform-hmcts-net-dns-zone"
   ttl                 = 300
   records             = [azurerm_private_endpoint.wowza_storage_endpoint_aks.private_service_connection[0].private_ip_address]
