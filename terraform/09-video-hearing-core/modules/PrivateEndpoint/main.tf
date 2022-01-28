@@ -29,7 +29,7 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
   }
 }
 
-local "endpoint_resource" {
+data "endpoint_resource" {
   value = tomap({
     for k, e in azurerm_private_endpoint.vh_endpoint : k => {
       resource_id   = e.id
@@ -52,7 +52,7 @@ variable "dns_zone_mapping" {
 }
 
 resource "azurerm_private_dns_a_record" "endpoint-dns" {
-  for_each            = local.endpoint_resource
+  for_each            = data.endpoint_resource
   name                = lookup(each.value, "resource_name")
   zone_name           = "${lookup(var.dns_zone_mapping, lookup(each.value, "resource_type"))}"
   resource_group_name = "core-infra-intsvc-rg"
