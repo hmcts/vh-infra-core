@@ -63,7 +63,7 @@ module "SignalR" {
     azurerm_resource_group.vh-infra-core,
     module.KeyVaults,
   ]
-  tags = local.
+  tags = local.common_tags
 }
 
 #--------------------------------------------------------------
