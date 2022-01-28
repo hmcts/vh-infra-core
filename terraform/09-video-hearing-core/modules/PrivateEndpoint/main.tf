@@ -16,7 +16,7 @@ data "azurerm_subnet" "ss_subnet" {
 resource "azurerm_private_endpoint" "vh_endpoint" {
   for_each            = var.resources
 
-  name                = format("vh-endpoint-%s-%s", lookup(each.value, "resource_name"), var.environment)
+  name                = format("endpoint-%s", lookup(each.value, "resource_name"))
   location            = var.location
   resource_group_name = data.azurerm_resource_group.vh-infra-core.name
   subnet_id           = data.azurerm_subnet.ss_subnet.id
@@ -27,5 +27,25 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
     is_manual_connection                = false
     subresource_names                   = [lookup(each.value, "resource_type")]
   }
+}
+
+variable "dns_zone_mapping" {
+  description = "mapping for endpoint dns"
+  default = {
+    "sqlServer" = "privatelink.database.windows.net",
+    "redisCache" = "privatelink.redis.cache.windows.net",
+    "signalr" = "privatelink.service.signalr.net",
+    "vault" = "privatelink.vaultcore.azure.net"
+
+  }
+}
+
+resource "azurerm_private_dns_a_record" "endpoint-dns" {
+  for_each            = var.resources
+  name                = format("endpoint-%s", lookup(each.value, "resource_name"))
+  zone_name           = lookup(var.dns_zone_mapping, lookup(each.value, resource_type))
+  resource_group_name = "core-infra-intsvc-rg"
+  ttl                 = 300
+  records             = var.ip_records
 }
 
