@@ -46,6 +46,6 @@ resource "azurerm_private_dns_a_record" "endpoint-dns" {
   zone_name           = "${lookup(var.dns_zone_mapping, lookup(each.value, resource_type))}"
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 300
-  records             = var.ip_records
+  records             = azurerm_private_endpoint.vh_endpoint.private_service_connection[0].private_ip_address
 }
 
