@@ -5,7 +5,6 @@ parameters:
     type: string
   - name: stack
     type: string
-    default: ''
   - name: project
     type: string
   - name: tfversion
