@@ -146,9 +146,9 @@ stages:
             parameters:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
-              ${{ if eq(parameters.Run_Stage, 'Video_Hearing_Core') }}:
+              ${{ if eq(parameters.Run_Stage, 'Destroy_Core') }}:
                 stack: '09-video-hearing-core'
-              ${{ if eq(parameters.Run_Stage, 'Video_Hearing_Wowza') }}:
+              ${{ if eq(parameters.Run_Stage, 'Destroy_Wowza') }}:
                 stack: '10-video-hearing-wowza'
               project: $(project)
               product: 'vh'
