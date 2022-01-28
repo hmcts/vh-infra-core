@@ -43,7 +43,7 @@ variable "dns_zone_mapping" {
 resource "azurerm_private_dns_a_record" "endpoint-dns" {
   for_each            = var.resources
   name                = format("endpoint-%s", lookup(each.value, "resource_name"))
-  zone_name           = lookup(var.dns_zone_mapping, lookup(each.value, resource_type))
+  zone_name           = "${lookup(var.dns_zone_mapping, lookup(each.value, resource_type))}"
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 300
   records             = var.ip_records
