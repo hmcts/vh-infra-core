@@ -40,12 +40,12 @@ variable "dns_zone_mapping" {
   }
 }
 
-#resource "azurerm_private_dns_a_record" "endpoint-dns" {
-#  for_each            = azurerm_private_endpoint.vh_endpoint
-#  name                = lookup(each.value, "name")
-#  zone_name           = "privatelink.database.windows.net"
-#  resource_group_name = "core-infra-intsvc-rg"
-#  ttl                 = 300
-#  records             = lookup(each.value, "private_service_connection.private_ip_address")
-#}
+resource "azurerm_private_dns_a_record" "endpoint-dns" {
+  for_each            = azurerm_private_endpoint.vh_endpoint.endpoint_resource
+  name                = lookup(each.value, "resource_name")
+  zone_name           = "privatelink.database.windows.net"
+  resource_group_name = "core-infra-intsvc-rg"
+  ttl                 = 300
+  records             = lookup(each.value, "value")
+}
 
