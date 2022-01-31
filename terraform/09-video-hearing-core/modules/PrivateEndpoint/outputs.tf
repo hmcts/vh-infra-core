@@ -4,7 +4,7 @@ output "endpoint_resource" {
       resource_id   = e.id
       name          = e.name
       resource_type = k.private_service_connection.subresource_names
-      value         = k.private_service_connection.private_ip_address[0]
+      value         = k.private_service_connection[0]
     }
   })
 }
