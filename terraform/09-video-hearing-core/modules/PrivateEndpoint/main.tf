@@ -29,34 +29,23 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
   }
 }
 
-variable "endpoint_resource" {
-  value = tomap({
-    for k, e in azurerm_private_endpoint.vh_endpoint : k => {
-      resource_id   = e.id
-      resource_name = e.name
-      resource_type = k.private_service_connection.subresource_names
-      ip_address    = k.private_service_connection[0].private_ip_address
-    }
-  })
-}
-
-variable "dns_zone_mapping" {
-  description = "mapping for endpoint dns"
-  default = {
-    "sqlServer" = "privatelink.database.windows.net",
-    "redisCache" = "privatelink.redis.cache.windows.net",
-    "signalr" = "privatelink.service.signalr.net",
-    "vault" = "privatelink.vaultcore.azure.net"
-
-  }
-}
-
-resource "azurerm_private_dns_a_record" "endpoint-dns" {
-  for_each            = variable.endpoint_resource
-  name                = lookup(each.value, "resource_name")
-  zone_name           = "${lookup(var.dns_zone_mapping, lookup(each.value, "resource_type"))}"
-  resource_group_name = "core-infra-intsvc-rg"
-  ttl                 = 300
-  records             = lookup(each.value, "ip_address")
-}
+#variable "dns_zone_mapping" {
+#  description = "mapping for endpoint dns"
+#  default = {
+#    "sqlServer" = "privatelink.database.windows.net",
+#    "redisCache" = "privatelink.redis.cache.windows.net",
+#    "signalr" = "privatelink.service.signalr.net",
+#    "vault" = "privatelink.vaultcore.azure.net"
+#
+#  }
+#}
+#
+#resource "azurerm_private_dns_a_record" "endpoint-dns" {
+#  for_each            = variable.endpoint_resource
+#  name                = lookup(each.value, "resource_name")
+#  zone_name           = "${lookup(var.dns_zone_mapping, lookup(each.value, "resource_type"))}"
+#  resource_group_name = "core-infra-intsvc-rg"
+#  ttl                 = 300
+#  records             = lookup(each.value, "ip_address")
+#}
 

@@ -246,6 +246,27 @@ module vh_endpoint {
   tags = local.common_tags
 }
 
+variable "dns_zone_mapping" {
+  description = "mapping for endpoint dns"
+  default = {
+    "sqlServer" = "privatelink.database.windows.net",
+    "redisCache" = "privatelink.redis.cache.windows.net",
+    "signalr" = "privatelink.service.signalr.net",
+    "vault" = "privatelink.vaultcore.azure.net"
+
+  }
+}
+module "endoint_dns_reg" {
+  source = "./modules/DnsZone"
+
+  for_each            = module.vh_endpoint.endpoint_resource
+  name                = lookup(each.value, "resource_name")
+  zone_name           = "${lookup(var.dns_zone_mapping, lookup(each.value, "resource_type"))}"
+  resource_group_name = "core-infra-intsvc-rg"
+  ttl                 = 3600
+  records             = lookup(each.value, "ip_address")
+}
+
 module vh_kv_endpoint {
 
   source              = "./modules/PrivateEndpoint"
