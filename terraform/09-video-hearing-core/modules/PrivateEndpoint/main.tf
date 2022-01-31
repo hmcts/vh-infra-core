@@ -41,7 +41,7 @@ variable "dns_zone_mapping" {
 }
 
 resource "azurerm_private_dns_a_record" "endpoint-dns" {
-  for_each            = azurerm_private_endpoint.vh_endpoint.[each.key]
+  for_each            = azurerm_private_endpoint.vh_endpoint[each.key]
   name                = lookup(each.value, "resource_name")
   zone_name           = "privatelink.database.windows.net"
   resource_group_name = "core-infra-intsvc-rg"
