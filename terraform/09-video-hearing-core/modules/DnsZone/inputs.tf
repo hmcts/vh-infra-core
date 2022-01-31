@@ -1,6 +1,5 @@
 variable "cnames" {
   type = map
-  default = {}
 }
 
 variable "a" {

@@ -256,14 +256,14 @@ variable "dns_zone_mapping" {
 
   }
 }
-module "endoint_dns_reg" {
-  source = "./modules/DnsZone"
-
-  a                   = module.vh_endpoint.endpoint_resource
-  
-  zone_name           = "privatelink.blob.core.windows.net"
-  resource_group_name = "core-infra-intsvc-rg"
-}
+#module "endoint_dns_reg" {
+#  source = "./modules/DnsZone"
+#
+#  a                   = module.vh_endpoint.endpoint_resource
+#  
+#  zone_name           = "privatelink.blob.core.windows.net"
+#  resource_group_name = "core-infra-intsvc-rg"
+#}
 
 module vh_kv_endpoint {
 
