@@ -259,9 +259,9 @@ variable "dns_zone_mapping" {
 module "endoint_dns_reg" {
   source = "./modules/DnsZone"
 
-  for_each            = module.vh_endpoint.endpoint_resource
-  name                = lookup(each.value, "resource_name")
-  zone_name           = "${lookup(var.dns_zone_mapping, lookup(each.value, "resource_type"))}"
+  a                   = module.vh_endpoint.endpoint_resource
+  
+  zone_name           = "privatelink.blob.core.windows.net"
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
   records             = lookup(each.value, "ip_address")
