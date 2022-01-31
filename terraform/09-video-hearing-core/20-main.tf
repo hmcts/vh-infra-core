@@ -263,8 +263,6 @@ module "endoint_dns_reg" {
   
   zone_name           = "privatelink.blob.core.windows.net"
   resource_group_name = "core-infra-intsvc-rg"
-  ttl                 = 3600
-  records             = lookup(each.value, "ip_address")
 }
 
 module vh_kv_endpoint {
