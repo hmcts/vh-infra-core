@@ -32,7 +32,9 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
 
 variable "dns_zone_mapping" {
   description = "mapping for endpoint dns"
+  type = map
   default = {
+    
     "endpoint-SQLServer" = "privatelink.database.windows.net",
     "endpoint-Redis" = "privatelink.redis.cache.windows.net",
     "endpoint-Signal" = "privatelink.service.signalr.net",
