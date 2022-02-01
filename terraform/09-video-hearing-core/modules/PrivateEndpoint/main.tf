@@ -27,6 +27,7 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
     is_manual_connection                = false
     subresource_names                   = [lookup(each.value, "resource_type")]
   }
+  tags = var.tags
 }
 
 variable "dns_zone_mapping" {
