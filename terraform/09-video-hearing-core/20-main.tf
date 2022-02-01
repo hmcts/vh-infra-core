@@ -270,7 +270,7 @@ resource azurerm_dns_a_record "test" {
   for_each = {for e, o in module.vh_endpoint : e => o.name }
   
   name                = each.key
-  zone_name           = "privatelink.database.windows.net"
+  zone_name           = lookup(var.dns_zone_mapping, each.value.private_service_connection[0].subresource_names)
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
   records             = [each.value.private_service_connection[0].private_ip_address]
