@@ -3,8 +3,7 @@ output "endpoint_resource" {
     for k, e in azurerm_private_endpoint.vh_endpoint : k => {
       resource_id   = e.id
       resource_name = e.name
-      #resource_type = k.private_service_connection.subresource_names
-      value         = k.private_service_connection.private_ip_address.0
+      resource_type = e.private_service_connection.0
     }
   })
 }
