@@ -267,13 +267,13 @@ variable "dns_zone_mapping" {
 #}
 
 resource azurerm_dns_a_record "test" {
-  for_each = {for endpoint in module.vh_endpoint.endpoint_resource: endpoint.resource_type => endpoint}
+  for_each = module.vh_endpoint.endpoint_resource
 
-  name                = each.value.name
+  name                = lookup(each.value, "name")
   zone_name           = "privatelink.database.windows.net"
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
-  records             = [each.value.private_ip_address]
+  records             = [lookup(each.value.*, "private_ip_address")]
 }
 
 module vh_kv_endpoint {
