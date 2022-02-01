@@ -35,9 +35,9 @@ variable "dns_zone_mapping" {
   type = map
   default = {
     
-    "endpoint-SQLServer" = "privatelink.database.windows.net",
-    "endpoint-Redis" = "privatelink.redis.cache.windows.net",
-    "endpoint-Signal" = "privatelink.service.signalr.net",
+    "endpoint-SQLServer" = "privatelink.database.windows.net"
+    "endpoint-Redis" = "privatelink.redis.cache.windows.net"
+    "endpoint-Signal" = "privatelink.service.signalr.net"
     "vault" = "privatelink.vaultcore.azure.net"
 
   }
