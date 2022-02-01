@@ -42,17 +42,14 @@ variable "dns_zone_mapping" {
 
   }
 }
-
-
-
 resource azurerm_dns_a_record "test" {
   for_each = {for e, o in azurerm_private_endpoint.vh_endpoint : e => o.name }
   
   name                = each.key
-  zone_name           = lookup(var.dns_zone_mapping, each.value.private_service_connection[0].subresource_names)
+  zone_name           = lookup(var.dns_zone_mapping, "endpoint-Signal")
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
-  records             = [each.value.private_service_connection[1].private_ip_address]
+  records             = [each.key.private_service_connection[0].private_ip_address]
 }
 
 
