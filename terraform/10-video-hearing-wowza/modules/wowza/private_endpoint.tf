@@ -41,18 +41,18 @@ data "azurerm_storage_account" "wowza_sa" {
 
 ## Create private endpoint for Wowza VM's
 
-#resource "azurerm_private_endpoint" "wowza_vm_endpoint_aks" {
-#  name                = "vh-wowza-endpoint-${var.environment}"
-#  location            = data.azurerm_resource_group.vh-infra-wowza.location
-#  resource_group_name = data.azurerm_resource_group.vh-infra-wowza.name
-#  subnet_id           = data.azurerm_subnet.ss_subnet.id
-#
-#  private_service_connection {
-#    name                           = "wowza-${var.environment}-aksserviceconnection"
-#    private_connection_resource_id = data.azurerm_private_link_service.wowza.id
-#    is_manual_connection           = false
-#  }
-#}
+resource "azurerm_private_endpoint" "wowza_vm_endpoint_aks" {
+  name                = "vh-wowza-endpoint-${var.environment}"
+  location            = data.azurerm_resource_group.vh-infra-wowza.location
+  resource_group_name = data.azurerm_resource_group.vh-infra-wowza.name
+  subnet_id           = data.azurerm_subnet.ss_subnet.id
+
+  private_service_connection {
+    name                           = "wowza-${var.environment}-aksserviceconnection"
+    private_connection_resource_id = data.azurerm_private_link_service.wowza.id
+    is_manual_connection           = false
+  }
+}
 
 
 ## Create Wowza Storage endpoint for AKS
