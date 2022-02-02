@@ -256,15 +256,15 @@ variable "dns_zone_mapping" {
 
   }
 }
-#module "endoint_dns_reg" {
-#  source = "./modules/DnsZone"
-#  for_each            = module.vh_endpoint.endpoint_resource
-#  a                   = module.vh_endpoint.endpoint_resource
-#  
-#  zone_name           = "privatelink.blob.core.windows.net"
-#  resource_group_name = "core-infra-intsvc-rg"
-#  records             = lookup(each.value, "ip_address")
-#}
+resource azurerm_dns_a_record "test" {
+  for_each = module.vh_endpoint.endpoint_resource
+  
+  name                = each.value.name
+  zone_name           = lookup(var.dns_zone_mapping, (lookup(each.value, "resource_type")))
+  resource_group_name = "core-infra-intsvc-rg"
+  ttl                 = 3600
+  records             = [lookup(each.value, "resource_ip")]
+}
 
 
 module vh_kv_endpoint {

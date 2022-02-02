@@ -30,27 +30,7 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
   tags = var.tags
 }
 
-variable "dns_zone_mapping" {
-  description = "mapping for endpoint dns"
-  type = map
-  default = {
-    
-    "endpoint-SQLServer" = "privatelink.database.windows.net"
-    "endpoint-Redis" = "privatelink.redis.cache.windows.net"
-    "endpoint-Signal" = "privatelink.service.signalr.net"
-    "vault" = "privatelink.vaultcore.azure.net"
 
-  }
-}
-resource azurerm_dns_a_record "test" {
-  for_each = {for e, o in azurerm_private_endpoint.vh_endpoint : e => o.name }
-  
-  name                = each.key
-  zone_name           = lookup(var.dns_zone_mapping, "endpoint-Signal")
-  resource_group_name = "core-infra-intsvc-rg"
-  ttl                 = 3600
-  records             = [each.key.private_service_connection[0].private_ip_address]
-}
 
 
 
