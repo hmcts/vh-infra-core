@@ -259,7 +259,7 @@ variable "dns_zone_mapping" {
 resource azurerm_dns_a_record "test" {
   for_each = module.vh_endpoint.endpoint_resource
   
-  name                = each.value.name
+  name                = each.value.resource_name
   zone_name           = lookup(var.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
