@@ -29,9 +29,3 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
   }
   tags = var.tags
 }
-
-
-
-
-
-

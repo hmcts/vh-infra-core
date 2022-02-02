@@ -260,7 +260,7 @@ resource azurerm_dns_a_record "test" {
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_endpoint.endpoint_resource
   
-  name                = each.value.resource_name
+  name                = lower(format("%s-%s", lookup(each.value, "resource_name"), var.environment))
   zone_name           = lookup(var.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
