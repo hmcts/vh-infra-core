@@ -4,15 +4,15 @@
     "parameters": {
         "automationAccount_name": {
             "defaultValue": "automation-account",
-            "type": "String"
+            "type": "string"
         },
         "my_location": {
             "defaultValue":"",
-            "type": "String"
+            "type": "string"
         },
         "userAssigned_identity": {
             "defaultValue": "",
-            "type": "String"
+            "type": "string"
         }
     },
     "variables": {},
