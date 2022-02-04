@@ -47,7 +47,7 @@ resource "azurerm_user_assigned_identity" "wowza-automation-account-mi" {
 # Create a custom, limited role for our managed identity
 resource "azurerm_role_definition" "virtual-machine-control" {
   name        = "Virtual-Machine-Control-${var.environment}"
-  scope       = azurerm_resource_group.wowza.name #  our resource group
+  scope       = azurerm_resource_group.wowza.id #  our resource group
   description = "Custom Role for controlling virtual machines"
   permissions {
     actions = [
@@ -58,12 +58,12 @@ resource "azurerm_role_definition" "virtual-machine-control" {
     not_actions = []
   }
   assignable_scopes = [
-   azurerm_resource_group.wowza.name,
+   azurerm_resource_group.wowza.id,
   ]
 }
 
 resource "azurerm_role_assignment" "wowza-auto-acct-mi-role" {
-  scope                = azurerm_resource_group.wowza.name ##### CHECK ME
+  scope                = azurerm_resource_group.wowza.id ##### CHECK ME
   
   # using our custom role
     role_definition_name = "Virtual-Machine-Control-${var.environment}" 
