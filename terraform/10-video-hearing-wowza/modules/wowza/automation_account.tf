@@ -22,4 +22,7 @@ resource "azurerm_resource_group_template_deployment" "wowza-automation-acct" {
   })
   # the actual ARM template file we will use
   template_content = file("./VM-Automation-Files/ARM-user-assigned-mi.json")
+
+  tags = var.tags
+
 }
