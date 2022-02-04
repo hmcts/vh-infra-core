@@ -13,7 +13,7 @@ resource "azurerm_automation_runbook" "wowza-VM-runbook" {
   name                    = "wowza-VM-runbook-${var.environment}"
   location                = var.location
   resource_group_name     = azurerm_resource_group.wowza.name
-  automation_account_name = "wowza-automation-acct-${var.environment}"
+  automation_account_name = azurerm_resource_group_template_deployment.wowza-automation-acct.name
   log_verbose             = "false"
   log_progress            = "false"
   description             = "This is a runbook used to stop and start wowza VMs"
@@ -31,7 +31,7 @@ resource "azurerm_automation_schedule" "wowza-automation-schedule" {
   for_each                = local.schedule_action
   name                    = "wowza-${each.value.action}-schedule-${var.environment}"
   resource_group_name     = azurerm_resource_group.wowza.name
-  automation_account_name = "wowza-automation-acct-${var.environment}"
+  automation_account_name = azurerm_resource_group_template_deployment.wowza-automation-acct.name # "wowza-automation-acct-${var.environment}"
   frequency               = "Day"
   interval                = 1
   timezone                = "Europe/London"
