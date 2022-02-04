@@ -30,3 +30,50 @@ resource "azurerm_key_vault_secret" "wowza-mi-clientid" {
   value        = azurerm_user_assigned_identity.wowza_storage.client_id
   key_vault_id = var.key_vault_id
 }
+
+#-----------------------
+# VM Automation account
+#-----------------------
+
+# Create a user-assigned managed identity
+resource "azurerm_user_assigned_identity" "wowza-automation-account-mi" {
+  resource_group_name = azurerm_resource_group.wowza.name
+  location            = azurerm_resource_group.wowza.location
+
+  name = "wowza-automation-mi-${var.environment}"
+  tags = var.tags
+}
+
+# Create a custom, limited role for our managed identity
+resource "azurerm_role_definition" "virtual-machine-control" {
+  name        = "Virtual-Machine-Control-${var.environment}"
+  scope       = azurerm_resource_group.wowza.name #  our resource group
+  description = "Custom Role for controlling virtual machines"
+  permissions {
+    actions = [
+      "Microsoft.Compute/virtualMachines/read",
+      "Microsoft.Compute/virtualMachines/start/action",
+      "Microsoft.Compute/virtualMachines/deallocate/action",
+    ]
+    not_actions = []
+  }
+  assignable_scopes = [
+   azurerm_resource_group.wowza.name,
+  ]
+}
+
+resource "azurerm_role_assignment" "wowza-auto-acct-mi-role" {
+  scope                = azurerm_resource_group.wowza.name ##### CHECK ME
+  
+  # using our custom role
+    role_definition_name = "Virtual-Machine-Control-${var.environment}" 
+
+  # principal_id is the principal_id of the user assigned system managed identity we just created
+  principal_id         = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
+
+    # This depends_on must be here or the terraform destroy will fail
+  depends_on = [
+    azurerm_role_definition.virtual-machine-control
+  ]
+  
+}

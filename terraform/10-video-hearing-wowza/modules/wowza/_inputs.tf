@@ -67,6 +67,11 @@ variable "tags" {
   default = {}
 }
 
+# variable "schedule_actions"{
+#  description = "The time and action required for the Wowza VM automation"
+#  type = map(string)
+#}
+
 variable "private_dns_zone_group_name" {}
 
 variable "private_dns_zone_group" {}
