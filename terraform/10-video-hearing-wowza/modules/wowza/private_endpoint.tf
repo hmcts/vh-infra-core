@@ -52,6 +52,7 @@ resource "azurerm_private_endpoint" "wowza_vm_endpoint_aks" {
     private_connection_resource_id = data.azurerm_private_link_service.wowza.id
     is_manual_connection           = false
   }
+  tags = var.tags
 }
 
 
@@ -79,13 +80,13 @@ resource "azurerm_private_endpoint" "wowza_storage_endpoint_aks" {
 
 # BLANKED OUT AS PERMISSION NEEDS GRANTING TO RUN AGAINST SUBSCRTIPTION 4bb049c8-33f3-4860-91b4-9ee45375cc18 before the DNS chanes will work
 # Code blocks for this reside in 20-main.tf, 00-init.tf & private_endpoint.tf
-resource "azurerm_dns_a_record" "wowza_storage_endpoint_dns" {
-  provider            = azurerm.private-endpoint-dns
-  name                = "vh-wowza-storage-${var.environment}"
-  zone_name           = var.private_dns_zone_group_name
-  resource_group_name = "core-infra-intsvc-rg" #"vh-hearings-reform-hmcts-net-dns-zone"
-  ttl                 = 300
-  records             = [azurerm_private_endpoint.wowza_storage_endpoint_aks.private_service_connection[0].private_ip_address]
-}
+#resource "azurerm_dns_a_record" "wowza_storage_endpoint_dns" {
+#  provider            = azurerm.private-endpoint-dns
+#  name                = "vh-wowza-storage-${var.environment}"
+#  zone_name           = var.private_dns_zone_group_name
+#  resource_group_name = "core-infra-intsvc-rg" #"vh-hearings-reform-hmcts-net-dns-zone"
+#  ttl                 = 300
+#  records             = [azurerm_private_endpoint.wowza_storage_endpoint_aks.private_service_connection[0].private_ip_address]
+#}
 
 
