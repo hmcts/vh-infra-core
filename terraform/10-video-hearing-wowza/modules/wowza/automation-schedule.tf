@@ -56,7 +56,7 @@ resource "azurerm_automation_schedule" "wowza-automation-schedule" {
 resource "azurerm_automation_job_schedule" "runbook-schedule-job" {
   for_each                = local.schedule_action
   resource_group_name     = azurerm_resource_group.wowza.name
-  automation_account_name = "wowza-automation-acct-${var.environment}"
+  automation_account_name = azurerm_automation_schedule.wowza-automation-schedule[each.action]
   schedule_name           = "wowza-${each.value.action}-schedule-${var.environment}"
   runbook_name            = azurerm_automation_schedule.wowza-automation-schedule.name
 
