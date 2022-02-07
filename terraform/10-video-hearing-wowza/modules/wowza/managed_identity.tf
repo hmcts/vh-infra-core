@@ -71,7 +71,7 @@ resource "azurerm_role_assignment" "wowza-auto-acct-mi-role" {
 
   # principal_id is the principal_id of the user assigned system managed identity we just created
   principal_id         = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
-  tags                 = var.tags
+
     # This depends_on must be here or the terraform destroy will fail
   depends_on = [
     azurerm_role_definition.virtual-machine-control
