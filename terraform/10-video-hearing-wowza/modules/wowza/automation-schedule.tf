@@ -38,7 +38,7 @@ resource "azurerm_automation_runbook" "wowza-VM-runbook" {
 
 resource "azurerm_automation_schedule" "wowza-automation-schedule" {
   for_each                = local.schedule_action
-  name                    = "wowza-schedule-${each.value.action}"
+  name                    = "wowza-${each.value.action}-schedule-${var.environment}"
   resource_group_name     = azurerm_resource_group.wowza.name
   automation_account_name = azurerm_resource_group_template_deployment.wowza-automation-acct.name # "wowza-automation-acct-${var.environment}"
   frequency               = "Day"
@@ -56,8 +56,8 @@ resource "azurerm_automation_schedule" "wowza-automation-schedule" {
 resource "azurerm_automation_job_schedule" "runbook-schedule-job" {
   for_each                = local.schedule_action
   resource_group_name     = azurerm_resource_group.wowza.name
-  automation_account_name = azurerm_automation_schedule.wowza-automation-schedule[each.schedule_action]
-  schedule_name           = "wowza-${each.value.action}-schedule-${var.environment}"
+  automation_account_name = "wowza-automation-acct-${var.environment}"
+  schedule_name           = "azurerm_automation_schedule.wowza-automation-schedule.wowza-${each.value.action}-schedule-${var.environment}"
   runbook_name            = azurerm_automation_schedule.wowza-automation-schedule.name
 
 # vmlist = azurerm_linux_virtual_machine.wowza[*].name
