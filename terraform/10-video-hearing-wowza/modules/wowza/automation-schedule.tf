@@ -11,7 +11,7 @@ locals {
 
   schedule_action = {
     vmstart = { time = "${local.start_date}T${local.start_time}Z", action = "Start"},
-    vmstop  = { time = "${local.start_date}T${local.start_time}Z", action = "Stop"}
+    vmstop  = { time = "${local.start_date}T${local.stop_time}Z", action = "Stop"}
   }
 }
 
