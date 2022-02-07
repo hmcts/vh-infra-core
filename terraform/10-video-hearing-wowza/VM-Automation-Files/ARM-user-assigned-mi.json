@@ -22,7 +22,13 @@
             "apiVersion": "2021-06-22",
             "name": "[parameters('automationAccount_name')]",
             "location": "[parameters('my_location')]",
-            "tags": {},
+            "tags": {
+               "application": "Video Hearings",
+               "builtFrom": "hmcts/vh-shared-infrastructure",
+               "businessArea":  "Cross-Cutting",
+               "criticality": "low",
+               "environment": "sandbox"
+            },
             "identity": {
                 "type": "UserAssigned",
                 "userAssignedIdentities": {

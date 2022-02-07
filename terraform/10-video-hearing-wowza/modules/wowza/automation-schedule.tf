@@ -1,9 +1,14 @@
 locals {
-  # for sandbox testing move to tfvars
-  # Year-Month-Day'T'HH:MM:SS:Z
+  # Move to tfvars?
+  day      = timestamp()
+  start_date = formatdate("YYYY-MM-DD", timeadd(local.day, "24h"))
+  start_time = "06:00:00" # test values only
+  stop_time  = "22:00:00" # test values only
+
+
   schedule_action = {
-    vmstart = { time = "2022-04-02T10:00:00Z", action = "Start"},
-    vmstop  = { time = "2022-04-02T09:00:00Z", action = "Stop"}
+    vmstart = { time = "${local.start_date}T${local.start_time}Z", action = "Start"},
+    vmstop  = { time = "${local.start_date}T${local.start_time}Z", action = "Stop"}
   }
 }
 
