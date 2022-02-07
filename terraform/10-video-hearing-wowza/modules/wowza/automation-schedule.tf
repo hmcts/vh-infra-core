@@ -1,7 +1,7 @@
 locals {
 
   runbook_name = "wowza-vm-runbook.ps1"
-  runbook_content = file("./VM-Automation-Files/${runbook_name}")
+  runbook_content = file("./VM-Automation-Files/${local.runbook_name}")
   # Move to tfvars?
   day      = timestamp()
   start_date = formatdate("YYYY-MM-DD", timeadd(local.day, "24h"))
