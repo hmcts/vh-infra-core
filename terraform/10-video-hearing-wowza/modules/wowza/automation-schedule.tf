@@ -30,7 +30,7 @@ resource "azurerm_automation_runbook" "wowza-VM-runbook" {
   }
 
   tags                     = var.tags
-  
+
   depends_on = [
     azurerm_resource_group_template_deployment.wowza-automation-acct
   ]
@@ -48,7 +48,6 @@ resource "azurerm_automation_schedule" "wowza-automation-schedule" {
   start_time              = each.value.time
   description             = "This is a schedule to ${each.value.action} wowza VMs at ${each.value.time}"
 
-  tags                    = var.tags
   depends_on = [
     azurerm_resource_group_template_deployment.wowza-automation-acct
   ]
@@ -60,7 +59,6 @@ resource "azurerm_automation_job_schedule" "runbook-schedule-job" {
   automation_account_name = "wowza-automation-acct-${var.environment}"
   schedule_name           = "wowza-${each.value.action}-schedule-${var.environment}"
   runbook_name            = "wowza-VM-runbook-${var.environment}"
-   tags                   = var.tags
 
 # vmlist = azurerm_linux_virtual_machine.wowza[*].name
   parameters = {

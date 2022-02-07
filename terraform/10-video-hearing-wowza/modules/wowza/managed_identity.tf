@@ -57,7 +57,7 @@ resource "azurerm_role_definition" "virtual-machine-control" {
     ]
     not_actions = []
   }
-  tags              = var.tags
+
   assignable_scopes = [
    azurerm_resource_group.wowza.id,
   ]
