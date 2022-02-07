@@ -1,4 +1,7 @@
 locals {
+
+  runbook_name = "wowza-vm-runbook.ps1"
+  runbook_content = file("./VM-Automation-Files/${runbook_name}")
   # Move to tfvars?
   day      = timestamp()
   start_date = formatdate("YYYY-MM-DD", timeadd(local.day, "24h"))
@@ -19,17 +22,17 @@ resource "azurerm_automation_runbook" "wowza-VM-runbook" {
   location                = var.location
   resource_group_name     = azurerm_resource_group.wowza.name
   automation_account_name = azurerm_resource_group_template_deployment.wowza-automation-acct.name
-  log_verbose             = "false"
-  log_progress            = "false"
+  log_verbose             = var.environment == "prod" ? "false" : "true"
+  log_progress            = "true"
   description             = "This is a runbook used to stop and start wowza VMs"
-  runbook_type            = "PowerShellWorkflow"
-  content                 = "./VM-Automation-Files/wowza-vm-runbook.ps1"
-  
+  runbook_type            = "PowerShell"
+  content                 = local.runbook_content
   publish_content_link {
-    uri = ""
+    uri = "https://raw.githubusercontent.com/hmcts/vh-shared-infrastructure/VIH-8562-Wowza-MI-Automation/terraform/10-video-hearing-wowza/VM-Automation-Files/wowza-vm-runbook.ps1"
   }
-
   tags                     = var.tags
+
+
 
   depends_on = [
     azurerm_resource_group_template_deployment.wowza-automation-acct
