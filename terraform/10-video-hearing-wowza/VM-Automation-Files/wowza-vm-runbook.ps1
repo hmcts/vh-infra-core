@@ -56,10 +56,7 @@ $VMssplit = $vmlist.Split(",")
 
 # Loop through one or more VMs which will be passed in from the terraform as a list
 # If the list is empty it will skip the block
-foreach ($VM in $VMs){
-
-    $status = (Get-AzVM -ResourceGroupName $resourcegroup -Name $VM -Status -DefaultProfile $AzureContext).Statuses[1].Code
-    Write-Output "`r`n Initial $VM VM status: $status `r`n `r`n"
+ForEach -Parallel -ThrottleLimit 4 ($VM in $VMs) {
 
     switch ($action) {
         "Start" {
@@ -88,9 +85,12 @@ foreach ($VM in $VMs){
         }    
     }
 
-    $status = (Get-AzVM -ResourceGroupName $resourcegroup -Name $VM -Status -DefaultProfile $AzureContext).Statuses[1].Code
-    Write-Output "`r`n Final $VM VM status: $status `r`n `r`n"
+    
 
 }
 
+foreach($VM in $VMs){
+    $status = (Get-AzVM -ResourceGroupName $resourcegroup -Name $VM -Status -DefaultProfile $AzureContext).Statuses[1].Code
+        Write-Output "`r`n Final $VM VM status: $status `r`n `r`n"
+}
 Write-Output "Script ended at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"

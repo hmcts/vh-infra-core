@@ -4,9 +4,9 @@ locals {
   runbook_content = file("./VM-Automation-Files/${local.runbook_name}")
   # Move to tfvars?
   day      = timestamp()
-  start_date = formatdate("YYYY-MM-DD", timeadd(local.day, "24h"))
-  start_time = "10:30:00" # test values only
-  stop_time  = "10:00:00" # test values only
+  start_date = formatdate("YYYY-MM-DD", local.day)
+  start_time = "14:45:00" # test values only
+  stop_time  = "14:55:00" # test values only
 
 
   schedule_action = {
