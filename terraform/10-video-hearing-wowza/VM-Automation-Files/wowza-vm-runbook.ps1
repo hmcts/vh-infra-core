@@ -56,7 +56,7 @@ $VMssplit = $vmlist.Split(",")
 
 # Loop through one or more VMs which will be passed in from the terraform as a list
 # If the list is empty it will skip the block
-ForEach -Parallel -ThrottleLimit 4 ($VM in $VMs) {
+ForEach ($VM in $VMs) {
 
     switch ($action) {
         "Start" {
