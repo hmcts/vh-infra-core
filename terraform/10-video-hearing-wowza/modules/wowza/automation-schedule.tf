@@ -5,8 +5,8 @@ locals {
   # Move to tfvars?
   day      = timestamp()
   start_date = formatdate("YYYY-MM-DD", timeadd(local.day, "24h"))
-  start_time = "06:00:00" # test values only
-  stop_time  = "22:00:00" # test values only
+  start_time = "10:30:00" # test values only
+  stop_time  = "10:00:00" # test values only
 
 
   schedule_action = {
@@ -66,7 +66,7 @@ resource "azurerm_automation_job_schedule" "runbook-schedule-job" {
 # vmlist = azurerm_linux_virtual_machine.wowza[*].name
   parameters = {
     mi_principal_id       = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
-    vmname                = join(",", azurerm_linux_virtual_machine.wowza[*].name)
+    vmlist                = join(",", azurerm_linux_virtual_machine.wowza[*].name)
     resourcegroup         = azurerm_resource_group.wowza.name
     action                = each.value.action
   }
