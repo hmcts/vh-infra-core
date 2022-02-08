@@ -5,8 +5,8 @@ locals {
   # Move to tfvars?
   day      = timestamp()
   start_date = formatdate("YYYY-MM-DD", local.day)
-  start_time = "18:25:00" # test values only
-  stop_time  = "18:20:00" # test values only
+  start_time = "06:00:00"
+  stop_time  = "22:020:00"
 
 
   schedule_action = {
@@ -44,7 +44,7 @@ resource "azurerm_automation_schedule" "wowza-automation-schedule" {
   name                    = "wowza-${each.value.action}-schedule-${var.environment}"
   resource_group_name     = azurerm_resource_group.wowza.name
   automation_account_name = azurerm_resource_group_template_deployment.wowza-automation-acct.name # "wowza-automation-acct-${var.environment}"
-  frequency               = "Hour"
+  frequency               = "Day"
   interval                = 1
   timezone                = "Europe/London"
 
