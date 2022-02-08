@@ -5,8 +5,8 @@ locals {
   # Move to tfvars?
   day      = timestamp()
   start_date = formatdate("YYYY-MM-DD", local.day)
-  start_time = "14:55:00" # test values only
-  stop_time  = "14:45:00" # test values only
+  start_time = "17:05:00" # test values only
+  stop_time  = "16:55:00" # test values only
 
 
   schedule_action = {
