@@ -4,7 +4,7 @@ locals {
   runbook_content = file("./VM-Automation-Files/${local.runbook_name}")
   # Move to tfvars?
   day      = timestamp()
-  start_date = formatdate("YYYY-MM-DD", local.day, "24h")
+  start_date = formatdate("YYYY-MM-DD",  timeadd(local.day, "24h"))
   start_time = "06:00:00"
   stop_time  = "22:00:00"
 
