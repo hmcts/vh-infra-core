@@ -6,7 +6,7 @@ locals {
   day      = timestamp()
   start_date = formatdate("YYYY-MM-DD", local.day)
   start_time = "06:00:00"
-  stop_time  = "22:020:00"
+  stop_time  = "22:00:00"
 
 
   schedule_action = {
