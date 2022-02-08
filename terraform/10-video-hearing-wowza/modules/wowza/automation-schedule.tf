@@ -5,8 +5,8 @@ locals {
   # Move to tfvars?
   day      = timestamp()
   start_date = formatdate("YYYY-MM-DD", local.day)
-  start_time = "17:55:00" # test values only
-  stop_time  = "17:50:00" # test values only
+  start_time = "18:25:00" # test values only
+  stop_time  = "18:20:00" # test values only
 
 
   schedule_action = {
@@ -25,7 +25,7 @@ resource "azurerm_automation_runbook" "wowza-VM-runbook" {
   log_verbose             = var.environment == "prod" ? "false" : "true"
   log_progress            = "true"
   description             = "This is a runbook used to stop and start wowza VMs"
-  runbook_type            = "PowerShellWorkflow"
+  runbook_type            = "PowerShell"
   content                 = local.runbook_content
   publish_content_link {
     uri = "https://raw.githubusercontent.com/hmcts/vh-shared-infrastructure/VIH-8562-Wowza-MI-Automation/terraform/10-video-hearing-wowza/VM-Automation-Files/wowza-vm-runbook.ps1"
