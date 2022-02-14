@@ -37,7 +37,7 @@ Param(
     $action
 )
 
-
+$day = (get-date).DayOfWeek
 Write-Output "Script started at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
 # Ensures you do not inherit an AzContext in your runbook
 Disable-AzContextAutosave -Scope Process | Out-Null
@@ -60,15 +60,17 @@ foreach($VM in $VMs) {
 
     switch ($action) {
         "Start" {
-            # Start the VM
-            try {
-                Write-Output "Starting VM $VM ..."
-                Start-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -NoWait
-            }
-            catch {
-                $ErrorMessage = $_.Exception.message
-                Write-Error ("Error starting the VM $VM : " + $ErrorMessage)
-                Break
+            if (($day -ne "Saturday") -or ($day -ne "Sunday")){
+                # Start the VM
+                try {
+                    Write-Output "Starting VM $VM ..."
+                    Start-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -NoWait
+                }
+                catch {
+                    $ErrorMessage = $_.Exception.message
+                    Write-Error ("Error starting the VM $VM : " + $ErrorMessage)
+                    Break
+                }
             }
         }
         "Stop" {
