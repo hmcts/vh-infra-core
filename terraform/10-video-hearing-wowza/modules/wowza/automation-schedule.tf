@@ -13,6 +13,9 @@ locals {
     vmstart = { time = "${local.start_date}T${local.start_time}Z", action = "Start"},
     vmstop  = { time = "${local.start_date}T${local.stop_time}Z", action = "Stop"}
   }
+
+  stop = var.environment == "prod" ? "False" : "True"
+
 }
 
 
@@ -69,5 +72,6 @@ resource "azurerm_automation_job_schedule" "runbook-schedule-job" {
     vmlist                = join(",", azurerm_linux_virtual_machine.wowza[*].name)
     resourcegroup         = azurerm_resource_group.wowza.name
     action                = each.value.action
+    stop                  = local.stop
   }
 }

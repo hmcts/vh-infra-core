@@ -34,7 +34,9 @@ Param(
     $vmlist, 
     [Parameter(Mandatory=$true)][ValidateSet("Start","Stop")] 
     [String] 
-    $action
+    $action,[Parameter(Mandatory=$true)][ValidateSet("True","False")] 
+    [String] 
+    $stop
 )
 
 $day = (get-date).DayOfWeek
@@ -74,17 +76,19 @@ foreach($VM in $VMs) {
             }
         }
         "Stop" {
-            # Stop the VM
-            try {
-                Write-Output "Stopping VM $VM ..."
-                Stop-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -Force 
-            }
-            catch {
-                $ErrorMessage = $_.Exception.message
-                Write-Error ("Error stopping the VM $VM : " + $ErrorMessage)
-                Break
-            }
-        }    
+            if ($stop = "True"){
+                # Stop the VM
+                try {
+                    Write-Output "Stopping VM $VM ..."
+                    Stop-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -Force 
+                }
+                catch {
+                    $ErrorMessage = $_.Exception.message
+                    Write-Error ("Error stopping the VM $VM : " + $ErrorMessage)
+                    Break
+                }
+            } 
+        }   
     }  # end of switch
 
 } # end of for each
