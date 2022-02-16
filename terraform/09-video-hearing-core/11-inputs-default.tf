@@ -46,7 +46,7 @@ variable "dns_subscription_id" {
 }
 
 locals {
-  variable "dns_zone_mapping" {
+  dns_zone_mapping = {
     description = "mapping for endpoint dns"
     default = {
       "sqlServer" = "privatelink.database.windows.net",
