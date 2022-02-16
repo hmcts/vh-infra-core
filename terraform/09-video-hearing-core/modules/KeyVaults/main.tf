@@ -624,7 +624,7 @@ resource "azurerm_role_assignment" "Reader" {
   scope                = azurerm_key_vault.vh-infra-core-ht.id
 }
 
-resource "azurerm_role_assignment" "Reader" {
+resource "azurerm_role_assignment" "App-Reader" {
   for_each             = azurerm_key_vault.app_keyvaults
   principal_id         = azurerm_user_assigned_identity.kvuser.principal_id
   role_definition_name = "Reader"
