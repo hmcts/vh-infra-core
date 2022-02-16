@@ -246,22 +246,13 @@ module vh_endpoint {
   tags = local.common_tags
 }
 
-variable "dns_zone_mapping" {
-  description = "mapping for endpoint dns"
-  default = {
-    "sqlServer" = "privatelink.database.windows.net",
-    "redisCache" = "privatelink.redis.cache.windows.net",
-    "signalr" = "privatelink.service.signalr.net",
-    "vault" = "privatelink.vaultcore.azure.net"
 
-  }
-}
 resource azurerm_private_dns_a_record "test" {
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_endpoint.endpoint_resource
   
   name                = lower(format("%s-%s", lookup(each.value, "resource_name"), var.environment))
-  zone_name           = lookup(var.dns_zone_mapping, (lookup(each.value, "resource_type")))
+  zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
   records             = [lookup(each.value, "resource_ip")]

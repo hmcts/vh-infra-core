@@ -6,6 +6,17 @@ data "azurerm_client_config" "current" {
 
 locals {
   common_tags = module.ctags.common_tags
+
+  variable "dns_zone_mapping" {
+  description = "mapping for endpoint dns"
+  default = {
+    "sqlServer" = "privatelink.database.windows.net",
+    "redisCache" = "privatelink.redis.cache.windows.net",
+    "signalr" = "privatelink.service.signalr.net",
+    "vault" = "privatelink.vaultcore.azure.net"
+
+  }
+}
 }
 
 module "ctags" {
