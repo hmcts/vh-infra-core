@@ -36,7 +36,7 @@ steps:
     displayName: 'Subscription Replacement'
     inputs:
       targetType: 'inline'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{parameters.stack}}'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
 
@@ -78,4 +78,3 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
       environmentServiceName: ${{ parameters.serviceConnection }} 
-      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
