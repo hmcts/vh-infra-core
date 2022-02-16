@@ -44,3 +44,15 @@ variable "dns_subscription_id" {
   type    = string
   default = ""
 }
+
+locals {
+  variable "dns_zone_mapping" {
+    description = "mapping for endpoint dns"
+    default = {
+      "sqlServer" = "privatelink.database.windows.net",
+      "redisCache" = "privatelink.redis.cache.windows.net",
+      "signalr" = "privatelink.service.signalr.net",
+      "vault" = "privatelink.vaultcore.azure.net"
+    }
+  }
+}
