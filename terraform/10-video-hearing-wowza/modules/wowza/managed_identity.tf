@@ -67,8 +67,8 @@ resource "azurerm_role_assignment" "wowza-auto-acct-mi-role" {
   scope                = azurerm_resource_group.wowza.id ##### CHECK ME
   
   # using our custom role
-    role_definition_name = azurerm_role_definition.virtual-machine-control.name
-
+  #role_definition_name = azurerm_role_definition.virtual-machine-control.name
+  role_definition_id   = azurerm_role_definition.virtual-machine-control.id
   # principal_id is the principal_id of the user assigned system managed identity we just created
   principal_id         = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
 
