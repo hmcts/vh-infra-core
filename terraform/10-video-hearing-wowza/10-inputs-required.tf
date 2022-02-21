@@ -110,6 +110,26 @@ variable "peering_target_subscription_id" {
   type        = string
 }
 
+# Automation start/stop variables
+variable "runbook_name"{
+  description = "Name of runbook file to be used to schedule VM start / stop"
+  type        =  string
+  default     = "wowza-vm-runbook.ps1"
+}
+
+variable "start_time" {
+  description = "The time that the Wowza VMs should restart"
+  type        = string
+  default     = "06:00:00"
+}
+
+variable "stop_time" {
+  description = "The time that the Wowza VMs should stop"
+  type        = string
+  default     = "22:00:00"
+}
+
+
 locals {
   common_tags = module.ctags.common_tags
 }
@@ -120,6 +140,3 @@ module "ctags" {
   product = var.product
   builtFrom = var.builtFrom
 }
-
-
-
