@@ -34,9 +34,10 @@ Param(
     $vmlist, 
     [Parameter(Mandatory=$true)][ValidateSet("Start","Stop")] 
     [String] 
-    $action,[Parameter(Mandatory=$true)][ValidateSet("True","False")] 
+    $action,
+    [Parameter(Mandatory=$true)][ValidateSet("True","False")] 
     [String] 
-    $stop
+    $makechange
 )
 
 $day = (get-date).DayOfWeek
@@ -58,43 +59,46 @@ $VMssplit = $vmlist.Split(",")
 
 # Loop through one or more VMs which will be passed in from the terraform as a list
 # If the list is empty it will skip the block
-foreach($VM in $VMs) {
+# If 'env = prod' $makechange will be false
+if ($makechange -ne "False"){
+    # If it is a weekend we do not want to start the VMs
+    if (($day -ne "Saturday") -or ($day -ne "Sunday")){
+        # If we are Monday through Friday:
+        foreach($VM in $VMs) {
 
-    switch ($action) {
-        "Start" {
-            if (($day -ne "Saturday") -or ($day -ne "Sunday")){
-                # Start the VM
-                try {
-                    Write-Output "Starting VM $VM ..."
-                    Start-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -NoWait
+            switch ($action) {
+                "Start" {
+                    
+                        # Start the VM
+                        try {
+                            Write-Output "Starting VM $VM ..."
+                            Start-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -NoWait
+                        }
+                        catch {
+                            $ErrorMessage = $_.Exception.message
+                            Write-Error ("Error starting the VM $VM : " + $ErrorMessage)
+                            Break
+                        }
                 }
-                catch {
-                    $ErrorMessage = $_.Exception.message
-                    Write-Error ("Error starting the VM $VM : " + $ErrorMessage)
-                    Break
-                }
-            }
-        }
-        "Stop" {
-            if ($stop = "True"){
-                # Stop the VM
-                try {
-                    Write-Output "Stopping VM $VM ..."
-                    Stop-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -Force 
-                }
-                catch {
-                    $ErrorMessage = $_.Exception.message
-                    Write-Error ("Error stopping the VM $VM : " + $ErrorMessage)
-                    Break
-                }
-            } 
-        }   
-    }  # end of switch
+                "Stop" {
+                    # Stop the VM
+                    try {
+                        Write-Output "Stopping VM $VM ..."
+                        Stop-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -Force 
+                    }
+                    catch {
+                        $ErrorMessage = $_.Exception.message
+                        Write-Error ("Error stopping the VM $VM : " + $ErrorMessage)
+                        Break
+                    }
+                }   
+            }  # end of 'switch'
 
-} # end of for each
-
+        } # end of 'for each'
+    } # end of weekend check
+}
 foreach($VM in $VMs){
     $status = (Get-AzVM -ResourceGroupName $resourcegroup -Name $VM -Status -DefaultProfile $AzureContext).Statuses[1].Code
-        Write-Output "`r`n Final $VM VM status: $status `r`n `r`n"
+        Write-Output "`r`n $VM VM status: $status `r`n `r`n"
 }
 Write-Output "Script ended at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
