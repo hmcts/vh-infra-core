@@ -31,7 +31,7 @@ resource "azurerm_automation_runbook" "wowza-VM-runbook" {
   runbook_type            = "PowerShell"
   content                 = local.runbook_content
   publish_content_link {
-    uri = "https://raw.githubusercontent.com/hmcts/vh-shared-infrastructure/VIH-8562-Wowza-MI-Automation/terraform/10-video-hearing-wowza/VM-Automation-Files/wowza-vm-runbook.ps1"
+    uri = "https://raw.githubusercontent.com/hmcts/vh-shared-infrastructure/master/terraform/10-video-hearing-wowza/VM-Automation-Files/wowza-vm-runbook.ps1"
   }
   tags                     = var.tags
 
