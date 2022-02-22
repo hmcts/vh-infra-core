@@ -16,7 +16,7 @@ data "azurerm_subnet" "ss_subnet" {
 resource "azurerm_private_endpoint" "vh_endpoint" {
   for_each            = var.resources
 
-  name                = format("s%-s%", lookup(each.value, "resource_name"), lookup(each.value, "resource_type"))
+  name                = format("%s-%s", lookup(each.value, "resource_name"), lookup(each.value, "resource_type"))
   location            = var.location
   resource_group_name = data.azurerm_resource_group.vh-infra-core.name
   subnet_id           = data.azurerm_subnet.ss_subnet.id
