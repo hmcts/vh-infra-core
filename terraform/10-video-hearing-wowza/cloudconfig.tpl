@@ -713,7 +713,33 @@ write_files:
     path: /home/wowza/mount.sh
     content: |
       #!/bin/bash
+
+      ## Add the blob mounts:
       blobfuse $1 --tmp-path=$3 -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 --file-cache-timeout-in-seconds=0 --config-file=$2 -o allow_other -o nonempty
+
+      ## Cron to check remounting
+      cronTaskPath="/home/wowza/remount_$4.txt"
+      sudo touch $cronTaskPath
+      sudo chmod 777 $cronTaskPath
+      echo "*/5 * * * * /home/wowza/remount.sh $1 $2 $3 $4 $5
+      " > $cronTaskPath
+      sudo -u wowza bash -c "crontab $cronTaskPath"
+  - owner: wowza:wowza
+    path: /home/wowza/remount.sh
+    content: |
+        mountDir="$5"
+        logPath="/usr/local/WowzaStreamingEngine/logs/blob-mount.log"
+        dt=$(date '+%d/%m/%Y %H:%M:%S')
+
+        context="failed"
+        if grep -qs $mountDir ../../proc/mounts; then
+         context="IS"
+        else
+          context="WAS NOT"
+          echo "Remounting $mountDir"
+          sudo /home/wowza/mount.sh $1 $2 $3 $4 $5
+        fi
+        echo "$dt :: drive $context mounted. :: $mountDir" >> $logPath
   - owner: wowza:wowza
     path: /home/wowza/recordings.cfg
     content: |
