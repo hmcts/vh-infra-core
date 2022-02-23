@@ -77,7 +77,19 @@ steps:
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
 
   - bash: |
-      echo $[ variablegroups.external ]
+      ORGANIZATION=https://dev.azure.com/hmcts
+      PROJECT="Video Hearings"
+      TOKEN=$(vh-PAT)
+      variablegroup1="external"
+      echo "getting variable group ID for $variablegroup1"
+      variablegroup1_id_URL="https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis/distributedtask/variablegroups?groupName=$variablegroup1*&queryOrder=IdDescending&api-version=5.1-preview.1"
+      variablegroup1_id=$(curl -s -X GET -u PAT:$TOKEN $variablegroup1_id_URL | jq -r '.value[].id')
+
+      echo "getting variables from the first variable group"
+      variablegroup1_URL="https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis/distributedtask/variablegroups?groupIds=$variablegroup1_id&api-version=5.1-preview.1"
+      curl -s -X GET -u PAT:$TOKEN $variablegroup1_URL | jq -r '.value[].variables' > variablegroup1_content.json
+
+      echo variablegroup1_content.json
     displayName: 'Check External TF Variables'
     name: externalSecrets
 
