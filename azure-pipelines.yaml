@@ -60,7 +60,7 @@ variables:
 
 stages:
 
-  - stage: vh-tenant-replacement
+  - stage: vh_tenant_replacement
     displayName: 'vh-tenant-replacement'
     jobs:
       - job: Video_Hearing_Core
