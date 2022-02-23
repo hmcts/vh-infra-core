@@ -21,10 +21,6 @@ module KeyVaults {
   resource_prefix     = local.std_prefix
   keyvaults           = local.keyvaults
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    ]
-
   tags = local.common_tags
 }
 
