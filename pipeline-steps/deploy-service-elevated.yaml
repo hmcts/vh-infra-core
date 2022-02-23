@@ -64,6 +64,7 @@ steps:
       variables="${variables} -var \"network_client_id=${GNP_CLIENT_ID} \""
       variables="${variables} -var \"network_client_secret=${GNP_CLIENT_SECRET} \""
       variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
+      variables="${variables} -var \"network_tenant_id=${azuread--temporarypassword} \""
 
       echo "Variables set as: "
       echo "${variables}"
@@ -75,25 +76,6 @@ steps:
       GNP_CLIENT_ID: $(GlobalNetworkPeering.GNP_CLIENT_ID) 
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
-
-  - bash: |
-      ORGANIZATION=https://dev.azure.com/hmcts
-      PROJECT="Video Hearings"
-      TOKEN=$(vh-PAT)
-      variablegroup1="external"
-      echo "getting variable group ID for $variablegroup1"
-      variablegroup1_id_URL="https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis/distributedtask/variablegroups?groupName=$variablegroup1&api-version=5.1-preview.1"
-      
-      #variablegroup1_id=$(az rest --method get -u PAT:$TOKEN "$variablegroup1_id_URL" | jq -r '.value[].id')
-      variablegroup1_id=$(az rest --method get -u PAT:$TOKEN "$variablegroup1_id_URL")
-      echo variablegroup1_id
-      echo "getting variables from the first variable group"
-      variablegroup1_URL="https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis/distributedtask/variablegroups?groupIds=$variablegroup1_id&api-version=5.1-preview.1"
-      az rest --method get -u PAT:$TOKEN "$variablegroup1_URL" | jq -r '.value[].variables' > variablegroup1_content.json
-
-      echo variablegroup1_content.json
-    displayName: 'Check External TF Variables'
-    name: externalSecrets
 
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
