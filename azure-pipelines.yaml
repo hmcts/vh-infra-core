@@ -81,6 +81,7 @@ stages:
     jobs: 
       - template: pipeline-steps/terraform-validate.yaml
         parameters:
+          environment: ${{ parameters.env }}
           terraformPath: $(Build.SourcesDirectory)/terraform
           tfversion: $(tfversion)
           location: ${{ parameters.location }}
