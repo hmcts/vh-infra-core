@@ -56,10 +56,6 @@ module "SignalR" {
   resource_prefix     = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-  ]
   tags = local.common_tags
 }
 
@@ -75,7 +71,7 @@ module AMS {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   storage_account_id  = azurerm_storage_account.vh-infra-core.id
 
-  depends_on = [azurerm_resource_group.vh-infra-core]
+  
   tags = local.common_tags
 }
 
@@ -88,10 +84,6 @@ module Redis {
   environment = var.environment
   resource_group_name = azurerm_resource_group.vh-infra-core.name
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-  ]
   tags = local.common_tags
 }
 
@@ -131,10 +123,6 @@ module Monitoring {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   resource_prefix     = "${local.std_prefix}${local.suffix}"
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-  ]
   tags = local.common_tags
 }
 
