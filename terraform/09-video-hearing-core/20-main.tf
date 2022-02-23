@@ -223,17 +223,17 @@ module vh_endpoint {
   resources = {
     "SQLServer" = {
       resource_id     = module.VHDataServices.server_id
-      resource_name   = "SQLServer"
+      resource_name   = module.VHDataServices.name
       resource_type   = "sqlServer"
     }
     "RedisCache" = {
       resource_id     = module.Redis.redis_id
-      resource_name   = "Redis"
+      resource_name   = module.Redis.name
       resource_type   = "redisCache"
     }
     "SignalR" = {
       resource_id     = module.SignalR.signalr_id
-      resource_name   = "SignalR"
+      resource_name   = module.SignalR.name
       resource_type   = "signalr"
     }
   }
@@ -251,8 +251,9 @@ module vh_endpoint {
 resource azurerm_private_dns_a_record "test" {
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_endpoint.endpoint_resource
-  
-  name                = lower(format("%s-%s", lookup(each.value, "resource_name"), var.environment))
+  #current endpoint-sqlserver-test
+  #needs to be vh-infra-core-test.database.windows.net
+  name                = lower(format("%s-%s.%s", "vh-infra-core", var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type"))) ))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
