@@ -27,5 +27,11 @@ variable "tags" {
 variable "external_passwords" {
   environment   = var.environment
   type = map(string)
+
+  #default = {
+  #  azuread--temporarypassword = "temp"
+  #  defaultpassword = ""
+  #  notifyconfiguration--apikey = ""
+  #}
 }
 

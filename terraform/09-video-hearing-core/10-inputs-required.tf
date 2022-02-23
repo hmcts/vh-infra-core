@@ -690,7 +690,7 @@ variable "network_tenant_id" {
 variable "external_passwords" {
   environment   = var.environment
   type = map(string)
-  default {
+  default = {
     azuread--temporarypassword = "temp"
     defaultpassword = ""
     notifyconfiguration--apikey = ""
