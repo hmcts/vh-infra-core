@@ -634,7 +634,7 @@ resource "azurerm_role_assignment" "App-Reader" {
 resource "azurerm_key_vault_secret" "external-secrets" {
   for_each = var.external_passwords
 
-  name         = each.value.name
+  name         = each.key
   value        = each.value
   key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
   # FromTFSec
