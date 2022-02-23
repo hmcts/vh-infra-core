@@ -64,7 +64,7 @@ steps:
       variables="${variables} -var \"network_client_id=${GNP_CLIENT_ID} \""
       variables="${variables} -var \"network_client_secret=${GNP_CLIENT_SECRET} \""
       variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
-      variables="${variables} -var \"network_tenant_id=${azuread--temporarypassword} \""
+      variables="${variables} -var \"azuread--temporarypassword=${azuread--temporarypassword} \""
 
       echo "Variables set as: "
       echo "${variables}"
