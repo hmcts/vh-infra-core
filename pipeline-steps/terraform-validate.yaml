@@ -3,6 +3,26 @@ parameters:
     type: string
   - name: tfversion
     type: string
+  - name: environment
+    type: string
+  - name: location
+    type: string
+  - name: stack
+    type: string
+  - name: project
+    type: string
+  - name: activity_name
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: run_stage
+    type: string
+  - name: builtFrom
+    type: string
+  - name: product
+    type: string
+  - name: state_sub 
+    type: string
 
 jobs:
 - job: TerraformValidate
