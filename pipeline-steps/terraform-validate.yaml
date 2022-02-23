@@ -29,6 +29,8 @@ jobs:
   displayName: 'Validate Terraform'
   pool:
     vmImage: 'ubuntu-20.04'
+  variables:
+  - group: vh-tenant-creds
   steps:
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
