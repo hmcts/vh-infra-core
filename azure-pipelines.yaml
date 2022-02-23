@@ -85,7 +85,7 @@ stages:
               vh_client_secret: $(vh_client_secret)
               vh_client_id: $(vh_client_id)
               environment: ${{ parameters.env }}
-
+            
           - template: pipeline-steps/deploy-service-elevated.yaml
             parameters:
               environment: ${{ parameters.env }}
