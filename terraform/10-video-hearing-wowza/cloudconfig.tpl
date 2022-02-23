@@ -692,6 +692,7 @@ write_files:
         </Root>
   - owner: root:root
     path: /etc/rc.local
+    permissions: '770'
     content: |
       #!/bin/sh -e
       #
@@ -711,9 +712,10 @@ write_files:
       exit 0
   - owner: wowza:wowza
     path: /home/wowza/mount.sh
+    permissions: 0775
     content: |
       #!/bin/bash
-
+       
       ## Add the blob mounts:
       blobfuse $1 --tmp-path=$3 -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 --file-cache-timeout-in-seconds=0 --config-file=$2 -o allow_other -o nonempty
 
@@ -726,13 +728,14 @@ write_files:
       sudo -u wowza bash -c "crontab $cronTaskPath"
   - owner: wowza:wowza
     path: /home/wowza/remount.sh
+    permissions: 0775
     content: |
         mountDir="$5"
         logPath="/usr/local/WowzaStreamingEngine/logs/blob-mount.log"
         dt=$(date '+%d/%m/%Y %H:%M:%S')
 
         context="failed"
-        if grep -qs $mountDir ../../proc/mounts; then
+        if grep -qs $mountDir /proc/mounts; then
          context="IS"
         else
           context="WAS NOT"
