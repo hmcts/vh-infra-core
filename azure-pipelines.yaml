@@ -103,6 +103,7 @@ stages:
           vmImage: 'Ubuntu 18.04'
         variables:
           - group: external
+          - group: vh-tenant-creds
         steps:
            
           - template: pipeline-steps/deploy-service-elevated.yaml

@@ -32,6 +32,11 @@ jobs:
   variables:
   - group: vh-tenant-creds
   steps:
+  - template: keyvault-read.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      environment: ${{ parameters.environment }}
+      
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
