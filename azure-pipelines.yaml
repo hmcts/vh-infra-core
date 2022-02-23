@@ -60,10 +60,10 @@ variables:
 
 stages:
 
-  - stage: vh_tenant_replacement
-    displayName: 'vh-tenant-replacement'
-    jobs:
-      - job: Video_Hearing_Core
+  - stage: CIBuild
+    displayName: 'Validate Infra'
+    jobs: 
+      - job: vh_tenant_replacement
         pool:
           vmImage: 'Ubuntu 18.04'
         variables:
@@ -76,9 +76,6 @@ stages:
               vh_client_id: $(vh_client_id)
               environment: ${{ parameters.env }}
 
-  - stage: CIBuild
-    displayName: 'Validate Infra'
-    jobs: 
       - template: pipeline-steps/terraform-validate.yaml
         parameters:
           environment: ${{ parameters.env }}
@@ -105,6 +102,14 @@ stages:
           - group: external
           - group: vh-tenant-creds
         steps:
+
+          - template: pipeline-steps/vh-tenant-replacement.yaml
+            parameters:
+              vh_tenant_id: $(vh_tenant_id)
+              vh_client_secret: $(vh_client_secret)
+              vh_client_id: $(vh_client_id)
+              environment: ${{ parameters.env }}
+
            
           - template: pipeline-steps/deploy-service-elevated.yaml
             parameters:
