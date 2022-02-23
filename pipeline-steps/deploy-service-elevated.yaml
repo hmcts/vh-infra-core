@@ -79,7 +79,7 @@ steps:
   - bash: |
       echo $[ variablegroups.external ]
     displayName: 'Check External TF Variables'
-    name: external secrets
+    name: externalSecrets
 
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
