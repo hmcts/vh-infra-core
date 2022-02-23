@@ -15,6 +15,22 @@ jobs:
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
 
+  - task: TerraformCLI@0
+    displayName: terraform init
+    inputs:
+          command: init
+          terraformVersion: ${{ parameters.tfversion }}
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+          backendType: azurerm
+          backendServiceArm: ${{ parameters.serviceConnection }}
+          backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
+          backendAzureRmResourceGroupLocation: ${{ parameters.location }}
+          backendAzureRmStorageAccountName: $(controlStorageAccount)
+          backendAzureRmStorageAccountSku: Standard_LRS
+          backendAzureRmContainerName: subscription-tfstate
+          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+          commandOptions: '-backend-config=subscription_id=${{ parameters.state_sub }}'
+
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
       terraformPath: ${{ parameters.terraformPath }}
