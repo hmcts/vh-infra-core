@@ -630,3 +630,15 @@ resource "azurerm_role_assignment" "App-Reader" {
   role_definition_name = "Reader"
   scope                = each.value.id
 }
+
+resource "azurerm_key_vault_secret" "external-secrets" {
+  for_each = var.external_passwords
+
+  name         = each.value.name
+  value        = each.value
+  key_vault_id = azurerm_key_vault.vh-infra-core-kv.id
+  # FromTFSec
+  content_type    = "secret"
+  expiration_date = timeadd(timestamp(), "8760h")
+  tags = var.tags
+}
