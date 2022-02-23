@@ -76,6 +76,11 @@ steps:
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
 
+  - bash: |
+      echo $[ variablegroups.external ]
+    displayName: 'Check External TF Variables'
+    name: external secrets
+
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
