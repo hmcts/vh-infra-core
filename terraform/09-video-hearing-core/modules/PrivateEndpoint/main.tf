@@ -27,14 +27,6 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
     is_manual_connection                = false
     subresource_names                   = [lookup(each.value, "resource_type")]
   }
-# might not need this
-  #lifecycle {
-  #  prevent_destroy = true
-  #  ignore_changes = [
-  #    subnet_id
-  #  ]
-  #}
   tags = var.tags
-
 }
 
