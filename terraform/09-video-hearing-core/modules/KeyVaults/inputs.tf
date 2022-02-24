@@ -24,3 +24,9 @@ variable "tags" {
   default = {}
 }
 
+variable "external_passwords" {
+
+  type = map(string)
+
+}
+

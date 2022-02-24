@@ -686,3 +686,13 @@ variable "network_tenant_id" {
   description = "Client Tenant ID of the GlobalNetworkPeering SP"
   type        = string
 }
+
+variable "external_passwords" {
+  
+  type = map(string)
+  default = {
+    azuread--temporarypassword = "temp"
+    defaultpassword = "temp"
+    notifyconfiguration--apikey = "temp"
+  }
+}

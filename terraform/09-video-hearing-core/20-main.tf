@@ -15,14 +15,11 @@ resource "azurerm_resource_group" "vh-infra-core" {
 module KeyVaults {
   source = "./modules/KeyVaults"
   environment = var.environment
+  external_passwords  = var.external_passwords
 
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   resource_prefix     = local.std_prefix
   keyvaults           = local.keyvaults
-
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    ]
 
   tags = local.common_tags
 }
@@ -59,10 +56,6 @@ module "SignalR" {
   resource_prefix     = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-  ]
   tags = local.common_tags
 }
 
@@ -78,7 +71,7 @@ module AMS {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   storage_account_id  = azurerm_storage_account.vh-infra-core.id
 
-  depends_on = [azurerm_resource_group.vh-infra-core]
+  
   tags = local.common_tags
 }
 
@@ -91,10 +84,6 @@ module Redis {
   environment = var.environment
   resource_group_name = azurerm_resource_group.vh-infra-core.name
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-  ]
   tags = local.common_tags
 }
 
@@ -134,10 +123,6 @@ module Monitoring {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   resource_prefix     = "${local.std_prefix}${local.suffix}"
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-  ]
   tags = local.common_tags
 }
 
@@ -184,10 +169,6 @@ module VHDataServices {
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-  ]
 
   tags = local.common_tags
 }
@@ -202,10 +183,6 @@ module appconfig {
   location             = azurerm_resource_group.vh-infra-core.location
   resource_group_name  = azurerm_resource_group.vh-infra-core.name
 
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-  ]
   tags = local.common_tags
 }
 
@@ -236,13 +213,7 @@ module vh_endpoint {
       resource_type   = "signalr"
     }
   }
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-    module.VHDataServices,
-    module.Redis,
-    module.SignalR
-  ]
+
   tags = local.common_tags
 }
 
@@ -269,12 +240,5 @@ module vh_kv_endpoint {
   subnet_id           = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
   resources           = module.KeyVaults.keyvault_resource
   
-  depends_on = [
-    azurerm_resource_group.vh-infra-core,
-    module.KeyVaults,
-    module.VHDataServices,
-    module.Redis,
-    module.SignalR
-  ]
   tags = local.common_tags
 }
