@@ -133,6 +133,16 @@ variable "stop_time" {
 locals {
   common_tags = module.ctags.common_tags
 }
+#these are only used in 09-video-hearing-core however for dev purposes they remain here
+variable "external_passwords" {
+  
+  type = map(string)
+  default = {
+    azuread--temporarypassword = "temp"
+    defaultpassword = "temp"
+    notifyconfiguration--apikey = "temp"
+  }
+}
 
 module "ctags" {
   source = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"

@@ -124,6 +124,7 @@ steps:
             -var activity_name=${{ parameters.activity_name }}
             -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
             $(variableName)
+            -var external_passwords='{azuread--temporarypassword = "temp", defaultpassword = "temp", notifyconfiguration--apikey = "temp", testusersecrets--testuserpassword = "temp"}'
 
   - task: TerraformCLI@0
     displayName: Terraform apply
