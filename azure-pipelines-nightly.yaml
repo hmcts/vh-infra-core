@@ -32,10 +32,9 @@ parameters:
   - name: Run_Stage
     displayName: Stage to Run
     type: string
-    default: 'Drift-Check'
+    default: 'Check_Drift'
     values:
-      - TFSec
-      - Drift-Check
+      - Check_Drift
 
   - name: location
     displayName: Location
@@ -70,7 +69,7 @@ variables:
 
 stages:
 
-  - stage: Drift-Check
+  - stage: Check_Drift
     displayName: 'Validate Infra'
     jobs: 
       - template: pipeline-steps/terraform-validate.yaml
