@@ -79,7 +79,7 @@ stages:
 
   - stage: Video_Hearing_Core
     displayName: 'Video_Hearing_Core'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Drift-Check'))
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
     jobs:
       - job: Video_Hearing_Core
         pool:
@@ -110,7 +110,7 @@ stages:
 
   - stage: Video_Hearing_Wowza
     displayName: 'Video_Hearing_Wowza'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Drift-Check'))
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
     jobs:
       - job: Video_Hearing_Wowza
         pool:
