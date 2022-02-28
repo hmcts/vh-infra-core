@@ -128,7 +128,7 @@ steps:
 
   - powershell: |
         $pathToPlan = '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
-        $planFile = ((Get-Content $(pathToPlan)/terraform.tfplan) -join "`n") + "`n" | Set-Content -NoNewline $(pathToPlan)/terraform.tfplan
+        $planFile = ((Get-Content $pathToPlan/terraform.tfplan) -join "`n") + "`n" | Set-Content -NoNewline $(pathToPlan)/terraform.tfplan
         terraform show -json -no-color '$(pathToPlan)/vh-shared-infra.tfplan' > vh-shared-infra.json
     displayName: 'Terraform Show'
 
