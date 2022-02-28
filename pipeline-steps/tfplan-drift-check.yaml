@@ -126,7 +126,7 @@ steps:
             $(variableName)
 
   - powershell: |
-        terraform show -json '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}/tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
+        terraform show -no-color -json '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}/tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
     displayName: 'Terraform Show'
 
   - task: PowerShell@2
