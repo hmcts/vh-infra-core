@@ -126,11 +126,13 @@ steps:
             $(variableName)
             
 
+  - download: current
+    artifact: 'vh-shared-infra.tfplan'
+    displayName: 'Download Plan file'
+
   - powershell: |
-        $tfPlan = 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}'
-        $pathToPlan = '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
-        ((Get-Content $pathToPlan/$tfPlan) -join "`n") + "`n" | Set-Content -NoNewline $pathToPlan/$tfPlan
-        terraform show -json -no-color '$pathToPlan/$tfPlan' > vh-shared-infra.json
+        ((Get-Content $vh-shared-infra.tfplan) -join "`n") + "`n" | Set-Content -NoNewline vh-shared-infra.tfplan
+        terraform show -json -no-color vh-shared-infra.tfplan > vh-shared-infra.json
     displayName: 'Terraform Show'
 
   - task: PowerShell@2
