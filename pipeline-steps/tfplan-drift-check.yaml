@@ -124,17 +124,9 @@ steps:
             -var activity_name=${{ parameters.activity_name }}
             -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
             $(variableName)
-            
-
-  - download: current
-    artifact: 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' 
-    # tfplan-application-sbox-09-video-hearing-core
-    # tfplan-application-sbox-10-video-hearing-wowza
-    displayName: 'Download Plan file' 
 
   - powershell: |
-        #((Get-Content $vh-shared-infra.tfplan) -join "`n") + "`n" | Set-Content -NoNewline vh-shared-infra.tfplan
-        terraform show -json -no-color 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra.json
+        terraform show -json -no-color 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
     displayName: 'Terraform Show'
 
   - task: PowerShell@2
@@ -145,7 +137,7 @@ steps:
       targetType: 'inline'
       script: |
         $environment = "${{ parameters.environment }}"
-        $planObj = Get-Content "vh-shared-infra.json" | ConvertFrom-Json
+        $planObj = Get-Content "vh-shared-infra-$${{ parameters.stack }}.json" | ConvertFrom-Json
         $resourceChanges = $planObj.resource_changes
         $addChanges = ($resourceChanges | Where {$_.change.actions -contains "create"}).length
         $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length
