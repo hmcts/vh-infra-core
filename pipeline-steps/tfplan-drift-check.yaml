@@ -127,11 +127,13 @@ steps:
             
 
   - powershell: |
-        terraform show -json -no-color '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}/vh-shared-infra.tfplan' > vh-shared-infra.json
+        $pathToPlan = '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+        $planFile = ((Get-Content $(pathToPlan)/terraform.tfplan) -join "`n") + "`n" | Set-Content -NoNewline $(pathToPlan)/terraform.tfplan
+        terraform show -json -no-color '$(pathToPlan)/vh-shared-infra.tfplan' > vh-shared-infra.json
     displayName: 'Terraform Show'
 
   - task: PowerShell@2
-    name: Check_Cifference
+    name: Check_Difference
     displayName: 'Check difference'
     # condition: and(succeeded(), eq(variables['TERRAFORM_PLAN_HAS_CHANGES'], 'true'))
     inputs:
