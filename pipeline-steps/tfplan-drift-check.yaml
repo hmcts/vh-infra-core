@@ -127,8 +127,10 @@ steps:
             
 
   - download: current
-    artifact: 'vh-shared-infra.tfplan'
-    displayName: 'Download Plan file'
+    artifact: 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' 
+    # tfplan-application-sbox-09-video-hearing-core
+    # tfplan-application-sbox-10-video-hearing-wowza
+    displayName: 'Download Plan file' 
 
   - powershell: |
         ((Get-Content $vh-shared-infra.tfplan) -join "`n") + "`n" | Set-Content -NoNewline vh-shared-infra.tfplan
