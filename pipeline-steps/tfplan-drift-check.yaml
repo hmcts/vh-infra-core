@@ -129,7 +129,7 @@ steps:
   - powershell: |
         $tfPlan = 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}'
         $pathToPlan = '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
-        $planFile = ((Get-Content '$pathToPlan/$tfPlan') -join "`n") + "`n" | Set-Content -NoNewline '$pathToPlan/$tfPlan'
+        ((Get-Content $pathToPlan/$tfPlan) -join "`n") + "`n" | Set-Content -NoNewline $pathToPlan/$tfPlan
         terraform show -json -no-color '$pathToPlan/$tfPlan' > vh-shared-infra.json
     displayName: 'Terraform Show'
 
