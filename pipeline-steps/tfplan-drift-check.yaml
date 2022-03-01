@@ -21,6 +21,9 @@ parameters:
     type: string
   - name: state_sub 
     type: string
+  - name: tf_working_dir
+    type: string
+    default: "$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}"
 
 steps:
 
@@ -126,7 +129,8 @@ steps:
             $(variableName)
 
   - powershell: |
-        terraform show -no-color -json '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}/tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
+        cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+        terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
     displayName: 'Terraform Show'
 
   - task: PowerShell@2
@@ -136,6 +140,7 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
+        cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
         $environment = "${{ parameters.environment }}"
         $planObj = Get-Content "vh-shared-infra-$${{ parameters.stack }}.json" | ConvertFrom-Json
         $resourceChanges = $planObj.resource_changes
