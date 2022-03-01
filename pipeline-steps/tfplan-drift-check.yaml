@@ -21,9 +21,6 @@ parameters:
     type: string
   - name: state_sub 
     type: string
-  - name: tf_working_dir
-    type: string
-    default: "$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}"
 
 steps:
 
