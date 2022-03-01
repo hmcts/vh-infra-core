@@ -149,5 +149,6 @@ steps:
         Write-Host $msg
         $sendMsg = (&{If($addChanges -gt 0 -or $changeChanges -gt 0 -or $removeChanges -gt 0) {"true"} Else {"false"}})
         Write-Host "Should send message: $sendMsg"
-        Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
-        Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
+        
+    # Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
+    # Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
