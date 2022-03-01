@@ -139,13 +139,13 @@ steps:
       script: |
         cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
         $environment = "${{ parameters.environment }}"
-        $planObj = Get-Content "vh-shared-infra-${{ parameters.stack }}.json" | ConvertFrom-Json
+        $planObj = Get-Content "vh-shared-infra-$${{ parameters.stack }}.json" | ConvertFrom-Json
         $resourceChanges = $planObj.resource_changes
         $addChanges = ($resourceChanges | Where {$_.change.actions -contains "create"}).length
         $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length
         $removeChanges = ($resourceChanges | Where {$_.change.actions -contains "delete"}).length
         $totalChanges = $addChanges + $changeChanges + $removeChanges
-        $msg = "There are $totalChanges ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on CVP ${{ parameters.stack }}"
+        $msg = "There are $totalChanges ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on ${{ parameters.stack }}"
         Write-Host $msg
         $sendMsg = (&{If($addChanges -gt 0 -or $changeChanges -gt 0 -or $removeChanges -gt 0) {"true"} Else {"false"}})
         Write-Host "Should send message: $sendMsg"
