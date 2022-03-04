@@ -158,7 +158,7 @@ steps:
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
-      logicAppUrl: ${{ parameters.logicAppUrl }}
+      logicAppUrl: $(parameters.logicAppUrl)
       title: "(Test)Terraform drift alert in $${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
       conditionAction: $(Check_Difference.sendMsg)
