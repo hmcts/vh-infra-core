@@ -139,7 +139,7 @@ steps:
       targetType: 'inline'
       script: |
         $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
-        $buildUrl = "$(System.TeamFoundationCollectionUri)$(encodedTeamProject)/_build/results?buildId=$(Build.BuildId)&view=results"
+        $buildUrl = "$(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId)&view=results"
         Write-Host $buildUrl
         cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
         $environment = "${{ parameters.environment }}"
