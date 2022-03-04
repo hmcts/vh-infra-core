@@ -138,9 +138,9 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
-        $buildUrl = "$(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId)&view=results"
-
+        
+        $buildUrl = "$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)&view=results"
+        Write-Host $buildUrl
         cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
         $environment = "${{ parameters.environment }}"
         $planObj = Get-Content "vh-shared-infra-$${{ parameters.stack }}.json" | ConvertFrom-Json
@@ -162,5 +162,5 @@ steps:
       title: "(Test)Terraform drift alert in ${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
       conditionAction: $(Check_Difference.sendMsg)
-      pipelineUrl: $Check_Difference.buildUrl
+      pipelineUrl: $(Check_Difference.buildUrl)
       projectName: $(System.TeamProject)
