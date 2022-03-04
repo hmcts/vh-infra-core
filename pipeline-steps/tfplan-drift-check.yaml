@@ -149,7 +149,7 @@ steps:
         $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length
         $removeChanges = ($resourceChanges | Where {$_.change.actions -contains "delete"}).length
         $totalChanges = $addChanges + $changeChanges + $removeChanges
-        $msg = "(TEST Message)There are $totalChanges differences ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on ${{ parameters.stack }}/n$buildUrl/n$GitHubUrl"
+        $msg = "(TEST Message)There are $totalChanges differences ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on ${{ parameters.stack }}`nPipeline: $buildUrl`nGithub: $GitHubUrl"
         Write-Host $msg
         $sendMsg = (&{If($addChanges -gt 0 -or $changeChanges -gt 0 -or $removeChanges -gt 0) {"true"} Else {"false"}})
         Write-Host "Should send message: $sendMsg"
