@@ -156,11 +156,11 @@ steps:
         Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
         Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
         Write-Host "Logic App Url: $(logic_app_url)"
-
+        Write-Host "Logic App Url: $(logicAppUrl)"
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
-      logicAppUrl: $logic_app_url
+      logicAppUrl: $logicAppUrl
       title: "Terraform Changes in $${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
       conditionAction: $(Check_Difference.sendMsg)
