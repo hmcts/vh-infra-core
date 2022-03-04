@@ -155,8 +155,7 @@ steps:
         Write-Host "Should send message: $sendMsg"
         Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
         Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
-        Write-Host "Logic App Url: $(logic_app_url)"
-        Write-Host "Logic App Url: $(logicAppUrl)"
+        Write-Host "Logic App Url: $logicAppUrl"
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
