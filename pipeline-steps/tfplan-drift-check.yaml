@@ -160,7 +160,7 @@ steps:
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
-      logicAppUrl: $(logic_app_url)
+      logicAppUrl: $logic_app_url
       title: "Terraform Changes in $${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
       conditionAction: $(Check_Difference.sendMsg)
