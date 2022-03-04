@@ -159,7 +159,7 @@ steps:
 
 
 
-  - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@azure-devops-templates
+  - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@hmcts/azure-devops-templates
     parameters:
       logicAppUrl: $(logic_app_url)
       title: "Terraform Changes in $${{ lower(parameters.environment) }}"
