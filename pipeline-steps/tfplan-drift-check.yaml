@@ -163,6 +163,6 @@ steps:
       logicAppUrl: $(logic_app_url)
       title: "Terraform Changes in $${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
-      conditionAction: $(CheckDifference.sendMsg)
+      conditionAction: $(Check_Difference.sendMsg)
       pipelineUrl: $buildUrl
       projectName: $(System.TeamProject)
