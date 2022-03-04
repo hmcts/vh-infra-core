@@ -162,5 +162,5 @@ steps:
       title: "(Test)Terraform drift alert in ${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
       conditionAction: $(Check_Difference.sendMsg)
-      pipelineUrl: $(Check_Difference.buildUrl)
+      pipelineUrl: "$(Check_Difference.buildUrl)"
       projectName: $(System.TeamProject)
