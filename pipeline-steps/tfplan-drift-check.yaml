@@ -21,6 +21,8 @@ parameters:
     type: string
   - name: state_sub 
     type: string
+  - name: logicAppUrl
+    type: string
 
 steps:
 
@@ -133,12 +135,11 @@ steps:
   - task: PowerShell@2
     name: Check_Difference
     displayName: 'Check difference'
-    # condition: and(succeeded(), eq(variables['TERRAFORM_PLAN_HAS_CHANGES'], 'true'))
     inputs:
       targetType: 'inline'
       script: |
         $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
-        $buildUrl = "$(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId)"
+        $buildUrl = "$(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId)&view=results"
         Write-Host "$buildUrl"
         $gitHubUrl = "https://www.github.com/$(Build.Repository.Name)/tree/$(Build.SourceBranchName)"
         cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
@@ -158,11 +159,11 @@ steps:
 
 
 
-  #- template: templates\Azure\LogicApp\send-pipeline-alert.yaml@azTemplates
-  #  parameters:
-  #    logicAppUrl: $(logic_app_url)
-  #    title: "Terraform Changes in $${{ lower(parameters.environment) }}"
-  #    message: "$(terraChanges.msg)"
-  #    conditionAction: $(terraChanges.sendMsg)
-  #    pipelineUrl: $buildUrl
-  #    projectName: $(System.TeamProject)
+  - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@azTemplates
+    parameters:
+      logicAppUrl: $(logic_app_url)
+      title: "Terraform Changes in $${{ lower(parameters.environment) }}"
+      message: "$(Check_Difference.msg)"
+      conditionAction: $(tCheckDifference.sendMsg)
+      pipelineUrl: $buildUrl
+      projectName: $(System.TeamProject)

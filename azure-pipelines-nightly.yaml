@@ -69,7 +69,7 @@ variables:
 
 stages:
 
-  - stage: Check_Drift
+  - stage: Validate
     displayName: 'Validate Infra'
     jobs: 
       - template: pipeline-steps/terraform-validate.yaml
@@ -86,6 +86,7 @@ stages:
           vmImage: 'Ubuntu 18.04'
         variables:
           - group: vh-tenant-creds
+          - group: vh-alerting-Logic-App-Details
         steps:
           - template: pipeline-steps/vh-tenant-replacement.yaml
             parameters:
@@ -107,6 +108,7 @@ stages:
               activity_name: Video_Hearing_Core
               run_stage: ${{ parameters.Run_Stage }}
               state_sub: $(vh_tf_state_sub)
+              logicAppUrl: $(vh-logic-app-url)
 
   - stage: Video_Hearing_Wowza
     displayName: 'Video_Hearing_Wowza'
@@ -117,6 +119,7 @@ stages:
           vmImage: 'Ubuntu 18.04'
         variables:
             - group: vh-tenant-creds
+            - group: vh-alerting-Logic-App-Details
         steps:
           - template: pipeline-steps/sshkey-download.yaml
           - template: pipeline-steps/tfplan-drift-check.yaml
@@ -132,3 +135,4 @@ stages:
               activity_name: Video_Hearing_Wowza
               run_stage: ${{ parameters.Run_Stage }}
               state_sub: $(vh_tf_state_sub)
+              logicAppUrl: $(vh-logic-app-url)
