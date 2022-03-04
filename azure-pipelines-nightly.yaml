@@ -108,7 +108,7 @@ stages:
               activity_name: Video_Hearing_Core
               run_stage: ${{ parameters.Run_Stage }}
               state_sub: $(vh_tf_state_sub)
-              logicAppUrl: $vh-logic-app-url
+              logicAppUrl: $(vh-logic-app-url)
 
   - stage: Video_Hearing_Wowza
     displayName: 'Video_Hearing_Wowza'

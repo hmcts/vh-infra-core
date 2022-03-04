@@ -155,12 +155,11 @@ steps:
         Write-Host "Should send message: $sendMsg"
         Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
         Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
-        Write-Host ${{ parameters.logicAppUrl }}
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
-      logicAppUrl: $logicAppUrl
-      title: "Terraform drift alert in $${{ lower(parameters.environment) }}"
+      logicAppUrl: ${{ parameters.logicAppUrl }}
+      title: "(Test)Terraform drift alert in $${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
       conditionAction: $(Check_Difference.sendMsg)
       pipelineUrl: $buildUrl
