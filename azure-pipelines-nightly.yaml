@@ -49,7 +49,12 @@ parameters:
     type: string
     default: 'SBOX'
     values:
-    - SBOX
+    - ITHC
+    - DEV
+    - DEMO
+    - TEST
+    - STG
+    - PROD
 
 
 
