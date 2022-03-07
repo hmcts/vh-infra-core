@@ -156,8 +156,8 @@ steps:
         Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
         Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
 
-  - script: |
-        Write-Host $(Check_Difference.buildUrl)
+  - bash: |
+        echo $(Check_Difference.buildUrl)
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
