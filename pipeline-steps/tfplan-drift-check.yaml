@@ -155,6 +155,7 @@ steps:
         Write-Host "Should send message: $sendMsg"
         Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
         Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
+        Write-Host "##vso[task.setvariable variable=buildUrl;isOutput=true]$buildUrl"
 
   - bash: |
         echo $(Check_Difference.buildUrl)
