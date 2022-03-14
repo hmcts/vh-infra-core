@@ -77,7 +77,7 @@ stages:
           terraformPath: $(Build.SourcesDirectory)/terraform
           tfversion: $(tfversion)
   - ${{each env in parameters.envs}}:
-    - stage: Video_Hearing_Core
+    - stage: Video_Hearing_Core${{env}}
       displayName: 'Video_Hearing_Core'
       #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
@@ -114,7 +114,7 @@ stages:
                 state_sub: $(vh_tf_state_sub)
                 logicAppUrl: $(vh-logic-app-url)
 
-    - stage: Video_Hearing_Wowza
+    - stage: Video_Hearing_Wowza${{env}}
       displayName: 'Video_Hearing_Wowza'
       #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
