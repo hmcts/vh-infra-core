@@ -61,8 +61,8 @@ variables:
   - name: project
     value: application
   # same comment as above ^^
-  - name: serviceConnection
-    value: DTS-SHAREDSERVICES-${{ parameters.envs }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
+  #- name: serviceConnection
+  #  value: DTS-SHAREDSERVICES-${{ parameters.envs }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: location
     value: 'UK South'
 
