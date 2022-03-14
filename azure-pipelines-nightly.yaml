@@ -48,14 +48,14 @@ parameters:
     displayName: Environment
     type: string
     values:
-    #- ITHC
-    #- DEV
-    #- DEMO
-    - SBOX
-    #- TEST
-    #- STG
-    #- PROD
-    - SBOX
+      #- ITHC
+      #- DEV
+      #- DEMO
+      - SBOX
+      #- TEST
+      #- STG
+      #- PROD
+      - SBOX
 
 variables:
   - name: gaServiceConnection
