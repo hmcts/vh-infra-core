@@ -48,7 +48,7 @@ parameters:
     displayName: Environments
     type: object
     values: []
-    default: ['SBOX','STG','DEV']
+    default: ['SBOX','DEV']
 
 variables:
   #- name: gaServiceConnection
