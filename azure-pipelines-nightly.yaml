@@ -29,12 +29,12 @@ resources:
       endpoint: hmcts
       
 parameters:
-  - name: Run_Stage
-    displayName: Stage to Run
-    type: string
-    default: 'Check_Drift'
-    values:
-      - Check_Drift
+  #- name: Run_Stage
+  #  displayName: Stage to Run
+  #  type: string
+  #  default: 'Check_Drift'
+  #  values:
+  #    - Check_Drift
 
   - name: location
     displayName: Location
@@ -44,23 +44,25 @@ parameters:
     - 'UK South'
     - 'UK West'
   
-  - name: envs
-    displayName: Environment
-    type: string
-    values:
+  #- name: envs
+  #  displayName: Environment
+  #  type: string
+  #  values:
     #- ITHC
     #- DEV
     #- DEMO
-    - SBOX
+  #  - SBOX
     #- TEST
     #- STG
     #- PROD
-    - SBOX
+  #  - SBOX
 
 
 variables:
+  - name: envs
+    value: ["SBOX", "SBOX"]
   - name: gaServiceConnection
-    value: DTS-SHAREDSERVICES-${{ parameters.envs }}-Video Hearings
+    value: DTS-SHAREDSERVICES-${{ var.envs }}-Video Hearings
   - name: tfversion
     value: 1.1.0
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
@@ -87,9 +89,9 @@ stages:
 
   - stage: Video_Hearing_Core
     displayName: 'Video_Hearing_Core'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
+    #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
     jobs:
-      - ${{each env in parameters.envs}}:
+      - ${{each env in var.envs}}:
         - job: Video_Hearing_Core_${{env}}
           pool:
             vmImage: 'Ubuntu 18.04'
@@ -121,9 +123,9 @@ stages:
 
   - stage: Video_Hearing_Wowza
     displayName: 'Video_Hearing_Wowza'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
+    #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
     jobs:
-      - ${{each env in parameters.envs}}:
+      - ${{each env in var.envs}}:
         - job: Video_Hearing_Wowza
           pool:
             vmImage: 'Ubuntu 18.04'
