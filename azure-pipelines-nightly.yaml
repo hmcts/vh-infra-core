@@ -51,8 +51,8 @@ parameters:
     default: ['SBOX','STG','DEV']
 
 variables:
-  - name: gaServiceConnection
-    value: DTS-SHAREDSERVICES-${{ parameters.envs }}-Video Hearings
+  #- name: gaServiceConnection
+  #  value: DTS-SHAREDSERVICES-${{ parameters.envs }}-Video Hearings
   - name: tfversion
     value: 1.1.0
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
@@ -85,6 +85,10 @@ stages:
           pool:
             vmImage: 'Ubuntu 18.04'
           variables:
+            - name: gaServiceConnection
+              value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+            - name: serviceConnection
+              value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
             - group: vh-tenant-creds
             - group: vh-alerting-Logic-App-Details
           steps:
@@ -118,8 +122,12 @@ stages:
           pool:
             vmImage: 'Ubuntu 18.04'
           variables:
-              - group: vh-tenant-creds
-              - group: vh-alerting-Logic-App-Details
+            - name: gaServiceConnection
+              value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+            - name: serviceConnection
+              value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+            - group: vh-tenant-creds
+            - group: vh-alerting-Logic-App-Details
           steps:
             - template: pipeline-steps/sshkey-download.yaml
             - template: pipeline-steps/tfplan-drift-check.yaml
