@@ -44,18 +44,18 @@ parameters:
     - 'UK South'
     - 'UK West'
   
-    - name: envs
-      displayName: Environment
-      type: string
-      values:
-      #- ITHC
-      #- DEV
-      #- DEMO
-      - SBOX
-      #- TEST
-      #- STG
-      #- PROD
-      - SBOX
+  - name: envs
+    displayName: Environment
+    type: string
+    values:
+    #- ITHC
+    #- DEV
+    #- DEMO
+    - SBOX
+    #- TEST
+    #- STG
+    #- PROD
+    - SBOX
 
 
 variables:
