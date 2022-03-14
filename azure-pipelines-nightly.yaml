@@ -43,11 +43,19 @@ parameters:
     values:
     - 'UK South'
     - 'UK West'
-  
-  - name: envs
-    displayName: Environment
-    type: string
-    values:
+
+    envs:
+    - name: SBOX
+      skip: false
+    - name: DEV
+      skip: true
+    - name: SBOX
+      skip: false
+
+  #- name: envs
+  #  displayName: Environment
+  #  type: string
+  #  values:
     - SBOX
     - SBOX
       #- ITHC
