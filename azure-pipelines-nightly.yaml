@@ -60,9 +60,7 @@ parameters:
 
 variables:
   - name: envs
-    values:
-    - SBOX
-    - SBOX
+    value: SBOX, SBOX
   - name: gaServiceConnection
     value: DTS-SHAREDSERVICES-${{ var.envs }}-Video Hearings
   - name: tfversion
