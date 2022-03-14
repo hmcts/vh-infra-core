@@ -48,8 +48,8 @@ parameters:
     displayName: Environment
     type: string
     values:
-      - SBOX
-      - SBOX
+    - SBOX
+    - SBOX
       #- ITHC
       #- DEV
       #- DEMO
