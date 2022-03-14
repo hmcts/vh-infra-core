@@ -60,7 +60,7 @@ parameters:
 
 variables:
   - name: envs
-    value:
+    values:
     - SBOX
     - SBOX
   - name: gaServiceConnection
