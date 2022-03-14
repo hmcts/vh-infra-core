@@ -29,6 +29,7 @@ resources:
       endpoint: hmcts
       
 parameters:
+  - envs: []
   #- name: Run_Stage
   #  displayName: Stage to Run
   #  type: string
@@ -44,7 +45,7 @@ parameters:
     - 'UK South'
     - 'UK West'
 
-    #envs: []
+    #
 
 
 variables:
