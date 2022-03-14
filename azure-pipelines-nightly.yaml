@@ -44,26 +44,8 @@ parameters:
     - 'UK South'
     - 'UK West'
 
-    envs:
-    - name: SBOX
-      skip: false
-    - name: DEV
-      skip: true
-    - name: SBOX
-      skip: false
+    envs: []
 
-  #- name: envs
-  #  displayName: Environment
-  #  type: string
-  #  values:
-    - SBOX
-    - SBOX
-      #- ITHC
-      #- DEV
-      #- DEMO
-      #- TEST
-      #- STG
-      #- PROD
 
 variables:
   - name: gaServiceConnection
@@ -97,6 +79,8 @@ stages:
     #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
     jobs:
       - ${{each env in parameters.envs}}:
+        - parameters:
+            envs:["SBOX", "SBOX"]
         - job: Video_Hearing_Core_${{env}}
           pool:
             vmImage: 'Ubuntu 18.04'
@@ -131,6 +115,8 @@ stages:
     #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
     jobs:
       - ${{each env in parameters.envs}}:
+        - parameters:
+            envs:["SBOX", "SBOX"]
         - job: Video_Hearing_Wowza
           pool:
             vmImage: 'Ubuntu 18.04'
