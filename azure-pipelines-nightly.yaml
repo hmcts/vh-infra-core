@@ -44,7 +44,7 @@ parameters:
     - 'UK South'
     - 'UK West'
 
-    envs: []
+    #envs: []
 
 
 variables:
