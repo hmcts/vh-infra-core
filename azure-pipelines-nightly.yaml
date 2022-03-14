@@ -49,7 +49,9 @@ parameters:
     type: object
     values: []
     default: ['SBOX','DEV']
-
+  
+stages:
+  
   - ${{each env in parameters.envs}}:
 
     variables:
@@ -69,7 +71,6 @@ parameters:
         value: 'UK South'
 
 
-    stages:
 
       - stage: Validate
         displayName: 'Validate Infra'
