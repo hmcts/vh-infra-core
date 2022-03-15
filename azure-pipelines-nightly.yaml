@@ -68,7 +68,7 @@ variables:
 
 stages:
   - ${{each env in parameters.envs}}:
-    - stage: Validate
+    - stage: Validate_${{env}}
       displayName: 'Validate Infra'
       variables:
       - name: gaServiceConnection
