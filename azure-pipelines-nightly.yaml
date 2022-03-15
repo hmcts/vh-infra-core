@@ -70,11 +70,11 @@ stages:
   - ${{each environment in parameters.env}}:
     # - stage: Validate_${{environment}}
     #   displayName: 'Validate Infra'
-    variables:
-    - name: gaServiceConnection
-      value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
-    - name: serviceConnection
-      value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
+    # variables:
+    # - name: gaServiceConnection
+    #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
+    # - name: serviceConnection
+    #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
     #   jobs: 
     #     - template: pipeline-steps/terraform-validate.yaml
     #       parameters:
@@ -92,8 +92,8 @@ stages:
             # # variables
             # - name: gaServiceConnection
             #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
-            # - name: serviceConnection
-            #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
+            - name: serviceConnection
+              value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - group: vh-tenant-creds
             - group: vh-alerting-Logic-App-Details
           steps:
@@ -130,8 +130,8 @@ stages:
             # variables
             # - name: gaServiceConnection
             #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
-            # - name: serviceConnection
-            #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
+            - name: serviceConnection
+              value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - group: vh-tenant-creds
             - group: vh-alerting-Logic-App-Details
           steps:
