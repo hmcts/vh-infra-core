@@ -52,11 +52,11 @@ parameters:
   
 
   
-  - ${{each env in parameters.envs}}:
+  
 
     variables:
-      - name: gaServiceConnection
-        value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+      #- name: gaServiceConnection
+      #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
       - name: tfversion
         value: 1.1.0
       # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
@@ -65,77 +65,92 @@ parameters:
       - name: project
         value: application
       # same comment as above ^^
-      - name: serviceConnection
-        value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
+      #- name: serviceConnection
+      #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
       - name: location
         value: 'UK South'
   
     stages:
+      - ${{each env in parameters.envs}}:
+        - stage: Validate
+          displayName: 'Validate Infra'
+          variables:
+          - name: gaServiceConnection
+            value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+          - name: serviceConnection
+            value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+          jobs: 
+            - template: pipeline-steps/terraform-validate.yaml
+              parameters:
+                terraformPath: $(Build.SourcesDirectory)/terraform
+                tfversion: $(tfversion)
 
-      - stage: Validate
-        displayName: 'Validate Infra'
-        jobs: 
-          - template: pipeline-steps/terraform-validate.yaml
-            parameters:
-              terraformPath: $(Build.SourcesDirectory)/terraform
-              tfversion: $(tfversion)
+        - stage: Video_Hearing_Core_${{env}}
+          displayName: 'Video_Hearing_Core'
+          #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
+          jobs:
+            - job: Video_Hearing_Core_${{env}}
+              pool:
+                vmImage: 'Ubuntu 18.04'
+              variables:
+                # variables
+                - name: gaServiceConnection
+                  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+                - name: serviceConnection
+                  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+                - group: vh-tenant-creds
+                - group: vh-alerting-Logic-App-Details
+              steps:
+                - template: pipeline-steps/vh-tenant-replacement.yaml
+                  parameters:
+                    vh_tenant_id: $(vh_tenant_id)
+                    vh_client_secret: $(vh_client_secret)
+                    vh_client_id: $(vh_client_id)
+                    environment: ${{ env }}
 
-      - stage: Video_Hearing_Core_${{env}}
-        displayName: 'Video_Hearing_Core'
-        #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
-        jobs:
-          - job: Video_Hearing_Core_${{env}}
-            pool:
-              vmImage: 'Ubuntu 18.04'
-            variables:
-              - group: vh-tenant-creds
-              - group: vh-alerting-Logic-App-Details
-            steps:
-              - template: pipeline-steps/vh-tenant-replacement.yaml
-                parameters:
-                  vh_tenant_id: $(vh_tenant_id)
-                  vh_client_secret: $(vh_client_secret)
-                  vh_client_id: $(vh_client_id)
-                  environment: ${{ env }}
+                - template: pipeline-steps/tfplan-drift-check.yaml
+                  parameters:
+                    environment: ${{ env }}
+                    location: ${{ parameters.location }}
+                    stack: '09-video-hearing-core'
+                    project: $(project)
+                    product: 'vh'
+                    builtFrom: $(Build.Repository.Name)
+                    tfversion: $(tfversion)
+                    serviceConnection: $(serviceConnection)
+                    activity_name: Video_Hearing_Core
+                    run_stage: ${{ parameters.Run_Stage }}
+                    state_sub: $(vh_tf_state_sub)
+                    logicAppUrl: $(vh-logic-app-url)
 
-              - template: pipeline-steps/tfplan-drift-check.yaml
-                parameters:
-                  environment: ${{ env }}
-                  location: ${{ parameters.location }}
-                  stack: '09-video-hearing-core'
-                  project: $(project)
-                  product: 'vh'
-                  builtFrom: $(Build.Repository.Name)
-                  tfversion: $(tfversion)
-                  serviceConnection: $(serviceConnection)
-                  activity_name: Video_Hearing_Core
-                  run_stage: ${{ parameters.Run_Stage }}
-                  state_sub: $(vh_tf_state_sub)
-                  logicAppUrl: $(vh-logic-app-url)
-
-      - stage: Video_Hearing_Wowza_${{env}}
-        displayName: 'Video_Hearing_Wowza'
-        #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
-        jobs:
-          - job: Video_Hearing_Wowza
-            pool:
-              vmImage: 'Ubuntu 18.04'
-            variables:
-              - group: vh-tenant-creds
-              - group: vh-alerting-Logic-App-Details
-            steps:
-              - template: pipeline-steps/sshkey-download.yaml
-              - template: pipeline-steps/tfplan-drift-check.yaml
-                parameters:
-                  environment: ${{ env }}
-                  location: ${{ parameters.location }}
-                  stack: '10-video-hearing-wowza'
-                  project: $(project)
-                  product: 'wowza'
-                  builtFrom: $(Build.Repository.Name)
-                  tfversion: $(tfversion)
-                  serviceConnection: $(serviceConnection)
-                  activity_name: Video_Hearing_Wowza
-                  run_stage: ${{ parameters.Run_Stage }}
-                  state_sub: $(vh_tf_state_sub)
-                  logicAppUrl: $(vh-logic-app-url)
+        - stage: Video_Hearing_Wowza_${{env}}
+          displayName: 'Video_Hearing_Wowza'
+          #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
+          jobs:
+            - job: Video_Hearing_Wowza
+              pool:
+                vmImage: 'Ubuntu 18.04'
+              variables:
+                # variables
+                - name: gaServiceConnection
+                  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+                - name: serviceConnection
+                  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+                - group: vh-tenant-creds
+                - group: vh-alerting-Logic-App-Details
+              steps:
+                - template: pipeline-steps/sshkey-download.yaml
+                - template: pipeline-steps/tfplan-drift-check.yaml
+                  parameters:
+                    environment: ${{ env }}
+                    location: ${{ parameters.location }}
+                    stack: '10-video-hearing-wowza'
+                    project: $(project)
+                    product: 'wowza'
+                    builtFrom: $(Build.Repository.Name)
+                    tfversion: $(tfversion)
+                    serviceConnection: $(serviceConnection)
+                    activity_name: Video_Hearing_Wowza
+                    run_stage: ${{ parameters.Run_Stage }}
+                    state_sub: $(vh_tf_state_sub)
+                    logicAppUrl: $(vh-logic-app-url)
