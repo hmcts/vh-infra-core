@@ -113,7 +113,7 @@ stages:
                 product: 'vh'
                 builtFrom: $(Build.Repository.Name)
                 tfversion: $(tfversion)
-                serviceConnection: $(serviceConnection)
+                serviceConnection: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
                 activity_name: Video_Hearing_Core
                 run_stage: ${{ parameters.Run_Stage }}
                 state_sub: $(vh_tf_state_sub)
@@ -145,7 +145,7 @@ stages:
                 product: 'wowza'
                 builtFrom: $(Build.Repository.Name)
                 tfversion: $(tfversion)
-                serviceConnection: $(serviceConnection)
+                serviceConnection: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
                 activity_name: Video_Hearing_Wowza
                 run_stage: ${{ parameters.Run_Stage }}
                 state_sub: $(vh_tf_state_sub)
