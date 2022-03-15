@@ -49,26 +49,22 @@ parameters:
     type: object
     values: []
     default: ['SBOX','DEV']
-  
 
-  
-  
-
-    variables:
-      #- name: gaServiceConnection
-      #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
-      - name: tfversion
-        value: 1.1.0
-      # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
-      # but it might be better to template the pipeline more and have a different pipeline file
-      # so that someone doesn't pick the wrong var in the dropdown
-      - name: project
-        value: application
-      # same comment as above ^^
-      #- name: serviceConnection
-      #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
-      - name: location
-        value: 'UK South'
+variables:
+  #- name: gaServiceConnection
+  #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+  - name: tfversion
+    value: 1.1.0
+  # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+  # but it might be better to template the pipeline more and have a different pipeline file
+  # so that someone doesn't pick the wrong var in the dropdown
+  - name: project
+    value: application
+  # same comment as above ^^
+  #- name: serviceConnection
+  #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
+  - name: location
+    value: 'UK South'
   
     stages:
       - ${{each env in parameters.envs}}:
