@@ -120,10 +120,10 @@ stages:
                 logicAppUrl: $(vh-logic-app-url)
 
     - stage: Video_Hearing_Wowza_${{environment}}
-      displayName: 'Video_Hearing_Wowza${{environment}}'
+      displayName: 'Video_Hearing_Wowza_${{environment}}'
       #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
-        - job: Video_Hearing_Wowza
+        - job: Video_Hearing_Wowza_${{environment}}
           pool:
             vmImage: 'Ubuntu 18.04'
           variables:
