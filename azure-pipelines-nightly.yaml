@@ -119,7 +119,7 @@ stages:
                 state_sub: $(vh_tf_state_sub)
                 logicAppUrl: $(vh-logic-app-url)
 
-    - stage: Video_Hearing_Wowza_${{env}}
+    - stage: Video_Hearing_Wowza_${{environment}}
       displayName: 'Video_Hearing_Wowza'
       #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
