@@ -68,21 +68,21 @@ variables:
 
 stages:
   - ${{each environment in parameters.env}}:
-    - stage: Validate_${{environment}}
-      displayName: 'Validate Infra'
-      variables:
-      - name: gaServiceConnection
-        value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
-      - name: serviceConnection
-        value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
-      jobs: 
-        - template: pipeline-steps/terraform-validate.yaml
-          parameters:
-            terraformPath: $(Build.SourcesDirectory)/terraform
-            tfversion: $(tfversion)
+    # - stage: Validate_${{environment}}
+    #   displayName: 'Validate Infra'
+    #   variables:
+    #   - name: gaServiceConnection
+    #     value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
+    #   - name: serviceConnection
+    #     value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
+    #   jobs: 
+    #     - template: pipeline-steps/terraform-validate.yaml
+    #       parameters:
+    #         terraformPath: $(Build.SourcesDirectory)/terraform
+    #         tfversion: $(tfversion)
 
     - stage: Video_Hearing_Core_${{environment}}
-      displayName: 'Video_Hearing_Core'
+      displayName: 'Video_Hearing_Core${{environment}}'
       #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
         - job: Video_Hearing_Core_${{environment}}
@@ -120,7 +120,7 @@ stages:
                 logicAppUrl: $(vh-logic-app-url)
 
     - stage: Video_Hearing_Wowza_${{environment}}
-      displayName: 'Video_Hearing_Wowza'
+      displayName: 'Video_Hearing_Wowza${{environment}}'
       #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
         - job: Video_Hearing_Wowza
