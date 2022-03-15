@@ -44,8 +44,8 @@ parameters:
     - 'UK South'
     - 'UK West'
 
-  - name: envs
-    displayName: Environments
+  - name: env
+    displayName: Environment
     type: object
     values: []
     default: ['SBOX','DEV']
@@ -67,33 +67,33 @@ variables:
     value: 'UK South'
 
 stages:
-  - ${{each env in parameters.envs}}:
-    - stage: Validate_${{env}}
+  - ${{each environment in parameters.env}}:
+    - stage: Validate_${{environment}}
       displayName: 'Validate Infra'
       variables:
       - name: gaServiceConnection
-        value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+        value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
       - name: serviceConnection
-        value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+        value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
       jobs: 
         - template: pipeline-steps/terraform-validate.yaml
           parameters:
             terraformPath: $(Build.SourcesDirectory)/terraform
             tfversion: $(tfversion)
 
-    - stage: Video_Hearing_Core_${{env}}
+    - stage: Video_Hearing_Core_${{environment}}
       displayName: 'Video_Hearing_Core'
       #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
-        - job: Video_Hearing_Core_${{env}}
+        - job: Video_Hearing_Core_${{environment}}
           pool:
             vmImage: 'Ubuntu 18.04'
           variables:
             # variables
             - name: gaServiceConnection
-              value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+              value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - name: serviceConnection
-              value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+              value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - group: vh-tenant-creds
             - group: vh-alerting-Logic-App-Details
           steps:
@@ -102,11 +102,11 @@ stages:
                 vh_tenant_id: $(vh_tenant_id)
                 vh_client_secret: $(vh_client_secret)
                 vh_client_id: $(vh_client_id)
-                environment: ${{ env }}
+                environment: ${{ environment }}
 
             - template: pipeline-steps/tfplan-drift-check.yaml
               parameters:
-                environment: ${{ env }}
+                environment: ${{ environment }}
                 location: ${{ parameters.location }}
                 stack: '09-video-hearing-core'
                 project: $(project)
@@ -129,16 +129,16 @@ stages:
           variables:
             # variables
             - name: gaServiceConnection
-              value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+              value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - name: serviceConnection
-              value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+              value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - group: vh-tenant-creds
             - group: vh-alerting-Logic-App-Details
           steps:
             - template: pipeline-steps/sshkey-download.yaml
             - template: pipeline-steps/tfplan-drift-check.yaml
               parameters:
-                environment: ${{ env }}
+                environment: ${{ environment }}
                 location: ${{ parameters.location }}
                 stack: '10-video-hearing-wowza'
                 project: $(project)
