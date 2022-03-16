@@ -42,8 +42,8 @@ parameters:
     displayName: Environment
     type: object
     values: []
-    default: ['DEV', ITHC, DEMO, TEST, STG, PROD]
-
+    default: ['DEV', 'SBOX']
+  #ITHC, DEMO, TEST, STG, PROD]
 variables:
   #- name: gaServiceConnection
   #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
@@ -101,7 +101,7 @@ stages:
                 product: 'vh'
                 builtFrom: $(Build.Repository.Name)
                 tfversion: $(tfversion)
-                serviceConnection:  DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
+                serviceConnection:  ${{variables.serviceConnection}}
                 activity_name: Video_Hearing_Core
                 run_stage: ${{ parameters.Run_Stage }}
                 state_sub: $(vh_tf_state_sub)
@@ -132,7 +132,7 @@ stages:
                 product: 'wowza'
                 builtFrom: $(Build.Repository.Name)
                 tfversion: $(tfversion)
-                serviceConnection: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
+                serviceConnection: $(serviceConnection)
                 activity_name: Video_Hearing_Wowza
                 run_stage: ${{ parameters.Run_Stage }}
                 state_sub: $(vh_tf_state_sub)
