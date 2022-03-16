@@ -43,6 +43,7 @@ parameters:
     type: object
     values: []
     default: ['DEV', ITHC, DEMO, TEST, STG]
+
 variables:
   #- name: gaServiceConnection
   #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
@@ -62,7 +63,7 @@ stages:
 
     - stage: Video_Hearing_Core_${{environment}}
       displayName: 'Video_Hearing_Core${{environment}}'
-      condition: succeededOrFailed()
+      dependsOn: []
       jobs:
         - job: Video_Hearing_Core_${{environment}}
           pool:
@@ -97,7 +98,7 @@ stages:
 
     - stage: Video_Hearing_Wowza_${{environment}}
       displayName: 'Video_Hearing_Wowza_${{environment}}'
-      condition: succeededOrFailed()
+      dependsOn: []
       jobs:
         - job: Video_Hearing_Wowza_${{environment}}
           pool:
