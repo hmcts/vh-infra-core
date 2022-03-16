@@ -131,10 +131,11 @@ steps:
     displayName: 'Terraform Show'
     dependsOn: terraform_plan
     condition: succeeded()
-    script: |
+    inputs:
+      targetType: 'inline'
+      script: |
         cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-        terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
-    
+        Terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
 
   - task: PowerShell@2
     dependsOn: terraform_plan
