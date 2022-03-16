@@ -206,7 +206,6 @@ steps:
         }
         else {
           $msg = "Pipeline fail. No message available for error in $environment on while running pipeline on ${{ parameters.stack }}"}
-        }
 
         Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
         Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
