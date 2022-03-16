@@ -62,6 +62,7 @@ stages:
 
     - stage: Video_Hearing_Core_${{environment}}
       displayName: 'Video_Hearing_Core${{environment}}'
+      condition: succeededOrFailed()
       jobs:
         - job: Video_Hearing_Core_${{environment}}
           pool:
@@ -96,6 +97,7 @@ stages:
 
     - stage: Video_Hearing_Wowza_${{environment}}
       displayName: 'Video_Hearing_Wowza_${{environment}}'
+      condition: succeededOrFailed()
       jobs:
         - job: Video_Hearing_Wowza_${{environment}}
           pool:

@@ -101,15 +101,15 @@ steps:
 
 
 
-  - task: TerraformCLI@0
-    displayName: terraform validate
-    inputs:
-          command: validate
-          terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+  # - task: TerraformCLI@0
+  #   displayName: terraform validate
+  #   inputs:
+  #         command: validate
+  #         terraformVersion: ${{ parameters.tfversion }}
+  #         workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
 
   - task: TerraformCLI@0
-    displayName: terraform plan
+    displayName: terraform_plan
     inputs:
           command: plan
           terraformVersion: ${{ parameters.tfversion }}
@@ -131,10 +131,14 @@ steps:
         cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
         terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
     displayName: 'Terraform Show'
+    dependsOn: terraform_plan
+    condition: succeeded()
 
   - task: PowerShell@2
     name: Check_Difference
     displayName: 'Check difference'
+    dependsOn: terraform_plan
+    condition: succeeded()
     inputs:
       targetType: 'inline'
       script: |
@@ -158,10 +162,23 @@ steps:
         Write-Host "##vso[task.setvariable variable=buildUrl;isOutput=true]$buildUrl"
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
+    dependsOn: terraform_plan
+    condition: succeeded()
     parameters:
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform drift alert for ${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
       conditionAction: $(Check_Difference.sendMsg)
       pipelineUrl: $(Check_Difference.buildUrl)
+      projectName: $(System.TeamProject)
+
+  - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
+    dependsOn: terraform_plan
+    condition: failed()
+    parameters:
+      logicAppUrl: ${{parameters.logicAppUrl}}
+      title: "Terraform Plan Failed in ${{ lower(parameters.environment) }}"
+      message: "An error has occurred in the terraform_plan stage of the pipeline"
+      conditionAction: $(Check_Difference.sendMsg)
+      pipelineUrl: $(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId))
       projectName: $(System.TeamProject)
