@@ -129,20 +129,20 @@ steps:
 
   - task: PowerShell@2
     displayName: 'terraform_show'
-    dependsOn: terraform_plan
-    condition: succeeded()
     inputs:
+      dependsOn: terraform_plan
+      condition: succeeded()
       targetType: 'inline'
       script: |
         cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
         Terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
 
   - task: PowerShell@2
-    dependsOn: terraform_show
-    condition: succeeded()
     name: Check_Difference
     displayName: 'Check difference'
     inputs:
+      dependsOn: terraform_plan
+      condition: succeeded()
       targetType: 'inline'
       script: |
         $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
@@ -166,7 +166,7 @@ steps:
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
-      dependsOn: Check_Difference
+      dependsOn: terraform_plan
       condition: succeeded()
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform drift alert for ${{ lower(parameters.environment) }}"
@@ -177,7 +177,7 @@ steps:
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
-      dependsOn: Check_Difference
+      dependsOn: terraform_plan
       condition: failed()
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform Plan Failed in ${{ lower(parameters.environment) }}"
