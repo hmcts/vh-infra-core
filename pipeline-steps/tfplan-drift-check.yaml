@@ -126,10 +126,11 @@ steps:
             $(variableName)
 
   - task: PowerShell@2
+    name: terraform_show
     displayName: 'terraform_show'
+    dependsOn: terraform_plan
+    condition: succeeded()
     inputs:
-      dependsOn: terraform_plan
-      condition: succeeded()
       targetType: 'inline'
       script: |
         cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
@@ -137,10 +138,10 @@ steps:
 
   - task: PowerShell@2
     name: Check_Difference
+    dependsOn: terraform_show
+    condition: succeeded()
     displayName: 'Check difference'
     inputs:
-      dependsOn: terraform_plan
-      condition: succeeded()
       targetType: 'inline'
       script: |
         $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
@@ -165,9 +166,9 @@ steps:
   - task: PowerShell@2
     name: plan_fail
     displayName: 'If Plan Failed'
+    dependsOn: terraform_plan
+    condition: failed()
     inputs:
-      dependsOn: terraform_plan
-      condition: failed()
       targetType: 'inline'
       script: |
         $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
@@ -198,10 +199,14 @@ steps:
         $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
         $buildUrl = "$(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId)"
         $sendMsg = "true"
-        if ($Check_Difference.sendMsg -eq 'true' && $plan_fail.sendMsg -eq $null){
+
+        if ($Check_Difference.sendMsg -eq 'true' && $plan_fail.sendMsg -eq 'true'){
+          $msg = "Both the success and fail tasks ran on this pipeline. Check pipeline logic: $environment ${{ parameters.stack }}"
+        }
+        elseif ($Check_Difference.sendMsg -eq 'true' && $plan_fail.sendMsg -ne 'true'){
           $msg = $Check_Difference.msg
         }
-        elseif ($Check_Difference.sendMsg -eq $null && $plan_fail.sendMsg -eq 'true' ){
+        elseif ($Check_Difference.sendMsg -ne 'true' && $plan_fail.sendMsg -eq 'true' ){
           $msg = $plan_fail.msg
         }
         else {
