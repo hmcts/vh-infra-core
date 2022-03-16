@@ -179,6 +179,6 @@ steps:
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform Plan Failed in ${{ lower(parameters.environment) }}"
       message: "An error has occurred in the terraform_plan stage of the pipeline"
-      conditionAction: $(Check_Difference.sendMsg)
+      conditionAction: true
       pipelineUrl: $(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId))
       projectName: $(System.TeamProject)
