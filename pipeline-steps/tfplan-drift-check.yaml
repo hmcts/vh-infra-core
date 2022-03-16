@@ -127,18 +127,20 @@ steps:
             -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
             $(variableName)
 
-  - powershell: |
-        cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-        terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
+  - task: PowerShell@2
     displayName: 'Terraform Show'
     dependsOn: terraform_plan
     condition: succeeded()
+    script: |
+        cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+        terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
+    
 
   - task: PowerShell@2
-    name: Check_Difference
-    displayName: 'Check difference'
     dependsOn: terraform_plan
     condition: succeeded()
+    name: Check_Difference
+    displayName: 'Check difference'
     inputs:
       targetType: 'inline'
       script: |
@@ -162,9 +164,9 @@ steps:
         Write-Host "##vso[task.setvariable variable=buildUrl;isOutput=true]$buildUrl"
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
-    dependsOn: terraform_plan
-    condition: succeeded()
     parameters:
+      dependsOn: terraform_plan
+      condition: succeeded()
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform drift alert for ${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
@@ -173,9 +175,9 @@ steps:
       projectName: $(System.TeamProject)
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
-    dependsOn: terraform_plan
-    condition: failed()
     parameters:
+      dependsOn: terraform_plan
+      condition: failed()
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform Plan Failed in ${{ lower(parameters.environment) }}"
       message: "An error has occurred in the terraform_plan stage of the pipeline"
