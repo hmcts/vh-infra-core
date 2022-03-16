@@ -165,9 +165,9 @@ steps:
         Write-Host "##vso[task.setvariable variable=buildUrl;isOutput=true]$buildUrl"
 
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
+    dependsOn: terraform_plan
+    condition: succeeded()
     parameters:
-      dependsOn: terraform_plan
-      condition: succeeded()
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform drift alert for ${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
