@@ -31,7 +31,7 @@ steps:
       serviceConnection: ${{ parameters.serviceConnection }}
       environment: ${{ parameters.environment }}
 
-# lowercase $env variable comes from the above template
+  # lowercase $env variable comes from the above template
 
   - task: Bash@3
     displayName: 'Subscription Replacement'
@@ -98,8 +98,6 @@ steps:
           backendAzureRmContainerName: subscription-tfstate
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
           commandOptions: '-backend-config=subscription_id=${{ parameters.state_sub }}'
-
-
 
   # - task: TerraformCLI@0
   #   displayName: terraform validate
@@ -175,10 +173,10 @@ steps:
       pipelineUrl: $(Check_Difference.buildUrl)
       projectName: $(System.TeamProject)
 
-  - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
+  - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@template
+    dependsOn: run_terraform
+    condition: failed()
     parameters:
-      dependsOn: terraform_plan
-      condition: failed()
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform Plan Failed in ${{ lower(parameters.environment) }}"
       message: "An error has occurred in the terraform_plan stage of the pipeline"
