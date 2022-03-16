@@ -149,7 +149,7 @@ steps:
         $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length
         $removeChanges = ($resourceChanges | Where {$_.change.actions -contains "delete"}).length
         $totalChanges = $addChanges + $changeChanges + $removeChanges
-        $msg = "(TEST Message)There are $totalChanges differences ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on ${{ parameters.stack }}"
+        $msg = "There are $totalChanges differences ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on ${{ parameters.stack }}"
         Write-Host $msg
         $sendMsg = (&{If($addChanges -gt 0 -or $changeChanges -gt 0 -or $removeChanges -gt 0) {"true"} Else {"false"}})
         Write-Host "Should send message: $sendMsg"
@@ -160,7 +160,7 @@ steps:
   - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
     parameters:
       logicAppUrl: ${{parameters.logicAppUrl}}
-      title: "(Test)Terraform drift alert in ${{ lower(parameters.environment) }}"
+      title: "Terraform drift alert for ${{ lower(parameters.environment) }}"
       message: "$(Check_Difference.msg)"
       conditionAction: $(Check_Difference.sendMsg)
       pipelineUrl: $(Check_Difference.buildUrl)

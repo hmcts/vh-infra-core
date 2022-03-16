@@ -29,12 +29,6 @@ resources:
       endpoint: hmcts
       
 parameters:
-  #- name: Run_Stage
-  #  displayName: Stage to Run
-  #  type: string
-  #  default: 'Check_Drift'
-  #  values:
-  #    - Check_Drift
 
   - name: location
     displayName: Location
@@ -48,7 +42,7 @@ parameters:
     displayName: Environment
     type: object
     values: []
-    default: ['SBOX','DEV']
+    default: ['DEV', ITHC, DEMO, TEST, STG, PROD]
 
 variables:
   #- name: gaServiceConnection
@@ -70,11 +64,6 @@ stages:
   - ${{each environment in parameters.env}}:
     # - stage: Validate_${{environment}}
     #   displayName: 'Validate Infra'
-    # variables:
-    # - name: gaServiceConnection
-    #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
-    # - name: serviceConnection
-    #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
     #   jobs: 
     #     - template: pipeline-steps/terraform-validate.yaml
     #       parameters:
@@ -83,7 +72,6 @@ stages:
 
     - stage: Video_Hearing_Core_${{environment}}
       displayName: 'Video_Hearing_Core${{environment}}'
-      #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
         - job: Video_Hearing_Core_${{environment}}
           pool:
@@ -121,7 +109,6 @@ stages:
 
     - stage: Video_Hearing_Wowza_${{environment}}
       displayName: 'Video_Hearing_Wowza_${{environment}}'
-      #condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'Check_Drift'))
       jobs:
         - job: Video_Hearing_Wowza_${{environment}}
           pool:
