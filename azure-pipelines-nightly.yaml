@@ -42,8 +42,7 @@ parameters:
     displayName: Environment
     type: object
     values: []
-    default: ['DEV', 'SBOX']
-  #ITHC, DEMO, TEST, STG, PROD]
+    default: ['DEV', ITHC, DEMO, TEST, STG]
 variables:
   #- name: gaServiceConnection
   #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
@@ -55,20 +54,11 @@ variables:
   - name: project
     value: application
   # same comment as above ^^
-  #- name: serviceConnection
-  #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings #OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: location
     value: 'UK South'
 
 stages:
   - ${{each environment in parameters.env}}:
-    # - stage: Validate_${{environment}}
-    #   displayName: 'Validate Infra'
-    #   jobs: 
-    #     - template: pipeline-steps/terraform-validate.yaml
-    #       parameters:
-    #         terraformPath: $(Build.SourcesDirectory)/terraform
-    #         tfversion: $(tfversion)
 
     - stage: Video_Hearing_Core_${{environment}}
       displayName: 'Video_Hearing_Core${{environment}}'
@@ -77,9 +67,6 @@ stages:
           pool:
             vmImage: 'Ubuntu 18.04'
           variables:
-            # # variables
-            # - name: gaServiceConnection
-            #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - name: serviceConnection
               value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - group: vh-tenant-creds
@@ -114,9 +101,6 @@ stages:
           pool:
             vmImage: 'Ubuntu 18.04'
           variables:
-            # variables
-            # - name: gaServiceConnection
-            #   value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - name: serviceConnection
               value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
             - group: vh-tenant-creds
