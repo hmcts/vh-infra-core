@@ -182,7 +182,7 @@ steps:
         # $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length
         # $removeChanges = ($resourceChanges | Where {$_.change.actions -contains "delete"}).length
         # $totalChanges = $addChanges + $changeChanges + $removeChanges
-        $msg = "The Terraform plan failed in the $environment Environment on ${{ parameters.stack }}"
+        $msg = "The Terraform plan task failed in the $environment Environment on ${{ parameters.stack }}"
         Write-Host $msg
         $sendMsg = "true"
         Write-Host "Should send message: $sendMsg"
