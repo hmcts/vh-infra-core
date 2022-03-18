@@ -30,3 +30,6 @@ override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+pipeline-steps/tfplan-drift-check copy.yaml
+.gitignore
+azure-pipelines-nightly copy.yaml
