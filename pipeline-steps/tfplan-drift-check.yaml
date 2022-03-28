@@ -128,8 +128,6 @@ steps:
   - task: PowerShell@2
     name: terraform_show
     displayName: 'terraform_show'
-    dependsOn: terraform_plan
-    condition: succeeded()
     inputs:
       targetType: 'inline'
       script: |
@@ -138,8 +136,6 @@ steps:
 
   - task: PowerShell@2
     name: Check_Difference
-    dependsOn: terraform_show
-    condition: succeeded()
     displayName: 'Check difference'
     inputs:
       targetType: 'inline'
