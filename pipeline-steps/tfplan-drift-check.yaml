@@ -164,7 +164,7 @@ steps:
     parameters:
       logicAppUrl: ${{parameters.logicAppUrl}}
       title: "Terraform drift alert for ${{ lower(parameters.environment) }}"
-      message: "$(choose_message.msg)"
-      conditionAction: $(choose_message.sendMsg)
-      pipelineUrl: $(choose_message.buildUrl)
+      message: "$(Check_Difference.msg)"
+      conditionAction: $(Check_Difference.sendMsg)
+      pipelineUrl: $(Check_Difference.buildUrl)
       projectName: $(System.TeamProject)
