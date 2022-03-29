@@ -1,0 +1,163 @@
+parameters:
+  - name: environment
+    type: string
+  - name: location
+    type: string
+  - name: stack
+    type: string
+  - name: project
+    type: string
+  - name: tfversion
+    type: string
+  - name: activity_name
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: run_stage
+    type: string
+  - name: builtFrom
+    type: string
+  - name: product
+    type: string
+  - name: state_sub 
+    type: string
+  - name: logicAppUrl
+    type: string
+
+steps:
+
+  - template: keyvault-read.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      environment: ${{ parameters.environment }}
+
+  # lowercase $env variable comes from the above template
+
+  - task: Bash@3
+    displayName: 'Subscription Replacement'
+    inputs:
+      targetType: 'inline'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      script: |
+            sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
+
+  - task: AzureCLI@2
+    displayName: 'GlobalNetworkPeering SC Details'
+    name: GlobalNetworkPeering
+    inputs: 
+      azureSubscription: 'GlobalNetworkPeering'
+      scriptType: 'pscore'
+      scriptLocation: 'inlineScript'
+      addSpnToEnvironment: true
+      InlineScript: |
+        Write-Host "##vso[task.setvariable variable=GNP_CLIENT_ID;isOutput=true]$($env:servicePrincipalId)"
+        Write-Host "Client ID: $($env:servicePrincipalId)"
+        Write-Host "##vso[task.setvariable variable=GNP_CLIENT_SECRET;isOutput=true]$($env:servicePrincipalKey)"
+        Write-Host "##vso[task.setvariable variable=GNP_TENANT_ID;isOutput=true]$($env:tenantId)"
+        Write-Host "Tenant ID: $($env:tenantId)"
+        $subscriptionId = az account show --query id -o tsv
+        Write-Host "##vso[task.setvariable variable=GNP_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
+        Write-Host "Subscription ID: $subscriptionId"
+
+  - bash: |
+      variableName="vars"
+      
+      variables=""
+      variables="${variables} -var \"network_client_id=${GNP_CLIENT_ID} \""
+      variables="${variables} -var \"network_client_secret=${GNP_CLIENT_SECRET} \""
+      variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
+
+      echo "Variables set as: "
+      echo "${variables}"
+      echo "##vso[task.setvariable variable=variableName]${variables}"
+
+    displayName: 'Set Shared Services TF Variables'
+    name: tfVariables
+    env:
+      GNP_CLIENT_ID: $(GlobalNetworkPeering.GNP_CLIENT_ID) 
+      GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
+      GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
+
+  - task: TerraformInstaller@0
+    displayName: 'Install Terraform ${{ parameters.tfversion }}'
+    inputs:
+          terraformVersion: ${{ parameters.tfversion }}
+
+  - task: TerraformCLI@0
+    displayName: terraform init
+    inputs:
+          command: init
+          terraformVersion: ${{ parameters.tfversion }}
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+          backendType: azurerm
+          backendServiceArm: ${{ parameters.serviceConnection }}
+          backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
+          backendAzureRmResourceGroupLocation: ${{ parameters.location }}
+          backendAzureRmStorageAccountName: $(controlStorageAccount)
+          backendAzureRmStorageAccountSku: Standard_LRS
+          backendAzureRmContainerName: subscription-tfstate
+          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+          commandOptions: '-backend-config=subscription_id=${{ parameters.state_sub }}'
+
+  - task: TerraformCLI@0
+    displayName: terraform_plan
+    inputs:
+          command: plan
+          terraformVersion: ${{ parameters.tfversion }}
+          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+          environmentServiceName: ${{ parameters.serviceConnection }}
+          publishPlanResults: vh-shared-infra.tfplan
+          commandOptions: >
+            -out tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}
+            -var control_vault=$(controlKeyVault)
+            -var environment=${{ lower(parameters.environment) }}
+            -var project=${{ parameters.project }}
+            -var builtFrom=${{ parameters.builtFrom }}
+            -var product=${{ parameters.product }}
+            -var activity_name=${{ parameters.activity_name }}
+            -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
+            $(variableName)
+
+  - task: PowerShell@2
+    name: terraform_show
+    displayName: 'terraform_show'
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+        terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
+
+  - task: PowerShell@2
+    name: Check_Difference
+    displayName: 'Check difference'
+    inputs:
+      targetType: 'inline'
+      script: |
+        $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
+        $buildUrl = "$(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId)"
+        Write-Host $buildUrl
+        cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+        $environment = "${{ parameters.environment }}"
+        $planObj = Get-Content "vh-shared-infra-$${{ parameters.stack }}.json" | ConvertFrom-Json
+        $resourceChanges = $planObj.resource_changes
+        $addChanges = ($resourceChanges | Where {$_.change.actions -contains "create"}).length
+        $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length
+        $removeChanges = ($resourceChanges | Where {$_.change.actions -contains "delete"}).length
+        $totalChanges = $addChanges + $changeChanges + $removeChanges
+        $msg = "There are $totalChanges differences ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on ${{ parameters.stack }}"
+        Write-Host $msg
+        $sendMsg = (&{If($addChanges -gt 0 -or $changeChanges -gt 0 -or $removeChanges -gt 0) {"true"} Else {"false"}})
+        Write-Host "Should send message: $sendMsg"
+        Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
+        Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
+        Write-Host "##vso[task.setvariable variable=buildUrl;isOutput=true]$buildUrl"
+
+
+  - template: templates\Azure\LogicApp\send-pipeline-alert.yaml@templates
+    parameters:
+      logicAppUrl: ${{parameters.logicAppUrl}}
+      title: "Terraform drift alert for ${{ lower(parameters.environment) }}"
+      message: "$(Check_Difference.msg)"
+      conditionAction: $(Check_Difference.sendMsg)
+      pipelineUrl: $(Check_Difference.buildUrl)
+      projectName: $(System.TeamProject)

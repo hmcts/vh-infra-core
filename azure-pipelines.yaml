@@ -151,7 +151,7 @@ stages:
               state_sub: $(vh_tf_state_sub)
 
 
-  - stage: Destory_Video_Hearing_Core
+  - stage: Destroy_Video_Hearing_Core
     displayName: 'Destroy Video_Hearing_Core'
     condition: contains('${{ parameters.Run_Stage }}', 'Destroy_Core')
     jobs:

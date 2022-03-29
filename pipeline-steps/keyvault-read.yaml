@@ -13,7 +13,7 @@ steps:
   displayName: Determine Key Vault and Storage names
   name: SetControlVars
   inputs:
-    azureSubscription: $(serviceConnection)
+    azureSubscription: ${{ parameters.serviceConnection }}
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
