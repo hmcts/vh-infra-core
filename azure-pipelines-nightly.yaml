@@ -46,8 +46,6 @@ parameters:
     #default: ['SBOX']
 
 variables:
-  #- name: gaServiceConnection
-  #  value: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
   - name: tfversion
     value: 1.1.0
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
