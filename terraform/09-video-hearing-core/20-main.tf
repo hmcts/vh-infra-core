@@ -222,8 +222,7 @@ resource azurerm_private_dns_a_record "endpoint-dns" {
 
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_endpoint.endpoint_resource
-  #current endpoint-sqlserver-test
-  #needs to be vh-infra-core-test.database.windows.net
+
   name                = lower(format("%s-%s.%s", "vh-infra-core", var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type"))) ))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = "core-infra-intsvc-rg"
@@ -247,8 +246,7 @@ resource azurerm_private_dns_a_record "kv-dns" {
 
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_kv_endpoint.endpoint_resource
-  #current endpoint-sqlserver-test
-  #needs to be vh-infra-core-test.database.windows.net
+
   name                = lower(format("%s-%s.%s", lookup(each.value, "resource_name"), var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type"))) ))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = "core-infra-intsvc-rg"
