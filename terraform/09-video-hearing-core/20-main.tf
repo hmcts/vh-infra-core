@@ -218,7 +218,8 @@ module vh_endpoint {
 }
 
 
-resource azurerm_private_dns_a_record "test" {
+resource azurerm_private_dns_a_record "endpoint-dns" {
+
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_endpoint.endpoint_resource
   #current endpoint-sqlserver-test
@@ -230,7 +231,6 @@ resource azurerm_private_dns_a_record "test" {
   records             = [lookup(each.value, "resource_ip")]
 }
 
-
 module vh_kv_endpoint {
 
   source              = "./modules/PrivateEndpoint"
@@ -241,4 +241,17 @@ module vh_kv_endpoint {
   resources           = module.KeyVaults.keyvault_resource
   
   tags = local.common_tags
+}
+
+resource azurerm_private_dns_a_record "kv-dns" {
+
+  provider = azurerm.private-endpoint-dns
+  for_each = module.vh_kv_endpoint.endpoint_resource
+  #current endpoint-sqlserver-test
+  #needs to be vh-infra-core-test.database.windows.net
+  name                = lower(format("%s-%s.%s", "vh-infra-core", var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type"))) ))
+  zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
+  resource_group_name = "core-infra-intsvc-rg"
+  ttl                 = 3600
+  records             = [lookup(each.value, "resource_ip")]
 }
