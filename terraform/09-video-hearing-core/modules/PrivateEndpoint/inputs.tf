@@ -22,16 +22,11 @@ variable "subnet_id" {
 
 variable "resources" {
   type = map(object({
-    resource_id   = string
-    resource_name = string
-    resource_type = string
+    resource_id         = string
+    resource_name       = string
+    resource_type       = string
+    private_dns_zone_id = string
   }))
   description = "VH Core Infra resources"
   default     = {}
-}
-
-variable "private_dns_zone_group_ids" {
-  type        = list(string)
-  description = "List of Private DNS resources to link"
-  default     = []
 }

@@ -29,8 +29,8 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
   }
 
   private_dns_zone_group {
-    name                 = "vh-${var.environment}-aksserviceconnection"
-    private_dns_zone_ids = var.private_dns_zone_group_ids
+    name                 = "vh-${var.environment}-aks-dns-group"
+    private_dns_zone_ids = [lookup(each.value, "private_dns_zone_id")]
   }
 
   tags = var.tags
