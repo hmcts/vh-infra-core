@@ -3,15 +3,15 @@ locals {
   #runbook_name = "wowza-vm-runbook.ps1"
   runbook_content = file("./VM-Automation-Files/${var.runbook_name}")
   # Move to tfvars?
-  day      = timestamp()
-  start_date = formatdate("YYYY-MM-DD",  timeadd(local.day, "24h"))
+  day        = timestamp()
+  start_date = formatdate("YYYY-MM-DD", timeadd(local.day, "24h"))
   #start_time = "06:00:00"
   #stop_time  = "22:00:00"
 
 
   schedule_action = {
-    vmstart = { time = "${local.start_date}T${var.start_time}Z", action = "Start"},
-    vmstop  = { time = "${local.start_date}T${var.stop_time}Z", action = "Stop"}
+    vmstart = { time = "${local.start_date}T${var.start_time}Z", action = "Start" },
+    vmstop  = { time = "${local.start_date}T${var.stop_time}Z", action = "Stop" }
   }
 
   makechange = var.environment == "prod" ? "False" : "True"
@@ -33,7 +33,7 @@ resource "azurerm_automation_runbook" "wowza-VM-runbook" {
   publish_content_link {
     uri = "https://raw.githubusercontent.com/hmcts/vh-shared-infrastructure/master/terraform/10-video-hearing-wowza/VM-Automation-Files/wowza-vm-runbook.ps1"
   }
-  tags                     = var.tags
+  tags = var.tags
 
 
 
@@ -51,8 +51,8 @@ resource "azurerm_automation_schedule" "wowza-automation-schedule" {
   interval                = 1
   timezone                = "Europe/London"
 
-  start_time              = each.value.time
-  description             = "This is a schedule to ${each.value.action} wowza VMs at ${each.value.time}"
+  start_time  = each.value.time
+  description = "This is a schedule to ${each.value.action} wowza VMs at ${each.value.time}"
 
   depends_on = [
     azurerm_resource_group_template_deployment.wowza-automation-acct
@@ -66,12 +66,12 @@ resource "azurerm_automation_job_schedule" "runbook-schedule-job" {
   schedule_name           = "wowza-${each.value.action}-schedule-${var.environment}"
   runbook_name            = azurerm_automation_runbook.wowza-VM-runbook.name
 
-# vmlist = azurerm_linux_virtual_machine.wowza[*].name
+  # vmlist = azurerm_linux_virtual_machine.wowza[*].name
   parameters = {
-    mi_principal_id       = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
-    vmlist                = join(",", azurerm_linux_virtual_machine.wowza[*].name)
-    resourcegroup         = azurerm_resource_group.wowza.name
-    action                = each.value.action
-    makechange            = local.makechange
+    mi_principal_id = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
+    vmlist          = join(",", azurerm_linux_virtual_machine.wowza[*].name)
+    resourcegroup   = azurerm_resource_group.wowza.name
+    action          = each.value.action
+    makechange      = local.makechange
   }
 }

@@ -5,17 +5,17 @@
 resource "azurerm_resource_group" "vh-infra-core" {
   name     = "${local.std_prefix}${local.suffix}"
   location = var.location
-  tags = local.common_tags
+  tags     = local.common_tags
 }
 
 #--------------------------------------------------------------
 # VH - KeyVaults
 #--------------------------------------------------------------
 
-module KeyVaults {
-  source = "./modules/KeyVaults"
-  environment = var.environment
-  external_passwords  = var.external_passwords
+module "KeyVaults" {
+  source             = "./modules/KeyVaults"
+  environment        = var.environment
+  external_passwords = var.external_passwords
 
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   resource_prefix     = local.std_prefix
@@ -36,11 +36,11 @@ resource "azurerm_storage_account" "vh-infra-core" {
   location            = azurerm_resource_group.vh-infra-core.location
   min_tls_version     = "TLS1_2"
 
-  access_tier                       = "Hot"
-  account_kind                      = "StorageV2"
-  account_tier                      = "Standard"
-  account_replication_type          = "LRS"
-  enable_https_traffic_only         = true
+  access_tier               = "Hot"
+  account_kind              = "StorageV2"
+  account_tier              = "Standard"
+  account_replication_type  = "LRS"
+  enable_https_traffic_only = true
 
   tags = local.common_tags
 }
@@ -50,7 +50,7 @@ resource "azurerm_storage_account" "vh-infra-core" {
 #--------------------------------------------------------------
 
 module "SignalR" {
-  source = "./modules/SignalR"
+  source      = "./modules/SignalR"
   environment = var.environment
 
   resource_prefix     = "${local.std_prefix}${local.suffix}"
@@ -64,14 +64,14 @@ module "SignalR" {
 #--------------------------------------------------------------
 
 
-module AMS {
+module "AMS" {
   source = "./modules/AMS"
 
   resource_prefix     = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   storage_account_id  = azurerm_storage_account.vh-infra-core.id
 
-  
+
   tags = local.common_tags
 }
 
@@ -79,9 +79,9 @@ module AMS {
 # VH - Redis Cache Standard
 #--------------------------------------------------------------
 
-module Redis {
-  source = "./modules/redis"
-  environment = var.environment
+module "Redis" {
+  source              = "./modules/redis"
+  environment         = var.environment
   resource_group_name = azurerm_resource_group.vh-infra-core.name
 
   tags = local.common_tags
@@ -92,16 +92,16 @@ module Redis {
 #--------------------------------------------------------------
 
 module "AppReg" {
-  source  = "./modules/AppReg"
+  source = "./modules/AppReg"
   providers = {
     azuread = azuread.vh
   }
   resource_group_name = azurerm_resource_group.vh-infra-core.name
-  environment = var.environment
+  environment         = var.environment
 
-  app_conf = local.app_conf
-  app_roles = local.app_roles
-  api_permissions = local.api_permissions
+  app_conf          = local.app_conf
+  app_roles         = local.app_roles
+  api_permissions   = local.api_permissions
   app_keyvaults_map = module.KeyVaults.app_keyvaults_out
 
   depends_on = [
@@ -117,9 +117,9 @@ module "AppReg" {
 #--------------------------------------------------------------
 
 
-module Monitoring {
-  source               = "./modules/Monitoring"
-  location             = azurerm_resource_group.vh-infra-core.location
+module "Monitoring" {
+  source              = "./modules/Monitoring"
+  location            = azurerm_resource_group.vh-infra-core.location
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   resource_prefix     = "${local.std_prefix}${local.suffix}"
 
@@ -131,10 +131,10 @@ module Monitoring {
 #--------------------------------------------------------------
 
 
-module VHDataServices {
-  source = "./modules/VHDataServices"
+module "VHDataServices" {
+  source      = "./modules/VHDataServices"
   environment = var.environment
-  public_env = local.environment == "dev" ? 1 : 0
+  public_env  = local.environment == "dev" ? 1 : 0
 
   databases = {
     vhbookings = {
@@ -178,10 +178,10 @@ module VHDataServices {
 # VH - AppConfiguration
 #--------------------------------------------------------------
 
-module appconfig {
-  source               = "./modules/AppConfiguration"
-  location             = azurerm_resource_group.vh-infra-core.location
-  resource_group_name  = azurerm_resource_group.vh-infra-core.name
+module "appconfig" {
+  source              = "./modules/AppConfiguration"
+  location            = azurerm_resource_group.vh-infra-core.location
+  resource_group_name = azurerm_resource_group.vh-infra-core.name
 
   tags = local.common_tags
 }
@@ -190,7 +190,7 @@ module appconfig {
 # VH - PrivateEndpoint
 #--------------------------------------------------------------
 
-module vh_endpoint {
+module "vh_endpoint" {
 
   source              = "./modules/PrivateEndpoint"
   location            = var.location
@@ -198,56 +198,63 @@ module vh_endpoint {
   environment         = var.environment
   resources = {
     "SQLServer" = {
-      resource_id     = module.VHDataServices.server_id
-      resource_name   = module.VHDataServices.name
-      resource_type   = "sqlServer"
+      resource_id   = module.VHDataServices.server_id
+      resource_name = module.VHDataServices.name
+      resource_type = "sqlServer"
     }
     "RedisCache" = {
-      resource_id     = module.Redis.redis_id
-      resource_name   = module.Redis.name
-      resource_type   = "redisCache"
+      resource_id   = module.Redis.redis_id
+      resource_name = module.Redis.name
+      resource_type = "redisCache"
     }
     "SignalR" = {
-      resource_id     = module.SignalR.signalr_id
-      resource_name   = module.SignalR.name
-      resource_type   = "signalr"
+      resource_id   = module.SignalR.signalr_id
+      resource_name = module.SignalR.name
+      resource_type = "signalr"
     }
   }
 
   tags = local.common_tags
 }
 
-
-resource azurerm_private_dns_a_record "endpoint-dns" {
+resource "azurerm_private_dns_a_record" "endpoint-dns" {
 
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_endpoint.endpoint_resource
 
-  name                = lower(format("%s-%s.%s", "vh-infra-core", var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type"))) ))
+  name                = lower(format("%s-%s.%s", "vh-infra-core", var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600
   records             = [lookup(each.value, "resource_ip")]
 }
 
-module vh_kv_endpoint {
+data "azurerm_private_dns_zone" "kv" {
+  provider = azurerm.private-endpoint-dns
 
-  source              = "./modules/PrivateEndpoint"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.vh-infra-core.name
-  environment         = var.environment
-  subnet_id           = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
-  resources           = module.KeyVaults.keyvault_resource
-  
+  name                = lookup(local.dns_zone_mapping, "vault")
+  resource_group_name = "core-infra-intsvc-rg"
+}
+
+module "vh_kv_endpoint" {
+
+  source                     = "./modules/PrivateEndpoint"
+  location                   = var.location
+  resource_group_name        = azurerm_resource_group.vh-infra-core.name
+  environment                = var.environment
+  subnet_id                  = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
+  resources                  = module.KeyVaults.keyvault_resource
+  private_dns_zone_group_ids = [data.azurerm_private_dns_zone.kv.id]
+
   tags = local.common_tags
 }
 
-resource azurerm_private_dns_a_record "kv-dns" {
+resource "azurerm_private_dns_a_record" "kv-dns" {
 
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_kv_endpoint.endpoint_resource
 
-  name                = lower(format("%s-%s.%s", lookup(each.value, "resource_name"), var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type"))) ))
+  name                = lower(format("%s-%s.%s", lookup(each.value, "resource_name"), var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = "core-infra-intsvc-rg"
   ttl                 = 3600

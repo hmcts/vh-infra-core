@@ -3,7 +3,7 @@ variable "environment" {
 }
 
 variable "tags" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }
 
@@ -16,8 +16,8 @@ variable "location" {
 }
 
 variable "subnet_id" {
-    type = string
-    default = " "
+  type    = string
+  default = " "
 }
 
 variable "resources" {
@@ -30,5 +30,8 @@ variable "resources" {
   default     = {}
 }
 
-
-
+variable "private_dns_zone_group_ids" {
+  type        = list(string)
+  description = "List of Private DNS resources to link"
+  default     = []
+}

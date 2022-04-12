@@ -1,7 +1,7 @@
 variable "environment" {}
 
 variable "environment_to_sku_map" {
-  type = map
+  type = map(any)
   default = {
     AAT = {
       name     = "Standard_S1"

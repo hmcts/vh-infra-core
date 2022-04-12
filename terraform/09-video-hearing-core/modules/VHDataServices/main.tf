@@ -59,8 +59,8 @@ resource "azurerm_sql_server" "vh-infra-core" {
   version                      = "12.0"
   administrator_login          = "hvhearingsapiadmin"
   administrator_login_password = random_password.sqlpass.result
-  
-  tags = merge({displayName = "Virtual Courtroom SQL Server"}, var.tags)
+
+  tags = merge({ displayName = "Virtual Courtroom SQL Server" }, var.tags)
 }
 
 # From TFSec
@@ -99,9 +99,9 @@ resource "azurerm_key_vault_secret" "hvhearingsapiadmin" {
   value        = random_password.sqlpass.result
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
   # FromTFSec
-  content_type     = "secret"
+  content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 resource "azurerm_key_vault_secret" "VhBookingsDatabaseConnectionString" {
@@ -111,7 +111,7 @@ resource "azurerm_key_vault_secret" "VhBookingsDatabaseConnectionString" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 resource "azurerm_key_vault_secret" "VhVideoDatabaseConnectionString" {
@@ -121,7 +121,7 @@ resource "azurerm_key_vault_secret" "VhVideoDatabaseConnectionString" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 resource "azurerm_key_vault_secret" "VhNotificationDatabaseConnectionString" {
@@ -131,7 +131,7 @@ resource "azurerm_key_vault_secret" "VhNotificationDatabaseConnectionString" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 resource "azurerm_key_vault_secret" "VhTestApiDatabaseConnectionString" {
@@ -141,7 +141,7 @@ resource "azurerm_key_vault_secret" "VhTestApiDatabaseConnectionString" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 resource "azurerm_sql_database" "vh-infra-core" {
@@ -164,7 +164,7 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
   resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = "Standard"
-  tags = var.tags
+  tags                = var.tags
 }
 
 resource "azurerm_servicebus_queue" "vh-infra-core" {
@@ -187,7 +187,7 @@ resource "azurerm_key_vault_secret" "servicebusqueue_connectionstring" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 resource "azurerm_key_vault_secret" "connectionstrings--videoapi" {
@@ -197,6 +197,6 @@ resource "azurerm_key_vault_secret" "connectionstrings--videoapi" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 

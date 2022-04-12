@@ -1,31 +1,31 @@
 ## Data sources
 
 data "azurerm_resource_group" "vh-infra-core" {
-  name                  = "vh-infra-core-${var.environment}"
+  name = "vh-infra-core-${var.environment}"
 }
 
 data "azurerm_resource_group" "vh-infra-wowza" {
-  name                  = "vh-infra-wowza-${var.environment}"
+  name = "vh-infra-wowza-${var.environment}"
 }
 
 data "azurerm_resource_group" "ss-network-rg" {
-  name                  = "ss-${var.environment}-network-rg"
+  name = "ss-${var.environment}-network-rg"
 }
 
 data "azurerm_private_link_service" "wowza" {
-  name                  = "vh-infra-wowza-${var.environment}"
-  resource_group_name   = "vh-infra-wowza-${var.environment}"
+  name                = "vh-infra-wowza-${var.environment}"
+  resource_group_name = "vh-infra-wowza-${var.environment}"
 }
 
 data "azurerm_virtual_network" "ss_vnet" {
-  name                  = "ss-${var.environment}-vnet"
-  resource_group_name   = "ss-${var.environment}-network-rg"
+  name                = "ss-${var.environment}-vnet"
+  resource_group_name = "ss-${var.environment}-network-rg"
 }
 
 data "azurerm_subnet" "ss_subnet" {
-  name                  = "vh_private_endpoints"
-  virtual_network_name  = "ss-${var.environment}-vnet"
-  resource_group_name   = "ss-${var.environment}-network-rg"
+  name                 = "vh_private_endpoints"
+  virtual_network_name = "ss-${var.environment}-vnet"
+  resource_group_name  = "ss-${var.environment}-network-rg"
 }
 
 data "azurerm_lb" "wowza_lb" {
@@ -34,8 +34,8 @@ data "azurerm_lb" "wowza_lb" {
 }
 
 data "azurerm_storage_account" "wowza_sa" {
-  name                  = "vhinfrawowza${var.environment}"
-  resource_group_name   = "vh-infra-wowza-${var.environment}"
+  name                = "vhinfrawowza${var.environment}"
+  resource_group_name = "vh-infra-wowza-${var.environment}"
 }
 
 

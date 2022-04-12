@@ -3,7 +3,7 @@
 #--------------------------------------------------------------
 
 data "azurerm_resource_group" "vh-infra-core" {
-  name     = "vh-infra-core-${var.environment}"
+  name = "vh-infra-core-${var.environment}"
 }
 
 #--------------------------------------------------------------
@@ -30,9 +30,9 @@ output "certificate_thumbprint" {
 #--------------------------------------------------------------
 
 data "azurerm_private_dns_zone" "core-infra-intsvc" {
-  provider              = azurerm.private-endpoint-dns
-  name                  = "privatelink.blob.core.windows.net"
-  resource_group_name   = "core-infra-intsvc-rg"
+  provider            = azurerm.private-endpoint-dns
+  name                = "privatelink.blob.core.windows.net"
+  resource_group_name = "core-infra-intsvc-rg"
 }
 
 #data "azurerm_private_dns_zone" "reform-hearings-dns" {
@@ -57,7 +57,7 @@ module "wowza" {
   network_client_id              = var.network_client_id
   network_client_secret          = var.network_client_secret
   network_tenant_id              = var.network_tenant_id
-  tags = local.common_tags
+  tags                           = local.common_tags
 
 
   #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id

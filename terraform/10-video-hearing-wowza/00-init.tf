@@ -5,7 +5,7 @@ terraform {
 
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = ">=2.64.0"
     }
   }
@@ -17,7 +17,7 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
-  alias   = "dns"
+  alias = "dns"
   features {}
   tenant_id     = var.dns_tenant_id
   client_id     = var.dns_client_id
@@ -28,17 +28,17 @@ provider "azurerm" {
 
 provider "azurerm" {
   features {}
-  alias           = "private-endpoint-dns"
+  alias                      = "private-endpoint-dns"
   skip_provider_registration = "true"
-  subscription_id = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
+  subscription_id            = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
 }
 
 
 provider "azurerm" {
   features {}
-  alias           = "hearings-dns"
+  alias                      = "hearings-dns"
   skip_provider_registration = "true"
-  subscription_id = "4bb049c8-33f3-4860-91b4-9ee45375cc18"
+  subscription_id            = "4bb049c8-33f3-4860-91b4-9ee45375cc18"
 }
 
 provider "azurerm" {

@@ -1,5 +1,5 @@
 variable "environment" {
-    type = string
+  type = string
 }
 
 variable "resource_group_name" {
@@ -11,16 +11,16 @@ variable "resource_prefix" {
 }
 
 variable "public_env" {
-  type = number
+  type    = number
   default = 0
 }
 
 variable "keyvaults" {
-    type = map(any)
+  type = map(any)
 }
 
 variable "tags" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }
 

@@ -2,12 +2,12 @@ data "azurerm_client_config" "current" {
 }
 
 data "azurerm_subscription" "peering_target" {
-    provider = azurerm.peering_target
+  provider = azurerm.peering_target
 }
 
 locals {
   dns_zone_name        = var.environment == "prod" ? "platform.hmcts.net" : "sandbox.platform.hmcts.net"
-  peering_vnets        = ["hmcts-hub-sbox-int"] #var.environment != "prod" && var.environment != "stg" ? ["hmcts-hub-prod-int", "ukw-hub-prod-int"] : []
+  peering_vnets        = ["hmcts-hub-sbox-int"]                                   #var.environment != "prod" && var.environment != "stg" ? ["hmcts-hub-prod-int", "ukw-hub-prod-int"] : []
   peering_subscription = data.azurerm_subscription.peering_target.subscription_id #"ea3a8c1e-af9d-4108-bc86-a7e2d267f49c"
 }
 
@@ -17,7 +17,7 @@ resource "azurerm_virtual_network" "wowza" {
 
   resource_group_name = azurerm_resource_group.wowza.name
   location            = azurerm_resource_group.wowza.location
-  tags = var.tags
+  tags                = var.tags
 }
 
 resource "azurerm_subnet" "wowza" {
@@ -27,7 +27,7 @@ resource "azurerm_subnet" "wowza" {
   address_prefixes     = [var.address_space]
 
   enforce_private_link_endpoint_network_policies = true
-  enforce_private_link_service_network_policies = true
+  enforce_private_link_service_network_policies  = true
 }
 
 resource "azurerm_network_security_group" "wowza" {
@@ -64,7 +64,7 @@ resource "azurerm_network_security_group" "wowza" {
 
 resource "azurerm_virtual_network_peering" "vh-to-hub" {
   provider = azurerm.peering_client
-  for_each                     = toset(local.peering_vnets)
+  for_each = toset(local.peering_vnets)
 
   name                         = each.value
   resource_group_name          = azurerm_resource_group.wowza.name
@@ -77,7 +77,7 @@ resource "azurerm_virtual_network_peering" "vh-to-hub" {
 
 resource "azurerm_virtual_network_peering" "hub-to-vh" {
   provider = azurerm.peering_target
-  for_each                     = toset(local.peering_vnets)
+  for_each = toset(local.peering_vnets)
 
   name                         = azurerm_virtual_network.wowza.name
   resource_group_name          = each.value

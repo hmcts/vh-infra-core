@@ -6,7 +6,7 @@ resource "azurerm_resource_group_template_deployment" "wowza-automation-acct" {
   resource_group_name = azurerm_resource_group.wowza.name
 
   # "Incremental" ADDS the resource to already existing resources. "Complete" destroys all other resources and creates the new one
-  deployment_mode     = "Incremental"
+  deployment_mode = "Incremental"
 
   # the parameters below can be found near the top of the ARM file
   parameters_content = jsonencode({

@@ -7,7 +7,7 @@ resource "azurerm_app_configuration" "vh" {
   resource_group_name = data.azurerm_resource_group.vh-core-infra.name
   location            = var.location
 
-  sku = "free"
+  sku  = "free"
   tags = var.tags
 }
 
@@ -23,7 +23,7 @@ resource "azurerm_key_vault_secret" "connectionstrings_appconfig" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 

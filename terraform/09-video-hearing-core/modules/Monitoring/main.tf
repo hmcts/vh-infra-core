@@ -4,19 +4,19 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
 }
 
 resource "azurerm_application_insights" "vh-infra-core" {
-  name                = var.resource_prefix
+  name = var.resource_prefix
 
   location            = var.location
   resource_group_name = var.resource_group_name
   application_type    = "web"
-  tags = var.tags
+  tags                = var.tags
 }
 
 resource "azurerm_log_analytics_workspace" "loganalytics" {
   name                = var.resource_prefix
   location            = var.location
   resource_group_name = var.resource_group_name
-  tags = var.tags
+  tags                = var.tags
 }
 
 output "instrumentation_key" {
@@ -30,7 +30,7 @@ resource "azurerm_key_vault_secret" "applicationinsights" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 resource "azurerm_key_vault_secret" "appinsightskey" {
@@ -40,7 +40,7 @@ resource "azurerm_key_vault_secret" "appinsightskey" {
   # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-  tags = var.tags
+  tags            = var.tags
 }
 
 

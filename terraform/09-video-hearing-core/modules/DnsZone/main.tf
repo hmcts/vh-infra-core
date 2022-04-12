@@ -15,5 +15,5 @@ resource "azurerm_dns_cname_record" "vh" {
   zone_name           = var.zone_name
   resource_group_name = var.resource_group_name
   ttl                 = 3600
-  record             = each.value.value
+  record              = each.value.value
 }

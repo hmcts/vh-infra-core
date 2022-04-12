@@ -11,7 +11,7 @@ variable "resource_prefix" {
 # }
 
 variable "public_env" {
-  type = number
+  type    = number
   default = 0
 }
 
@@ -28,6 +28,6 @@ variable "location" {
 }
 
 variable "tags" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }
