@@ -241,11 +241,11 @@ module "vh_kv_endpoint" {
   environment         = var.environment
   subnet_id           = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
   resources = tomap({
-    for k in module.KeyVaults :
+    for k in module.KeyVaults.keyvault_resource :
     k.keyvault_name => {
-      resource_id         = k.keyvault_id
-      resource_name       = k.keyvault_name
-      resource_type       = "vault"
+      resource_id         = k.resource_id
+      resource_name       = k.resource_name
+      resource_type       = k.resource_type
       private_dns_zone_id = data.azurerm_private_dns_zone.kv.id
     }
   })
