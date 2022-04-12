@@ -8,7 +8,7 @@ resource "azurerm_storage_account" "wowza_recordings" {
   account_tier              = "Standard"
   account_replication_type  = "RAGRS"
   enable_https_traffic_only = true
-  tags = var.tags
+  tags                      = var.tags
 }
 
 resource "azurerm_storage_container" "recordings" {
@@ -37,7 +37,7 @@ resource "azurerm_private_endpoint" "wowza_storage" {
 resource "azurerm_private_dns_zone" "blob" {
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = azurerm_resource_group.wowza.name
-  tags = var.tags
+  tags                = var.tags
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "wowza" {
@@ -46,7 +46,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "wowza" {
   private_dns_zone_name = azurerm_private_dns_zone.blob.name
   virtual_network_id    = azurerm_virtual_network.wowza.id
   registration_enabled  = true
-  tags = var.tags
+  tags                  = var.tags
 }
 
 resource "azurerm_private_dns_a_record" "wowza_storage" {
@@ -55,12 +55,12 @@ resource "azurerm_private_dns_a_record" "wowza_storage" {
   resource_group_name = azurerm_resource_group.wowza.name
   ttl                 = 300
   records             = [azurerm_private_endpoint.wowza_storage.private_service_connection.0.private_ip_address]
-  tags = var.tags
+  tags                = var.tags
 }
 
 resource "azurerm_key_vault_secret" "wowza-sa-key" {
   name         = "wowzaconfiguration--storageaccountkey"
   value        = azurerm_storage_account.wowza_recordings.primary_access_key
   key_vault_id = var.key_vault_id
-  tags = var.tags
+  tags         = var.tags
 }

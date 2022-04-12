@@ -50,7 +50,7 @@ resource "azurerm_role_definition" "virtual-machine-control" {
   scope       = azurerm_resource_group.wowza.id #  our resource group
   description = "Custom Role for controlling virtual machines"
   permissions {
-    actions   = [
+    actions = [
       "Microsoft.Compute/virtualMachines/read",
       "Microsoft.Compute/virtualMachines/start/action",
       "Microsoft.Compute/virtualMachines/deallocate/action",
@@ -59,22 +59,22 @@ resource "azurerm_role_definition" "virtual-machine-control" {
   }
 
   assignable_scopes = [
-   azurerm_resource_group.wowza.id,
+    azurerm_resource_group.wowza.id,
   ]
 }
 
 resource "azurerm_role_assignment" "wowza-auto-acct-mi-role" {
-  scope                = azurerm_resource_group.wowza.id ##### CHECK ME
-  
+  scope = azurerm_resource_group.wowza.id ##### CHECK ME
+
   # using our custom role
   #role_definition_name = azurerm_role_definition.virtual-machine-control.name
-  role_definition_id   = azurerm_role_definition.virtual-machine-control.role_definition_resource_id
+  role_definition_id = azurerm_role_definition.virtual-machine-control.role_definition_resource_id
   # principal_id is the principal_id of the user assigned system managed identity we just created
-  principal_id         = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
+  principal_id = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
 
-    # This depends_on must be here or the terraform destroy will fail
+  # This depends_on must be here or the terraform destroy will fail
   depends_on = [
     azurerm_role_definition.virtual-machine-control
   ]
-  
+
 }

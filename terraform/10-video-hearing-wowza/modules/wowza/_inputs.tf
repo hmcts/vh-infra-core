@@ -3,7 +3,7 @@ variable "environment" {
 }
 
 variable "location" {
-  type    = string
+  type = string
 }
 
 variable "service_name" {
@@ -11,7 +11,7 @@ variable "service_name" {
 }
 
 variable "address_space" {
-  type    = string
+  type = string
 }
 
 variable "vm_size" {
@@ -25,7 +25,7 @@ variable "admin_user" {
 }
 
 variable "admin_ssh_key_path" {
-  type    = string
+  type = string
   #default = "~/.ssh/wowza.pub"
 }
 
@@ -63,7 +63,7 @@ variable "storage_msi_client_id" {
 }
 
 variable "tags" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }
 
@@ -94,9 +94,9 @@ variable "network_tenant_id" {
 }
 
 # Automation start/stop variables
-variable "runbook_name"{
+variable "runbook_name" {
   description = "Name of runbook file to be used to schedule VM start / stop"
-  type        =  string
+  type        = string
   default     = "wowza-vm-runbook.ps1"
 }
 

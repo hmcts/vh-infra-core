@@ -3,8 +3,8 @@ resource "azurerm_public_ip" "wowza" {
   resource_group_name = azurerm_resource_group.wowza.name
   location            = azurerm_resource_group.wowza.location
   allocation_method   = "Static"
-  sku = "Standard"
-  tags = var.tags
+  sku                 = "Standard"
+  tags                = var.tags
 }
 
 resource "azurerm_lb" "wowza-public" {

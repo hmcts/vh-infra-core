@@ -71,7 +71,7 @@ resource "azurerm_managed_disk" "wowza_data" {
   storage_account_type = "Premium_LRS"
   create_option        = "Empty"
   disk_size_gb         = 512
-  tags = var.tags
+  tags                 = var.tags
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "wowza_data" {
