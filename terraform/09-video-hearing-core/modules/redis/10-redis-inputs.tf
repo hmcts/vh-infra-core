@@ -15,7 +15,7 @@ variable "default_redis_cache_standard_sku" {
 }
 
 variable "environment_to_sku_map" {
-  type = map
+  type = map(any)
   default = {
     AAT = {
       sku_name = "Basic"
@@ -68,9 +68,9 @@ variable "environment_to_sku_map" {
 locals {
   environment = var.environment
   sku = lookup(var.environment_to_sku_map, var.environment, {
-      sku_name = "Basic"
-      capacity = "0"
-      family   = "C"
+    sku_name = "Basic"
+    capacity = "0"
+    family   = "C"
   })
 }
 
@@ -99,6 +99,6 @@ variable "redis_cache_patch_schedule_hour" {
 }
 
 variable "tags" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }

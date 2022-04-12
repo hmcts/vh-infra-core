@@ -1,8 +1,8 @@
 variable "resource_group_name" {
-    type = string
+  type = string
 }
 variable "environment" {
-    type = string
+  type = string
 }
 
 variable "redis_cache_standard_required" {

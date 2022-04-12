@@ -11,6 +11,6 @@ variable "storage_account_id" {
 }
 
 variable "tags" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }

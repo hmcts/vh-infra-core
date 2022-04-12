@@ -1,28 +1,28 @@
 variable "environment" {
-    type = string
+  type = string
 }
 
 variable "app_conf" {
-    type = map
+  type = map(any)
 }
 
 variable "app_roles" {
-    type = map
+  type = map(any)
 }
 
 variable "api_permissions" {
-    type = map
+  type = map(any)
 }
 
 variable "resource_group_name" {
-    type = string
+  type = string
 }
 
 variable "app_keyvaults_map" {
-    type = map(any)
+  type = map(any)
 }
 
 variable "tags" {
-    type = map(any)
-    default = {}
+  type    = map(any)
+  default = {}
 }

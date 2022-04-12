@@ -1,9 +1,9 @@
 variable "cnames" {
-  type = map
+  type = map(any)
 }
 
 variable "a" {
-  type = map
+  type = map(any)
 }
 
 variable "zone_name" {

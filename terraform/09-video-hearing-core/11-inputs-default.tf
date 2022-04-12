@@ -48,11 +48,11 @@ variable "dns_subscription_id" {
 locals {
   dns_zone_mapping = {
     description = "mapping for infra-core endpoint dns"
-    
-    "sqlServer" = "privatelink.database.windows.net",
+
+    "sqlServer"  = "privatelink.database.windows.net",
     "redisCache" = "privatelink.redis.cache.windows.net",
-    "signalr" = "privatelink.service.signalr.net",
-    "vault" = "privatelink.vaultcore.azure.net"
-    
+    "signalr"    = "privatelink.service.signalr.net",
+    "vault"      = "privatelink.vaultcore.azure.net"
+
   }
 }

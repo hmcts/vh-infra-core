@@ -20,12 +20,12 @@ resource "azurerm_signalr_service" "vh" {
 }
 
 resource "azurerm_key_vault_secret" "signalr_connection_str" {
-   name         = "connectionstrings--signalr"
-   value        = azurerm_signalr_service.vh.primary_connection_string
-   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
-   # FromTFSec
+  name         = "connectionstrings--signalr"
+  value        = azurerm_signalr_service.vh.primary_connection_string
+  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+  # FromTFSec
   content_type    = "secret"
   expiration_date = timeadd(timestamp(), "8760h")
-   tags = var.tags
+  tags            = var.tags
 }
 
