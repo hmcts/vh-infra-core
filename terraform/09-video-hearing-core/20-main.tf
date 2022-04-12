@@ -198,19 +198,22 @@ module "vh_endpoint" {
   environment         = var.environment
   resources = {
     "SQLServer" = {
-      resource_id   = module.VHDataServices.server_id
-      resource_name = module.VHDataServices.name
-      resource_type = "sqlServer"
+      resource_id         = module.VHDataServices.server_id
+      resource_name       = module.VHDataServices.name
+      resource_type       = "sqlServer"
+      private_dns_zone_id = data.azurerm_private_dns_zone.sql.id
     }
     "RedisCache" = {
-      resource_id   = module.Redis.redis_id
-      resource_name = module.Redis.name
-      resource_type = "redisCache"
+      resource_id         = module.Redis.redis_id
+      resource_name       = module.Redis.name
+      resource_type       = "redisCache"
+      private_dns_zone_id = data.azurerm_private_dns_zone.redis.id
     }
     "SignalR" = {
-      resource_id   = module.SignalR.signalr_id
-      resource_name = module.SignalR.name
-      resource_type = "signalr"
+      resource_id         = module.SignalR.signalr_id
+      resource_name       = module.SignalR.name
+      resource_type       = "signalr"
+      private_dns_zone_id = data.azurerm_private_dns_zone.signalr.id
     }
   }
 
@@ -224,27 +227,27 @@ resource "azurerm_private_dns_a_record" "endpoint-dns" {
 
   name                = lower(format("%s-%s.%s", "vh-infra-core", var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
-  resource_group_name = "core-infra-intsvc-rg"
+  resource_group_name = local.dns_zone_resource_group_name
   ttl                 = 3600
   records             = [lookup(each.value, "resource_ip")]
 }
 
-data "azurerm_private_dns_zone" "kv" {
-  provider = azurerm.private-endpoint-dns
-
-  name                = lookup(local.dns_zone_mapping, "vault")
-  resource_group_name = "core-infra-intsvc-rg"
-}
 
 module "vh_kv_endpoint" {
 
-  source                     = "./modules/PrivateEndpoint"
-  location                   = var.location
-  resource_group_name        = azurerm_resource_group.vh-infra-core.name
-  environment                = var.environment
-  subnet_id                  = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
-  resources                  = module.KeyVaults.keyvault_resource
-  private_dns_zone_group_ids = [data.azurerm_private_dns_zone.kv.id]
+  source              = "./modules/PrivateEndpoint"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.vh-infra-core.name
+  environment         = var.environment
+  subnet_id           = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/vh_private_endpoints"
+  resources = tomap({
+    for k, v in module.KeyVaults : k => {
+      resource_id         = v.keyvault_id
+      resource_name       = v.keyvault_name
+      resource_type       = "vault"
+      private_dns_zone_id = data.azurerm_private_dns_zone.kv.id
+    }
+  })
 
   tags = local.common_tags
 }
@@ -256,7 +259,7 @@ resource "azurerm_private_dns_a_record" "kv-dns" {
 
   name                = lower(format("%s-%s.%s", lookup(each.value, "resource_name"), var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
-  resource_group_name = "core-infra-intsvc-rg"
+  resource_group_name = local.dns_zone_resource_group_name
   ttl                 = 3600
   records             = [lookup(each.value, "resource_ip")]
 }

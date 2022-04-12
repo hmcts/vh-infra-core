@@ -55,4 +55,5 @@ locals {
     "vault"      = "privatelink.vaultcore.azure.net"
 
   }
+  dns_zone_resource_group_name = "core-infra-intsvc-rg"
 }
