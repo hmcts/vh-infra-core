@@ -1,9 +1,4 @@
 
-data "azurerm_key_vault" "vh-infra-core-kv" {
-  name                = var.resource_group_name
-  resource_group_name = var.resource_group_name
-}
-
 data "azurerm_subnet" "ss_subnet" {
   name                 = "vh_private_endpoints"
   virtual_network_name = "ss-${var.environment}-vnet"
