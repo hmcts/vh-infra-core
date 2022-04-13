@@ -1,7 +1,3 @@
-data "azurerm_resource_group" "vh-infra-core" {
-  name = var.resource_group_name
-}
-
 locals {
   environment = var.environment
 }
@@ -16,8 +12,8 @@ resource "azurerm_key_vault" "app_keyvaults" {
   for_each = var.keyvaults
 
   name                        = "${each.key}-${var.environment}"
-  location                    = data.azurerm_resource_group.vh-infra-core.location
-  resource_group_name         = data.azurerm_resource_group.vh-infra-core.name
+  location                    = var.location
+  resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
@@ -276,9 +272,9 @@ resource "azurerm_key_vault_access_policy" "dts_operations" {
 #tfsec:ignore:azure-keyvault-no-purge
 #tfsec:ignore:azure-keyvault-specify-network-acl
 resource "azurerm_key_vault" "vh-infra-core-ht" {
-  name                        = data.azurerm_resource_group.vh-infra-core.name
-  resource_group_name         = data.azurerm_resource_group.vh-infra-core.name
-  location                    = data.azurerm_resource_group.vh-infra-core.location
+  name                        = var.resource_group_name
+  resource_group_name         = var.resource_group_name
+  location                    = var.location
   enabled_for_disk_encryption = false
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   enabled_for_deployment      = true

@@ -3,9 +3,9 @@
 #--------------------------------------------------------------
 
 resource "azurerm_redis_cache" "redis_cache_standard" {
-  name                = trim(data.azurerm_resource_group.vh-infra-core.name, "-")
-  location            = data.azurerm_resource_group.vh-infra-core.location
-  resource_group_name = data.azurerm_resource_group.vh-infra-core.name
+  name                = trim(var.resource_group_name, "-")
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   capacity = local.sku.capacity
   family   = local.sku.family

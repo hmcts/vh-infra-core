@@ -1,6 +1,3 @@
-data "azurerm_resource_group" "vh-infra-core" {
-  name = var.resource_group_name
-}
 
 data "azurerm_key_vault" "vh-infra-core-kv" {
   name                = var.resource_group_name
@@ -18,7 +15,7 @@ resource "azurerm_private_endpoint" "vh_endpoint" {
 
   name                = format("%s-%s", lookup(each.value, "resource_name"), lookup(each.value, "resource_type"))
   location            = var.location
-  resource_group_name = data.azurerm_resource_group.vh-infra-core.name
+  resource_group_name = var.resource_group_name
   subnet_id           = data.azurerm_subnet.ss_subnet.id
 
   private_service_connection {

@@ -8,3 +8,6 @@ variable "environment" {
 variable "redis_cache_standard_required" {
   default = "false"
 }
+variable "location" {
+  type = string
+}

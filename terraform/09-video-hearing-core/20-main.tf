@@ -18,6 +18,7 @@ module "KeyVaults" {
   external_passwords = var.external_passwords
 
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   keyvaults           = local.keyvaults
 
@@ -85,6 +86,7 @@ module "Redis" {
   source              = "./modules/redis"
   environment         = var.environment
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  location            = azurerm_resource_group.vh-infra-core.location
 
   tags = local.common_tags
 }
