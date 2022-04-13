@@ -92,7 +92,7 @@ stages:
           state_sub: $(vh_tf_state_sub)
 
   - stage: Video_Hearing_Core
-    displayName: 'Video_Hearing_Core'
+    displayName: 'Video_Hearing_Core (${{ parameters.env }})'
     condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'CI'))
     jobs:
       - job: Video_Hearing_Core
@@ -126,7 +126,7 @@ stages:
               state_sub: $(vh_tf_state_sub)
 
   - stage: Video_Hearing_Wowza
-    displayName: 'Video_Hearing_Wowza'
+    displayName: 'Video_Hearing_Wowza (${{ parameters.env }})'
     condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'CI'))
     jobs:
       - job: Video_Hearing_Wowza
@@ -152,7 +152,7 @@ stages:
 
 
   - stage: Destroy_Video_Hearing_Core
-    displayName: 'Destroy Video_Hearing_Core'
+    displayName: 'Destroy Video_Hearing_Core (${{ parameters.env }})'
     condition: contains('${{ parameters.Run_Stage }}', 'Destroy_Core')
     jobs:
       - job: Video_Hearing_Core
