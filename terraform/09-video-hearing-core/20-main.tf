@@ -149,6 +149,7 @@ module "SignalR" {
 
   resource_prefix     = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  location            = azurerm_resource_group.vh-infra-core.location
 
   tags = local.common_tags
 }
