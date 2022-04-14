@@ -18,10 +18,104 @@ module "KeyVaults" {
   external_passwords = var.external_passwords
 
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   keyvaults           = local.keyvaults
 
   tags = local.common_tags
+}
+data "azurerm_key_vault" "vh-infra-core-kv" {
+  name                = azurerm_resource_group.vh-infra-core.name
+  resource_group_name = azurerm_resource_group.vh-infra-core.name
+
+  depends_on = [
+    module.KeyVaults
+  ]
+}
+module "KeyVault_Secrets" {
+  source       = "./modules/KeyVaults/Secrets"
+  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+
+  tags = local.common_tags
+  secrets = [
+    {
+      name         = "connectionstrings--appconfig"
+      value        = module.appconfig.connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "applicationinsights--instrumentationkey"
+      value        = module.Monitoring.instrumentation_key
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "azuread--appinsightskey"
+      value        = module.Monitoring.instrumentation_key
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "connectionstrings--rediscache"
+      value        = module.Redis.connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "connectionstrings--signalr"
+      value        = module.SignalR.connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "hvhearingsapiadmin"
+      value        = module.VHDataServices.admin_password
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "connectionstrings--VhBookings"
+      value        = module.VHDataServices.bookings_api_connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "connectionstrings--vhvideo"
+      value        = module.VHDataServices.video_connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "connectionstrings--vhnotificationsapi"
+      value        = module.VHDataServices.notification_connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "connectionstrings--testapi"
+      value        = module.VHDataServices.test_api_connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "servicebusqueue--connectionstring"
+      value        = module.VHDataServices.service_bus_connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "connectionstrings--videoapi"
+      value        = module.VHDataServices.video_api_connection_string
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+  ]
+
+  depends_on = [
+    module.KeyVaults,
+    module.AppReg
+  ]
 }
 
 
@@ -55,6 +149,7 @@ module "SignalR" {
 
   resource_prefix     = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  location            = azurerm_resource_group.vh-infra-core.location
 
   tags = local.common_tags
 }
@@ -85,6 +180,7 @@ module "Redis" {
   source              = "./modules/redis"
   environment         = var.environment
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  location            = azurerm_resource_group.vh-infra-core.location
 
   tags = local.common_tags
 }
