@@ -20,7 +20,7 @@ steps:
         "secrets"        = $na_obj
       }
 
-      $all_secrets = @($bookings_secrets, $notifications_secrets) -Compress -Depth 100
+      $all_secrets = @($bookings_secrets, $notifications_secrets) | ConvertTo-Json  -Compress -Depth 100
       $all_secrets = $all_secrets -replace "`"", "\`""
       Write-Host $all_secrets 
       Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true]$all_secrets");
