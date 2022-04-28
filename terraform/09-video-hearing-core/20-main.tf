@@ -127,15 +127,16 @@ output "kvs" {
   value = module.KeyVaults.keyvault_resource
 }
 module "input_Secrets" {
+  for_each = { for secret in var.kv_secrets : secret => secret } 
   source       = "./modules/KeyVaults/Secrets"
   key_vault_id = lookup(module.KeyVaults.keyvault_resource, each.value.key_vault_name).resource_id
 
   tags = local.common_tags
   secrets = [
-    for secret in var.kv_secrets :
+    for secret in each.value.secrets :
       {
-        name         = each.value.secret.name
-        value        = each.value.secret.value
+        name         = secret.name
+        value        = secret.value
         tags         = local.common_tags
         content_type = "ado_secret"
       }
