@@ -703,8 +703,8 @@ variable "kv_secrets" {
   type = list(object({
     key_vault_name = string
     secrets = list(object({
-      name = string
-      value = string 
+      name  = string
+      value = string
     }))
   }))
   default = []
