@@ -1,11 +1,11 @@
 parameters:
   - name: environment
     type: string
-    
+
 steps:
   - powershell: |
      
-     $env = ${{ parameters.environment } }
+     $env = "${{ parameters.environment }}"
 
       $bookings_secrets = @{
         "key_vault_name" = "vh-bookings-api- $env"
