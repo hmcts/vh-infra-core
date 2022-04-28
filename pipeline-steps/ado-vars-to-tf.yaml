@@ -16,7 +16,7 @@ steps:
 
       $na_obj=$($env:notifications_secrets) | ConvertFrom-Json
       $notifications_secrets = [pscustomobject]@{
-        "key_vault_name" = "vh-notifications-api"
+        "key_vault_name" = "vh-notification-api"
         "secrets"        = $na_obj
       }
 
