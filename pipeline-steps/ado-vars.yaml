@@ -1,0 +1,4 @@
+
+variables:
+  - group: CP-Testing-Group
+  - group: vh-key-vault-vars

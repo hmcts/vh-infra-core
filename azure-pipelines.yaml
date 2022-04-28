@@ -101,6 +101,7 @@ stages:
         variables:
           - group: external
           - group: vh-tenant-creds
+          - template: pipeline-steps/ado-vars.yaml
         steps:
 
           - template: pipeline-steps/vh-tenant-replacement.yaml
