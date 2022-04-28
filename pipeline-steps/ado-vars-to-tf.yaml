@@ -9,13 +9,13 @@ steps:
 
       $ba_obj=$($env:bookings_secrets) | ConvertFrom-Json
       $ba2_obj=$($env:bookings_secrets_v2) | ConvertFrom-Json
-      $bookings_secrets = @{
+      $bookings_secrets = [pscustomobject]@{
         "key_vault_name" = "vh-bookings-api- $env"
-        "secrets"        = $ba_obj + $ba2_obj
+        "secrets"        = $($ba_obj + $ba2_obj)
       }
 
       $na_obj=$($env:notifications_secrets) | ConvertFrom-Json
-      $notifications_secrets = @{
+      $notifications_secrets = [pscustomobject]@{
         "key_vault_name" = "vh-notifications-api- $env"
         "secrets"        = $na_obj
       }
