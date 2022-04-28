@@ -65,7 +65,7 @@ stages:
     jobs: 
       - job: vh_tenant_replacement
         pool:
-          vmImage: 'Ubuntu 18.04'
+          vmImage: 'ubuntu-latest'
         variables:
           - group: vh-tenant-creds
         steps:
@@ -97,7 +97,7 @@ stages:
     jobs:
       - job: Video_Hearing_Core
         pool:
-          vmImage: 'Ubuntu 18.04'
+          vmImage: 'ubuntu-latest'
         variables:
           - group: external
           - group: vh-tenant-creds
@@ -131,7 +131,7 @@ stages:
     jobs:
       - job: Video_Hearing_Wowza
         pool:
-          vmImage: 'Ubuntu 18.04'
+          vmImage: 'ubuntu-latest'
         variables:
             - group: vh-tenant-creds
         steps:
