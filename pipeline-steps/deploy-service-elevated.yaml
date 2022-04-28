@@ -80,7 +80,7 @@ steps:
       GNP_CLIENT_ID: $(GlobalNetworkPeering.GNP_CLIENT_ID) 
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
-      ADO_VARS: $(ado_vars_to_json.ado_vars)
+      ADO_VARS: $(ado_vars_to_tf.ado_vars)
 
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'

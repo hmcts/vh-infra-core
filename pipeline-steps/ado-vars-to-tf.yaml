@@ -21,10 +21,11 @@ steps:
       }
 
       $all_secrets = @($bookings_secrets, $notifications_secrets)
+      Write-Host $($all_secrets | ConvertTo-Json)
       Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true]$all_secrets");
     env:
       bookings_secrets: $(vh-bookings-api-secrets)
       bookings_secrets_v2: $(vh-bookings-api-v2-secrets)
       notifications_secrets: $(vh-notifications-api-secrets)
     displayName: "Get Secrets from ADO Library to tf vars"
-    name: ado_vars_to_json
+    name: ado_vars_to_tf
