@@ -126,7 +126,7 @@ module "KeyVault_Secrets" {
 output "kvs" {
   value = module.KeyVaults.keyvault_resource
 }
-resource "azurerm_key_vault_secret" "input_Secrets" {
+/* resource "azurerm_key_vault_secret" "input_Secrets" {
   for_each        = { for secret in var.kv_secrets : secret.key_vault_name => secret }
   key_vault_id    = module.KeyVaults.keyvault_resource[each.value.key_vault_name].resource_id
   name            = each.value.secrets.name
@@ -134,7 +134,7 @@ resource "azurerm_key_vault_secret" "input_Secrets" {
   tags            = local.common_tags
   content_type    = "ado_secret"
   expiration_date = timeadd(timestamp(), "8760h")
-}
+} */
 
 #--------------------------------------------------------------
 # VH - Storage Group

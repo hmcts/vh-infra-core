@@ -13,7 +13,7 @@ output "keyvault_name" {
 
 output "keyvault_resource" {
   value = tomap({
-    for k, v in azurerm_key_vault.app_keyvaults : k.name => {
+    for k, v in azurerm_key_vault.app_keyvaults : k => {
       resource_id   = v.id
       resource_name = v.name
       resource_type = "vault"
