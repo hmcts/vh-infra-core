@@ -21,6 +21,9 @@ parameters:
     type: string
   - name: state_sub 
     type: string
+  - name: additional_tf_var 
+    type: string
+    default: ""
 
 steps:
 
@@ -57,10 +60,6 @@ steps:
         Write-Host "##vso[task.setvariable variable=GNP_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
         Write-Host "Subscription ID: $subscriptionId"
 
-  - template: ado-vars-to-tf.yaml
-    parameters: 
-      environment: ${{ parameters.environment }}
-
   - bash: |
       variableName="vars"
       
@@ -68,7 +67,9 @@ steps:
       variables="${variables} -var \"network_client_id=${GNP_CLIENT_ID} \""
       variables="${variables} -var \"network_client_secret=${GNP_CLIENT_SECRET} \""
       variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
-      variables="${variables} -var \"kv_secrets=${ADO_VARS} \""
+      if [ ! -z "${ADO_VARS}" ]; then
+        variables="${variables} -var \"kv_secrets=${ADO_VARS} \""
+      fi
 
       echo "Variables set as: "
       echo "${variables}"
@@ -80,7 +81,7 @@ steps:
       GNP_CLIENT_ID: $(GlobalNetworkPeering.GNP_CLIENT_ID) 
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
-      ADO_VARS: $(ado_vars_to_tf.ado_vars)
+      ADDITIONAL_VAR: ${{ parameters.additional_tf_var }}
 
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'

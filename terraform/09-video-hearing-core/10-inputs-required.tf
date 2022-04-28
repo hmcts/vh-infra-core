@@ -708,4 +708,5 @@ variable "kv_secrets" {
     }))
   }))
   default = []
+  sensitive = true
 }
