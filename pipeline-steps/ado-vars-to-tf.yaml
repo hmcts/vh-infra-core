@@ -8,14 +8,16 @@ steps:
       $env = "${{ parameters.environment }}"
 
       $ba_obj=$($env:bookings_secrets) | ConvertFrom-Json
-      Write-Host $ba_obj
+      $ba2_obj=$($env:bookings_secrets_v2) | ConvertFrom-Json
       $bookings_secrets = @{
         "key_vault_name" = "vh-bookings-api- $env"
-        "secrets"        = $ba_obj + $($env:bookings_secrets_v2 | ConvertFrom-Json)
+        "secrets"        = $ba_obj + $ba2_obj
       }
+
+      $na_obj=$($env:notifications_secrets) | ConvertFrom-Json
       $notifications_secrets = @{
         "key_vault_name" = "vh-notifications-api- $env"
-        "secrets"        = $($env:notifications_secrets | ConvertFrom-Json)
+        "secrets"        = $na_obj
       }
 
       $all_secrets = @($bookings_secrets, $notifications_secrets)
