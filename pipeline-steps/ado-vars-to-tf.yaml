@@ -76,7 +76,7 @@ steps:
 
       $all_secrets = @($bookings_secrets, $notifications_secrets, $user_api_secrets, $video_api_secrets, $test_api_secrets, $admin_web_secrets, $service_web_secrets, $video_web_secrets, $test_web_secrets, $booking_queue_secrets, $scheduler_jobs_secrets) | ConvertTo-Json  -Compress -Depth 100
       $all_secrets = $all_secrets -replace "`"", "\`""
-      #Write-Host $all_secrets 
+      Write-Host $all_secrets 
       Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true;issecret=true]$all_secrets");
     env:
       bookings_secrets: $(vh-bookings-api-secrets)
