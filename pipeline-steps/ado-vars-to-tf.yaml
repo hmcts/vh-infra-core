@@ -6,7 +6,8 @@ steps:
   - powershell: |
      
       $env = "${{ parameters.environment }}"
-      
+      $all_secrets = @()
+
       $ba_obj = $($env:bookings_secrets) | ConvertFrom-Json
       $ba2_obj = $($env:bookings_secrets_v2) | ConvertFrom-Json
       $secrets_obj = $($ba_obj + $ba2_obj)
