@@ -112,7 +112,7 @@ stages:
               environment: ${{ parameters.env }}
 
 
-          - template: ado-vars-to-tf.yaml
+          - template: pipeline-steps/ado-vars-to-tf.yaml
             parameters: 
               environment: ${{ parameters.env }}
         
