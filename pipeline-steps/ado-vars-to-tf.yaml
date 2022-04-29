@@ -27,7 +27,7 @@ steps:
               "key_vault_name" = "vh-notification-api"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $notifications_secrets
       }
 
 
@@ -38,7 +38,7 @@ steps:
               "key_vault_name" = "vh-user-api"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $user_api_secrets
       }
 
       $va_obj = $($env:video_api_secrets) | ConvertFrom-Json
@@ -48,7 +48,7 @@ steps:
               "key_vault_name" = "vh-video-api"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $video_api_secrets
       }
 
       $ta_obj = $($env:test_api_secrets) | ConvertFrom-Json
@@ -58,7 +58,7 @@ steps:
               "key_vault_name" = "vh-test-api"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $test_api_secrets
       }
 
       $aa_obj = $($env:admin_web_secrets) | ConvertFrom-Json
@@ -68,7 +68,7 @@ steps:
               "key_vault_name" = "vh-admin-web"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $admin_web_secrets
       }
 
       $sw_obj = $($env:service_web_secrets) | ConvertFrom-Json
@@ -78,7 +78,7 @@ steps:
               "key_vault_name" = "vh-service-web"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $service_web_secrets
       }
 
       $vw_obj = $($env:video_web_secrets) | ConvertFrom-Json
@@ -88,7 +88,7 @@ steps:
               "key_vault_name" = "vh-video-web"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $video_web_secrets
       }
 
       $tw_obj = $($env:test_web_secrets) | ConvertFrom-Json
@@ -98,7 +98,7 @@ steps:
               "key_vault_name" = "vh-test-web"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $test_web_secrets
       }
 
       $bq_obj = $($env:booking_queue_secrets) | ConvertFrom-Json
@@ -108,7 +108,7 @@ steps:
               "key_vault_name" = "vh-booking-queue"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $bookings_secrets
+          $all_secrets += $booking_queue_secrets
       }
 
       $sj_obj = $($env:scheduler_jobs_secrets) | ConvertFrom-Json
