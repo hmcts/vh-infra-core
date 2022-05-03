@@ -5,7 +5,6 @@ steps:
       targetType: 'inline'
       workingDirectory: '$(System.DefaultWorkingDirectory)/config/terraform/application/vars/09-video-hearing-core'
       script: |
-            
             sed -i 's|replace_vh_tenant_id|$(VH_TENANT_ID)|gI' '${{ lower(parameters.environment) }}.tfvars'
             sed -i 's|replace_vh_client_id|$(VH_CLIENT_ID)|gI' '${{ lower(parameters.environment) }}.tfvars'
             sed -i 's|replace_vh_client_secret|$(VH_CLIENT_SECRET)|gI' '${{ lower(parameters.environment) }}.tfvars'
