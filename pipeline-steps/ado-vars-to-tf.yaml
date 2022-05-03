@@ -1,0 +1,142 @@
+parameters:
+  - name: environment
+    type: string
+
+steps:
+  - powershell: |
+     
+      $env = "${{ parameters.environment }}"
+      $all_secrets = @()
+
+      $ba_obj = $($env:bookings_secrets) | ConvertFrom-Json
+      $ba2_obj = $($env:bookings_secrets_v2) | ConvertFrom-Json
+      $secrets_obj = $($ba_obj + $ba2_obj)
+      if ($null -ne $secrets_obj) {
+          $bookings_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-bookings-api"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $bookings_secrets
+      }
+
+
+      $na_obj = $($env:notifications_secrets) | ConvertFrom-Json
+      $secrets_obj = $na_obj
+      if ($null -ne $secrets_obj) {
+          $notifications_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-notification-api"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $notifications_secrets
+      }
+
+
+      $ua_obj = $($env:user_api_secrets) | ConvertFrom-Json
+      $secrets_obj = $ua_obj
+      if ($null -ne $secrets_obj) {
+          $user_api_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-user-api"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $user_api_secrets
+      }
+
+      $va_obj = $($env:video_api_secrets) | ConvertFrom-Json
+      $secrets_obj = $va_obj
+      if ($null -ne $secrets_obj) {
+          $video_api_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-video-api"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $video_api_secrets
+      }
+
+      $ta_obj = $($env:test_api_secrets) | ConvertFrom-Json
+      $secrets_obj = $ta_obj
+      if ($null -ne $secrets_obj) {
+          $test_api_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-test-api"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $test_api_secrets
+      }
+
+      $aa_obj = $($env:admin_web_secrets) | ConvertFrom-Json
+      $secrets_obj = $aa_obj
+      if ($null -ne $secrets_obj) {
+          $admin_web_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-admin-web"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $admin_web_secrets
+      }
+
+      $sw_obj = $($env:service_web_secrets) | ConvertFrom-Json
+      $secrets_obj = $sw_obj
+      if ($null -ne $secrets_obj) {
+          $service_web_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-service-web"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $service_web_secrets
+      }
+
+      $vw_obj = $($env:video_web_secrets) | ConvertFrom-Json
+      $secrets_obj = $vw_obj
+      if ($null -ne $secrets_obj) {
+          $video_web_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-video-web"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $video_web_secrets
+      }
+
+      $tw_obj = $($env:test_web_secrets) | ConvertFrom-Json
+      $secrets_obj = $tw_obj
+      if ($null -ne $secrets_obj) {
+          $test_web_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-test-web"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $test_web_secrets
+      }
+
+      $bq_obj = $($env:booking_queue_secrets) | ConvertFrom-Json
+      $secrets_obj = $bq_obj
+      if ($null -ne $secrets_obj) {
+          $booking_queue_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-booking-queue"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $booking_queue_secrets
+      }
+
+      $sj_obj = $($env:scheduler_jobs_secrets) | ConvertFrom-Json
+      $secrets_obj = $sj_obj
+      if ($null -ne $secrets_obj) {
+          $scheduler_jobs_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-scheduler-jobs"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $scheduler_jobs_secrets
+      }
+
+      $all_secrets = $all_secrets | ConvertTo-Json  -Compress -Depth 100
+      $all_secrets = $all_secrets -replace "`"", "\`""
+      #Write-Host $all_secrets 
+      Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true;issecret=true]$all_secrets");
+    env:
+      bookings_secrets: $(vh-bookings-api-secrets)
+      bookings_secrets_v2: $(vh-bookings-api-v2-secrets)
+      notifications_secrets: $(vh-notifications-api-secrets)
+      user_api_secrets: $(vh-user-api-secrets)
+      video_api_secrets: $(vh-video-api-secrets)
+      test_api_secrets: $(vh-test-api-secrets)
+      admin_web_secrets: $(vh-admin-web-secrets)
+      service_web_secrets: $(vh-service-web-secrets)
+      video_web_secrets: $(vh-video-web-secrets)
+      test_web_secrets: $(vh-test-web-secrets)
+      booking_queue_secrets: $(vh-booking-queue-secrets)
+      scheduler_jobs_secrets: $(vh-scheduler-jobs-secrets)
+    displayName: "Get Secrets from ADO Library to tf vars"
+    name: ado_vars_to_tf

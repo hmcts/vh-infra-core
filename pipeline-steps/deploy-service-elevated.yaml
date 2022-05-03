@@ -21,6 +21,9 @@ parameters:
     type: string
   - name: state_sub 
     type: string
+  - name: additional_tf_var 
+    type: string
+    default: ""
 
 steps:
 
@@ -64,6 +67,9 @@ steps:
       variables="${variables} -var \"network_client_id=${GNP_CLIENT_ID} \""
       variables="${variables} -var \"network_client_secret=${GNP_CLIENT_SECRET} \""
       variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
+      if [ ! -z "${ADDITIONAL_VAR}" ]; then
+        variables="${variables} -var \"kv_secrets=${ADDITIONAL_VAR} \""
+      fi
 
       echo "Variables set as: "
       echo "${variables}"
@@ -75,6 +81,7 @@ steps:
       GNP_CLIENT_ID: $(GlobalNetworkPeering.GNP_CLIENT_ID) 
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
+      ADDITIONAL_VAR: ${{ parameters.additional_tf_var }}
 
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'

@@ -24,6 +24,12 @@ module "KeyVaults" {
 
   tags = local.common_tags
 }
+
+
+#--------------------------------------------------------------
+# VH - KeyVaults Core Secrects
+#--------------------------------------------------------------
+
 data "azurerm_key_vault" "vh-infra-core-kv" {
   name                = azurerm_resource_group.vh-infra-core.name
   resource_group_name = azurerm_resource_group.vh-infra-core.name
@@ -117,7 +123,29 @@ module "KeyVault_Secrets" {
     module.AppReg
   ]
 }
+output "kvs" {
+  value = module.KeyVaults.keyvault_resource
+}
+module "input_Secrets" {
+  for_each     = { for secret in var.kv_secrets : secret.key_vault_name => secret }
+  source       = "./modules/KeyVaults/Secrets"
+  key_vault_id = lookup(module.KeyVaults.keyvault_resource, each.value.key_vault_name).resource_id
 
+  tags = local.common_tags
+  secrets = [
+    for secret in each.value.secrets :
+    {
+      name         = secret.name
+      value        = secret.value
+      tags         = local.common_tags
+      content_type = "ado_secret"
+    }
+  ]
+
+  depends_on = [
+    module.KeyVaults
+  ]
+}
 
 #--------------------------------------------------------------
 # VH - Storage Group
