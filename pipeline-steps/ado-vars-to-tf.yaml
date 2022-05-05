@@ -4,7 +4,6 @@ parameters:
 
 steps:
   - powershell: |
-     
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
 
