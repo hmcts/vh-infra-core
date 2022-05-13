@@ -116,6 +116,18 @@ module "KeyVault_Secrets" {
       tags         = local.common_tags
       content_type = "secret"
     },
+    {
+      name         = "vh-infra-core-${var.environment}-sql-username"
+      value        = module.VHDataServices.admin_username
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "vh-infra-core-${var.environment}-sql-password"
+      value        = module.VHDataServices.admin_password
+      tags         = local.common_tags
+      content_type = "secret"
+    },
   ]
 
   depends_on = [
