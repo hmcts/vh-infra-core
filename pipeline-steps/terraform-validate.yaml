@@ -24,14 +24,7 @@ parameters:
   - name: state_sub 
     type: string
 
-jobs:
-- job: TerraformValidate
-  displayName: 'Validate Terraform'
-  pool:
-    vmImage: 'ubuntu-20.04'
-  variables:
-  - group: vh-tenant-creds
-  steps:
+steps:
   - template: keyvault-read.yaml
     parameters:
       serviceConnection: $(serviceConnection)

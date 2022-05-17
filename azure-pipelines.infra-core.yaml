@@ -1,0 +1,127 @@
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: hmcts/azure-devops-templates
+      ref: refs/heads/master
+      endpoint: hmcts
+
+trigger:
+  - none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- name: tfVersion
+  value: 1.1.0
+- name: tfStateServiceConnection
+  value: DTS-SHAREDSERVICES-PROD-Video Hearings
+
+stages:
+
+################################################
+# Check State. #################################
+
+  - stage: 'Check_Terraform_State'
+    displayName: Check Terraform State
+    jobs:
+    - job: 'Check_Terraform_State'
+      displayName: Check Terraform State
+      steps:
+      - template: pipeline-steps/check-state.yaml
+        parameters:
+          serviceConnection: ${{ variables.tfStateServiceConnection }}
+          resourceGroup: vh-infra-core-tf
+          storageAccountName: vhinfracoretf
+          containerName: tfstate
+          location: 'uk south'
+
+################################################
+# Terraform Plan Dev. ##########################
+
+  - stage: 'Terraform_Plan_Dev'
+    displayName: 'Terraform Plan Dev'
+    jobs: 
+    - job: 'Terraform_Plan_Dev'
+      displayName: 'Terraform Plan Dev'
+      variables:
+      - group: vh-tenant-creds
+      - name: environment
+        value: DEV
+      - group: external
+      - template: pipeline-steps/ado-vars.yaml
+        # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+        # but it might be better to template the pipeline more and have a different pipeline file
+        # so that someone doesn't pick the wrong var in the dropdown
+      - name: project
+        value: application
+        # same comment as above ^^
+      - name: environmentServiceConnection
+        value: DTS-SHAREDSERVICES-DEV-Video Hearings
+      steps:
+      - template: pipeline-steps/vh-tenant-replacement.yaml
+        parameters:
+          environment: ${{ variables.environment }}
+
+      - template: pipeline-steps/ado-vars-to-tf.yaml
+        parameters: 
+          environment: ${{ variables.environment }}
+
+      - template: pipeline-steps/plan-service-elevated.yaml
+        parameters:
+          environment: ${{ variables.environment }}
+          location: 'UK South'
+          stack: '09-video-hearing-core'
+          project: $(project)
+          product: 'vh'
+          builtFrom: $(Build.Repository.Name)
+          tfversion: $(tfversion)
+          serviceConnection: ${{ variables.environmentServiceConnection }}
+          backendServiceConnection: ${{ variables.tfStateServiceConnection }}
+          activity_name: Video_Hearing_Core
+          state_sub: $(vh_tf_state_sub)
+          additional_tf_var: $(ado_vars_to_tf.ado_vars)
+
+################################################
+# Terraform Apply Dev. #########################
+
+  - stage: 'Terraform_Apply_Dev'
+    displayName: 'Terraform Apply Dev'
+    variables:
+      - group: vh-tenant-creds
+      - name: environment
+        value: DEV
+      - group: external
+      - template: pipeline-steps/ado-vars.yaml
+        # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+        # but it might be better to template the pipeline more and have a different pipeline file
+        # so that someone doesn't pick the wrong var in the dropdown
+      - name: project
+        value: application
+      # same comment as above ^^
+      - name: environmentServiceConnection
+        value: DTS-SHAREDSERVICES-DEV-Video Hearings
+    jobs:
+      - deployment: 'Terraform_Apply_Dev'
+        displayName: Terraform Apply Dev
+        continueOnError: false
+        environment: Dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - template: pipeline-steps/apply-service-elevated.yaml
+                parameters:
+                  environment: ${{ variables.environment }}
+                  location: 'UK South'
+                  stack: '09-video-hearing-core'
+                  project: $(project)
+                  product: 'vh'
+                  builtFrom: $(Build.Repository.Name)
+                  tfversion: $(tfversion)
+                  serviceConnection: ${{ variables.environmentServiceConnection }}
+                  backendServiceConnection: ${{ variables.tfStateServiceConnection }}
+                  activity_name: Video_Hearing_Core
+                  state_sub: $(vh_tf_state_sub)
+                  additional_tf_var: $(ado_vars_to_tf.ado_vars) 
