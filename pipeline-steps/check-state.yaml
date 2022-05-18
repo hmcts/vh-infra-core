@@ -25,11 +25,11 @@ steps:
         
         switch -Wildcard ($resourceGroup)
         {
-          '*dev*'  { $envTag = "develeopment"}
+          '*dev*'  { $envTag = "development"}
           '*demo*' { $envTag = "demo"}
           '*prod*' { $envTag = "production"}
           '*stg*'  { $envTag = "staging"}
-          '*ithc*' { $envTag = "ithc"}
+          '*ithc*' { $envTag = "ITHC"}
           '*test*' { $envTag = "testing"}
         }
 

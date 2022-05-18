@@ -17,8 +17,6 @@ parameters:
     type: string
   - name: product
     type: string
-  - name: state_sub 
-    type: string
   - name: additional_tf_var 
     type: string
     default: ""
@@ -60,7 +58,6 @@ steps:
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: tfstate
       backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
-      commandOptions: '-backend-config=subscription_id=${{ parameters.state_sub }}'
 
   - task: TerraformCLI@0
     displayName: Terraform Apply
