@@ -83,8 +83,8 @@ stages:
         builtFrom: $(Build.Repository.Name)
         tfversion: ${{ parameters.terraformVersion }}
         serviceConnection: ${{ parameters.environmentServiceConnection }}
-        tfStateResourceGroup: ${{ parameters.tfStateResourceGroup }}
-        tfStateStorageAccountName: ${{ parameters.tfStateStorageAccountName }}
+        tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
+        tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
         activity_name: ${{ parameters.activityName  }}
         state_sub: $(vh_tf_state_sub)
         ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:
@@ -126,8 +126,8 @@ stages:
                 builtFrom: $(Build.Repository.Name)
                 tfversion: ${{ parameters.terraformVersion }}
                 serviceConnection: ${{ parameters.environmentServiceConnection }}
-                tfStateResourceGroup: ${{ parameters.tfStateResourceGroup }}
-                tfStateStorageAccountName: ${{ parameters.tfStateStorageAccountName }}
+                tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
+                tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
                 activity_name: ${{ parameters.activityName  }}
                 state_sub: $(vh_tf_state_sub)
                 ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:

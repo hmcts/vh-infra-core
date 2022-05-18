@@ -22,8 +22,19 @@ steps:
         $resourceGroup="${{ lower(parameters.resourceGroup) }}"
         $location="${{ parameters.location }}"
         $storageAccountName="${{ lower(parameters.storageAccountName) }}"
+        
+        switch -Wildcard ($resourceGroup)
+        {
+          '*dev*'  { $envTag = "develeopment"}
+          '*demo*' { $envTag = "demo"}
+          '*prod*' { $envTag = "production"}
+          '*stg*'  { $envTag = "staging"}
+          '*ithc*'  { $envTag = "ithc"}'
+          '*test*'  { $envTag = "testing"}'
+        }
+
         $containerName="${{ parameters.containerName }}"
-        $tags=@("application=video-hearing-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=production")
+        $tags=@("application=video-hearing-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=$envTag")
         az group create --name $resourceGroup --location $location --tags $tags
         az storage account create --name $storageAccountName --resource-group $resourceGroup `
                                   --location $location --kind "StorageV2" --allow-blob-public-access "false" `
