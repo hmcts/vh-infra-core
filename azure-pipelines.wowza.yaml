@@ -54,7 +54,6 @@ stages:
       terraformVersion: ${{ variables.tfVersion }}
       env: ${{ env }}
       location: 'UK South'
-      project: application
       environmentServiceConnection: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
       tfStateServiceConnection: ${{ variables.tfStateServiceConnection }}
       stack: 10-video-hearing-wowza

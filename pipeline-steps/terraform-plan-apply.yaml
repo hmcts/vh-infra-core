@@ -15,6 +15,7 @@ parameters:
 
 - name: project
   type: string
+  default: application
 
 - name: environmentServiceConnection
   type: string
