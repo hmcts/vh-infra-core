@@ -31,7 +31,7 @@ steps:
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       environment: ${{ parameters.environment }}
-
+      
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
