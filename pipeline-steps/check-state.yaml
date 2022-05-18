@@ -29,8 +29,8 @@ steps:
           '*demo*' { $envTag = "demo"}
           '*prod*' { $envTag = "production"}
           '*stg*'  { $envTag = "staging"}
-          '*ithc*'  { $envTag = "ithc"}'
-          '*test*'  { $envTag = "testing"}'
+          '*ithc*' { $envTag = "ithc"}
+          '*test*' { $envTag = "testing"}
         }
 
         $containerName="${{ parameters.containerName }}"
