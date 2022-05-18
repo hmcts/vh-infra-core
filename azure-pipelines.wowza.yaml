@@ -25,7 +25,8 @@ variables:
 - name: tfStateServiceConnection
   value: DTS-SHAREDSERVICES-PROD-Video Hearings
 - group: external
-
+- name: azureLocation
+  value: 'UK South'
 stages:
 
 ################################################
@@ -53,8 +54,7 @@ stages:
     parameters:
       terraformVersion: ${{ variables.tfVersion }}
       env: ${{ env }}
-      location: 'UK South'
-      project: application
+      location: ${{ variables.azureLocation }}
       environmentServiceConnection: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
       tfStateServiceConnection: ${{ variables.tfStateServiceConnection }}
       stack: 10-video-hearing-wowza

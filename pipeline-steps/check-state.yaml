@@ -19,9 +19,9 @@ steps:
     scriptType: pscore
     scriptLocation: inlineScript
     inlineScript: |
-        $resourceGroup="${{ parameters.resourceGroup }}"
+        $resourceGroup="${{ lower(parameters.resourceGroup) }}"
         $location="${{ parameters.location }}"
-        $storageAccountName="${{ parameters.storageAccountName }}"
+        $storageAccountName="${{ lower(parameters.storageAccountName) }}"
         $containerName="${{ parameters.containerName }}"
         $tags=@("application=video-hearing-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=production")
         az group create --name $resourceGroup --location $location --tags $tags

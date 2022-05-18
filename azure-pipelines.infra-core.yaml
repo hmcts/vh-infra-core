@@ -22,28 +22,11 @@ pool:
 variables:
 - name: tfVersion
   value: 1.1.0
-- name: tfStateServiceConnection
-  value: DTS-SHAREDSERVICES-PROD-Video Hearings
 - group: external
-
+- name: azureLocation
+  value: 'UK South'
 stages:
 
-################################################
-# Check State. #################################
-
-- stage: 'Check_Terraform_State'
-  displayName: Check Terraform State
-  jobs:
-  - job: 'Check_Terraform_State'
-    displayName: Check Terraform State
-    steps:
-    - template: pipeline-steps/check-state.yaml
-      parameters:
-        serviceConnection: ${{ variables.tfStateServiceConnection }}
-        resourceGroup: vh-infra-core-tf
-        storageAccountName: vhinfracoretf
-        containerName: tfstate
-        location: 'uk south'
 
 ################################################
 # Terraform Plan & Apply. ######################
@@ -53,10 +36,10 @@ stages:
     parameters:
       terraformVersion: ${{ variables.tfVersion }}
       env: ${{ env }}
-      location: 'UK South'
-      project: application
+      location: ${{ variables.azureLocation }}
       environmentServiceConnection: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
-      tfStateServiceConnection: ${{ variables.tfStateServiceConnection }}
       stack: 09-video-hearing-core
       product: vh
       activityName: Video_Hearing_Core
+      tfStateResourceGroup: vh-infra-core-{{env}}-tf
+      tfStateStorageAccountName: vhinfracore{{env}}tf

@@ -19,9 +19,6 @@ parameters:
 - name: environmentServiceConnection
   type: string
 
-- name: tfStateServiceConnection
-  type: string
-
 - name: stack
   type: string
   values:
@@ -39,6 +36,13 @@ parameters:
   values:
     - Video_Hearing_Wowza
     - Video_Hearing_Core
+
+- name: tfStateResourceGroup
+  type: string
+
+- name: tfStateStorageAccountName 
+  type: string
+
 
 stages:
 - stage: 'Terraform_Plan_${{ parameters.env }}'
@@ -61,7 +65,6 @@ stages:
         parameters:
           environment: ${{ variables.environment }}
 
-    - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
       - template: ado-vars-to-tf.yaml
         parameters: 
           environment: ${{ variables.environment }}
@@ -79,7 +82,8 @@ stages:
         builtFrom: $(Build.Repository.Name)
         tfversion: ${{ parameters.terraformVersion }}
         serviceConnection: ${{ parameters.environmentServiceConnection }}
-        backendServiceConnection: ${{ parameters.tfStateServiceConnection }}
+        tfStateResourceGroup: ${{ parameters.tfStateResourceGroup }}
+        tfStateStorageAccountName: ${{ parameters.tfStateStorageAccountName }}
         activity_name: ${{ parameters.activityName  }}
         state_sub: $(vh_tf_state_sub)
         ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:
@@ -121,7 +125,8 @@ stages:
                 builtFrom: $(Build.Repository.Name)
                 tfversion: ${{ parameters.terraformVersion }}
                 serviceConnection: ${{ parameters.environmentServiceConnection }}
-                backendServiceConnection: ${{ parameters.tfStateServiceConnection }}
+                tfStateResourceGroup: ${{ parameters.tfStateResourceGroup }}
+                tfStateStorageAccountName: ${{ parameters.tfStateStorageAccountName }}
                 activity_name: ${{ parameters.activityName  }}
                 state_sub: $(vh_tf_state_sub)
                 ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:

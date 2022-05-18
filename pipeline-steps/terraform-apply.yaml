@@ -13,8 +13,6 @@ parameters:
     type: string
   - name: serviceConnection
     type: string
-  - name: backendServiceConnection
-    type: string
   - name: builtFrom
     type: string
   - name: product
@@ -24,7 +22,10 @@ parameters:
   - name: additional_tf_var 
     type: string
     default: ""
-
+  - name: tfStateResourceGroup
+    type: string
+  - name: tfStateStorageAccountName 
+    type: string
 steps:
 
   - template: keyvault-read.yaml
@@ -52,10 +53,10 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(Pipeline.Workspace)/${{ parameters.stack }}'
       backendType: azurerm
-      backendServiceArm: ${{ parameters.backendServiceConnection }}
-      backendAzureRmResourceGroupName: 'vh-infra-core-tf'
+      backendServiceArm: ${{ parameters.serviceConnection }}
+      backendAzureRmResourceGroupName: ${{ parameters.tfStateResourceGroup }}
       backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-      backendAzureRmStorageAccountName: vhinfracoretf
+      backendAzureRmStorageAccountName: ${{ parameters.tfStateStorageAccountName }}
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: tfstate
       backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
