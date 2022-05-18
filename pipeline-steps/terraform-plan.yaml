@@ -100,9 +100,9 @@ steps:
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
           backendType: azurerm
           backendServiceArm: ${{ parameters.serviceConnection }}
-          backendAzureRmResourceGroupName: ${{ parameters.tfStateResourceGroup }}
+          backendAzureRmResourceGroupName: ${{ lower(parameters.tfStateResourceGroup) }}
           backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-          backendAzureRmStorageAccountName:  ${{ parameters.tfStateStorageAccountName }}
+          backendAzureRmStorageAccountName:  ${{ lower(parameters.tfStateStorageAccountName) }}
           backendAzureRmStorageAccountSku: Standard_LRS
           backendAzureRmContainerName: tfstate
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
