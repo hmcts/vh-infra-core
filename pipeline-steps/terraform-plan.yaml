@@ -1,0 +1,128 @@
+parameters:
+- name: env
+  type: string
+
+- name: terraformVersion
+  type: string
+  default: 1.1.0
+
+- name: location
+  type: string
+  default: 'UK South'
+  values:
+    - UK South
+    - UK West
+
+- name: project
+  type: string
+
+- name: environmentServiceConnection
+  type: string
+
+- name: tfStateServiceConnection
+  type: string
+
+- name: stack
+  type: string
+  values:
+    - 09-video-hearing-core
+    - 10-video-hearing-wowza
+
+- name: product
+  type: string
+  values:
+    - vh
+    - wowza
+
+- name: activityName
+  type: string
+  values:
+    - Video_Hearing_Wowza
+    - Video_Hearing_Core
+
+stages:
+- stage: 'Terraform_Plan_${{ parameters.env }}'
+  displayName: 'Terraform Plan ${{ parameters.env }}'
+  jobs: 
+  - job: 'Terraform_Plan_${{ parameters.env }}'
+    displayName: 'Terraform Plan ${{ parameters.env }}'
+    variables:
+    - name: environment
+      value: ${{ parameters.env }}
+    - group: vh-tenant-creds
+    - template: ado-vars.yaml
+      # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+      # but it might be better to template the pipeline more and have a different pipeline file
+      # so that someone doesn't pick the wrong var in the dropdown
+      # same comment as above ^^
+    steps:
+    - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
+      - template: vh-tenant-replacement.yaml
+        parameters:
+          environment: ${{ variables.environment }}
+
+    - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
+      - template: ado-vars-to-tf.yaml
+        parameters: 
+          environment: ${{ variables.environment }}
+
+    - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
+      - template: sshkey-download.yaml
+
+    - template: terraform-plan.yaml
+      parameters:
+        environment: ${{ variables.environment }}
+        location: ${{ parameters.location }}
+        stack: ${{ parameters.stack }}
+        project: ${{ parameters.project }}
+        product: ${{ parameters.product }}
+        builtFrom: $(Build.Repository.Name)
+        tfversion: ${{ parameters.terraformVersion }}
+        serviceConnection: ${{ parameters.environmentServiceConnection }}
+        backendServiceConnection: ${{ parameters.tfStateServiceConnection }}
+        activity_name: ${{ parameters.activityName  }}
+        state_sub: $(vh_tf_state_sub)
+        ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:
+          additional_tf_var: $(ado_vars_to_tf.ado_vars)
+
+################################################
+# Terraform Apply Dev. #########################
+
+- stage: 'Terraform_Apply_${{ parameters.env }}'
+  displayName: 'Terraform Apply ${{ parameters.env }}'
+  variables:
+    - name: environment
+      value: ${{ parameters.env }}
+    - group: vh-tenant-creds
+    - template: ado-vars.yaml
+      # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+      # but it might be better to template the pipeline more and have a different pipeline file
+      # so that someone doesn't pick the wrong var in the dropdown
+    # same comment as above ^^
+  jobs:
+    - deployment: 'Terraform_Apply_${{ parameters.env }}'
+      displayName: Terraform Apply ${{ parameters.env }}
+      continueOnError: false
+      environment: ${{ parameters.env }}
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
+              - template: sshkey-download.yaml
+
+            - template: terraform-apply.yaml
+              parameters:
+                environment: ${{ variables.environment }}
+                location: ${{ parameters.location }}
+                stack: ${{ parameters.stack }}
+                project: ${{ parameters.project }}
+                product: ${{ parameters.product }}
+                builtFrom: $(Build.Repository.Name)
+                tfversion: ${{ parameters.terraformVersion }}
+                serviceConnection: ${{ parameters.environmentServiceConnection }}
+                backendServiceConnection: ${{ parameters.tfStateServiceConnection }}
+                activity_name: ${{ parameters.activityName  }}
+                state_sub: $(vh_tf_state_sub)
+                ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:
+                  additional_tf_var: $(ado_vars_to_tf.ado_vars) 

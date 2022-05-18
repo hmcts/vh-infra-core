@@ -57,6 +57,6 @@ stages:
       project: application
       environmentServiceConnection: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
       tfStateServiceConnection: ${{ variables.tfStateServiceConnection }}
-      stack: 09-video-hearing-core
-      product: vh
-      activityName: Video_Hearing_Core
+      stack: 10-video-hearing-wowza
+      product: wowza
+      activityName: Video_Hearing_Wowza 
