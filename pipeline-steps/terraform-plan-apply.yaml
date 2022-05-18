@@ -86,7 +86,6 @@ stages:
         tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
         tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
         activity_name: ${{ parameters.activityName  }}
-        state_sub: $(vh_tf_state_sub)
         ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:
           additional_tf_var: $(ado_vars_to_tf.ado_vars)
 
@@ -129,6 +128,5 @@ stages:
                 tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
                 tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
                 activity_name: ${{ parameters.activityName  }}
-                state_sub: $(vh_tf_state_sub)
                 ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:
                   additional_tf_var: $(ado_vars_to_tf.ado_vars)
