@@ -41,5 +41,5 @@ stages:
       stack: 09-video-hearing-core
       product: vh
       activityName: Video_Hearing_Core
-      tfStateResourceGroup: vh-infra-core-{{env}}-tf
-      tfStateStorageAccountName: vhinfracore{{env}}tf
+      tfStateResourceGroup: vh-infra-core-${{ env }}-tf
+      tfStateStorageAccountName: vhinfracore${{ env }}tf
