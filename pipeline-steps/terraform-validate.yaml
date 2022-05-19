@@ -1,34 +1,43 @@
 parameters:
-  - name: terraformPath
-    type: string
   - name: tfversion
     type: string
+
   - name: environment
     type: string
+
   - name: location
     type: string
+
   - name: stack
     type: string
+
   - name: project
     type: string
+    default: application
+
   - name: activity_name
     type: string
+
   - name: serviceConnection
     type: string
-  - name: run_stage
-    type: string
+
   - name: builtFrom
     type: string
+
   - name: product
     type: string
-  - name: state_sub 
+
+  - name: tfStateResourceGroup
     type: string
 
+  - name: tfStateStorageAccountName 
+    type: string
+    
 steps:
-  - template: keyvault-read.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      environment: ${{ parameters.environment }}
+#  - template: keyvault-read.yaml
+#    parameters:
+#      serviceConnection: $(serviceConnection)
+#      environment: ${{ parameters.environment }}
       
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
@@ -36,21 +45,20 @@ steps:
           terraformVersion: ${{ parameters.tfversion }}
 
   - task: TerraformCLI@0
-    displayName: terraform init
+    displayName: Terraform Init
     inputs:
           command: init
           terraformVersion: ${{ parameters.tfversion }}
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
           backendType: azurerm
           backendServiceArm: ${{ parameters.serviceConnection }}
-          backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
+          backendAzureRmResourceGroupName: ${{ lower(parameters.tfStateResourceGroup) }}
           backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-          backendAzureRmStorageAccountName: $(controlStorageAccount)
+          backendAzureRmStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
           backendAzureRmStorageAccountSku: Standard_LRS
-          backendAzureRmContainerName: subscription-tfstate
+          backendAzureRmContainerName: tfstate
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
-          commandOptions: '-backend-config=subscription_id=${{ parameters.state_sub }}'
 
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
-      terraformPath: ${{ parameters.terraformPath }}
+      terraformPath: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
