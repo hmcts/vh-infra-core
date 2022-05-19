@@ -35,16 +35,9 @@ stages:
       steps:
       - template: pipeline-steps/terraform-validate.yaml
         parameters:
-          environment: Dev
           tfversion: ${{ variables.tfversion }}
-          location: ${{ variables.azureLocation }}
           stack: '09-video-hearing-core'
-          product: 'vh'
-          builtFrom: $(Build.Repository.Name)
-          serviceConnection: DTS-SHAREDSERVICES-Dev-Video Hearings
-          activity_name: Video_Hearing_Core
-          tfStateResourceGroup: vh-infra-core-dev-tf
-          tfStateStorageAccountName: vhinfracoredevtf
+
 
 ################################################
 # Terraform Plan & Apply. ######################

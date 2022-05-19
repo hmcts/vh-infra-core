@@ -2,37 +2,9 @@ parameters:
   - name: tfversion
     type: string
 
-  - name: environment
-    type: string
-
-  - name: location
-    type: string
-
   - name: stack
     type: string
 
-  - name: project
-    type: string
-    default: application
-
-  - name: activity_name
-    type: string
-
-  - name: serviceConnection
-    type: string
-
-  - name: builtFrom
-    type: string
-
-  - name: product
-    type: string
-
-  - name: tfStateResourceGroup
-    type: string
-
-  - name: tfStateStorageAccountName 
-    type: string
-    
 steps:
 #  - template: keyvault-read.yaml
 #    parameters:
