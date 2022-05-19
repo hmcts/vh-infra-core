@@ -27,6 +27,9 @@ variables:
   value: 'UK South'
 stages:
 
+################################################
+# Validate Infra Code. #########################
+
 - stage: Validate_Terraform_Code
   displayName: 'Validate Terraform Code'
   jobs:
