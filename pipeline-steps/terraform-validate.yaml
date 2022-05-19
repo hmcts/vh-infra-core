@@ -44,21 +44,6 @@ steps:
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
 
-  - task: TerraformCLI@0
-    displayName: Terraform Init
-    inputs:
-          command: init
-          terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
-          backendType: azurerm
-          backendServiceArm: ${{ parameters.serviceConnection }}
-          backendAzureRmResourceGroupName: ${{ lower(parameters.tfStateResourceGroup) }}
-          backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-          backendAzureRmStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
-          backendAzureRmStorageAccountSku: Standard_LRS
-          backendAzureRmContainerName: tfstate
-          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
-
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
       terraformPath: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
