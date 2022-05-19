@@ -635,6 +635,6 @@ resource "azurerm_key_vault_secret" "external-secrets" {
   key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = timeadd(timestamp(), "8760h")
+  ##expiration_date = timeadd(timestamp(), "8760h")
   tags            = var.tags
 }
