@@ -28,6 +28,20 @@ variables:
 stages:
 
 ################################################
+# Validate Infra Code. #########################
+
+- stage: Validate_Terraform_Code
+  displayName: 'Validate Terraform Code'
+  jobs:
+    - job: Validate_Terraform_Code
+      displayName: Validate Terraform Code
+      steps:
+      - template: pipeline-steps/terraform-validate.yaml
+        parameters:
+          tfversion: ${{ variables.tfversion }}
+          stack: '10-video-hearing-wowza'
+
+################################################
 # Terraform Plan & Apply. ######################
 
 - ${{ each env in parameters.environment }}:
