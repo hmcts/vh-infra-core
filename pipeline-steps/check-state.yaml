@@ -31,6 +31,7 @@ steps:
           '*stg*'  { $envTag = "staging"}
           '*ithc*' { $envTag = "ITHC"}
           '*test*' { $envTag = "testing"}
+          '*sbox*' { $envTag = "sandbox"}
         }
 
         $containerName="${{ parameters.containerName }}"
