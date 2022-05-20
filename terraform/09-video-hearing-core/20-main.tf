@@ -40,7 +40,7 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
 }
 module "KeyVault_Secrets" {
   source       = "./modules/KeyVaults/Secrets"
-  key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
+  key_vault_id = module.KeyVaults.keyvault_id
 
   tags = local.common_tags
   secrets = [

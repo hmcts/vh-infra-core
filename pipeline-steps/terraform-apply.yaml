@@ -1,0 +1,69 @@
+parameters:
+  - name: environment
+    type: string
+  - name: location
+    type: string
+  - name: stack
+    type: string
+  - name: project
+    type: string
+  - name: tfversion
+    type: string
+  - name: activity_name
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: builtFrom
+    type: string
+  - name: product
+    type: string
+  - name: additional_tf_var 
+    type: string
+    default: ""
+  - name: tfStateResourceGroup
+    type: string
+  - name: tfStateStorageAccountName 
+    type: string
+steps:
+
+  - template: keyvault-read.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      environment: ${{ parameters.environment }}
+      
+  - task: TerraformInstaller@0
+    displayName: 'Install Terraform ${{ parameters.tfversion }}'
+    inputs:
+      terraformVersion: ${{ parameters.tfversion }}
+
+  - task: ExtractFiles@1
+    displayName: 'Extract Terraform Artifacts'
+    inputs:
+      archiveFilePatterns: '$(Pipeline.Workspace)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+      destinationFolder: '$(Pipeline.Workspace)/'
+      cleanDestinationFolder: false
+      overwriteExistingFiles: true
+
+  - task: TerraformCLI@0
+    displayName: Terraform Init
+    inputs:
+      command: init
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: '$(Pipeline.Workspace)/${{ parameters.stack }}'
+      backendType: azurerm
+      backendServiceArm: ${{ parameters.serviceConnection }}
+      backendAzureRmResourceGroupName: ${{ lower(parameters.tfStateResourceGroup) }}
+      backendAzureRmResourceGroupLocation: ${{ parameters.location }}
+      backendAzureRmStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
+      backendAzureRmStorageAccountSku: Standard_LRS
+      backendAzureRmContainerName: tfstate
+      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+
+  - task: TerraformCLI@0
+    displayName: Terraform Apply
+    inputs:
+      command: apply
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: '$(Pipeline.Workspace)/${{ parameters.stack }}'
+      environmentServiceName: ${{ parameters.serviceConnection }}
+      commandOptions: '-input=false $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.tfplan'

@@ -13,23 +13,30 @@ parameters:
     type: string
   - name: serviceConnection
     type: string
-  - name: run_stage
-    type: string
   - name: builtFrom
     type: string
   - name: product
     type: string
-  - name: state_sub 
-    type: string
   - name: additional_tf_var 
     type: string
     default: ""
+  - name: tfStateResourceGroup
+    type: string
+  - name: tfStateStorageAccountName 
+    type: string
 
 steps:
+  - template: check-state.yaml
+    parameters:
+        serviceConnection: ${{ parameters.serviceConnection }}
+        resourceGroup: ${{ parameters.tfStateResourceGroup }}
+        storageAccountName: ${{ parameters.tfStateStorageAccountName }}
+        containerName: tfstate
+        location: ${{ parameters.location }}
 
   - template: keyvault-read.yaml
     parameters:
-      serviceConnection: $(serviceConnection)
+      serviceConnection: ${{ parameters.serviceConnection }}
       environment: ${{ parameters.environment }}
 
 # lowercase $env variable comes from the above template
@@ -41,7 +48,6 @@ steps:
       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
-
   - task: AzureCLI@2
     displayName: 'GlobalNetworkPeering SC Details'
     name: GlobalNetworkPeering
@@ -59,7 +65,6 @@ steps:
         $subscriptionId = az account show --query id -o tsv
         Write-Host "##vso[task.setvariable variable=GNP_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
         Write-Host "Subscription ID: $subscriptionId"
-
   - bash: |
       variableName="vars"
       
@@ -70,11 +75,9 @@ steps:
       if [ ! -z "${ADDITIONAL_VAR}" ]; then
         variables="${variables} -var \"kv_secrets=${ADDITIONAL_VAR} \""
       fi
-
       echo "Variables set as: "
       echo "${variables}"
       echo "##vso[task.setvariable variable=variableName]${variables}"
-
     displayName: 'Set Shared Services TF Variables'
     name: tfVariables
     env:
@@ -82,31 +85,28 @@ steps:
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
       ADDITIONAL_VAR: ${{ parameters.additional_tf_var }}
-
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
 
   - task: TerraformCLI@0
-    displayName: terraform init
+    displayName: Terraform Init
     inputs:
           command: init
           terraformVersion: ${{ parameters.tfversion }}
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
           backendType: azurerm
           backendServiceArm: ${{ parameters.serviceConnection }}
-          backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
+          backendAzureRmResourceGroupName: ${{ lower(parameters.tfStateResourceGroup) }}
           backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-          backendAzureRmStorageAccountName: $(controlStorageAccount)
+          backendAzureRmStorageAccountName:  ${{ lower(parameters.tfStateStorageAccountName) }}
           backendAzureRmStorageAccountSku: Standard_LRS
-          backendAzureRmContainerName: subscription-tfstate
+          backendAzureRmContainerName: tfstate
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
-          commandOptions: '-backend-config=subscription_id=${{ parameters.state_sub }}'
-
 
   - task: TerraformCLI@0
-    displayName: terraform validate
+    displayName: Terraform Validate
     inputs:
           command: validate
           terraformVersion: ${{ parameters.tfversion }}
@@ -114,15 +114,14 @@ steps:
 
 
   - task: TerraformCLI@0
-    displayName: terraform plan
+    displayName: Terraform Plan
     inputs:
           command: plan
           terraformVersion: ${{ parameters.tfversion }}
           workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
           environmentServiceName: ${{ parameters.serviceConnection }}
-          publishPlanResults: vh-shared-infra.tfplan
           commandOptions: >
-            -out tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}
+            -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.tfplan
             -var control_vault=$(controlKeyVault)
             -var environment=${{ lower(parameters.environment) }}
             -var project=${{ parameters.project }}
@@ -131,14 +130,16 @@ steps:
             -var activity_name=${{ parameters.activity_name }}
             -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
             $(variableName)
-
-  - task: TerraformCLI@0
-    displayName: Terraform apply
-    #condition: and(always(), ne(variables['Build.Reason'], 'PullRequest'))
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), not(contains('${{ parameters.run_stage }}', 'CI')))
+  - task: ArchiveFiles@2
+    displayName: 'Zip Terraform Files'
     inputs:
-      command: apply
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-      environmentServiceName: ${{ parameters.serviceConnection }}
-      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}'
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      archiveType: zip
+      archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Terraform Artifacts'
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+      publishLocation: pipeline
+      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}'

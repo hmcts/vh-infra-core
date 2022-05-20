@@ -1,0 +1,44 @@
+parameters:
+  - name: serviceConnection
+    type: string  
+  - name: location
+    type: string
+  - name: resourceGroup
+    type: string
+  - name: storageAccountName
+    type: string
+  - name: containerName
+    type: string
+
+steps:
+- task: AzureCLI@2
+  continueOnError: false
+  displayName: Check Terraform State
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptType: pscore
+    scriptLocation: inlineScript
+    inlineScript: |
+        $resourceGroup="${{ lower(parameters.resourceGroup) }}"
+        $location="${{ parameters.location }}"
+        $storageAccountName="${{ lower(parameters.storageAccountName) }}"
+        
+        switch -Wildcard ($resourceGroup)
+        {
+          '*dev*'  { $envTag = "development"}
+          '*demo*' { $envTag = "demo"}
+          '*prod*' { $envTag = "production"}
+          '*stg*'  { $envTag = "staging"}
+          '*ithc*' { $envTag = "ITHC"}
+          '*test*' { $envTag = "testing"}
+          '*sbox*' { $envTag = "sandbox"}
+        }
+
+        $containerName="${{ parameters.containerName }}"
+        $tags=@("application=video-hearing-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=$envTag")
+        az group create --name $resourceGroup --location $location --tags $tags
+        az storage account create --name $storageAccountName --resource-group $resourceGroup `
+                                  --location $location --kind "StorageV2" --allow-blob-public-access "false" `
+                                  --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
+                                  
+        az storage container create --name $containerName --account-name $storageAccountName --auth-mode "login"
