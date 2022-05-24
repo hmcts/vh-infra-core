@@ -5,9 +5,16 @@ resources:
       name: hmcts/azure-devops-templates
       ref: refs/heads/master
       endpoint: hmcts
+      
+pr: none
 
 trigger:
-  - none
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - terraform/10-video-hearing-wowza
 
 parameters:
 - name: environment

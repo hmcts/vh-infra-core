@@ -1,5 +1,7 @@
 locals {
   environment = var.environment
+  current_year  = formatdate("YYYY", timeadd(timestamp(), "8760h"))
+  secret_expiry = "${local.current_year}-03-01T01:00:00Z"
 }
 
 data "azurerm_client_config" "current" {}
@@ -635,6 +637,6 @@ resource "azurerm_key_vault_secret" "external-secrets" {
   key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
   # FromTFSec
   content_type    = "secret"
-  ##expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = local.secret_expiry
   tags            = var.tags
 }

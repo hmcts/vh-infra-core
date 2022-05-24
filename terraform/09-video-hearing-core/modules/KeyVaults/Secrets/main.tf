@@ -1,3 +1,7 @@
+locals {
+  current_year  = formatdate("YYYY", timeadd(timestamp(), "8760h"))
+  secret_expiry = "${local.current_year}-03-01T01:00:00Z"
+}
 
 ## Loop secrets
 resource "azurerm_key_vault_secret" "secret" {
@@ -7,5 +11,5 @@ resource "azurerm_key_vault_secret" "secret" {
   value           = each.value.value
   tags            = merge(var.tags, each.value.tags)
   content_type    = each.value.content_type
-  ##expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = local.secret_expiry
 }

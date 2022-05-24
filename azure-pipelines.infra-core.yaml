@@ -6,8 +6,15 @@ resources:
       ref: refs/heads/master
       endpoint: hmcts
 
+pr: none
+
 trigger:
-  - none
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - terraform/09-video-hearing-core
 
 parameters:
 - name: environment

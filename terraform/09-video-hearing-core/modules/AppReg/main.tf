@@ -1,3 +1,8 @@
+locals {
+  current_year  = formatdate("YYYY", timeadd(timestamp(), "8760h"))
+  secret_expiry = "${local.current_year}-03-01T01:00:00Z"
+}
+
 resource "azuread_application" "app_reg" {
   for_each                   = var.app_conf
   name                       = "a${each.key}.${var.environment}.platform.hmcts.net"
@@ -73,7 +78,7 @@ resource "azurerm_key_vault_secret" "client_id" {
   key_vault_id = var.app_keyvaults_map[each.key].id
   # FromTFSec
   content_type    = "secret"
-  #expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = local.secret_expiry
   tags            = var.tags
 }
 
@@ -85,7 +90,7 @@ resource "azurerm_key_vault_secret" "secret" {
   key_vault_id = var.app_keyvaults_map[each.key].id
   # FromTFSec
   content_type    = "secret"
-  #expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = local.secret_expiry
   tags            = var.tags
 }
 
@@ -113,7 +118,7 @@ resource "azurerm_key_vault_secret" "azuread-vhvideowebclientid" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  #expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = local.secret_expiry
   tags            = var.tags
 }
 
@@ -123,7 +128,7 @@ resource "azurerm_key_vault_secret" "services-vhvideowebclientid" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  #expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = local.secret_expiry
   tags            = var.tags
 }
 
@@ -151,7 +156,7 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientid" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  #expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = local.secret_expiry
   tags            = var.tags
 }
 
@@ -161,7 +166,7 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  ##expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = local.secret_expiry
   tags            = var.tags
 }
 
