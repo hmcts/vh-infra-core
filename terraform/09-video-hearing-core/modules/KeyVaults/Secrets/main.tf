@@ -11,5 +11,5 @@ resource "azurerm_key_vault_secret" "secret" {
   value           = each.value.value
   tags            = merge(var.tags, each.value.tags)
   content_type    = each.value.content_type
-  expiration_date = local.secret_expiry
+  expiration_date = "2032-12-31T00:00:00Z"
 }

@@ -78,7 +78,7 @@ resource "azurerm_key_vault_secret" "client_id" {
   key_vault_id = var.app_keyvaults_map[each.key].id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = local.secret_expiry
+  expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
 
@@ -90,7 +90,7 @@ resource "azurerm_key_vault_secret" "secret" {
   key_vault_id = var.app_keyvaults_map[each.key].id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = local.secret_expiry
+  expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
 
@@ -118,7 +118,7 @@ resource "azurerm_key_vault_secret" "azuread-vhvideowebclientid" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = local.secret_expiry
+  expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
 
@@ -128,7 +128,7 @@ resource "azurerm_key_vault_secret" "services-vhvideowebclientid" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = local.secret_expiry
+  expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
 
@@ -156,7 +156,7 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientid" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = local.secret_expiry
+  expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
 
@@ -166,7 +166,7 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   key_vault_id = data.azurerm_key_vault.vh-infra-core.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = local.secret_expiry
+  expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
 

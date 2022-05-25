@@ -638,6 +638,6 @@ resource "azurerm_key_vault_secret" "external-secrets" {
   key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
   # FromTFSec
   content_type    = "secret"
-  expiration_date = local.secret_expiry
+  expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
