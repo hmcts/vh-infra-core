@@ -22,6 +22,7 @@ parameters:
   default:
    - Dev
    - Demo
+   - Stg
 
 pool:
   vmImage: 'ubuntu-latest'
