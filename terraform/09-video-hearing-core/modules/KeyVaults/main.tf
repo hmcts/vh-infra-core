@@ -434,7 +434,7 @@ resource "azurerm_key_vault_access_policy" "devops1" {
 
 }
 
-
+/*
 resource "azurerm_key_vault_access_policy" "sp_access_policy" {
   for_each = azurerm_key_vault.app_keyvaults
 
@@ -508,6 +508,7 @@ resource "azurerm_key_vault_access_policy" "sp_access_policy" {
     "update"
   ]
 }
+*/
 
 # kv user identity
 resource "azurerm_key_vault_access_policy" "kv_user_identity" {
