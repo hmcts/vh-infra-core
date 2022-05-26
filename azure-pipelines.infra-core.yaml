@@ -23,6 +23,7 @@ parameters:
    - Dev
    - Demo
    - Stg
+   - Prod
 
 pool:
   vmImage: 'ubuntu-latest'
