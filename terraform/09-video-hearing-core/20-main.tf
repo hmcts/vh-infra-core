@@ -402,3 +402,14 @@ resource "azurerm_private_dns_a_record" "kv-dns" {
   ttl                 = 3600
   records             = [lookup(each.value, "resource_ip")]
 }
+
+#--------------------------------------------------------------
+# KEDA Managed Identity
+#--------------------------------------------------------------
+
+module "keda_mi" {
+  source      = "git@github.com:hmcts/cnp-keda-shared-infrastucture?ref=master"
+  product     = "vh"
+  env         = var.environment
+  common_tags = local.common_tags
+}
