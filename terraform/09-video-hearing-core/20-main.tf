@@ -408,7 +408,7 @@ resource "azurerm_private_dns_a_record" "kv-dns" {
 #--------------------------------------------------------------
 
 module "keda_mi" {
-  source      = "git@github.com:hmcts/cnp-keda-shared-infrastucture?ref=master"
+  source      = "git::https://github.com/hmcts/cnp-keda-shared-infrastucture?ref=master"
   product     = "vh"
   env         = var.environment
   common_tags = local.common_tags
