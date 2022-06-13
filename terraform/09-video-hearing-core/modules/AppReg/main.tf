@@ -169,4 +169,20 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
+resource "azuread_group" "dev-team" {
+  display_name     = "inx-dev"
+  security_enabled = true
+}
 
+
+
+data "azuread_group" "vhqa" {
+  display_name     = "VHQA"
+  security_enabled = true
+}
+
+resource "azuread_group_member" "member" {
+  for_each         = var.app_conf
+  group_object_id  = data.azuread_group.vhqa.id
+  member_object_id = azuread_application.app_reg[each.key].id
+} 
