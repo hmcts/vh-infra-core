@@ -189,18 +189,18 @@ locals {
   #  )
 
   reply_urls = [
-        "https://vh-service-web.${local.environment}.platform.hmcts.net/",
-        "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
-        "https://vh-service-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/login",
-        "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-        "https://serviceweb_ac/login",
-        "https://serviceweb_ac/home",
-        "https://serviceweb_ac/",
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/",
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/home",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/login",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/home",
+    "https://localhost/home",
+    "https://localhost/login",
+    "https://localhost/",
+    "https://serviceweb_ac/login",
+    "https://serviceweb_ac/home",
+    "https://serviceweb_ac/",
   ]
 
   # new apps that need registration can be added as a block below
