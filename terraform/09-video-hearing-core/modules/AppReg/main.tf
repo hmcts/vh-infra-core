@@ -4,9 +4,9 @@ locals {
 }
 
 resource "azuread_application" "app_reg" {
-  for_each                   = var.app_conf
-  display_name                       = "a${each.key}.${var.environment}.platform.hmcts.net"
-  identifier_uris            = each.value.identifier_uris
+  for_each        = var.app_conf
+  display_name    = "a${each.key}.${var.environment}.platform.hmcts.net"
+  identifier_uris = each.value.identifier_uris
   #reply_urls                 = each.value.reply_urls
   #available_to_other_tenants = each.value.available_to_other_tenants
   #oauth2_allow_implicit_flow = each.value.oauth2_allow_implicit_flow
@@ -15,8 +15,8 @@ resource "azuread_application" "app_reg" {
   #group_membership_claims    = "None"
 
   web {
-    homepage_url= "https://${each.key}.${var.environment}.platform.hmcts.net"
-    redirect_uris =  each.value.reply_urls
+    homepage_url  = "https://${each.key}.${var.environment}.platform.hmcts.net"
+    redirect_uris = each.value.reply_urls
   }
 
   #owners                     = ["dad89ade-ef6a-41ef-9729-332402704dc9"]
@@ -33,17 +33,17 @@ resource "azuread_application" "app_reg" {
       }
     }
   }
- dynamic "app_role" {
+  dynamic "app_role" {
     for_each = lookup(var.app_roles, each.key, )
     content {
-      id = app_role.id
+      id                   = app_role.value.id
       display_name         = app_role.key
       description          = app_role.value.description
-      enabled                         = app_role.value.is_enabled
+      enabled              = app_role.value.is_enabled
       value                = app_role.value.value
       allowed_member_types = app_role.value.allowed_member_types
     }
-  } 
+  }
 }
 
 

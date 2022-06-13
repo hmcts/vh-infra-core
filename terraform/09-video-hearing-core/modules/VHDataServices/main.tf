@@ -115,7 +115,7 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
 resource "azurerm_servicebus_queue" "vh-infra-core" {
   for_each = var.queues
 
-  name                = each.key
+  name = each.key
   #namespace_name      = azurerm_servicebus_namespace.vh-infra-core.name
 
   enable_partitioning   = false
