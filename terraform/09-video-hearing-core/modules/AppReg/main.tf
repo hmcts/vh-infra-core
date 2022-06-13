@@ -1,19 +1,36 @@
 locals {
   current_year  = formatdate("YYYY", timeadd(timestamp(), "8760h"))
   secret_expiry = "${local.current_year}-03-01T01:00:00Z"
+
+  roles_map = {
+    for item in var.roles :
+    item => {
+      name = item
+    }
+  }
+}
+
+data "azurerm_role_definition" "roles" {
+  for_each = local.roles_map
+  name = each.key
 }
 
 resource "azuread_application" "app_reg" {
   for_each                   = var.app_conf
-  name                       = "a${each.key}.${var.environment}.platform.hmcts.net"
-  homepage                   = "https://${each.key}.${var.environment}.platform.hmcts.net"
+  display_name                       = "a${each.key}.${var.environment}.platform.hmcts.net"
   identifier_uris            = each.value.identifier_uris
-  reply_urls                 = each.value.reply_urls
-  available_to_other_tenants = each.value.available_to_other_tenants
-  oauth2_allow_implicit_flow = each.value.oauth2_allow_implicit_flow
-  type                       = each.value.type
-  public_client              = false
-  group_membership_claims    = "None"
+  #reply_urls                 = each.value.reply_urls
+  #available_to_other_tenants = each.value.available_to_other_tenants
+  #oauth2_allow_implicit_flow = each.value.oauth2_allow_implicit_flow
+  #type                       = each.value.type
+  #public_client              = false
+  #group_membership_claims    = "None"
+
+  web {
+    homepage_url= "https://${each.key}.${var.environment}.platform.hmcts.net"
+    redirect_uris =  each.value.reply_urls
+  }
+
   #owners                     = ["dad89ade-ef6a-41ef-9729-332402704dc9"]
   dynamic "required_resource_access" {
     for_each = lookup(var.api_permissions, each.key, )
@@ -31,29 +48,20 @@ resource "azuread_application" "app_reg" {
   dynamic "app_role" {
     for_each = lookup(var.app_roles, each.key, )
     content {
+      id = lookup(data.azurerm_role_definition.roles, app_role.key, ).id
       display_name         = app_role.key
       description          = app_role.value.description
-      is_enabled           = app_role.value.is_enabled
+      #is_enabled           = app_role.value.is_enabled
       value                = app_role.value.value
       allowed_member_types = app_role.value.allowed_member_types
     }
   }
 }
 
-# Generate Random Password
-resource "random_password" "random_secret" {
-  for_each         = var.app_conf
-  length           = 32
-  special          = true
-  override_special = "_%@"
-}
-
 # Create app reg secret
 resource "azuread_application_password" "create_secret" {
   for_each              = var.app_conf
   application_object_id = azuread_application.app_reg[each.key].id
-  description           = ""
-  value                 = random_password.random_secret[each.key].result
   end_date_relative     = "8760h"
 }
 
@@ -169,12 +177,6 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
-resource "azuread_group" "dev-team" {
-  display_name     = "inx-dev"
-  security_enabled = true
-}
-
-
 
 data "azuread_group" "vhqa" {
   display_name     = "VHQA"

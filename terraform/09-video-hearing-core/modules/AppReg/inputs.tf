@@ -26,3 +26,9 @@ variable "tags" {
   type    = map(any)
   default = {}
 }
+
+variable "roles" {
+  type = list(string)
+  description = "List of avaliable roles"
+  default = ["avh JudicialOfficeHolder","avh Citizen","avh Video Hearings Officer","avh Judge","avh Legal Representative","avh Video Hearing QA" ]
+}
