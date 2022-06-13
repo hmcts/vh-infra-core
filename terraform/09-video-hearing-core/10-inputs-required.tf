@@ -280,7 +280,7 @@ locals {
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
-        "https://1905f943.ngrok.io",
+        "https://1905f943.ngrok.io/",
         "https://1905f943.ngrok.io/login",
         "https://1905f943.ngrok.io/home",
         "https://adminweb_ac/login",
