@@ -556,7 +556,8 @@ locals {
         value       = "avh-JudicialOfficeHolder"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
       }
     }
     # Video Web
@@ -567,7 +568,8 @@ locals {
         value       = "avh-JudicialOfficeHolder"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
       }
       "avh Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
@@ -575,7 +577,8 @@ locals {
         value       = "avh-Citizen"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
       }
       "avh Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
@@ -583,7 +586,8 @@ locals {
         value       = "avh-VHO"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "b64edf41-6393-4726-8bbf-bcee33455b97"
       }
       "avh Judge" = {
         description = "This user is able to conduct hearings as a judge."
@@ -591,7 +595,8 @@ locals {
         value       = "avh-Judge"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
       }
       "avh Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
@@ -599,7 +604,8 @@ locals {
         value       = "avh-ProfessionalUser"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "5e49645a-2af9-4d2d-b9ef-7d4b659e91c7"
       }
     }
     # Test Web
@@ -610,7 +616,8 @@ locals {
         value       = "avh-VHQA"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "bb339a15-17ac-4988-a628-7f1abe4c0165"
       }
     }
     # Admin Web
@@ -621,7 +628,8 @@ locals {
         value       = "avh-Citizen"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
       }
       "avh Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
@@ -629,7 +637,8 @@ locals {
         value       = "avh-VHO"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "b64edf41-6393-4726-8bbf-bcee33455b97"
       }
       "avh Judge" = {
         description = "This user is able to conduct hearings as a judge."
@@ -637,7 +646,8 @@ locals {
         value       = "avh-Judge"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
       }
       "avh Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
@@ -645,7 +655,8 @@ locals {
         value       = "avh-ProfessionalUser"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "5e49645a-2af9-4d2d-b9ef-7d4b659e91c7"
       }
     }
     "vh-notification-api" = {}

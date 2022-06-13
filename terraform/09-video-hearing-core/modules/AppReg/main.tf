@@ -1,18 +1,6 @@
 locals {
   current_year  = formatdate("YYYY", timeadd(timestamp(), "8760h"))
   secret_expiry = "${local.current_year}-03-01T01:00:00Z"
-
-  roles_map = {
-    for item in var.roles :
-    item => {
-      name = item
-    }
-  }
-}
-
-data "azurerm_role_definition" "roles" {
-  for_each = local.roles_map
-  name = each.key
 }
 
 resource "azuread_application" "app_reg" {
@@ -45,18 +33,20 @@ resource "azuread_application" "app_reg" {
       }
     }
   }
-  dynamic "app_role" {
+ dynamic "app_role" {
     for_each = lookup(var.app_roles, each.key, )
     content {
-      id = lookup(data.azurerm_role_definition.roles, app_role.key, ).id
+      id = app_role.id
       display_name         = app_role.key
       description          = app_role.value.description
-      #is_enabled           = app_role.value.is_enabled
+      enabled                         = app_role.value.is_enabled
       value                = app_role.value.value
       allowed_member_types = app_role.value.allowed_member_types
     }
-  }
+  } 
 }
+
+
 
 # Create app reg secret
 resource "azuread_application_password" "create_secret" {
