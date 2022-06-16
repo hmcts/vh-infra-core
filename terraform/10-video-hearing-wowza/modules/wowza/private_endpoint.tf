@@ -55,6 +55,7 @@ resource "azurerm_private_endpoint" "wowza_storage_endpoint_aks" {
     name                 = "vh-wowza-aks-storage-endpoint-${var.environment}-dnszonegroup"
     private_dns_zone_ids = [var.private_dns_zone_group]
   }
+  tags = var.tags
 }
 
 
