@@ -1,11 +1,6 @@
 ## Data sources
-
 data "azurerm_resource_group" "vh-infra-core" {
   name = "vh-infra-core-${var.environment}"
-}
-
-data "azurerm_resource_group" "vh-infra-wowza" {
-  name = "vh-infra-wowza-${var.environment}"
 }
 
 data "azurerm_resource_group" "ss-network-rg" {
