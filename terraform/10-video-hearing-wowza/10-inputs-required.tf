@@ -150,3 +150,8 @@ module "ctags" {
   product     = var.product
   builtFrom   = var.builtFrom
 }
+
+## Automation Accounts
+variable "schedules" {
+  default = []
+}

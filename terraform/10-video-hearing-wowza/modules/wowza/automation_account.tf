@@ -1,28 +1,31 @@
-# Create an Automation Account that uses a user-assigned Managed Identity
-# This is currently (Jan 2022) done using an ARM template
 
-resource "azurerm_resource_group_template_deployment" "wowza-automation-acct" {
-  name                = "wowza-automation-acct-${var.environment}"
-  resource_group_name = azurerm_resource_group.wowza.name
+resource "azurerm_automation_account" "vm-start-stop" {
 
-  # "Incremental" ADDS the resource to already existing resources. "Complete" destroys all other resources and creates the new one
-  deployment_mode = "Incremental"
+  name                = "vh-wowza-${var.env}-aa"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku_name            = "Basic"
 
-  # the parameters below can be found near the top of the ARM file
-  parameters_content = jsonencode({
-    "automationAccount_name" = {
-      value = "wowza-automation-acct-${var.environment}"
-    },
-    "my_location" = {
-      value = var.location
-    },
-    "userAssigned_identity" = {
-      value = azurerm_user_assigned_identity.wowza-automation-account-mi.id
-    }
-  })
-  # the actual ARM template file we will use
-  template_content = file("./VM-Automation-Files/ARM-user-assigned-mi.json")
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.wowza-automation-account-mi.id]
+  }
 
-  tags = var.tags
+  tags = var.common_tags
+}
 
+module "vm_automation" {
+  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-start-stop-vm"
+
+  product                 = "vh-wowza"
+  env                     = var.environment
+  location                = var.location
+  automation_account_name = azurerm_automation_account.vm-start-stop.name
+  tags                    = var.tags
+  schedules               = var.schedules
+  resource_group_name     = azurerm_resource_group.rg.name
+  vm_names = [
+    for wowza_vm in azurerm_linux_virtual_machine.wowza : wowza_vm.name
+  ]
+  mi_principal_id = azurerm_user_assigned_identity.wowza-automation-account-mi.principal_id
 }

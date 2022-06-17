@@ -6,3 +6,13 @@ service_certificate_kv_url     = "https://vh-infra-core-ithc.vault.azure.net/sec
 dns_resource_group             = "vh-hearings-reform-hmcts-net-dns-zone"
 dns_zone_name                  = "hearings.reform.hmcts.net"
 peering_target_subscription_id = "fb084706-583f-4c9a-bdab-949aac66ba5c"
+
+schedules = [
+  {
+    name      = "vm-off",
+    frequency = "Day"
+    interval  = 1
+    run_time  = "06:00:00"
+    start_vm  = false
+  }
+]
