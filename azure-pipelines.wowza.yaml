@@ -20,8 +20,11 @@ parameters:
 - name: environment
   type: object
   default:
+   - Sbox
    - Dev
    - Demo
+   - Stg
+   - Prod
 
 pool:
   vmImage: 'ubuntu-latest'
