@@ -48,7 +48,7 @@ data "azurerm_key_vault" "acmekv" {
 resource "azurerm_role_assignment" "kv_access" {
   scope                = data.azurerm_key_vault.acmekv.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_user_assigned_identity.wowza_cert.client_id
+  principal_id         = azurerm_user_assigned_identity.wowza_cert.principal_id
 }
 
 data "template_file" "cloudconfig" {
