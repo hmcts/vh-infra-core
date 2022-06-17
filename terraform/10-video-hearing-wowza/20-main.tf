@@ -42,22 +42,20 @@ data "azurerm_private_dns_zone" "core-infra-intsvc" {
 #}
 
 module "wowza" {
-  source                         = "./modules/wowza"
-  environment                    = var.environment
-  location                       = var.location
-  service_name                   = "vh-infra-wowza-${var.environment}"
-  admin_ssh_key_path             = var.admin_ssh_key_path
-  service_certificate_kv_url     = var.service_certificate_kv_url
-  service_certificate_thumbprint = var.service_certificate_thumbprint
-  key_vault_id                   = data.azurerm_key_vault.vh-infra-core.id
-  address_space                  = lookup(var.workspace_to_address_space_map, var.environment, "")
-  storage_msi_client_id          = lookup(var.workspace_to_storage_msi_map, var.environment, "")
-  private_dns_zone_group         = data.azurerm_private_dns_zone.core-infra-intsvc.id
-  private_dns_zone_group_name    = data.azurerm_private_dns_zone.core-infra-intsvc.name
-  network_client_id              = var.network_client_id
-  network_client_secret          = var.network_client_secret
-  network_tenant_id              = var.network_tenant_id
-  tags                           = local.common_tags
+  source                      = "./modules/wowza"
+  environment                 = var.environment
+  location                    = var.location
+  service_name                = "vh-infra-wowza-${var.environment}"
+  admin_ssh_key_path          = var.admin_ssh_key_path
+  key_vault_id                = data.azurerm_key_vault.vh-infra-core.id
+  address_space               = lookup(var.workspace_to_address_space_map, var.environment, "")
+  storage_msi_client_id       = lookup(var.workspace_to_storage_msi_map, var.environment, "")
+  private_dns_zone_group      = data.azurerm_private_dns_zone.core-infra-intsvc.id
+  private_dns_zone_group_name = data.azurerm_private_dns_zone.core-infra-intsvc.name
+  network_client_id           = var.network_client_id
+  network_client_secret       = var.network_client_secret
+  network_tenant_id           = var.network_tenant_id
+  tags                        = local.common_tags
 
 
   #hearings_dns_zone              = data.azurerm_private_dns_zone.reform-hearings-dns.id
