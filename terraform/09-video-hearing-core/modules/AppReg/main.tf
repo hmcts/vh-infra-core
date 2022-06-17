@@ -1,7 +1,4 @@
-locals {
-  current_year  = formatdate("YYYY", timeadd(timestamp(), "8760h"))
-  secret_expiry = "${local.current_year}-03-01T01:00:00Z"
-}
+
 
 resource "azuread_application" "app_reg" {
   for_each        = var.app_conf
