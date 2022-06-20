@@ -61,7 +61,7 @@ resource "azurerm_network_security_group" "wowza" {
   }
   tags = var.tags
 }
-/* 
+
 resource "azurerm_virtual_network_peering" "vh-to-hub" {
   provider = azurerm.peering_client
   for_each = toset(local.peering_vnets)
@@ -86,4 +86,4 @@ resource "azurerm_virtual_network_peering" "hub-to-vh" {
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
 
-} */
+} 
