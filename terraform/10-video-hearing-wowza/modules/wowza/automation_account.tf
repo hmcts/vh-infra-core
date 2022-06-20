@@ -1,7 +1,7 @@
 
 resource "azurerm_automation_account" "vm-start-stop" {
 
-  name                = "vh-wowza-${var.env}-aa"
+  name                = "vh-wowza-${var.environment}-aa"
   location            = var.location
   resource_group_name = azurerm_resource_group.wowza.name
   sku_name            = "Basic"
@@ -11,7 +11,7 @@ resource "azurerm_automation_account" "vm-start-stop" {
     identity_ids = [azurerm_user_assigned_identity.wowza-automation-account-mi.id]
   }
 
-  tags = var.common_tags
+  tags = var.tags
 }
 
 module "vm_automation" {
