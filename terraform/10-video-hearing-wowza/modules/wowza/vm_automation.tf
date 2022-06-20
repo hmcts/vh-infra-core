@@ -17,13 +17,13 @@ resource "random_password" "streamPassword" {
 }
 
 resource "azurerm_key_vault_secret" "restPassword" {
-  name         = "restPassword-${var.environment}"
+  name         = "wowzaconfiguration--restPassword-${var.environment}"
   value        = random_password.restPassword.result
   key_vault_id = var.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "streamPassword" {
-  name         = "streamPassword-${var.environment}"
+  name         = "wowzaconfiguration--streamPassword-${var.environment}"
   value        = random_password.streamPassword.result
   key_vault_id = var.key_vault_id
 }
@@ -34,22 +34,7 @@ resource "azurerm_key_vault_secret" "configPassword" {
   key_vault_id = var.key_vault_id
 }
 
-resource "azurerm_user_assigned_identity" "wowza_cert" {
-  resource_group_name = azurerm_resource_group.wowza.name
-  location            = azurerm_resource_group.wowza.location
 
-  name = "wowza-cert-${var.environment}-mi"
-  tags = var.tags
-}
-data "azurerm_key_vault" "acmekv" {
-  name                = "acmedtssds${var.environment}"
-  resource_group_name = "sds-platform-${var.environment}-rg"
-}
-resource "azurerm_role_assignment" "kv_access" {
-  scope                = data.azurerm_key_vault.acmekv.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_user_assigned_identity.wowza_cert.principal_id
-}
 
 data "template_file" "cloudconfig" {
   template = file(var.cloud_init_file)

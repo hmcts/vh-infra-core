@@ -104,3 +104,7 @@ variable "stop_time" {
   default     = "22:00:00"
 }
 
+## Automation Accounts
+variable "schedules" {
+  default = []
+}

@@ -1,5 +1,4 @@
 
-
 data "azurerm_client_config" "current" {}
 
 #### Per App Key Vault

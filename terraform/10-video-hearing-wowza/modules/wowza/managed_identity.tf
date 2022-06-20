@@ -19,7 +19,7 @@ output "wowza-storage-msi" {
 }
 
 resource "azurerm_role_assignment" "wowza_storage_access" {
-  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/vh-infra-wowza-${var.environment}/providers/Microsoft.Storage/storageAccounts/vhinfrawowza${var.environment}"
+  scope                = azurerm_storage_account.wowza_recordings.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_user_assigned_identity.wowza_storage.principal_id
 }
@@ -77,4 +77,25 @@ resource "azurerm_role_assignment" "wowza-auto-acct-mi-role" {
     azurerm_role_definition.virtual-machine-control
   ]
 
+}
+
+#-----------------------
+# VM Cert Access
+#-----------------------
+
+resource "azurerm_user_assigned_identity" "wowza_cert" {
+  resource_group_name = azurerm_resource_group.wowza.name
+  location            = azurerm_resource_group.wowza.location
+
+  name = "wowza-cert-${var.environment}-mi"
+  tags = var.tags
+}
+data "azurerm_key_vault" "acmekv" {
+  name                = "acmedtssds${var.environment}"
+  resource_group_name = "sds-platform-${var.environment}-rg"
+}
+resource "azurerm_role_assignment" "kv_access" {
+  scope                = data.azurerm_key_vault.acmekv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.wowza_cert.principal_id
 }
