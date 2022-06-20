@@ -34,14 +34,6 @@ variable "os_disk_type" {
   default = "Standard_LRS"
 }
 
-variable "service_certificate_kv_url" {
-  type = string
-}
-
-variable "service_certificate_thumbprint" {
-  type = string
-}
-
 variable "key_vault_id" {
   type = string
 }
