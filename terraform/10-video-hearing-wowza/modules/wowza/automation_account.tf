@@ -23,7 +23,7 @@ module "vm_automation" {
   automation_account_name = azurerm_automation_account.vm-start-stop.name
   tags                    = var.tags
   schedules               = var.schedules
-  resource_group_name     = azurerm_resource_group.rg.name
+  resource_group_name     = azurerm_resource_group.wowza.name
   vm_names = [
     for wowza_vm in azurerm_linux_virtual_machine.wowza : wowza_vm.name
   ]
