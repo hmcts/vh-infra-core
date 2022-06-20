@@ -1,0 +1,109 @@
+parameters:
+  - name: subscription
+    type: string
+  - name: vmNames
+    type: object
+    default: []
+  - name: vmRgName
+    type: string
+  - name: env
+    type: string
+    default: ''
+
+steps:
+  - task: AzureCLI@2
+    displayName: Get Settings for Dynatrace Extension
+    name: dynaSettings
+    condition: always()
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+
+        $dynatrace_tenant_id="$env:DYNATRACE_TENANT_ID"
+        $dynatrace_host_group="$env:DYNATRACE_HOST_GROUP"
+        $dynatrace_network_zone="$env:DYNATRACE_NETWORK_ZONE"
+        $env = "${{ parameters.env }}"
+        $env_long = "$env:ENV_LONG"
+
+        $infraKvName = "$env:INFRA_KV"
+        Write-Host infraKvName
+        Write-Host $infraKvName
+        Write-Host Cleared
+        $infraSecretName = "$env:DYNATRACE_TOKEN"
+        Write-Host infraSecretName
+        Write-Host $infraSecretName
+        
+        Write-Host "Get Dynatrace env token from $infraKvName / $infraSecretName "
+        $dynatrace_token=az keyvault secret show --id https://$infraKvName.vault.azure.net/secrets/$infraSecretName  --query "value" -o tsv
+
+        $settings = [PSCustomObject]@{
+          tenantId           = $dynatrace_tenant_id
+          token              = $dynatrace_token
+          hostGroup          = $dynatrace_host_group
+          networkZone        = $dynatrace_network_zone
+          enableLogAnalytics = "yes"
+          installerArguments = "--loglevel=Verbose"
+        }
+        $settingsJson = $settings | ConvertTo-Json -Compress -Depth 100
+        $settingsJson = $settingsJson -replace "`"", "\`""
+
+        $protectedSettings = [PSCustomObject]@{}
+        $protectedSettingsJson = $protectedSettings | ConvertTo-Json -Compress -Depth 100
+        $protectedSettingsJson = $protectedSettingsJson -replace "`"", "\`""
+
+        $dynatrace_token_display = $dynatrace_token -replace '[ -~]', "*"
+        $settings.token = $dynatrace_token_display
+        
+        if ( Test-Path variable:restApiPutBody)
+        { 
+            Write-Host Cleared
+            Clear-Variable -Name "restApiPutBody"
+        }
+
+        $restApiPutBody =  [PSCustomObject]@{
+            "location" = "uksouth"
+            "properties" = [PSCustomObject]@{
+                "publisher"               = "dynatrace.ruxit"
+                "type"                    = "oneAgentLinux"
+                "typeHandlerVersion"      = "2.182"
+                "autoUpgradeMinorVersion" = "true"
+                "settings" = [PSCustomObject]@{
+                    "tenantId"           = $dynatrace_tenant_id
+                    "token"              = $dynatrace_token
+                    "enableLogAnalytics" = "true"
+                    "hostGroup"          = $dynatrace_host_group
+                }
+            }
+            "tags" = [PSCustomObject]@{
+                "application"  = 'Cloud'
+                "BuiltFrom"    = 'hmcts/cvp-audio-ingress'
+                "BusinessArea" = 'Cross-Cutting'
+                "environment"  = $env_long
+                "Platform"     = ''
+                "Video"        = ''
+            }    
+        }
+
+        $restApiPutBodyJson = $restApiPutBody | ConvertTo-Json -Compress -Depth 100
+        $restApiPutBodyJson = $restApiPutBodyJson -replace "`"", "\`""
+        
+        Write-Host "##vso[task.setvariable variable=restApiPutBodyJson;isOutput=true;issecret=true]$restApiPutBodyJson"
+        Write-Host restApiPutBodyJson
+        Write-Host $restApiPutBodyJson
+        Write-Host settingsJson
+        Write-Host $settingsJson
+        
+
+  - ${{ each vm in parameters.vmNames }}:
+    - template: templates\Azure\Vm\install-ext-by-api.yaml@azTemplates
+      parameters:
+        subscription: ${{ parameters.subscription }}
+        rgName: ${{ parameters.vmRgName }}
+        vmName: ${{ vm }}
+        extName: "oneAgentLinux"
+        extPublisher: "dynatrace.ruxit"
+        restApiPutBodyJson: $(dynaSettings.restApiPutBodyJson)
+
+

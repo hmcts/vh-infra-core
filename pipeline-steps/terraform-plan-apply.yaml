@@ -103,6 +103,9 @@ stages:
       # but it might be better to template the pipeline more and have a different pipeline file
       # so that someone doesn't pick the wrong var in the dropdown
     # same comment as above ^^
+    
+    - template: config\pipeline\vars\${{ parameters.product }}\common.yaml
+    - template: config\pipeline\vars\${{ parameters.product }}\${{ parameters.env }}.yaml
   jobs:
     - deployment: 'Terraform_Apply_${{ parameters.env }}'
       displayName: Terraform Apply ${{ parameters.env }}
@@ -130,3 +133,14 @@ stages:
                 activity_name: ${{ parameters.activityName  }}
                 ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:
                   additional_tf_var: $(ado_vars_to_tf.ado_vars)
+    - ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
+      - job: ApplyExtToEnv
+        displayName: 'Extensions to ${{parameters.environment}}'
+        dependsOn: ApplyTfToEnv
+        steps:
+          - template: az-ext-dynatrace-api.yaml
+            parameters:
+              subscription: ${{variables.environmentServiceConnection}}
+              vmNames: ["vh-infra-wowza-${{parameters.environment}}-0","vh-infra-wowza-${{parameters.environment}}-1" ]
+              vmRgName: "vh-infra-wowza-${{parameters.environment}}"
+              env: ${{parameters.environment}}
