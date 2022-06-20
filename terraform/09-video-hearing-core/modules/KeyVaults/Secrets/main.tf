@@ -1,7 +1,3 @@
-locals {
-  current_year  = formatdate("YYYY", timeadd(timestamp(), "8760h"))
-  secret_expiry = "${local.current_year}-03-01T01:00:00Z"
-}
 
 ## Loop secrets
 resource "azurerm_key_vault_secret" "secret" {

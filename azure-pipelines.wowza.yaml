@@ -5,8 +5,9 @@ resources:
       name: hmcts/azure-devops-templates
       ref: refs/heads/master
       endpoint: hmcts
-      
-pr: none
+
+pr: 
+  - master
 
 trigger:
   branches:

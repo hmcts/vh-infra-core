@@ -1,8 +1,4 @@
-locals {
-  environment = var.environment
-  current_year  = formatdate("YYYY", timeadd(timestamp(), "8760h"))
-  secret_expiry = "${local.current_year}-03-01T01:00:00Z"
-}
+
 
 data "azurerm_client_config" "current" {}
 
@@ -606,14 +602,14 @@ resource "azurerm_key_vault_access_policy" "azkvap" {
 }
 
 data "azurerm_resource_group" "managed-identities-rg" {
-  name = "managed-identities-${local.environment}-rg"
+  name = "managed-identities-${var.environment}-rg"
 }
 
 resource "azurerm_user_assigned_identity" "kvuser" {
   resource_group_name = data.azurerm_resource_group.managed-identities-rg.name
   location            = data.azurerm_resource_group.managed-identities-rg.location
 
-  name = "${var.resource_prefix}-${local.environment}-kvuser"
+  name = "${var.resource_prefix}-${var.environment}-kvuser"
   tags = var.tags
 }
 

@@ -10,7 +10,7 @@ terraform {
     }
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 0.6"
+      version = "~> 2.19.0"
     }
   }
 }
@@ -47,9 +47,6 @@ provider "azuread" {
   tenant_id     = var.vh_tenant_id
   client_id     = var.vh_client_id
   client_secret = var.vh_client_secret
-
-  subscription_id = "not needed"
-
 }
 
 provider "azuread" {

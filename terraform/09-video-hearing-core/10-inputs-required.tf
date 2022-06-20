@@ -188,6 +188,21 @@ locals {
   #    }
   #  )
 
+  reply_urls = [
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/",
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/home",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/login",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/home",
+    "https://localhost/home",
+    "https://localhost/login",
+    "https://localhost/",
+    "https://serviceweb_ac/login",
+    "https://serviceweb_ac/home",
+    "https://serviceweb_ac/",
+  ]
+
   # new apps that need registration can be added as a block below
   app_conf = {
     vh-service-web = {
@@ -196,18 +211,18 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-service-web.${local.environment}.platform.hmcts.net",
+        "https://vh-service-web.${local.environment}.platform.hmcts.net/",
         "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
         "https://vh-service-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
         "https://serviceweb_ac/login",
         "https://serviceweb_ac/home",
-        "https://serviceweb_ac",
+        "https://serviceweb_ac/",
       ]
     }
     vh-video-web = {
@@ -216,18 +231,18 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-video-web.${local.environment}.platform.hmcts.net",
+        "https://vh-video-web.${local.environment}.platform.hmcts.net/",
         "https://vh-video-web.${local.environment}.platform.hmcts.net/login",
         "https://vh-video-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
         "https://videoweb_ac/login",
         "https://videoweb_ac/home",
-        "https://videoweb_ac",
+        "https://videoweb_ac/",
       ]
     }
     vh-test-web = {
@@ -236,18 +251,18 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-test-web.${local.environment}.platform.hmcts.net",
+        "https://vh-test-web.${local.environment}.platform.hmcts.net/",
         "https://vh-test-web.${local.environment}.platform.hmcts.net/login",
         "https://vh-test-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
         "https://testweb_ac/login",
         "https://testweb_ac/home",
-        "https://testweb_ac",
+        "https://testweb_ac/",
       ]
     }
     vh-admin-web = {
@@ -256,21 +271,21 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-admin-web.${local.environment}.platform.hmcts.net",
+        "https://vh-admin-web.${local.environment}.platform.hmcts.net/",
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/login",
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
-        "https://1905f943.ngrok.io",
+        "https://localhost/",
+        "https://1905f943.ngrok.io/",
         "https://1905f943.ngrok.io/login",
         "https://1905f943.ngrok.io/home",
         "https://adminweb_ac/login",
         "https://adminweb_ac/home",
-        "https://adminweb_ac",
+        "https://adminweb_ac/",
       ]
     }
     vh-notification-api = {
@@ -279,15 +294,15 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-notification-api.${local.environment}.platform.hmcts.net",
+        "https://vh-notification-api.${local.environment}.platform.hmcts.net/",
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/login",
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
       ]
     }
     vh-test-api = {
@@ -313,15 +328,15 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-video-api.${local.environment}.platform.hmcts.net",
+        "https://vh-video-api.${local.environment}.platform.hmcts.net/",
         "https://vh-video-api.${local.environment}.platform.hmcts.net/login",
         "https://vh-video-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
       ]
     }
     vh-bookings-api = {
@@ -330,15 +345,15 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-bookings-api.${local.environment}.platform.hmcts.net",
+        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/",
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/login",
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
       ]
     }
     vh-user-api = {
@@ -347,15 +362,15 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-user-api.${local.environment}.platform.hmcts.net",
+        "https://vh-user-api.${local.environment}.platform.hmcts.net/",
         "https://vh-user-api.${local.environment}.platform.hmcts.net/login",
         "https://vh-user-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
       ]
     }
     vh-booking-queue = {
@@ -364,15 +379,15 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net",
+        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/",
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/login",
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/home",
-        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
       ]
     }
     vh-scheduler-jobs = {
@@ -381,15 +396,15 @@ locals {
       type                       = "webapp/api"
       identifier_uris            = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net",
+        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/",
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/login",
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/home",
-        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net",
+        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/",
         "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/login",
         "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
-        "https://localhost",
+        "https://localhost/",
       ]
     }
   }
@@ -556,7 +571,8 @@ locals {
         value       = "avh-JudicialOfficeHolder"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
       }
     }
     # Video Web
@@ -567,7 +583,8 @@ locals {
         value       = "avh-JudicialOfficeHolder"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
       }
       "avh Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
@@ -575,7 +592,8 @@ locals {
         value       = "avh-Citizen"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
       }
       "avh Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
@@ -583,7 +601,8 @@ locals {
         value       = "avh-VHO"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "b64edf41-6393-4726-8bbf-bcee33455b97"
       }
       "avh Judge" = {
         description = "This user is able to conduct hearings as a judge."
@@ -591,7 +610,8 @@ locals {
         value       = "avh-Judge"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
       }
       "avh Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
@@ -599,7 +619,8 @@ locals {
         value       = "avh-ProfessionalUser"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "5e49645a-2af9-4d2d-b9ef-7d4b659e91c7"
       }
     }
     # Test Web
@@ -610,7 +631,8 @@ locals {
         value       = "avh-VHQA"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "bb339a15-17ac-4988-a628-7f1abe4c0165"
       }
     }
     # Admin Web
@@ -621,7 +643,8 @@ locals {
         value       = "avh-Citizen"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
       }
       "avh Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
@@ -629,7 +652,8 @@ locals {
         value       = "avh-VHO"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "b64edf41-6393-4726-8bbf-bcee33455b97"
       }
       "avh Judge" = {
         description = "This user is able to conduct hearings as a judge."
@@ -637,7 +661,8 @@ locals {
         value       = "avh-Judge"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
       }
       "avh Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
@@ -645,7 +670,8 @@ locals {
         value       = "avh-ProfessionalUser"
         allowed_member_types = [
           "User",
-        ]
+        ],
+        id = "5e49645a-2af9-4d2d-b9ef-7d4b659e91c7"
       }
     }
     "vh-notification-api" = {}
