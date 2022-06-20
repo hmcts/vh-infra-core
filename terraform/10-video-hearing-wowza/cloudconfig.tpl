@@ -794,7 +794,63 @@ write_files:
       # Publish password file (format [username][space][password])
       #username password
       wowza ${streamPassword}
+  - owner: wowza:wowza
+    permissions: 0775
+    path: /home/wowza/schedule-cert.sh
+    content: |
+        #!/bin/bash
+        cronTaskPath="/home/wowza/cert-renew.txt"
+        sudo touch $cronTaskPath
+        sudo chmod 777 $cronTaskPath
 
+        echo "0 0 * * * /home/wowza/renew-cert.sh
+        " > $cronTaskPath
+
+        sudo -u wowza bash -c "crontab $cronTaskPath"
+
+  - owner: wowza:wowza
+    permissions: 0775
+    path: /home/wowza/renew-cert.sh
+    content: |
+        #!/bin/bash
+
+        miClientId="${managedIdentityClientId}"
+
+        az login --identity --username $miClientId
+
+        keyVaultName="${keyVaultName}"
+        certName="${certName}"
+        domain="${domain}"
+
+        jksPath="/usr/local/WowzaStreamingEngine/conf/ssl.wowza.jks"
+        jksPass="${certPassword}"
+
+        export PATH=$PATH:/usr/local/WowzaStreamingEngine/java/bin
+
+        expiryDate=$(keytool -list -v -keystore $jksPath -storepass $jksPass | grep until | sed 's/.*until: //')
+
+        echo "Certificate Expires $expiryDate"
+        expiryDate="$(date -d "$expiryDate - 14 days" +%Y%m%d)"
+        echo "Certificate Forced Expiry is $expiryDate"
+        today=$(date +%Y%m%d)
+
+        if [[ $expiryDate -lt $today ]]; then
+            echo "Certificate has expired"
+            downloadedPfxPath="downloadedCert.pfx"
+            signedPfxPath="signedCert.pfx"
+        
+            rm -rf $downloadedPfxPath || true
+            az keyvault secret download --file $downloadedPfxPath --vault-name $keyVaultName --encoding base64 --name $certName
+            
+            rm -rf $signedPfxPath || true
+            openssl pkcs12 -in $downloadedPfxPath -out tmpmycert.pem -passin pass: -passout pass:$jksPass
+            openssl pkcs12 -export -out $signedPfxPath -in tmpmycert.pem -passin pass:$jksPass -passout pass:$jksPass
+
+            keytool -delete -alias 1 -keystore $jksPath -storepass $jksPass
+            keytool -importkeystore -srckeystore $signedPfxPath -srcstoretype pkcs12 -destkeystore $jksPath -deststoretype JKS -deststorepass $jksPass -srcstorepass $jksPass
+        else
+            echo "Certificate has NOT expired"
+        fi
   - owner: wowza:wowza
     permissions: 0775
     path: /home/wowza/log4j-fix.sh
@@ -844,17 +900,29 @@ write_files:
 
         ## Start Wowza
         sudo service WowzaStreamingEngine start
+  # PLEASE LEAVE THIS AT THE BOTTOM
+  - owner: wowza:wowza
+    permissions: 0775
+    path: /home/wowza/runcmd.sh
+    content: |
+        #!/bin/bash
 
+        chmod +x /etc/rc.local && systemctl enable rc-local.service && systemctl start rc-local.service
+
+        /home/wowza/migrateWowzaToDisk.sh
+        /home/wowza/log4j-fix.sh
+        wget https://www.wowza.com/downloads/forums/collection/wse-plugin-autorecord.zip && unzip wse-plugin-autorecord.zip && mv lib/wse-plugin-autorecord.jar /usr/local/WowzaStreamingEngine/lib/ && chown wowza: /usr/local/WowzaStreamingEngine/lib/wse-plugin-autorecord.jar
+  
+        # install certificates
+        sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash # Az cli install
+        sudo /home/wowza/renew-cert.sh
+        sudo /home/wowza/schedule-cert.sh
+
+        # restart wowza
+        sudo service WowzaStreamingEngine restart
 
 runcmd:
-  - 'chmod +x /etc/rc.local && systemctl enable rc-local.service && systemctl start rc-local.service'
-  - 'bash /home/wowza/migrateWowzaToDisk.sh'
-  - 'bash /home/wowza/log4j-fix.sh'
-  - 'wget https://www.wowza.com/downloads/forums/collection/wse-plugin-autorecord.zip && unzip wse-plugin-autorecord.zip && mv lib/wse-plugin-autorecord.jar /usr/local/WowzaStreamingEngine/lib/ && chown wowza: /usr/local/WowzaStreamingEngine/lib/wse-plugin-autorecord.jar'
-  - 'secretsname=$(find /var/lib/waagent/ -name "${certThumbprint}.prv" | cut -c -57)'
-  - 'openssl pkcs12 -export -out $secretsname.pfx -inkey $secretsname.prv -in $secretsname.crt -passin pass: -passout pass:${certPassword}'
-  - 'export PATH=$PATH:/usr/local/WowzaStreamingEngine/java/bin'
-  - 'keytool -importkeystore -srckeystore $secretsname.pfx -srcstoretype pkcs12 -destkeystore /usr/local/WowzaStreamingEngine/conf/ssl.wowza.jks -deststoretype JKS -deststorepass ${certPassword} -srcstorepass ${certPassword}'
-  - 'service WowzaStreamingEngine restart'
+  - 'sudo /home/wowza/runcmd.sh'
+
 
 final_message: "The system is finally up, after $UPTIME seconds"

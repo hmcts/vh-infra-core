@@ -35,18 +35,6 @@ variable "admin_ssh_key_path" {
   #default = "~/.ssh/wowza.pub"
 }
 
-variable "service_certificate_kv_url" {
-  type = string
-}
-
-variable "service_certificate_thumbprint" {
-  type = string
-}
-
-# variable "key_vault_id" {
-#   type = string
-# }
-
 # # DNS
 variable "dns_zone_name" {
   type = string
