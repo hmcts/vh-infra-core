@@ -104,8 +104,8 @@ stages:
       # so that someone doesn't pick the wrong var in the dropdown
     # same comment as above ^^
     
-    - template: config\pipeline\vars\${{ parameters.product }}\common.yaml
-    - template: config\pipeline\vars\${{ parameters.product }}\${{ parameters.env }}.yaml
+    - template: ../config\pipeline\vars\${{ parameters.product }}\common.yaml
+    - template: ../config\pipeline\vars\${{ parameters.product }}\${{ parameters.env }}.yaml
   jobs:
     - deployment: 'Terraform_Apply_${{ parameters.env }}'
       displayName: Terraform Apply ${{ parameters.env }}
