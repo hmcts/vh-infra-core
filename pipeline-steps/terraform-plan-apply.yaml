@@ -135,7 +135,7 @@ stages:
                   additional_tf_var: $(ado_vars_to_tf.ado_vars)
     - ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
       - job: ApplyExtToEnv
-        displayName: 'Extensions to ${{parameters.environment}}'
+        displayName: 'Extensions to ${{parameters.env}}'
         dependsOn: ApplyTfToEnv
         steps:
           - template: az-ext-dynatrace-api.yaml
