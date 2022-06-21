@@ -120,7 +120,7 @@ stages:
 
             - template: terraform-apply.yaml
               parameters:
-                environment: ${{ variables.environment }}
+                environment: ${{ parameters.env }}
                 location: ${{ parameters.location }}
                 stack: ${{ parameters.stack }}
                 project: ${{ parameters.project }}
@@ -141,6 +141,6 @@ stages:
           - template: az-ext-dynatrace-api.yaml
             parameters:
               subscription: ${{variables.environmentServiceConnection}}
-              vmNames: ["vh-infra-wowza-${{parameters.environment}}-0","vh-infra-wowza-${{parameters.environment}}-1" ]
-              vmRgName: "vh-infra-wowza-${{parameters.environment}}"
-              env: ${{parameters.environment}}
+              vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
+              vmRgName: "vh-infra-wowza-${{parameters.env}}"
+              env: ${{parameters.env}}
