@@ -136,7 +136,7 @@ stages:
     - ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
       - job: ApplyExtToEnv
         displayName: 'Extensions to ${{parameters.env}}'
-        dependsOn: ApplyTfToEnv
+        dependsOn: Terraform_Apply_${{ parameters.env }}
         steps:
           - template: az-ext-dynatrace-api.yaml
             parameters:
