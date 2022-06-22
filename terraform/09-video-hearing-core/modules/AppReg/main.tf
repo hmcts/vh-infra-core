@@ -88,7 +88,7 @@ resource "azurerm_key_vault_secret" "secret" {
   tags            = var.tags
 }
 
-resource "azurerm_key_vault_secret" "secret" {
+resource "azurerm_key_vault_secret" "identifier_uri" {
   for_each = var.app_conf
   name     = "azuread--identifieruri"
   value    = each.value.identifier_uris[0]
