@@ -91,7 +91,7 @@ resource "azurerm_key_vault_secret" "secret" {
 resource "azurerm_key_vault_secret" "secret" {
   for_each = var.app_conf
   name     = "azuread--identifieruri"
-  value    =  each.value.identifier_uris[0]
+  value    = each.value.identifier_uris[0]
   #key_vault_id = data.azurerm_key_vault.key_vault[each.key].id
   key_vault_id = var.app_keyvaults_map[each.key].id
   # FromTFSec
