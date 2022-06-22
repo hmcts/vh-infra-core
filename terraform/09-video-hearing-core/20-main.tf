@@ -63,6 +63,12 @@ module "KeyVault_Secrets" {
       content_type = "secret"
     },
     {
+      name         = "azuread--tenantid"
+      value        = var.vh_tenant_id
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
       name         = "connectionstrings--rediscache"
       value        = module.Redis.connection_string
       tags         = local.common_tags
