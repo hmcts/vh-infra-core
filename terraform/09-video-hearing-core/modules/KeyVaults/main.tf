@@ -96,6 +96,80 @@ resource "azurerm_key_vault_access_policy" "app_access_policy" {
   ]
 }
 
+resource "azurerm_key_vault_access_policy" "dts_sds_dev" {
+  for_each = azurerm_key_vault.app_keyvaults
+
+  key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = "7bde62e7-b39f-487c-95c9-b4c794fdbb96" # DTS SDS Developers AD Group
+
+  certificate_permissions = [
+    "backup",
+    "create",
+    "delete",
+    "deleteissuers",
+    "get",
+    "getissuers",
+    "import",
+    "list",
+    "listissuers",
+    "managecontacts",
+    "manageissuers",
+    "purge",
+    "recover",
+    "restore",
+    "setissuers",
+    "update"
+  ]
+
+  key_permissions = [
+    "backup",
+    "create",
+    "decrypt",
+    "delete",
+    "encrypt",
+    "get",
+    "import",
+    "list",
+    "purge",
+    "recover",
+    "restore",
+    "sign",
+    "unwrapKey",
+    "update",
+    "verify",
+    "wrapKey"
+  ]
+
+  secret_permissions = [
+    "backup",
+    "delete",
+    "get",
+    "list",
+    "purge",
+    "recover",
+    "restore",
+    "set"
+  ]
+
+  storage_permissions = [
+    "backup",
+    "delete",
+    "deletesas",
+    "get",
+    "getsas",
+    "list",
+    "listsas",
+    "purge",
+    "recover",
+    "regeneratekey",
+    "restore",
+    "set",
+    "setsas",
+    "update"
+  ]
+}
+
 resource "azurerm_key_vault_access_policy" "app_access_policy1" {
   for_each = azurerm_key_vault.app_keyvaults
 
