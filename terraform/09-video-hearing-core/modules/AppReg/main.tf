@@ -1,5 +1,3 @@
-data "azurerm_client_config" "current" {
-}
 
 resource "azuread_application" "app_reg" {
   for_each        = var.app_conf
@@ -90,15 +88,19 @@ resource "azurerm_key_vault_secret" "secret" {
   tags            = var.tags
 }
 
-resource "azurerm_key_vault_secret" "tenant" {
-  for_each        = var.app_conf
-  name            = "azuread--tenantid"
-  value           = data.azurerm_client_config.current.tenant_id
-  key_vault_id    = var.app_keyvaults_map[each.key].id
+resource "azurerm_key_vault_secret" "identifier_uri" {
+  for_each = var.app_conf
+  name     = "azuread--identifieruri"
+  value    = each.value.identifier_uris[0]
+  #key_vault_id = data.azurerm_key_vault.key_vault[each.key].id
+  key_vault_id = var.app_keyvaults_map[each.key].id
+  # FromTFSec
   content_type    = "secret"
   expiration_date = "2032-12-31T00:00:00Z"
   tags            = var.tags
 }
+
+
 
 data "azurerm_key_vault" "vh-infra-core" {
   name                = "vh-infra-core-${var.environment}"
