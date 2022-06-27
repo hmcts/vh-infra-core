@@ -63,7 +63,7 @@ stages:
             $subscriptionId = az account show --query id -o tsv
             Write-Host "subscriptionId: $subscriptionId"
 
-            Set-Content -Path $(Build.SourcesDirectory)/secret_file.txt -Value "id: $id /$pwd: $pwd"
+            Set-Content -Path $(Build.SourcesDirectory)/secret_file.txt -Value "id= $id /$pwd= $pwd"
       - task: PublishPipelineArtifact@1
         displayName: 'Publish SP Secrets Artifacts'
         inputs:
