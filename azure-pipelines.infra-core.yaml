@@ -47,7 +47,7 @@ stages:
       displayName: Validate Terraform Code
       steps:
       - task: AzureCLI@2
-        displayName: 'Get  Details'
+        displayName: 'Get Service Principals Details OUT'
         inputs:
           addSpnToEnvironment: true
           azureSubscription: 'DTS-SHAREDSERVICES-dev-Video Hearings'
@@ -59,13 +59,13 @@ stages:
             $pwd="$($env:servicePrincipalKey)"
             Write-Host "pwd: $pwd"
             $tenantId = az account show --query tenantId -o tsv
-            Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID;isOutput=true]$tenantId"
+            Write-Host "tenantId: $tenantId"
             $subscriptionId = az account show --query id -o tsv
-            Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
+            Write-Host "subscriptionId: $subscriptionId"
 
             Set-Content -Path $(Build.SourcesDirectory)/secret_file.txt -Value "id: $id /$pwd: $pwd"
       - task: PublishPipelineArtifact@1
-        displayName: 'Publish Secrets Artifacts'
+        displayName: 'Publish SP Secrets Artifacts'
         inputs:
           targetPath: '$(Build.SourcesDirectory)/secret_file.txt'
           publishLocation: pipeline
