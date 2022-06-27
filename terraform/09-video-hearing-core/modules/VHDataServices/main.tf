@@ -109,13 +109,13 @@ module "db_secrets" {
   tags = var.tags
   secrets = [
     {
-      name         = "db_admin_username"
+      name         = "db-admin-username"
       value        = local.sql_server_username
       tags         = var.tags
       content_type = ""
     },
     {
-      name         = "db_admin_password"
+      name         = "db-admin-password"
       value        = random_password.sqlpass.result
       tags         = var.tags
       content_type = ""
