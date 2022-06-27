@@ -49,6 +49,7 @@ stages:
       - task: AzureCLI@2
         displayName: 'Get  Details'
         inputs:
+          addSpnToEnvironment: true
           azureSubscription: 'DTS-SHAREDSERVICES-dev-Video Hearings'
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
