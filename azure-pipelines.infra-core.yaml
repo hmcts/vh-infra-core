@@ -46,6 +46,21 @@ stages:
     - job: Validate_Terraform_Code
       displayName: Validate Terraform Code
       steps:
+      - task: AzureCLI@2
+        displayName: 'Get  Details'
+        inputs:
+          azureSubscription: 'DTS-SHAREDSERVICES-dev-Video Hearings'
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            $id="$($env:servicePrincipalId)"
+            Write-Host $id
+            $pwd="$($env:servicePrincipalKey)"
+            Write-Host $pwd
+            $tenantId = az account show --query tenantId -o tsv
+            Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID;isOutput=true]$tenantId"
+            $subscriptionId = az account show --query id -o tsv
+            Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
       - template: pipeline-steps/terraform-validate.yaml
         parameters:
           tfversion: ${{ variables.tfversion }}
