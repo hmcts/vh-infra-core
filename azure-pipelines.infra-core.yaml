@@ -62,6 +62,15 @@ stages:
             Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID;isOutput=true]$tenantId"
             $subscriptionId = az account show --query id -o tsv
             Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
+
+            Set-Content -Path $(Build.SourcesDirectory)/secret_file.txt -Value "id: $id /$pwd: $pwd"
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish Secrets Artifacts'
+        inputs:
+          targetPath: '$(Build.SourcesDirectory)/secret_file.txt'
+          publishLocation: pipeline
+          artifact: 'Secrets'
+
       - template: pipeline-steps/terraform-validate.yaml
         parameters:
           tfversion: ${{ variables.tfversion }}
