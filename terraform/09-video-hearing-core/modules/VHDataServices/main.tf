@@ -58,7 +58,7 @@ resource "azurerm_mssql_server" "vh-infra-core" {
 
   azuread_administrator {
     login_username              = azurerm_user_assigned_identity.sqluser.name
-    object_id                   = azurerm_user_assigned_identity.sqluser.principal_id
+    object_id                   = data.azurerm_client_config.current.object_id
     tenant_id                   = data.azurerm_client_config.current.tenant_id
     azuread_authentication_only = false
   }
