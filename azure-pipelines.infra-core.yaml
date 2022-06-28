@@ -3,7 +3,7 @@ resources:
     - repository: templates
       type: github
       name: hmcts/azure-devops-templates
-      ref: refs/heads/master
+      ref: refs/heads/VIH-9097-sql-access
       endpoint: hmcts
 
 pr: 
@@ -18,13 +18,20 @@ trigger:
     - terraform/09-video-hearing-core
 
 parameters:
-- name: environment
-  type: object
-  default:
-   - Dev
-   - Demo
-   - Stg
-   - Prod
+  - name: environment
+    type: object
+    default:
+    - Dev
+    - Demo
+    - Stg
+    - Prod
+  - name: dbAccess
+    type: object
+    default:
+      - user: vh-wowza-dev-1
+        databaseName: vhbookings
+        roles:
+          - db_datareader
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -46,35 +53,19 @@ stages:
     - job: Validate_Terraform_Code
       displayName: Validate Terraform Code
       steps:
-      - task: AzureCLI@2
-        displayName: 'Get Service Principals Details OUT'
-        inputs:
-          addSpnToEnvironment: true
-          azureSubscription: 'DTS-SHAREDSERVICES-dev-Video Hearings'
-          scriptType: 'pscore'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            $id="$($env:servicePrincipalId)"
-            Write-Host "ID: $id"
-            $pwd="$($env:servicePrincipalKey)"
-            Write-Host "pwd: $pwd"
-            $tenantId = az account show --query tenantId -o tsv
-            Write-Host "tenantId: $tenantId"
-            $subscriptionId = az account show --query id -o tsv
-            Write-Host "subscriptionId: $subscriptionId"
+        - ${{ each accessRequest in parameters.dbAccess }}:
+          - template: templates\Azure\MSSQL\Access\grantUserAccess.yaml@templates
+            parameters: 
+              azureSubscription: DTS-SHAREDSERVICES-dev-Video Hearings
+              sqlServerName: vh-infra-core-dev
+              username: ${{ accessRequest.user }}
+              databaseName: ${{ accessRequest.databaseName }}
+              roles: ${{ accessRequest.roles }}
 
-            Set-Content -Path $(Build.SourcesDirectory)/secret_file.txt -Value "id= $id /$pwd= $pwd"
-      - task: PublishPipelineArtifact@1
-        displayName: 'Publish SP Secrets Artifacts'
-        inputs:
-          targetPath: '$(Build.SourcesDirectory)/secret_file.txt'
-          publishLocation: pipeline
-          artifact: 'Secrets'
-
-      - template: pipeline-steps/terraform-validate.yaml
-        parameters:
-          tfversion: ${{ variables.tfversion }}
-          stack: '09-video-hearing-core'
+        - template: pipeline-steps/terraform-validate.yaml
+          parameters:
+            tfversion: ${{ variables.tfversion }}
+            stack: '09-video-hearing-core'
 
 
 ################################################
