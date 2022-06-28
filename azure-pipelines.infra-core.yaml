@@ -32,6 +32,10 @@ parameters:
         databaseName: vhbookings
         roles:
           - db_datareader
+      - user: dcd_videohearings
+        databaseName: vhbookings
+        roles:
+          - db_datareader
 
 pool:
   vmImage: 'ubuntu-latest'
