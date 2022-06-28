@@ -58,9 +58,11 @@ stages:
             parameters: 
               azureSubscription: DTS-SHAREDSERVICES-dev-Video Hearings
               sqlServerName: vh-infra-core-dev
+              sqlServerResourceGroup: vh-infra-core-dev
               username: ${{ accessRequest.user }}
               databaseName: ${{ accessRequest.databaseName }}
               roles: ${{ accessRequest.roles }}
+              sqlfirewallRequired: true
 
         - template: pipeline-steps/terraform-validate.yaml
           parameters:
