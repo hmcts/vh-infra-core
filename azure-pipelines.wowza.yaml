@@ -21,7 +21,6 @@ parameters:
 - name: environment
   type: object
   default:
-   - Sbox
    - Dev
    - Demo
    - Stg
