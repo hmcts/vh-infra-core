@@ -144,3 +144,27 @@ stages:
               vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
               vmRgName: "vh-infra-wowza-${{parameters.env}}"
               env: ${{parameters.env}}
+    
+    - job: SqlAccess
+      displayName: SQL AD Access 
+      dependsOn: Terraform_Apply_${{ parameters.env }}
+      steps:
+        - template: pipeline-steps/sql-access.yaml
+          parameters:
+            azureSubscription: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+            sqlServerResourceGroup: vh-infra-core-${{ env }}
+            sqlServerName: vh-infra-core-${{ env }}
+            dbAccess:
+              - user: 'DTS SDS Developers'
+                databaseNames: 
+                  - vhbookings
+                  - vhnotification
+                  - vhvideo
+                roles:
+                  - db_datareader
+                  - db_datawriter
+              - user: mi-ingestion-adf-${{ env }}
+                databaseNames: 
+                  - vhbookings
+                roles:
+                  - db_datareader
