@@ -149,7 +149,7 @@ stages:
       displayName: SQL AD Access 
       dependsOn: Terraform_Apply_${{ parameters.env }}
       steps:
-        - template: pipeline-steps/sql-access.yaml
+        - template: sql-access.yaml
           parameters:
             azureSubscription: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
             sqlServerResourceGroup: vh-infra-core-${{ parameters.env }}
