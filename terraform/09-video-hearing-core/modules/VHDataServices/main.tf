@@ -39,14 +39,6 @@ resource "azurerm_user_assigned_identity" "sqluser" {
   name = "${var.resource_prefix}-${local.environment}-sqluser"
   tags = var.tags
 }
-resource "azuread_directory_role" "readers" {
-  display_name = "Directory Readers"
-}
-resource "azuread_directory_role_assignment" "sqluser_readers" {
-  role_id             = azuread_directory_role.readers.template_id
-  principal_object_id = azurerm_user_assigned_identity.sqluser.principal_id
-}
-
 
 resource "random_password" "sqlpass" {
   length           = 32
