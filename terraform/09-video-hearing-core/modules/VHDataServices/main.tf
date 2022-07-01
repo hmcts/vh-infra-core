@@ -40,7 +40,7 @@ resource "azurerm_user_assigned_identity" "sqluser" {
   tags = var.tags
 }
 resource "azurerm_role_assignment" "example" {
-  scope                = data.azurerm_client_config.current.tenant_id
+  scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${var.resource_group_name}"
   role_definition_name = "Directory Reader"
   principal_id         = azurerm_user_assigned_identity.sqluser.principal_id
 }
@@ -70,7 +70,7 @@ resource "azurerm_mssql_server" "vh-infra-core" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.sqluser.principal_id
+      azurerm_user_assigned_identity.sqluser.id
     ]
   }
 
