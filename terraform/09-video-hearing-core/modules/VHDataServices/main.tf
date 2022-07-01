@@ -41,6 +41,12 @@ resource "azurerm_user_assigned_identity" "sqluser" {
   name = "${var.resource_prefix}-${local.environment}-sqluser"
   tags = var.tags
 }
+resource "azurerm_role_assignment" "example" {
+  scope                = data.azurerm_client_config.current.tenant_id
+  role_definition_name = "Directory Reader"
+  principal_id         = azurerm_user_assigned_identity.sqluser.object_id
+}
+
 
 resource "random_password" "sqlpass" {
   length           = 32
@@ -61,6 +67,11 @@ resource "azurerm_mssql_server" "vh-infra-core" {
     object_id                   = data.azurerm_client_config.current.object_id
     tenant_id                   = data.azurerm_client_config.current.tenant_id
     azuread_authentication_only = false
+  }
+
+  identity {
+    type = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.sqluser.object_id]
   }
 
   tags = merge({ displayName = "Virtual Courtroom SQL Server" }, var.tags)

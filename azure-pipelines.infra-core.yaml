@@ -57,17 +57,6 @@ stages:
     - job: Validate_Terraform_Code
       displayName: Validate Terraform Code
       steps:
-        - ${{ each accessRequest in parameters.dbAccess }}:
-          - template: templates\Azure\MSSQL\Access\grantUserAccess.yaml@templates
-            parameters: 
-              azureSubscription: DTS-SHAREDSERVICES-dev-Video Hearings
-              sqlServerName: vh-infra-core-dev
-              sqlServerResourceGroup: vh-infra-core-dev
-              username: ${{ accessRequest.user }}
-              databaseName: ${{ accessRequest.databaseName }}
-              roles: ${{ accessRequest.roles }}
-              sqlfirewallRequired: true
-
         - template: pipeline-steps/terraform-validate.yaml
           parameters:
             tfversion: ${{ variables.tfversion }}
@@ -89,3 +78,23 @@ stages:
       activityName: Video_Hearing_Core
       tfStateResourceGroup: vh-infra-core-${{ env }}-tf
       tfStateStorageAccountName: vhinfracore${{ env }}tf
+  
+  - template: pipeline-steps/sql-access.yaml
+    parameters:
+      azureSubscription: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+      sqlServerResourceGroup: vh-infra-core-${{ env }}
+      sqlServerName: vh-infra-core-${{ env }}
+      dbAccess:
+        - user: 'DTS SDS Developers'
+          databaseNames: 
+            - vhbookings
+            - vhnotification
+            - vhvideo
+          roles:
+            - db_datareader
+            - db_datawriter
+        - user: mi-ingestion-adf-${{ env }}
+          databaseNames: 
+            - vhbookings
+          roles:
+            - db_datareader
