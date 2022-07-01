@@ -22,7 +22,7 @@ steps:
         azureSubscription: ${{ parameters.azureSubscription }}
         sqlServerName: ${{ parameters.sqlServerName }}
         username: ${{ accessRequest.user }}
-        databaseName: ${{ accessRequest.databaseName }}
+        databaseNames: ${{ accessRequest.databaseNames }}
         roles: ${{ accessRequest.roles }}
 
   - template: templates\Azure\MSSQL/Firewall/removeSqlFirewallRule.yaml
