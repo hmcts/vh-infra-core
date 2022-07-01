@@ -25,7 +25,7 @@ steps:
         databaseNames: ${{ accessRequest.databaseNames }}
         roles: ${{ accessRequest.roles }}
 
-  - template: templates\Azure\MSSQL\Firewall\removeSqlFirewallRule.yaml
+  - template: templates\Azure\MSSQL\Firewall\removeSqlFirewallRule.yaml@templates
     parameters:
       sqlServerResourceGroup: ${{ parameters.sqlServerResourceGroup }}
       sqlServerName: ${{ parameters.sqlServerName }}
