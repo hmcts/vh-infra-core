@@ -25,17 +25,6 @@ parameters:
     - Demo
     - Stg
     - Prod
-  - name: dbAccess
-    type: object
-    default:
-      - user: vh-wowza-dev-1
-        databaseName: vhbookings
-        roles:
-          - db_datareader
-      - user: dcd_videohearings
-        databaseName: vhbookings
-        roles:
-          - db_datareader
 
 pool:
   vmImage: 'ubuntu-latest'
