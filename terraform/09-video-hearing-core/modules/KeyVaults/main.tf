@@ -3,7 +3,7 @@ data "azurerm_client_config" "current" {}
 
 #### Per App Key Vault
 
-#tfsec:ignore:azure-keyvault-no-purge
+#tfsec:ignore:azure-keyvault-no-Purge
 #tfsec:ignore:azure-keyvault-specify-network-acl
 resource "azurerm_key_vault" "app_keyvaults" {
   for_each = var.keyvaults
@@ -30,69 +30,69 @@ resource "azurerm_key_vault_access_policy" "app_access_policy" {
   object_id    = "52432a41-19d7-4372-b9d8-5703f0b4fc2d"
 
   certificate_permissions = [
-    "backup",
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "recover",
-    "restore",
-    "setissuers",
-    "update"
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
   ]
 
   key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey"
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
   ]
 
   secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set"
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
   ]
 
   storage_permissions = [
-    "backup",
-    "delete",
-    "deletesas",
-    "get",
-    "getsas",
-    "list",
-    "listsas",
-    "purge",
-    "recover",
-    "regeneratekey",
-    "restore",
-    "set",
-    "setsas",
-    "update"
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
   ]
 }
 
@@ -104,69 +104,69 @@ resource "azurerm_key_vault_access_policy" "dts_sds_dev" {
   object_id    = "7bde62e7-b39f-487c-95c9-b4c794fdbb96" # DTS SDS Developers AD Group
 
   certificate_permissions = [
-    "backup",
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "recover",
-    "restore",
-    "setissuers",
-    "update"
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
   ]
 
   key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey"
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
   ]
 
   secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set"
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
   ]
 
   storage_permissions = [
-    "backup",
-    "delete",
-    "deletesas",
-    "get",
-    "getsas",
-    "list",
-    "listsas",
-    "purge",
-    "recover",
-    "regeneratekey",
-    "restore",
-    "set",
-    "setsas",
-    "update"
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
   ]
 }
 
@@ -178,69 +178,69 @@ resource "azurerm_key_vault_access_policy" "app_access_policy1" {
   object_id    = "4c5243b4-5106-4d45-8635-7c9b6ca5ab6c"
 
   certificate_permissions = [
-    "backup",
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "recover",
-    "restore",
-    "setissuers",
-    "update"
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
   ]
 
   key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey"
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
   ]
 
   secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set"
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
   ]
 
   storage_permissions = [
-    "backup",
-    "delete",
-    "deletesas",
-    "get",
-    "getsas",
-    "list",
-    "listsas",
-    "purge",
-    "recover",
-    "regeneratekey",
-    "restore",
-    "set",
-    "setsas",
-    "update"
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
   ]
 }
 
@@ -252,17 +252,17 @@ resource "azurerm_key_vault_access_policy" "user_identity" {
   object_id    = azurerm_user_assigned_identity.kvuser.principal_id
 
   certificate_permissions = [
-    "get",
+    "Get",
   ]
 
   key_permissions = [
-    "get",
+    "Get",
   ]
 
   secret_permissions = [
-    "get",
-    "list",
-    "set"
+    "Get",
+    "List",
+    "Set"
   ]
 }
 
@@ -274,73 +274,73 @@ resource "azurerm_key_vault_access_policy" "dts_operations" {
   object_id    = data.azurerm_client_config.current.object_id
 
   certificate_permissions = [
-    "backup",
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "recover",
-    "restore",
-    "setissuers",
-    "update"
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
   ]
 
   key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey"
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
   ]
 
   secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set"
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
   ]
 
   storage_permissions = [
-    "backup",
-    "delete",
-    "deletesas",
-    "get",
-    "getsas",
-    "list",
-    "listsas",
-    "purge",
-    "recover",
-    "regeneratekey",
-    "restore",
-    "set",
-    "setsas",
-    "update"
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
   ]
 }
 
-#tfsec:ignore:azure-keyvault-no-purge
+#tfsec:ignore:azure-keyvault-no-Purge
 #tfsec:ignore:azure-keyvault-specify-network-acl
 resource "azurerm_key_vault" "vh-infra-core-ht" {
   name                        = var.resource_group_name
@@ -362,69 +362,69 @@ resource "azurerm_key_vault_access_policy" "devops" {
   object_id    = "52432a41-19d7-4372-b9d8-5703f0b4fc2d"
 
   certificate_permissions = [
-    "backup",
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "recover",
-    "restore",
-    "setissuers",
-    "update"
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
   ]
 
   key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey"
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
   ]
 
   secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set"
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
   ]
 
   storage_permissions = [
-    "backup",
-    "delete",
-    "deletesas",
-    "get",
-    "getsas",
-    "list",
-    "listsas",
-    "purge",
-    "recover",
-    "regeneratekey",
-    "restore",
-    "set",
-    "setsas",
-    "update"
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
   ]
 
 }
@@ -436,69 +436,69 @@ resource "azurerm_key_vault_access_policy" "devops1" {
   object_id    = "4c5243b4-5106-4d45-8635-7c9b6ca5ab6c"
 
   certificate_permissions = [
-    "backup",
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "recover",
-    "restore",
-    "setissuers",
-    "update"
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
   ]
 
   key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey"
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
   ]
 
   secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set"
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
   ]
 
   storage_permissions = [
-    "backup",
-    "delete",
-    "deletesas",
-    "get",
-    "getsas",
-    "list",
-    "listsas",
-    "purge",
-    "recover",
-    "regeneratekey",
-    "restore",
-    "set",
-    "setsas",
-    "update"
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
   ]
 
 }
@@ -512,69 +512,69 @@ resource "azurerm_key_vault_access_policy" "sp_access_policy" {
   object_id    = "ae3963c5-b695-42c9-aa24-1d32617f51d5"
 
   certificate_permissions = [
-    "backup",
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "recover",
-    "restore",
-    "setissuers",
-    "update"
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
   ]
 
   key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey"
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
   ]
 
   secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set"
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
   ]
 
   storage_permissions = [
-    "backup",
-    "delete",
-    "deletesas",
-    "get",
-    "getsas",
-    "list",
-    "listsas",
-    "purge",
-    "recover",
-    "regeneratekey",
-    "restore",
-    "set",
-    "setsas",
-    "update"
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
   ]
 }
 */
@@ -587,17 +587,17 @@ resource "azurerm_key_vault_access_policy" "kv_user_identity" {
   object_id    = azurerm_user_assigned_identity.kvuser.principal_id
 
   certificate_permissions = [
-    "get",
+    "Get",
   ]
 
   key_permissions = [
-    "get",
+    "Get",
   ]
 
   secret_permissions = [
-    "get",
-    "list",
-    "set"
+    "Get",
+    "List",
+    "Set"
   ]
 }
 
@@ -608,69 +608,69 @@ resource "azurerm_key_vault_access_policy" "azkvap" {
   object_id    = data.azurerm_client_config.current.object_id
 
   certificate_permissions = [
-    "backup",
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "recover",
-    "restore",
-    "setissuers",
-    "update"
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
   ]
 
   key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey"
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
   ]
 
   secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set"
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
   ]
 
   storage_permissions = [
-    "backup",
-    "delete",
-    "deletesas",
-    "get",
-    "getsas",
-    "list",
-    "listsas",
-    "purge",
-    "recover",
-    "regeneratekey",
-    "restore",
-    "set",
-    "setsas",
-    "update"
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
   ]
 }
 

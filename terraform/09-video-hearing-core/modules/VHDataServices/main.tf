@@ -12,20 +12,18 @@ data "azurerm_subnet" "aks01-subnet" {
   resource_group_name  = "ss-${local.environment}-network-rg"
 }
 
-resource "azurerm_sql_virtual_network_rule" "aks00vnetrule" {
+resource "azurerm_mssql_virtual_network_rule" "aks00vnetrule" {
 
-  name                = "ss-${local.environment}-vnet-aks00"
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_mssql_server.vh-infra-core.name
-  subnet_id           = data.azurerm_subnet.aks00-subnet.id
+  name      = "ss-${local.environment}-vnet-aks00"
+  server_id = azurerm_mssql_server.vh-infra-core.id
+  subnet_id = data.azurerm_subnet.aks00-subnet.id
 }
 
-resource "azurerm_sql_virtual_network_rule" "aks01vnetrule" {
+resource "azurerm_mssql_virtual_network_rule" "aks01vnetrule" {
 
-  name                = "ss-${local.environment}-vnet-aks01"
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_mssql_server.vh-infra-core.name
-  subnet_id           = data.azurerm_subnet.aks01-subnet.id
+  name      = "ss-${local.environment}-vnet-aks01"
+  server_id = azurerm_mssql_server.vh-infra-core.id
+  subnet_id = data.azurerm_subnet.aks01-subnet.id
 }
 
 
@@ -44,7 +42,7 @@ resource "azurerm_user_assigned_identity" "sqluser" {
 resource "azurerm_role_assignment" "example" {
   scope                = data.azurerm_client_config.current.tenant_id
   role_definition_name = "Directory Reader"
-  principal_id         = azurerm_user_assigned_identity.sqluser.object_id
+  principal_id         = azurerm_user_assigned_identity.sqluser.principal_id
 }
 
 
@@ -71,7 +69,9 @@ resource "azurerm_mssql_server" "vh-infra-core" {
 
   identity {
     type = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.sqluser.object_id]
+    identity_ids = [
+      azurerm_user_assigned_identity.sqluser.principal_id
+    ]
   }
 
   tags = merge({ displayName = "Virtual Courtroom SQL Server" }, var.tags)
@@ -146,7 +146,8 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
 resource "azurerm_servicebus_queue" "vh-infra-core" {
   for_each = var.queues
 
-  name = each.key
+  name         = each.key
+  namespace_id = azurerm_servicebus_namespace.vh-infra-core.id
   #namespace_name      = azurerm_servicebus_namespace.vh-infra-core.name
 
   enable_partitioning   = false
