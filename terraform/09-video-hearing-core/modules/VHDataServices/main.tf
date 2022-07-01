@@ -41,7 +41,7 @@ resource "azurerm_user_assigned_identity" "sqluser" {
 }
 resource "azurerm_role_assignment" "example" {
   scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${var.resource_group_name}"
-  role_definition_name = "Directory Reader"
+  role_definition_name = "Directory Readers"
   principal_id         = azurerm_user_assigned_identity.sqluser.principal_id
 }
 
