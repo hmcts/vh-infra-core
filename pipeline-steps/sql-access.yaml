@@ -10,7 +10,7 @@ parameters:
     default: []
 
 steps:
-  - template: templates\Azure\MSSQL\Firewall/addSqlFirewallRule.yaml@templates
+  - template: templates\Azure\MSSQL\Firewall\addSqlFirewallRule.yaml@templates
     parameters:
       sqlServerResourceGroup: ${{ parameters.sqlServerResourceGroup }}
       sqlServerName: ${{ parameters.sqlServerName }}
@@ -25,7 +25,7 @@ steps:
         databaseNames: ${{ accessRequest.databaseNames }}
         roles: ${{ accessRequest.roles }}
 
-  - template: templates\Azure\MSSQL/Firewall/removeSqlFirewallRule.yaml
+  - template: templates\Azure\MSSQL\Firewall\removeSqlFirewallRule.yaml
     parameters:
       sqlServerResourceGroup: ${{ parameters.sqlServerResourceGroup }}
       sqlServerName: ${{ parameters.sqlServerName }}
