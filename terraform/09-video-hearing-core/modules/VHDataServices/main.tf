@@ -39,10 +39,12 @@ resource "azurerm_user_assigned_identity" "sqluser" {
   name = "${var.resource_prefix}-${local.environment}-sqluser"
   tags = var.tags
 }
-resource "azurerm_role_assignment" "example" {
-  scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${var.resource_group_name}"
-  role_definition_name = "Directory Readers"
-  principal_id         = azurerm_user_assigned_identity.sqluser.principal_id
+resource "azuread_directory_role" "readers" {
+  display_name = "Directory Readers"
+}
+resource "azuread_directory_role_assignment" "sqluser_readers" {
+  role_id             = azuread_directory_role.readers.template_id
+  principal_object_id = azurerm_user_assigned_identity.sqluser.principal_id
 }
 
 
