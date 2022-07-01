@@ -151,9 +151,9 @@ stages:
       steps:
         - template: pipeline-steps/sql-access.yaml
           parameters:
-            azureSubscription: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
-            sqlServerResourceGroup: vh-infra-core-${{ env }}
-            sqlServerName: vh-infra-core-${{ env }}
+            azureSubscription: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
+            sqlServerResourceGroup: vh-infra-core-${{ parameters.env }}
+            sqlServerName: vh-infra-core-${{ parameters.env }}
             dbAccess:
               - user: 'DTS SDS Developers'
                 databaseNames: 
@@ -163,7 +163,7 @@ stages:
                 roles:
                   - db_datareader
                   - db_datawriter
-              - user: mi-ingestion-adf-${{ env }}
+              - user: mi-ingestion-adf-${{ parameters.env }}
                 databaseNames: 
                   - vhbookings
                 roles:
