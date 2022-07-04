@@ -39,12 +39,12 @@ resource "azurerm_user_assigned_identity" "sqluser" {
   name = "${var.resource_prefix}-${local.environment}-sqluser"
   tags = var.tags
 }
-resource "azuread_group" "directory_readers" {
+data "azuread_group" "directory_readers" {
   display_name     = "DTS Directory Readers"
   security_enabled = true
 }
 resource "azuread_group_member" "directory_readers" {
-  group_object_id  = azuread_group.directory_readers.id
+  group_object_id  = data.azuread_group.directory_readers.id
   member_object_id = azurerm_user_assigned_identity.sqluser.principal_id
 }
 
