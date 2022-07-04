@@ -45,7 +45,7 @@ resource "azuread_group" "directory_readers" {
 }
 resource "azuread_group_member" "directory_readers" {
   group_object_id  = azuread_group.directory_readers.id
-  member_object_id = azurerm_user_assigned_identity.sqluser.object_id
+  member_object_id = azurerm_user_assigned_identity.sqluser.principal_id
 }
 
 resource "random_password" "sqlpass" {
