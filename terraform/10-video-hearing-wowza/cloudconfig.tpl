@@ -41,7 +41,7 @@ write_files:
                                       <SSLProtocol>TLS</SSLProtocol>
                                       <Algorithm>SunX509</Algorithm>
                                       <CipherSuites></CipherSuites>
-                                      <Protocols></Protocols>
+                                      <Protocols>TLSv1.2</Protocols>
                               </SSLConfig>
                               <IPWhiteList>*</IPWhiteList>
                               <IPBlackList></IPBlackList>
