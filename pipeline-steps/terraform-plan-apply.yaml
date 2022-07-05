@@ -162,9 +162,12 @@ stages:
                   - vhvideo
                 roles:
                   - db_datareader
-                  - ${{ if ne(parameters.env, 'prod') }}:
+                  - ${{ if ne(lower(parameters.env), 'prod') }}:
                     - db_datawriter
-              - user: mi-ingestion-adf-${{ parameters.env }}
+              - ${{ if eq(lower(parameters.env), 'demo') }}:
+                - user: mi-ingestion-adf-test
+              - ${{ else }}:
+                - user: mi-ingestion-adf-${{ lower(parameters.env)}}
                 databaseNames: 
                   - vhbookings
                 roles:
