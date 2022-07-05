@@ -5,11 +5,9 @@ variable "resource_group_name" {
 variable "resource_prefix" {
   type = string
 }
-
-# variable "delegated_networks" {
-#   type = map(any)
-# }
-
+variable "key_vault_id" {
+  type = string
+}
 variable "public_env" {
   type    = number
   default = 0
@@ -31,3 +29,5 @@ variable "tags" {
   type    = map(any)
   default = {}
 }
+
+variable "environment" {}

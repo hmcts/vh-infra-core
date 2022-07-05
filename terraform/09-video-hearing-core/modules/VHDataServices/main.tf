@@ -12,25 +12,24 @@ data "azurerm_subnet" "aks01-subnet" {
   resource_group_name  = "ss-${local.environment}-network-rg"
 }
 
-resource "azurerm_sql_virtual_network_rule" "aks00vnetrule" {
+resource "azurerm_mssql_virtual_network_rule" "aks00vnetrule" {
 
-  name                = "ss-${local.environment}-vnet-aks00"
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_sql_server.vh-infra-core.name
-  subnet_id           = data.azurerm_subnet.aks00-subnet.id
+  name      = "ss-${local.environment}-vnet-aks00"
+  server_id = azurerm_mssql_server.vh-infra-core.id
+  subnet_id = data.azurerm_subnet.aks00-subnet.id
 }
 
-resource "azurerm_sql_virtual_network_rule" "aks01vnetrule" {
+resource "azurerm_mssql_virtual_network_rule" "aks01vnetrule" {
 
-  name                = "ss-${local.environment}-vnet-aks01"
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_sql_server.vh-infra-core.name
-  subnet_id           = data.azurerm_subnet.aks01-subnet.id
+  name      = "ss-${local.environment}-vnet-aks01"
+  server_id = azurerm_mssql_server.vh-infra-core.id
+  subnet_id = data.azurerm_subnet.aks01-subnet.id
 }
 
 
 locals {
-  environment = var.environment
+  environment         = var.environment
+  sql_server_username = "hvhearingsapiadmin"
 }
 
 resource "azurerm_user_assigned_identity" "sqluser" {
@@ -40,6 +39,14 @@ resource "azurerm_user_assigned_identity" "sqluser" {
   name = "${var.resource_prefix}-${local.environment}-sqluser"
   tags = var.tags
 }
+data "azuread_group" "directory_readers" {
+  display_name     = "DTS Directory Readers"
+  security_enabled = true
+}
+resource "azuread_group_member" "directory_readers" {
+  group_object_id  = data.azuread_group.directory_readers.id
+  member_object_id = azurerm_user_assigned_identity.sqluser.principal_id
+}
 
 resource "random_password" "sqlpass" {
   length           = 32
@@ -47,20 +54,35 @@ resource "random_password" "sqlpass" {
   override_special = "_%@"
 }
 
-resource "azurerm_sql_server" "vh-infra-core" {
+resource "azurerm_mssql_server" "vh-infra-core" {
   name                         = "${var.resource_prefix}-${local.environment}"
   resource_group_name          = var.resource_group_name
   location                     = var.location
   version                      = "12.0"
-  administrator_login          = "hvhearingsapiadmin"
+  administrator_login          = local.sql_server_username
   administrator_login_password = random_password.sqlpass.result
+
+  azuread_administrator {
+    login_username              = "DTS Bootstrap (sub:dts-sharedservices-${local.environment})"
+    object_id                   = data.azurerm_client_config.current.object_id
+    tenant_id                   = data.azurerm_client_config.current.tenant_id
+    azuread_authentication_only = false
+  }
+  primary_user_assigned_identity_id = azurerm_user_assigned_identity.sqluser.id
+
+  identity {
+    type = "UserAssigned"
+    identity_ids = [
+      azurerm_user_assigned_identity.sqluser.id
+    ]
+  }
 
   tags = merge({ displayName = "Virtual Courtroom SQL Server" }, var.tags)
 }
 
 # From TFSec
 resource "azurerm_mssql_server_extended_auditing_policy" "vh-infra-core-sec-pol" {
-  server_id = azurerm_sql_server.vh-infra-core.id
+  server_id = azurerm_mssql_server.vh-infra-core.id
 }
 
 resource "azurerm_template_deployment" "sqlbackup" {
@@ -72,21 +94,11 @@ resource "azurerm_template_deployment" "sqlbackup" {
   template_body = file("${path.module}/sql_rentention.json")
 
   parameters = {
-    databaseServerName = azurerm_sql_server.vh-infra-core.name
+    databaseServerName = azurerm_mssql_server.vh-infra-core.name
     database           = join(",", keys(var.databases))
   }
 
   deployment_mode = "Incremental"
-}
-
-resource "azurerm_sql_active_directory_administrator" "sqluser" {
-  server_name         = azurerm_sql_server.vh-infra-core.name
-  resource_group_name = var.resource_group_name
-
-  login     = azurerm_user_assigned_identity.sqluser.name
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = azurerm_user_assigned_identity.sqluser.principal_id
-
 }
 
 resource "azurerm_sql_database" "vh-infra-core" {
@@ -95,13 +107,35 @@ resource "azurerm_sql_database" "vh-infra-core" {
   name                = each.key
   resource_group_name = var.resource_group_name
   location            = var.location
-  server_name         = azurerm_sql_server.vh-infra-core.name
+  server_name         = azurerm_mssql_server.vh-infra-core.name
 
   edition                          = each.value.edition
   collation                        = each.value.collation
   requested_service_objective_name = each.value.performance_level
 
   tags = var.tags
+}
+
+module "db_secrets" {
+  source       = "../KeyVaults/Secrets"
+  key_vault_id = var.key_vault_id
+
+  tags = var.tags
+  secrets = [
+    {
+      name         = "db-admin-username"
+      value        = local.sql_server_username
+      tags         = var.tags
+      content_type = ""
+    },
+    {
+      name         = "db-admin-password"
+      value        = random_password.sqlpass.result
+      tags         = var.tags
+      content_type = ""
+    }
+  ]
+
 }
 
 resource "azurerm_servicebus_namespace" "vh-infra-core" {
@@ -115,7 +149,8 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
 resource "azurerm_servicebus_queue" "vh-infra-core" {
   for_each = var.queues
 
-  name = each.key
+  name         = each.key
+  namespace_id = azurerm_servicebus_namespace.vh-infra-core.id
   #namespace_name      = azurerm_servicebus_namespace.vh-infra-core.name
 
   enable_partitioning   = false

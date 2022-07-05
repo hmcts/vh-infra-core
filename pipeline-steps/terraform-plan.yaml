@@ -106,14 +106,6 @@ steps:
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
 
   - task: TerraformCLI@0
-    displayName: Terraform Validate
-    inputs:
-          command: validate
-          terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
-
-
-  - task: TerraformCLI@0
     displayName: Terraform Plan
     inputs:
           command: plan

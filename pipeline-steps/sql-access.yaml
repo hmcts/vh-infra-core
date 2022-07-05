@@ -1,0 +1,32 @@
+parameters:
+  - name: azureSubscription
+    type: string
+  - name: sqlServerResourceGroup
+    type: string
+  - name: sqlServerName
+    type: string
+  - name: dbAccess
+    type: object
+    default: []
+
+steps:
+  - template: templates\Azure\MSSQL\Firewall\addSqlFirewallRule.yaml@templates
+    parameters:
+      sqlServerResourceGroup: ${{ parameters.sqlServerResourceGroup }}
+      sqlServerName: ${{ parameters.sqlServerName }}
+      azureSubscription: ${{ parameters.azureSubscription }}
+
+  - ${{ each accessRequest in parameters.dbAccess }}:
+    - template: templates\Azure\MSSQL\Access\grantUserAccess.yaml@templates
+      parameters: 
+        azureSubscription: ${{ parameters.azureSubscription }}
+        sqlServerName: ${{ parameters.sqlServerName }}
+        username: ${{ accessRequest.user }}
+        databaseNames: ${{ accessRequest.databaseNames }}
+        roles: ${{ accessRequest.roles }}
+
+  - template: templates\Azure\MSSQL\Firewall\removeSqlFirewallRule.yaml@templates
+    parameters:
+      sqlServerResourceGroup: ${{ parameters.sqlServerResourceGroup }}
+      sqlServerName: ${{ parameters.sqlServerName }}
+      azureSubscription: ${{ parameters.azureSubscription }}
