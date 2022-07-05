@@ -73,6 +73,15 @@ stages:
     - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
       - template: sshkey-download.yaml
 
+    - template: templates\Azure\Common\unlock-resource-group.yml@templates
+      parameters:
+        subscriptionName:  ${{variables.environmentServiceConnection}}
+        ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
+          resourceGroupName: "vh-infra-wowza-${{variables.environment}}"
+        ${{ else }}:
+          resourceGroupName: "vh-infra-core-${{variables.environment}}" 
+        lockName: "${{variables.environment}}-lock"
+
     - template: terraform-plan.yaml
       parameters:
         environment: ${{ variables.environment }}
