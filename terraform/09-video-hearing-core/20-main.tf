@@ -87,7 +87,7 @@ module "KeyVault_Secrets" {
       content_type = "secret"
     },
     {
-      name         = "connectionstrings--VhBookings"
+      name         = "connectionstrings--vhbookings"
       value        = module.VHDataServices.bookings_api_connection_string
       tags         = local.common_tags
       content_type = "secret"
@@ -99,7 +99,7 @@ module "KeyVault_Secrets" {
       content_type = "secret"
     },
     {
-      name         = "connectionstrings--vhnotificationsapi"
+      name         = "connectionstrings--vhnotification"
       value        = module.VHDataServices.notification_connection_string
       tags         = local.common_tags
       content_type = "secret"
