@@ -48,6 +48,10 @@ resource "azuread_group_member" "directory_readers" {
   member_object_id = azurerm_user_assigned_identity.sqluser.principal_id
 }
 
+data "azuread_application" "bootstrap" {
+  object_id = data.azurerm_client_config.current.object_id
+}
+
 resource "random_password" "sqlpass" {
   length           = 32
   special          = true
@@ -63,11 +67,12 @@ resource "azurerm_mssql_server" "vh-infra-core" {
   administrator_login_password = random_password.sqlpass.result
 
   azuread_administrator {
-    login_username              = azurerm_user_assigned_identity.sqluser.name
+    login_username              = data.azuread_application.bootstrap.display_name
     object_id                   = data.azurerm_client_config.current.object_id
     tenant_id                   = data.azurerm_client_config.current.tenant_id
     azuread_authentication_only = false
   }
+  primary_user_assigned_identity_id = data.azurerm_client_config.current.object_id
 
   identity {
     type = "UserAssigned"
