@@ -68,7 +68,7 @@ resource "azurerm_mssql_server" "vh-infra-core" {
     tenant_id                   = data.azurerm_client_config.current.tenant_id
     azuread_authentication_only = false
   }
-  primary_user_assigned_identity_id = data.azurerm_client_config.current.object_id
+  primary_user_assigned_identity_id = azurerm_user_assigned_identity.sqluser.id
 
   identity {
     type = "UserAssigned"
