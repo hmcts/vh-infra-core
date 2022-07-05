@@ -75,7 +75,7 @@ stages:
 
     - template: templates\Azure\Common\unlock-resource-group.yml@templates
       parameters:
-        subscriptionName: ${{variables.environmentServiceConnection}}
+        subscriptionName: ${{parameters.environmentServiceConnection}}
         ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
           resourceGroupName: "vh-infra-wowza-${{variables.environment}}"
         ${{ else }}:
