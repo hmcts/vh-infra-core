@@ -140,7 +140,7 @@ module "KeyVault_Secrets" {
       tags         = local.common_tags
       content_type = "secret"
     },
-      {
+    {
       name         = "notifyconfiguration--callbacksecret"
       value        = "placeholder"
       tags         = local.common_tags
