@@ -99,7 +99,7 @@ module "KeyVault_Secrets" {
       content_type = "secret"
     },
     {
-      name         = "connectionstrings--vhnotification"
+      name         = "connectionstrings--vhnotificationsapi"
       value        = module.VHDataServices.notification_connection_string
       tags         = local.common_tags
       content_type = "secret"
