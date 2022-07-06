@@ -16,7 +16,7 @@ resource "azuread_application" "app_reg" {
   }
 
   owners                     = [data.azuread_client_config.current.object_id]
-  
+
   dynamic "required_resource_access" {
     for_each = lookup(var.api_permissions, each.key, )
     content {
@@ -57,6 +57,7 @@ resource "azuread_service_principal" "create_sp" {
   for_each                     = var.app_conf
   application_id               = azuread_application.app_reg[each.key].application_id
   app_role_assignment_required = false
+  owners                       = [data.azuread_client_config.current.object_id]
 }
 
 data "azurerm_key_vault" "key_vault" {
