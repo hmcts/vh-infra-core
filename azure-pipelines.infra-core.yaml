@@ -56,15 +56,28 @@ stages:
 # Terraform Plan & Apply. ######################
 
 - ${{ each env in parameters.environment }}:
-  - template: pipeline-steps/terraform-plan-apply.yaml
-    parameters:
-      terraformVersion: ${{ variables.tfVersion }}
-      env: ${{ env }}
-      location: ${{ variables.azureLocation }}
-      environmentServiceConnection: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
-      stack: 09-video-hearing-core
-      product: vh
-      activityName: Video_Hearing_Core
-      tfStateResourceGroup: vh-infra-core-${{ env }}-tf
-      tfStateStorageAccountName: vhinfracore${{ env }}tf
-  
+  - ${{ if and( eq(env, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
+    - template: pipeline-steps/terraform-plan-apply.yaml
+      parameters:
+        terraformVersion: ${{ variables.tfVersion }}
+        env: ${{ env }}
+        location: ${{ variables.azureLocation }}
+        environmentServiceConnection: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+        stack: 09-video-hearing-core
+        product: vh
+        activityName: Video_Hearing_Core
+        tfStateResourceGroup: vh-infra-core-${{ env }}-tf
+        tfStateStorageAccountName: vhinfracore${{ env }}tf
+
+  - ${{ elseif eq(variables['Build.SourceBranchName'], 'master') }}:
+      - template: pipeline-steps/terraform-plan-apply.yaml
+        parameters:
+          terraformVersion: ${{ variables.tfVersion }}
+          env: ${{ env }}
+          location: ${{ variables.azureLocation }}
+          environmentServiceConnection: DTS-SHAREDSERVICES-${{ env }}-Video Hearings
+          stack: 09-video-hearing-core
+          product: vh
+          activityName: Video_Hearing_Core
+          tfStateResourceGroup: vh-infra-core-${{ env }}-tf
+          tfStateStorageAccountName: vhinfracore${{ env }}tf
