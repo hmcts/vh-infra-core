@@ -134,6 +134,18 @@ module "KeyVault_Secrets" {
       tags         = local.common_tags
       content_type = "secret"
     },
+    {
+      name         = "notifyconfiguration--apikey"
+      value        = module.VHDataServices.admin_password
+      tags         = "placeholder"
+      content_type = "secret"
+    },
+      {
+      name         = "notifyconfiguration--callbacksecret"
+      value        = "placeholder"
+      tags         = local.common_tags
+      content_type = "secret"
+    }
   ]
 
   depends_on = [
