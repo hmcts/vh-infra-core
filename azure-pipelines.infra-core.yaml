@@ -18,13 +18,13 @@ trigger:
     - terraform/09-video-hearing-core
 
 parameters:
-- name: environment
-  type: object
-  default:
-   - Dev
-   - Demo
-   - Stg
-   - Prod
+  - name: environment
+    type: object
+    default:
+    - Dev
+    - Demo
+    - Stg
+    - Prod
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -46,10 +46,10 @@ stages:
     - job: Validate_Terraform_Code
       displayName: Validate Terraform Code
       steps:
-      - template: pipeline-steps/terraform-validate.yaml
-        parameters:
-          tfversion: ${{ variables.tfversion }}
-          stack: '09-video-hearing-core'
+        - template: pipeline-steps/terraform-validate.yaml
+          parameters:
+            tfversion: ${{ variables.tfversion }}
+            stack: '09-video-hearing-core'
 
 
 ################################################

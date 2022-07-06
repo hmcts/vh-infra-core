@@ -73,6 +73,15 @@ stages:
     - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
       - template: sshkey-download.yaml
 
+    - template: templates\Azure\Common\unlock-resource-group.yml@templates
+      parameters:
+        subscriptionName: ${{parameters.environmentServiceConnection}}
+        ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
+          resourceGroupName: "vh-infra-wowza-${{variables.environment}}"
+        ${{ else }}:
+          resourceGroupName: "vh-infra-core-${{variables.environment}}" 
+        lockName: "${{variables.environment}}-lock"
+
     - template: terraform-plan.yaml
       parameters:
         environment: ${{ variables.environment }}
@@ -144,3 +153,35 @@ stages:
               vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
               vmRgName: "vh-infra-wowza-${{parameters.env}}"
               env: ${{parameters.env}}
+    
+    - job: SqlAccess
+      displayName: SQL AD Access 
+      dependsOn: Terraform_Apply_${{ parameters.env }}
+      steps:
+        - template: sql-access.yaml
+          parameters:
+            azureSubscription: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
+            sqlServerResourceGroup: vh-infra-core-${{ parameters.env }}
+            sqlServerName: vh-infra-core-${{ parameters.env }}
+            dbAccess:
+              - user: 'DTS SDS Developers'
+                databaseNames: 
+                  - vhbookings
+                  - vhnotification
+                  - vhvideo
+                roles:
+                  - db_datareader
+                  - ${{ if ne(lower(parameters.env), 'prod') }}:
+                    - db_datawriter
+              - ${{ if eq(lower(parameters.env), 'demo') }}:
+                - user: mi-ingestion-adf-test
+                  databaseNames: 
+                    - vhbookings
+                  roles:
+                    - db_datareader
+              - ${{ else }}:
+                - user: mi-ingestion-adf-${{ lower(parameters.env)}}
+                  databaseNames: 
+                    - vhbookings
+                  roles:
+                    - db_datareader
