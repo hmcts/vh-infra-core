@@ -149,7 +149,7 @@ stages:
         steps:
           - template: az-ext-dynatrace-api.yaml
             parameters:
-              subscription: ${{variables.environmentServiceConnection}}
+              subscription: ${{parameters.environmentServiceConnection}}
               vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
               vmRgName: "vh-infra-wowza-${{parameters.env}}"
               env: ${{parameters.env}}
