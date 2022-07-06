@@ -136,8 +136,8 @@ module "KeyVault_Secrets" {
     },
     {
       name         = "notifyconfiguration--apikey"
-      value        = module.VHDataServices.admin_password
-      tags         = "placeholder"
+      value        = "placeholder"
+      tags         = local.common_tags
       content_type = "secret"
     },
       {
