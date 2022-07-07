@@ -7,7 +7,12 @@ resources:
       endpoint: hmcts
 
 pr: 
-  - master
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - terraform/10-video-hearing-wowza
 
 trigger:
   branches:

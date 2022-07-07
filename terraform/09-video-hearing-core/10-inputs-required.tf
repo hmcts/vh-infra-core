@@ -717,9 +717,8 @@ variable "external_passwords" {
 
   type = map(string)
   default = {
-    azuread--temporarypassword  = "temp"
-    defaultpassword             = "temp"
-    notifyconfiguration--apikey = "temp"
+    azuread--temporarypassword = "temp"
+    defaultpassword            = "temp"
   }
 }
 

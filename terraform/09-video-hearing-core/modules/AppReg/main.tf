@@ -15,7 +15,8 @@ resource "azuread_application" "app_reg" {
     redirect_uris = each.value.reply_urls
   }
 
-  #owners                     = ["dad89ade-ef6a-41ef-9729-332402704dc9"]
+  owners                     = [data.azuread_client_config.current.object_id]
+
   dynamic "required_resource_access" {
     for_each = lookup(var.api_permissions, each.key, )
     content {
@@ -56,6 +57,7 @@ resource "azuread_service_principal" "create_sp" {
   for_each                     = var.app_conf
   application_id               = azuread_application.app_reg[each.key].application_id
   app_role_assignment_required = false
+  owners                       = [data.azuread_client_config.current.object_id]
 }
 
 data "azurerm_key_vault" "key_vault" {
@@ -188,3 +190,5 @@ data "azuread_group" "vhqa" {
   group_object_id  = data.azuread_group.vhqa.id
   member_object_id = azuread_application.app_reg[each.key].id
 }  */
+
+data "azuread_client_config" "current" {}
