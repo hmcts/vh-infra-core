@@ -142,17 +142,19 @@ stages:
                 activity_name: ${{ parameters.activityName  }}
                 ${{ if eq(parameters.stack, 'Video_Hearing_Core') }}:
                   additional_tf_var: $(ado_vars_to_tf.ado_vars)
-    - ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
-      - job: ApplyExtToEnv
-        displayName: 'Extensions to ${{parameters.env}}'
-        dependsOn: Terraform_Apply_${{ parameters.env }}
-        steps:
-          - template: az-ext-dynatrace-api.yaml
-            parameters:
-              subscription: ${{variables.environmentServiceConnection}}
-              vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
-              vmRgName: "vh-infra-wowza-${{parameters.env}}"
-              env: ${{parameters.env}}
+
+    - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
+      - ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
+        - job: ApplyExtToEnv
+          displayName: 'Extensions to ${{parameters.env}}'
+          dependsOn: Terraform_Apply_${{ parameters.env }}
+          steps:
+            - template: az-ext-dynatrace-api.yaml
+              parameters:
+                subscription: ${{parameters.environmentServiceConnection}}
+                vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
+                vmRgName: "vh-infra-wowza-${{parameters.env}}"
+                env: ${{parameters.env}}
     
     - job: SqlAccess
       displayName: SQL AD Access 
@@ -176,12 +178,12 @@ stages:
               - ${{ if eq(lower(parameters.env), 'demo') }}:
                 - user: mi-ingestion-adf-test
                   databaseNames: 
-                    - vhbookings
+                    - vhvideo
                   roles:
                     - db_datareader
               - ${{ else }}:
                 - user: mi-ingestion-adf-${{ lower(parameters.env)}}
                   databaseNames: 
-                    - vhbookings
+                    - vhvideo
                   roles:
                     - db_datareader
