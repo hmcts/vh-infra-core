@@ -178,12 +178,12 @@ stages:
               - ${{ if eq(lower(parameters.env), 'demo') }}:
                 - user: mi-ingestion-adf-test
                   databaseNames: 
-                    - vhbookings
+                    - vhvideo
                   roles:
                     - db_datareader
               - ${{ else }}:
                 - user: mi-ingestion-adf-${{ lower(parameters.env)}}
                   databaseNames: 
-                    - vhbookings
+                    - vhvideo
                   roles:
                     - db_datareader
