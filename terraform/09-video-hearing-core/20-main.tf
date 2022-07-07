@@ -133,12 +133,6 @@ module "KeyVault_Secrets" {
       value        = module.VHDataServices.admin_password
       tags         = local.common_tags
       content_type = "secret"
-    },
-    {
-      name         = "notifyconfiguration--callbacksecret"
-      value        = "temp"
-      tags         = local.common_tags
-      content_type = "secret"
     }
   ]
 

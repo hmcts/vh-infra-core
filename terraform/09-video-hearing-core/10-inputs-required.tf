@@ -719,7 +719,6 @@ variable "external_passwords" {
   default = {
     azuread--temporarypassword  = "temp"
     defaultpassword             = "temp"
-    notifyconfiguration--apikey = "temp"
   }
 }
 
