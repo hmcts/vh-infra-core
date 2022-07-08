@@ -1,73 +1,26 @@
 locals {
-  secret_prefix = "wowzaconfiguration--"
+  secret_prefix = "wowzaconfiguration"
+  secrets = {
+    "managedidentityclientid" = azurerm_user_assigned_identity.wowza_storage.client_id,
+    "storageaccountkey" = azurerm_storage_account.wowza_recordings.primary_access_key,
+    "restPassword" = random_password.restPassword.result,
+    "streamPassword" = random_password.streamPassword.result,
+    "azure-storage-directory" = "/wowzadata/azurecopy",
+    "endpoint" = "http://${local.wowza_domain}:443",
+    "storage-account" = azurerm_storage_account.wowza_recordings.name,
+    "storage-account-endpoint" = azurerm_storage_account.wowza_recordings.primary_blob_endpoint,
+    "storage-account-container" = azurerm_storage_container.recordings.name,
+    "username" = var.admin_user
+
+  }
 }
 
-module "KeyVault_Cvp_Secrets" {
-  source       = "./../../../09-video-hearing-core/modules/KeyVaults/Secrets"
-  key_vault_id = var.key_vault_id
-
-  tags = var.tags
-  secrets = [
-    {
-      name         = "${local.secret_prefix}managedidentityclientid"
-      value        = azurerm_user_assigned_identity.wowza_storage.client_id
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}storageaccountkey"
-      value        = azurerm_storage_account.wowza_recordings.primary_access_key
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}restPassword"
-      value        = random_password.restPassword.result
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}streamPassword"
-      value        = random_password.streamPassword.result
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}azure-storage-directory"
-      value        = "/wowzadata/azurecopy"
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}endpoint"
-      value        = "http://${local.wowza_domain}:443"
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}storage-account"
-      value        = azurerm_storage_account.wowza_recordings.name
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}storage-account-endpoint"
-      value        = azurerm_storage_account.wowza_recordings.primary_blob_endpoint
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}storage-account-container"
-      value        = azurerm_storage_container.recordings.name
-      tags         = var.tags
-      content_type = "secret"
-    },
-    {
-      name         = "${local.secret_prefix}username"
-      value        = var.admin_user
-      tags         = var.tags
-      content_type = "secret"
-    }
-  ]
-
+resource "azurerm_key_vault_secret" "secret" {
+  for_each        = local.secrets
+  key_vault_id    = var.key_vault_id
+  name            = "${local.secret_prefix}--${each.key}"
+  value           = each.value
+  tags            = var.tags
+  content_type    = ""
+  expiration_date = "2032-12-31T00:00:00Z"
 }
