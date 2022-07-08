@@ -24,12 +24,6 @@ resource "azurerm_role_assignment" "wowza_storage_access" {
   principal_id         = azurerm_user_assigned_identity.wowza_storage.principal_id
 }
 
-# Add Managed Identity clientID to infra KeyVault
-resource "azurerm_key_vault_secret" "wowza-mi-clientid" {
-  name         = "wowzaconfiguration--managedidentityclientid"
-  value        = azurerm_user_assigned_identity.wowza_storage.client_id
-  key_vault_id = var.key_vault_id
-}
 
 #-----------------------
 # VM Automation account
