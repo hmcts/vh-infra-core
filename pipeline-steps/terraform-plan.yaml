@@ -48,6 +48,7 @@ steps:
       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
+
   - task: AzureCLI@2
     displayName: 'GlobalNetworkPeering SC Details'
     name: GlobalNetworkPeering
@@ -65,6 +66,29 @@ steps:
         $subscriptionId = az account show --query id -o tsv
         Write-Host "##vso[task.setvariable variable=GNP_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
         Write-Host "Subscription ID: $subscriptionId"
+
+  - ${{ if eq(parameters.activity_name, "Video_Hearing_Core") }}:      
+    - task: AzureCLI@2
+      displayName: 'CVP SC Details'
+      name: cvp
+      inputs: 
+        ${{ if eq(parameters.environment, 'prod') }}:
+          azureSubscription: DTS-SHAREDSERVICES-PROD-Video Hearings
+        ${{ else }}:
+          azureSubscription: DTS-SHAREDSERVICES-STG-Video Hearings
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        addSpnToEnvironment: true
+        InlineScript: |
+          Write-Host "##vso[task.setvariable variable=CLIENT_ID;isOutput=true]$($env:servicePrincipalId)"
+          Write-Host "Client ID: $($env:servicePrincipalId)"
+          Write-Host "##vso[task.setvariable variable=CLIENT_SECRET;isOutput=true]$($env:servicePrincipalKey)"
+          Write-Host "##vso[task.setvariable variable=TENANT_ID;isOutput=true]$($env:tenantId)"
+          Write-Host "Tenant ID: $($env:tenantId)"
+          $subscriptionId = az account show --query id -o tsv
+          Write-Host "##vso[task.setvariable variable=SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
+          Write-Host "Subscription ID: $subscriptionId"
+
   - bash: |
       variableName="vars"
       
@@ -74,6 +98,11 @@ steps:
       variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
       if [ ! -z "${ADDITIONAL_VAR}" ]; then
         variables="${variables} -var \"kv_secrets=${ADDITIONAL_VAR} \""
+      fi
+      if [ ! -z "${CVP_CLIENT_ID}" ]; then
+        variables="${variables} -var \"cvp_subscription_id=${CVP_SUBSCRIPTION_ID} \""
+        variables="${variables} -var \"cvp_client_id=${CVP_CLIENT_ID} \""
+        variables="${variables} -var \"cvp_client_secret=${CVP_CLIENT_SECRET} \""
       fi
       echo "Variables set as: "
       echo "${variables}"
@@ -85,6 +114,10 @@ steps:
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
       ADDITIONAL_VAR: ${{ parameters.additional_tf_var }}
+      ${{ if eq(parameters.activity_name, "Video_Hearing_Core") }}:
+        CVP_CLIENT_ID: $(cvp.CLIENT_ID) 
+        CVP_CLIENT_SECRET: $(cvp.CLIENT_SECRET) 
+        CVP_SUBSCRIPTION_ID: $(cvp.SUBSCRIPTION_ID) 
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
