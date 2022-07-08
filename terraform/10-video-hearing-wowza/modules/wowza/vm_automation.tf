@@ -42,7 +42,7 @@ data "template_file" "cloudconfig" {
     certPassword            = random_password.certPassword.result
     storageAccountName      = azurerm_storage_account.wowza_recordings.name
     storageContainerName    = azurerm_storage_container.recordings.name
-    msiClientId             = var.storage_msi_client_id
+    msiClientId             = azurerm_user_assigned_identity.wowza_storage.client_id
     restPassword            = md5("wowza:Wowza:${random_password.restPassword.result}")
     streamPassword          = md5("wowza:Wowza:${random_password.streamPassword.result}")
     managedIdentityClientId = azurerm_user_assigned_identity.wowza_cert.client_id

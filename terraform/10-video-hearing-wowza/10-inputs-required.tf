@@ -64,19 +64,6 @@ variable "workspace_to_address_space_map" {
   }
 }
 
-variable "workspace_to_storage_msi_map" {
-  type = map(string)
-  default = {
-    prod = "/subscriptions/4bb049c8-33f3-4860-91b4-9ee45375cc18/resourceGroups/vh-infra-wowza-prod/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-prod"
-    stg  = "/subscriptions/74dacd4f-a248-45bb-a2f0-af700dc4cf68/resourceGroups/vh-infra-wowza-stg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-stg"
-    # preprod = "/subscriptions/4bb049c8-33f3-4860-91b4-9ee45375cc18/resourceGroups/vh-infra-wowza-preprod/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-preprod"
-    dev  = "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/vh-infra-wowza-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-dev"
-    test = "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/resourceGroups/vh-infra-wowza-test/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-test"
-    demo = "/subscriptions/c68a4bed-4c3d-4956-af51-4ae164c1957c/resourceGroups/vh-infra-wowza-demo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-demo"
-    sbox = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/vh-infra-wowza-sbox/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-sbox"
-    ithc = "/subscriptions/ba71a911-e0d6-4776-a1a6-079af1df7139/resourceGroups/vh-infra-wowza-ithc/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wowza-storage-ithc"
-  }
-}
 
 # Networking Client Details
 variable "network_client_id" {

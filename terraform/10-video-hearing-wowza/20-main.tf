@@ -49,7 +49,6 @@ module "wowza" {
   admin_ssh_key_path          = var.admin_ssh_key_path
   key_vault_id                = data.azurerm_key_vault.vh-infra-core.id
   address_space               = lookup(var.workspace_to_address_space_map, var.environment, "")
-  storage_msi_client_id       = azurerm_user_assigned_identity.wowza_storage.client_id
   private_dns_zone_group      = data.azurerm_private_dns_zone.core-infra-intsvc.id
   private_dns_zone_group_name = data.azurerm_private_dns_zone.core-infra-intsvc.name
   network_client_id           = var.network_client_id
