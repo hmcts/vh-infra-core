@@ -67,7 +67,7 @@ steps:
         Write-Host "##vso[task.setvariable variable=GNP_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
         Write-Host "Subscription ID: $subscriptionId"
 
-  - ${{ if eq(parameters.activity_name, "Video_Hearing_Core") }}:      
+  - ${{ if eq(parameters.activity_name, 'Video_Hearing_Core') }}:      
     - task: AzureCLI@2
       displayName: 'CVP SC Details'
       name: cvp
@@ -114,7 +114,7 @@ steps:
       GNP_CLIENT_SECRET: $(GlobalNetworkPeering.GNP_CLIENT_SECRET) 
       GNP_TENANT_ID: $(GlobalNetworkPeering.GNP_TENANT_ID) 
       ADDITIONAL_VAR: ${{ parameters.additional_tf_var }}
-      ${{ if eq(parameters.activity_name, "Video_Hearing_Core") }}:
+      ${{ if eq(parameters.activity_name, 'Video_Hearing_Core') }}:
         CVP_CLIENT_ID: $(cvp.CLIENT_ID) 
         CVP_CLIENT_SECRET: $(cvp.CLIENT_SECRET) 
         CVP_SUBSCRIPTION_ID: $(cvp.SUBSCRIPTION_ID) 
