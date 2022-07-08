@@ -21,13 +21,13 @@ module "KeyVault_Cvp_Secrets" {
       content_type = "secret"
     },
     {
-      name         = "${local.secret_prefix}restPassword-${var.environment}"
+      name         = "${local.secret_prefix}restPassword"
       value        = random_password.restPassword.result
       tags         = var.tags
       content_type = "secret"
     },
     {
-      name         = "${local.secret_prefix}streamPassword-${var.environment}"
+      name         = "${local.secret_prefix}streamPassword"
       value        = random_password.streamPassword.result
       tags         = var.tags
       content_type = "secret"
