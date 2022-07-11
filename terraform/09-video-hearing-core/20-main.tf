@@ -141,9 +141,7 @@ module "KeyVault_Secrets" {
     module.AppReg
   ]
 }
-output "kvs" {
-  value = module.KeyVaults.keyvault_resource
-}
+
 module "input_Secrets" {
   for_each     = { for secret in var.kv_secrets : secret.key_vault_name => secret }
   source       = "./modules/KeyVaults/Secrets"
