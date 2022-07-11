@@ -1,3 +1,8 @@
+parameters:
+  - name: environment
+    type: string
+
 
 variables:
   - group: vh-key-vault-vars
+  - group: KinlyConfiguration_${{ parameters.environment }}
