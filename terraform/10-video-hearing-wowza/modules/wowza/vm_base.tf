@@ -1,3 +1,8 @@
+resource "tls_private_key" "vm" {
+    algorithm = "RSA"
+    rsa_bits = 4096
+}
+
 resource "azurerm_linux_virtual_machine" "wowza" {
   count = var.wowza_instance_count
 
@@ -20,7 +25,7 @@ resource "azurerm_linux_virtual_machine" "wowza" {
 
   admin_ssh_key {
     username   = var.admin_user
-    public_key = file(var.admin_ssh_key_path)
+    public_key = tls_private_key.vm.public_key_openssh
   }
 
   os_disk {
