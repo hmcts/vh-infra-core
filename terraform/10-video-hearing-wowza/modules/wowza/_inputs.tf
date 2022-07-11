@@ -49,11 +49,6 @@ variable "wowza_instance_count" {
   default = 2
 }
 
-variable "storage_msi_client_id" {
-  type    = string
-  default = ""
-}
-
 variable "tags" {
   type    = map(string)
   default = {}
