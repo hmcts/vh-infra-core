@@ -11,8 +11,8 @@ locals {
     "storage-account-endpoint"  = azurerm_storage_account.wowza_recordings.primary_blob_endpoint,
     "storage-account-container" = azurerm_storage_container.recordings.name,
     "username"                  = var.admin_user
-    "ssh-public"= tls_private_key.vm.public_key_openssh
-    "ssh-private"= tls_private_key.vm.private_key_openssh
+    "ssh-public"                = tls_private_key.vm.public_key_openssh
+    "ssh-private"               = tls_private_key.vm.private_key_openssh
   }
 }
 

@@ -1,6 +1,6 @@
 resource "tls_private_key" "vm" {
-    algorithm = "RSA"
-    rsa_bits = 4096
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
 resource "azurerm_linux_virtual_machine" "wowza" {

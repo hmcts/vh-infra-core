@@ -1,4 +1,4 @@
-location           = "uksouth"
+location = "uksouth"
 
 dns_resource_group = "vh-hearings-reform-hmcts-net-dns-zone"
 dns_zone_name      = "hearings.reform.hmcts.net"
