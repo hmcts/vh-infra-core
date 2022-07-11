@@ -30,11 +30,6 @@ variable "location" {
   type = string
 }
 
-variable "admin_ssh_key_path" {
-  type = string
-  #default = "~/.ssh/wowza.pub"
-}
-
 # # DNS
 variable "dns_zone_name" {
   type = string

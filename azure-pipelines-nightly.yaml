@@ -108,7 +108,6 @@ stages:
             - group: vh-tenant-creds
             - group: vh-alerting-Logic-App-Details
           steps:
-            - template: pipeline-steps/sshkey-download.yaml
             - template: pipeline-steps/tfplan-drift-check.yaml
               parameters:
                 environment: ${{ environment }}
