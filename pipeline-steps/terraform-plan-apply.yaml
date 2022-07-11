@@ -56,6 +56,8 @@ stages:
       value: ${{ parameters.env }}
     - group: vh-tenant-creds
     - template: ado-vars.yaml
+      parameters:
+        environment: ${{ parameters.env }}
       # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
       # but it might be better to template the pipeline more and have a different pipeline file
       # so that someone doesn't pick the wrong var in the dropdown
@@ -108,6 +110,8 @@ stages:
       value: ${{ parameters.env }}
     - group: vh-tenant-creds
     - template: ado-vars.yaml
+      parameters:
+        environment: ${{ parameters.env }}
       # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
       # but it might be better to template the pipeline more and have a different pipeline file
       # so that someone doesn't pick the wrong var in the dropdown

@@ -58,9 +58,4 @@ resource "azurerm_private_dns_a_record" "wowza_storage" {
   tags                = var.tags
 }
 
-resource "azurerm_key_vault_secret" "wowza-sa-key" {
-  name         = "wowzaconfiguration--storageaccountkey"
-  value        = azurerm_storage_account.wowza_recordings.primary_access_key
-  key_vault_id = var.key_vault_id
-  tags         = var.tags
-}
+

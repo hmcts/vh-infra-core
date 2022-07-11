@@ -15,7 +15,7 @@ resource "azuread_application" "app_reg" {
     redirect_uris = each.value.reply_urls
   }
 
-  owners                     = [data.azuread_client_config.current.object_id]
+  owners = [data.azuread_client_config.current.object_id]
 
   dynamic "required_resource_access" {
     for_each = lookup(var.api_permissions, each.key, )

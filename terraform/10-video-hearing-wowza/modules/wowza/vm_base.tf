@@ -55,7 +55,7 @@ resource "azurerm_linux_virtual_machine" "wowza" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      var.storage_msi_client_id
+      azurerm_user_assigned_identity.wowza_storage.id
     ]
   }
   tags = var.tags

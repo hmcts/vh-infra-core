@@ -735,3 +735,19 @@ variable "kv_secrets" {
   default = []
   #sensitive = true
 }
+
+
+# CVP Client Details
+variable "cvp_client_id" {
+  description = "Client ID of the CVP SP"
+  type        = string
+}
+variable "cvp_client_secret" {
+  description = "Client Secret of the CVP SP"
+  type        = string
+  sensitive   = true
+}
+variable "cvp_subscription_id" {
+  description = "Client Subscription ID of the CVP SP"
+  type        = string
+}
