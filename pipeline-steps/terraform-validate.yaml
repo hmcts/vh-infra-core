@@ -16,6 +16,12 @@ steps:
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
 
+  - task: TerraformCLI@0
+    displayName: 'Terraform init'
+    inputs:
+      command: 'init'
+      commandOptions: '-backend=false -input=false'
+
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
       terraformPath: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
