@@ -21,6 +21,7 @@ steps:
     inputs:
       command: 'init'
       commandOptions: '-backend=false -input=false'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
 
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
