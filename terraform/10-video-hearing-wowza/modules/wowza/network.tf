@@ -28,6 +28,12 @@ resource "azurerm_subnet" "wowza" {
   enforce_private_link_service_network_policies  = true
 }
 
+
+resource "azurerm_subnet_network_security_group_association" "wowza" {
+  subnet_id                 = azurerm_subnet.wowza.id
+  network_security_group_id = azurerm_network_security_group.wowza.id
+}
+
 resource "azurerm_network_security_group" "wowza" {
   name = var.service_name
 
