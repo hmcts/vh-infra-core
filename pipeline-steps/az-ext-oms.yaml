@@ -8,6 +8,8 @@ parameters:
     type: string
   - name: env
     type: string
+  - name: env_long
+    type: string
     
 steps:
   - task: AzureCLI@2
@@ -19,10 +21,10 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-        $rgName="$env:WS_RG"
-        $workspaceName="$env:WS_NAME"
-        $workspaceSubscriptionName="$env:WS_SUB_NAME"
-        $env_long = "${{ parameters.env }}"
+        $rgName="vh-infra-core-${{ parameters.env }}"
+        $workspaceName="vh-infra-core-${{ parameters.env }}"
+        $workspaceSubscriptionName="DTS-SHAREDSERVICES-${{ upper(parameters.env) }}"
+        $env_long = "${{ parameters.env_long }}"
         Write-Output "====env_long===="
         Write-Output $env_long
 
