@@ -22,7 +22,7 @@ module "wowza_recordings" {
   location            = azurerm_resource_group.wowza.location
 
   access_tier                     = "Cool"
-  account_kind                    = "BlobStorage"
+  account_kind                    = "StorageV2"
   account_tier                    = "Standard"
   account_replication_type        = "RAGRS"
   allow_nested_items_to_be_public = "true"
