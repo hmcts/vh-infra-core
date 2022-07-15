@@ -1,0 +1,64 @@
+parameters:
+  - name: subscription
+    type: string
+  - name: vmNames
+    type: object
+    default: []
+  - name: vmRgName
+    type: string
+  - name: env
+    type: string
+
+steps:
+  - task: AzureCLI@2
+    displayName: Get Settings for OMS Extension
+    name: omsSettings
+    condition: always()
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        $rgName="$env:WS_RG"
+        $workspaceName="$env:WS_NAME"
+        $workspaceSubscriptionName="$env:WS_SUB_NAME"
+        $env = "${{ parameters.env }}"
+        $env_long = "$env:ENV_LONG"
+        Write-Output "====env_long===="
+        Write-Output $env_long
+
+        az account set -s $workspaceSubscriptionName
+
+        $restApiPutBody = [PSCustomObject]@{
+            "location" = "uksouth"
+            "properties" = [PSCustomObject]@{
+                    publisher               = 'Microsoft.Azure.NetworkWatcher'
+                    type                    = 'NetworkWatcherAgentLinux'
+                    typeHandlerVersion      = '1.4'
+                    autoUpgradeMinorVersion = 'true'
+            }
+            "tags" = [PSCustomObject]@{
+                    application  = 'Cloud'
+                    BuiltFrom    = 'hmcts/cvp-audio-ingress'
+                    BusinessArea = 'Cross-Cutting'
+                    environment  = $env_long
+                    Platform     = ''
+                    Video        = ''
+                }    
+        }
+        $restApiPutBodyJson = $restApiPutBody | ConvertTo-Json -Compress -Depth 100
+        $restApiPutBodyJson = $restApiPutBodyJson -replace "`"", "\`""
+        Write-Output "====restApiPutBodyJson===="
+        Write-Output $restApiPutBodyJson
+
+        Write-Host "##vso[task.setvariable variable=restApiPutBodyJson;isOutput=true;issecret=true]$restApiPutBodyJson"
+
+  - ${{ each vm in parameters.vmNames }}:
+    - template: templates\Azure\Vm\install-ext-by-api.yaml@azTemplates
+      parameters:
+        subscription: ${{ parameters.subscription }}
+        rgName: ${{ parameters.vmRgName }}
+        vmName: ${{ vm }}
+        extName: "OmsAgentForLinux"
+        extPublisher: "Microsoft.EnterpriseCloud.Monitoring"
+        restApiPutBodyJson: $(omsSettings.restApiPutBodyJson)
