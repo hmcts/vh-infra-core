@@ -48,54 +48,67 @@ parameters:
 stages:
 - stage: 'Terraform_Plan_${{ parameters.env }}'
   displayName: 'Terraform Plan ${{ parameters.env }}'
+  variables:
+    - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/common.yaml
+    - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
   jobs: 
-  - job: 'Terraform_Plan_${{ parameters.env }}'
-    displayName: 'Terraform Plan ${{ parameters.env }}'
-    variables:
-    - name: environment
-      value: ${{ parameters.env }}
-    - group: vh-tenant-creds
-    - template: ado-vars.yaml
-      parameters:
-        environment: ${{ parameters.env }}
-      # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
-      # but it might be better to template the pipeline more and have a different pipeline file
-      # so that someone doesn't pick the wrong var in the dropdown
-      # same comment as above ^^
-    steps:
-    - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
-      - template: vh-tenant-replacement.yaml
+    - job: ApplyExtToEnv
+      displayName: 'Extensions to ${{parameters.env}}'
+      steps:
+        - template: az-ext-oms.yaml
+          parameters:
+            subscription: ${{parameters.environmentServiceConnection}}
+            vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
+            vmRgName:  "vh-infra-wowza-${{parameters.env}}"
+            env: ${{ parameters.env }}
+            env_long: ${{ variables.env_long }}
+    - job: 'Terraform_Plan_${{ parameters.env }}'
+      displayName: 'Terraform Plan ${{ parameters.env }}'
+      variables:
+      - name: environment
+        value: ${{ parameters.env }}
+      - group: vh-tenant-creds
+      - template: ado-vars.yaml
+        parameters:
+          environment: ${{ parameters.env }}
+        # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+        # but it might be better to template the pipeline more and have a different pipeline file
+        # so that someone doesn't pick the wrong var in the dropdown
+        # same comment as above ^^
+      steps:
+      - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
+        - template: vh-tenant-replacement.yaml
+          parameters:
+            environment: ${{ variables.environment }}
+
+        - template: ado-vars-to-tf.yaml
+          parameters: 
+            environment: ${{ variables.environment }}
+
+      - template: templates\Azure\Common\unlock-resource-group.yml@templates
+        parameters:
+          subscriptionName: ${{parameters.environmentServiceConnection}}
+          ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
+            resourceGroupName: "vh-infra-wowza-${{variables.environment}}"
+          ${{ else }}:
+            resourceGroupName: "vh-infra-core-${{variables.environment}}" 
+          lockName: "${{variables.environment}}-lock"
+
+      - template: terraform-plan.yaml
         parameters:
           environment: ${{ variables.environment }}
-
-      - template: ado-vars-to-tf.yaml
-        parameters: 
-          environment: ${{ variables.environment }}
-
-    - template: templates\Azure\Common\unlock-resource-group.yml@templates
-      parameters:
-        subscriptionName: ${{parameters.environmentServiceConnection}}
-        ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
-          resourceGroupName: "vh-infra-wowza-${{variables.environment}}"
-        ${{ else }}:
-          resourceGroupName: "vh-infra-core-${{variables.environment}}" 
-        lockName: "${{variables.environment}}-lock"
-
-    - template: terraform-plan.yaml
-      parameters:
-        environment: ${{ variables.environment }}
-        location: ${{ parameters.location }}
-        stack: ${{ parameters.stack }}
-        project: ${{ parameters.project }}
-        product: ${{ parameters.product }}
-        builtFrom: $(Build.Repository.Name)
-        tfversion: ${{ parameters.terraformVersion }}
-        serviceConnection: ${{ parameters.environmentServiceConnection }}
-        tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
-        tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
-        activity_name: ${{ parameters.activityName  }}
-        ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
-          additional_tf_var: $(ado_vars_to_tf.ado_vars)
+          location: ${{ parameters.location }}
+          stack: ${{ parameters.stack }}
+          project: ${{ parameters.project }}
+          product: ${{ parameters.product }}
+          builtFrom: $(Build.Repository.Name)
+          tfversion: ${{ parameters.terraformVersion }}
+          serviceConnection: ${{ parameters.environmentServiceConnection }}
+          tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
+          tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
+          activity_name: ${{ parameters.activityName  }}
+          ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
+            additional_tf_var: $(ado_vars_to_tf.ado_vars)
 
 ################################################
 # Terraform Apply Dev. #########################
@@ -151,7 +164,8 @@ stages:
             subscription: ${{parameters.environmentServiceConnection}}
             vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
             vmRgName:  "vh-infra-wowza-${{parameters.env}}"
-            env: ${{ variables.env_long }}
+            env: ${{ parameters.env }}
+            env_long: ${{ variables.env_long }}
         - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
           - ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
             - template: az-ext-dynatrace-api.yaml
