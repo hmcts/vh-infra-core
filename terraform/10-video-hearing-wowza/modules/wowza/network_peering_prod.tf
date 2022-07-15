@@ -22,3 +22,4 @@ resource "azurerm_virtual_network_peering" "uks_prod_hub_to_vnet" {
   remote_virtual_network_id = azurerm_virtual_network.wowza.id
   allow_forwarded_traffic   = true
 }
+ 

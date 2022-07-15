@@ -17,7 +17,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "REPLACE_ME"
+  subscription_id = data.azurerm_client_config.current.subscription_id
 }
 
 provider "azurerm" {

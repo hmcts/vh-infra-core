@@ -1,10 +1,6 @@
 data "azurerm_client_config" "current" {
 }
 
-data "azurerm_subscription" "peering_target" {
-  provider = azurerm.peering_target
-}
-
 locals {
   dns_zone_name = var.environment == "prod" ? "platform.hmcts.net" : "sandbox.platform.hmcts.net"
 }
