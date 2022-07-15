@@ -1,6 +1,6 @@
 data "azurerm_log_analytics_workspace" "core" {
-  name                = var.service_name
-  resource_group_name = var.service_name
+  name                = "vh-infra-core-${var.environment}"
+  resource_group_name = "vh-infra-core-${var.environment}"
 }
 
 resource "azurerm_network_watcher" "wowza" {
