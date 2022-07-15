@@ -25,7 +25,7 @@ steps:
         $dynatrace_host_group="$env:DYNATRACE_HOST_GROUP"
         $dynatrace_network_zone="$env:DYNATRACE_NETWORK_ZONE"
         $env = "${{ parameters.env }}"
-        $env_long = "$env:ENV_LONG"
+        $env_long = "${{ variables.env_long }}"
 
         $infraKvName = "$env:INFRA_KV"
         Write-Host infraKvName
@@ -77,8 +77,8 @@ steps:
                 }
             }
             "tags" = [PSCustomObject]@{
-                "application"  = 'Cloud'
-                "BuiltFrom"    = 'hmcts/cvp-audio-ingress'
+                "application"  = 'video-hearing-service'
+                "BuiltFrom"    = 'hmcts/vh-shared-infrastructure'
                 "BusinessArea" = 'Cross-Cutting'
                 "environment"  = $env_long
                 "Platform"     = ''

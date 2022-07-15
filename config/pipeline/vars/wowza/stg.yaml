@@ -1,3 +1,4 @@
 variables:
   dynatrace_host_group: "SDS_VH_STG"
   dynatrace_tenant_id: "yrk32651"
+  env_long: "staging"

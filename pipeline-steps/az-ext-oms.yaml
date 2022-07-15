@@ -23,7 +23,7 @@ steps:
         $workspaceName="$env:WS_NAME"
         $workspaceSubscriptionName="$env:WS_SUB_NAME"
         $env = "${{ parameters.env }}"
-        $env_long = "$env:ENV_LONG"
+        $env_long = "${{ variables.env_long }}"
         Write-Output "====env_long===="
         Write-Output $env_long
 
@@ -38,8 +38,8 @@ steps:
                     autoUpgradeMinorVersion = 'true'
             }
             "tags" = [PSCustomObject]@{
-                    application  = 'Cloud'
-                    BuiltFrom    = 'hmcts/cvp-audio-ingress'
+                    application  = 'video-hearing-service'
+                    BuiltFrom    = 'hmcts/vh-shared-infrastructure'
                     BusinessArea = 'Cross-Cutting'
                     environment  = $env_long
                     Platform     = ''
