@@ -7,6 +7,7 @@ resource "azurerm_network_watcher" "wowza" {
   name                = "${var.service_name}-watcher"
   location            = azurerm_resource_group.wowza.location
   resource_group_name = azurerm_resource_group.wowza.name
+  tags                = var.tags
 }
 
 resource "azurerm_network_watcher_flow_log" "nsg" {
@@ -30,4 +31,6 @@ resource "azurerm_network_watcher_flow_log" "nsg" {
     workspace_resource_id = data.azurerm_log_analytics_workspace.core.id
     interval_in_minutes   = 10
   }
+
+  tags = var.tags
 }
