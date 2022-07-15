@@ -84,7 +84,7 @@ resource "azurerm_lb_rule" "ssh" {
   backend_port                   = 22
   frontend_ip_configuration_name = local.frontend_ip_configuration_name
   probe_id                       = azurerm_lb_probe.wowza_rtmps-public.id
-  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.wowza_vm[0].id]
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.wowza-public.id]
   load_distribution              = "Default"
   idle_timeout_in_minutes        = 30
 }
