@@ -1,3 +1,6 @@
+data "azurerm_client_config" "current" {
+}
+
 #--------------------------------------------------------------
 # VH - Resource Group
 #--------------------------------------------------------------
@@ -46,7 +49,6 @@ module "wowza" {
   environment                 = var.environment
   location                    = var.location
   service_name                = "vh-infra-wowza-${var.environment}"
-  admin_ssh_key_path          = var.admin_ssh_key_path
   key_vault_id                = data.azurerm_key_vault.vh-infra-core.id
   address_space               = lookup(var.workspace_to_address_space_map, var.environment, "")
   private_dns_zone_group      = data.azurerm_private_dns_zone.core-infra-intsvc.id

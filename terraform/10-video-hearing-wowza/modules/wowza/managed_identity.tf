@@ -19,7 +19,7 @@ output "wowza-storage-msi" {
 }
 
 resource "azurerm_role_assignment" "wowza_storage_access" {
-  scope                = azurerm_storage_account.wowza_recordings.id
+  scope                = module.wowza_recordings.storageaccount_id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_user_assigned_identity.wowza_storage.principal_id
 }

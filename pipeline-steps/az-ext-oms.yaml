@@ -1,0 +1,65 @@
+parameters:
+  - name: subscription
+    type: string
+  - name: vmNames
+    type: object
+    default: []
+  - name: vmRgName
+    type: string
+  - name: env
+    type: string
+  - name: env_long
+    type: string
+    
+steps:
+  - task: AzureCLI@2
+    displayName: Get Settings for OMS Extension
+    name: omsSettings
+    condition: always()
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        $rgName="vh-infra-core-${{ parameters.env }}"
+        $workspaceName="vh-infra-core-${{ parameters.env }}"
+        $workspaceSubscriptionName="DTS-SHAREDSERVICES-${{ upper(parameters.env) }}"
+        $env_long = "${{ parameters.env_long }}"
+        Write-Output "====env_long===="
+        Write-Output $env_long
+
+        az account set -s $workspaceSubscriptionName
+
+        $restApiPutBody = [PSCustomObject]@{
+            "location" = "uksouth"
+            "properties" = [PSCustomObject]@{
+                    publisher               = 'Microsoft.Azure.NetworkWatcher'
+                    type                    = 'NetworkWatcherAgentLinux'
+                    typeHandlerVersion      = '1.4'
+                    autoUpgradeMinorVersion = 'true'
+            }
+            "tags" = [PSCustomObject]@{
+                    application  = 'video-hearing-service'
+                    BuiltFrom    = 'hmcts/vh-shared-infrastructure'
+                    BusinessArea = 'Cross-Cutting'
+                    environment  = $env_long
+                    Platform     = ''
+                    Video        = ''
+                }    
+        }
+        $restApiPutBodyJson = $restApiPutBody | ConvertTo-Json -Compress -Depth 100
+        $restApiPutBodyJson = $restApiPutBodyJson -replace "`"", "\`""
+        Write-Output "====restApiPutBodyJson===="
+        Write-Output $restApiPutBodyJson
+
+        Write-Host "##vso[task.setvariable variable=restApiPutBodyJson;isOutput=true;issecret=true]$restApiPutBodyJson"
+
+  - ${{ each vm in parameters.vmNames }}:
+    - template: templates\Azure\Vm\install-ext-by-api.yaml@templates
+      parameters:
+        subscription: ${{ parameters.subscription }}
+        rgName: ${{ parameters.vmRgName }}
+        vmName: ${{ vm }}
+        extName: "OmsAgentForLinux"
+        extPublisher: "Microsoft.EnterpriseCloud.Monitoring"
+        restApiPutBodyJson: $(omsSettings.restApiPutBodyJson)

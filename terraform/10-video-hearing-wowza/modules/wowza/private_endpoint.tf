@@ -18,24 +18,6 @@ data "azurerm_subnet" "ss_subnet" {
   resource_group_name  = "ss-${var.environment}-network-rg"
 }
 
-
-## Create private endpoint for Wowza VM's
-
-resource "azurerm_private_endpoint" "wowza_vm_endpoint_aks" {
-  name                = "vh-wowza-endpoint-${var.environment}"
-  location            = azurerm_resource_group.wowza.location
-  resource_group_name = azurerm_resource_group.wowza.name
-  subnet_id           = data.azurerm_subnet.ss_subnet.id
-
-  private_service_connection {
-    name                           = "wowza-${var.environment}-aksserviceconnection"
-    private_connection_resource_id = azurerm_private_link_service.wowza.id
-    is_manual_connection           = false
-  }
-  tags = var.tags
-}
-
-
 ## Create Wowza Storage endpoint for AKS
 
 resource "azurerm_private_endpoint" "wowza_storage_endpoint_aks" {
@@ -46,7 +28,7 @@ resource "azurerm_private_endpoint" "wowza_storage_endpoint_aks" {
 
   private_service_connection {
     name                           = "wowza-${var.environment}-storageconnection"
-    private_connection_resource_id = azurerm_storage_account.wowza_recordings.id
+    private_connection_resource_id = module.wowza_recordings.storageaccount_id
     subresource_names              = ["Blob"]
     is_manual_connection           = false
   }

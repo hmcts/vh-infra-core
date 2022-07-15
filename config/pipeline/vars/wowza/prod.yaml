@@ -1,3 +1,4 @@
 variables:
   dynatrace_host_group: "SDS_VH_PROD"
   dynatrace_tenant_id: "ebe20728"
+  env_long: "production"

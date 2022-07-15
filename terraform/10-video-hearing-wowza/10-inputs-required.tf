@@ -30,11 +30,6 @@ variable "location" {
   type = string
 }
 
-variable "admin_ssh_key_path" {
-  type = string
-  #default = "~/.ssh/wowza.pub"
-}
-
 # # DNS
 variable "dns_zone_name" {
   type = string
@@ -53,14 +48,13 @@ variable "dev_group" {
 variable "workspace_to_address_space_map" {
   type = map(string)
   default = {
-    prod = "10.50.10.0/28"
-    stg  = "10.50.10.16/28"
-    # preprod = "10.50.10.16/28"
-    dev  = "10.50.10.32/28"
-    demo = "10.50.10.48/28"
-    test = "10.50.10.64/28"
-    sbox = "10.50.10.80/28"
-    ithc = "10.50.10.96/28"
+    prod = "10.50.11.16/28"
+    stg  = "10.50.10.112/28"
+    dev  = "10.100.198.64/28"
+    demo = "10.254.0.224/28"
+    test = "10.100.197.208/28"
+    sbox = "10.100.198.32/28"
+    ithc = "10.100.197.224/28"
   }
 }
 

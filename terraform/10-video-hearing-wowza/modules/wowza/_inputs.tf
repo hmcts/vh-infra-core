@@ -24,11 +24,6 @@ variable "admin_user" {
   default = "wowza"
 }
 
-variable "admin_ssh_key_path" {
-  type = string
-  #default = "~/.ssh/wowza.pub"
-}
-
 variable "os_disk_type" {
   type    = string
   default = "Standard_LRS"

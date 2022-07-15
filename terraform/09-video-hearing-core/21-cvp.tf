@@ -2,7 +2,7 @@ locals {
   cvp_environment              = var.environment == "prod" ? var.environment : "stg"
   cvp_container_name           = "recordings"
   cvp_storage_account_name     = "cvprecordings${local.cvp_environment}sa"
-  cvp_storage_account_endpoint = "http://${local.cvp_storage_account_name}.blob.core.windows.net/"
+  cvp_storage_account_endpoint = "https://${local.cvp_storage_account_name}.blob.core.windows.net/"
   cvp_resource_group_name      = "cvp-recordings-${local.cvp_environment}-rg"
 }
 

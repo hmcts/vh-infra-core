@@ -143,7 +143,6 @@ stages:
         variables:
             - group: vh-tenant-creds
         steps:
-          - template: pipeline-steps/sshkey-download.yaml
           - template: pipeline-steps/deploy-service-elevated.yaml
             parameters:
               environment: ${{ parameters.env }}

@@ -1,6 +1,0 @@
-steps:
-  - task: DownloadSecureFile@1
-    name: sshPubKey
-    displayName: Download SSH Public Key
-    inputs:
-      secureFile: 'wowza-ssh-public-key.pub'
