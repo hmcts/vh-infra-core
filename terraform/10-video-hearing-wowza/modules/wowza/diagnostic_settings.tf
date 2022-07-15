@@ -1,5 +1,5 @@
 resource "azurerm_monitor_diagnostic_setting" "storage_account" {
-  name                       = "vh-sa-${var.env}-diag-set"
+  name                       = "vh-sa-${var.environment}-diag-set"
   target_resource_id         = module.wowza_recordings.storageaccount_id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
 
@@ -23,7 +23,7 @@ resource "azurerm_monitor_diagnostic_setting" "storage_account" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "nsg" {
-  name                       = "vh-nsg-${var.env}-diag-set"
+  name                       = "vh-nsg-${var.environment}-diag-set"
   target_resource_id         = azurerm_network_security_group.wowza.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
 
@@ -49,7 +49,7 @@ resource "azurerm_monitor_diagnostic_setting" "nsg" {
 resource "azurerm_monitor_diagnostic_setting" "nics" {
   count = var.wowza_instance_count
 
-  name                       = "vh-nic${count.index}-${var.env}-diag-set"
+  name                       = "vh-nic${count.index}-${var.environment}-diag-set"
   target_resource_id         = azurerm_network_interface.wowza[count.index].id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
 
@@ -65,7 +65,7 @@ resource "azurerm_monitor_diagnostic_setting" "nics" {
 
 
 resource "azurerm_monitor_diagnostic_setting" "load_balancer" {
-  name                       = "vh-lb-${var.env}-diag-set"
+  name                       = "vh-lb-${var.environment}-diag-set"
   target_resource_id         = azurerm_lb.wowza.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
 
@@ -97,7 +97,7 @@ resource "azurerm_monitor_diagnostic_setting" "load_balancer" {
   }
 }
 resource "azurerm_monitor_diagnostic_setting" "load_balancer_public" {
-  name                       = "vh-lb-public-${var.env}-diag-set"
+  name                       = "vh-lb-public-${var.environment}-diag-set"
   target_resource_id         = azurerm_lb.wowza-public.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
 
