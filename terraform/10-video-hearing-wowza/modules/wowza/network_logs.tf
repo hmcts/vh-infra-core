@@ -10,7 +10,7 @@ resource "azurerm_network_watcher_flow_log" "nsg" {
   name = "${var.service_name}-flow-logs"
 
   network_security_group_id = azurerm_network_security_group.wowza.id
-  storage_account_id        = azurerm_storage_account.wowza_recordings.id
+  storage_account_id        = module.wowza_recordings.storageaccount_id
   enabled                   = true
 
   retention_policy {
