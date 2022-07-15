@@ -37,6 +37,12 @@ resource "azurerm_lb_probe" "wowza_rest-public" {
   port            = 8087
 }
 
+resource "azurerm_lb_probe" "wowza_ssh-public" {
+  loadbalancer_id = azurerm_lb.wowza-public.id
+  name            = "ssh-probe"
+  port            = 22
+}
+
 resource "azurerm_lb_rule" "wowza-public" {
   loadbalancer_id                = azurerm_lb.wowza-public.id
   name                           = "RTMPS-Rule"
@@ -83,7 +89,7 @@ resource "azurerm_lb_rule" "ssh" {
   frontend_port                  = 22
   backend_port                   = 22
   frontend_ip_configuration_name = local.frontend_ip_configuration_name
-  probe_id                       = azurerm_lb_probe.wowza_rtmps-public.id
+  probe_id                       = azurerm_lb_probe.wowza_ssh-public.id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.wowza-public.id]
   load_distribution              = "Default"
   idle_timeout_in_minutes        = 30
