@@ -3,13 +3,8 @@ data "azurerm_log_analytics_workspace" "core" {
   resource_group_name = "vh-infra-core-${var.environment}"
 }
 
-data "azurerm_network_watcher" "this" {
-  name                = "NetworkWatcher_${azurerm_resource_group.wowza.location}"
-  resource_group_name = "NetworkWatcherRG"
-}
-
 resource "azurerm_network_watcher_flow_log" "nsg" {
-  network_watcher_name = azurerm_network_watcher.wowza.name
+  network_watcher_name = "NetworkWatcher_${azurerm_resource_group.wowza.location}" ## Subscription Shared Watcher
   resource_group_name  = azurerm_resource_group.wowza.name
   name                 = "${var.service_name}-flow-logs"
 
