@@ -8,7 +8,6 @@ parameters:
     type: string
   - name: env
     type: string
-    default: ''
 
 steps:
   - task: AzureCLI@2
@@ -24,8 +23,7 @@ steps:
         $dynatrace_tenant_id="$env:DYNATRACE_TENANT_ID"
         $dynatrace_host_group="$env:DYNATRACE_HOST_GROUP"
         $dynatrace_network_zone="$env:DYNATRACE_NETWORK_ZONE"
-        $env = "${{ parameters.env }}"
-        $env_long = "${{ variables.env_long }}"
+        $env_long = "${{ parameters.env }}"
 
         $infraKvName = "$env:INFRA_KV"
         Write-Host infraKvName

@@ -22,8 +22,7 @@ steps:
         $rgName="$env:WS_RG"
         $workspaceName="$env:WS_NAME"
         $workspaceSubscriptionName="$env:WS_SUB_NAME"
-        $env = "${{ parameters.env }}"
-        $env_long = "${{ variables.env_long }}"
+        $env_long = "${{ parameters.env }}"
         Write-Output "====env_long===="
         Write-Output $env_long
 

@@ -151,7 +151,7 @@ stages:
             subscription: ${{parameters.environmentServiceConnection}}
             vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
             vmRgName:  "vh-infra-wowza-${{parameters.env}}"
-            env: ${{parameters.env}}
+            env: ${{ variables.env_long }}
         - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
           - ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
             - template: az-ext-dynatrace-api.yaml
