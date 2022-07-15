@@ -146,7 +146,7 @@ stages:
       displayName: 'Extensions to ${{parameters.env}}'
       dependsOn: Terraform_Apply_${{ parameters.env }}
       steps:
-        - template: ../steps/az-ext-oms.yaml
+        - template: az-ext-oms.yaml
           parameters:
             subscription: ${{parameters.environmentServiceConnection}}
             vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
