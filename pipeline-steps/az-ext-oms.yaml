@@ -54,7 +54,7 @@ steps:
         Write-Host "##vso[task.setvariable variable=restApiPutBodyJson;isOutput=true;issecret=true]$restApiPutBodyJson"
 
   - ${{ each vm in parameters.vmNames }}:
-    - template: templates\Azure\Vm\install-ext-by-api.yaml@azTemplates
+    - template: templates\Azure\Vm\install-ext-by-api.yaml@templates
       parameters:
         subscription: ${{ parameters.subscription }}
         rgName: ${{ parameters.vmRgName }}
