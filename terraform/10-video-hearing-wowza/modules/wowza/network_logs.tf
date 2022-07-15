@@ -1,7 +1,4 @@
-data "azurerm_log_analytics_workspace" "core" {
-  name                = "vh-infra-core-${var.environment}"
-  resource_group_name = "vh-infra-core-${var.environment}"
-}
+
 
 resource "azurerm_network_watcher_flow_log" "nsg" {
   network_watcher_name = "NetworkWatcher_${azurerm_resource_group.wowza.location}"
