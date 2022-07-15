@@ -96,7 +96,7 @@ resource "azurerm_monitor_diagnostic_setting" "load_balancer" {
     }
   }
 }
-resource "azurerm_monitor_diagnostic_setting" "load_balancer" {
+resource "azurerm_monitor_diagnostic_setting" "load_balancer_public" {
   name                       = "vh-lb-public-${var.env}-diag-set"
   target_resource_id         = azurerm_lb.wowza-public.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
