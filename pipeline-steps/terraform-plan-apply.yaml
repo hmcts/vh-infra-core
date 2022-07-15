@@ -52,16 +52,6 @@ stages:
     - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/common.yaml
     - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
   jobs: 
-    - job: ApplyExtToEnv
-      displayName: 'Extensions to ${{parameters.env}}'
-      steps:
-        - template: az-ext-oms.yaml
-          parameters:
-            subscription: ${{parameters.environmentServiceConnection}}
-            vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
-            vmRgName:  "vh-infra-wowza-${{parameters.env}}"
-            env: ${{ parameters.env }}
-            env_long: ${{ variables.env_long }}
     - job: 'Terraform_Plan_${{ parameters.env }}'
       displayName: 'Terraform Plan ${{ parameters.env }}'
       variables:
