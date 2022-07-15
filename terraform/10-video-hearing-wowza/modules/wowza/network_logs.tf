@@ -25,9 +25,9 @@ resource "azurerm_network_watcher_flow_log" "nsg" {
 
   traffic_analytics {
     enabled               = true
-    workspace_id          = azurerm_log_analytics_workspace.core.workspace_id
-    workspace_region      = azurerm_log_analytics_workspace.core.location
-    workspace_resource_id = azurerm_log_analytics_workspace.core.id
+    workspace_id          = data.azurerm_log_analytics_workspace.core.workspace_id
+    workspace_region      = data.azurerm_log_analytics_workspace.core.location
+    workspace_resource_id = data.azurerm_log_analytics_workspace.core.id
     interval_in_minutes   = 10
   }
 }
