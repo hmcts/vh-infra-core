@@ -21,7 +21,6 @@ resource "random_password" "streamPassword" {
   override_special = "_%*"
 }
 
-
 data "template_file" "cloudconfig" {
   template = file(var.cloud_init_file)
   vars = {
