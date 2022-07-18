@@ -41,7 +41,7 @@ write_files:
                                       <SSLProtocol>TLS</SSLProtocol>
                                       <Algorithm>SunX509</Algorithm>
                                       <CipherSuites></CipherSuites>
-                                      <Protocols>TLSv1.2</Protocols>
+                                      <Protocols></Protocols>
                               </SSLConfig>
                               <IPWhiteList>*</IPWhiteList>
                               <IPBlackList></IPBlackList>
@@ -160,7 +160,7 @@ write_files:
                                               <SSLProtocol>TLS</SSLProtocol>
                                               <Algorithm>SunX509</Algorithm>
                                               <CipherSuites></CipherSuites>
-                                              <Protocols>TLSv1.2</Protocols>
+                                              <Protocols></Protocols>
                                       </SSLConfig>
                                       <SocketConfiguration>
                                               <ReuseAddress>true</ReuseAddress>
@@ -847,7 +847,7 @@ write_files:
             openssl pkcs12 -export -out $signedPfxPath -in tmpmycert.pem -passin pass:$jksPass -passout pass:$jksPass
 
             keytool -delete -alias 1 -keystore $jksPath -storepass $jksPass
-            keytool -importkeystore -srckeystore $signedPfxPath -srcstoretype pkcs12 -destkeystore $jksPath -deststoretype JKS -deststorepass $jksPass -srcstorepass ""
+            keytool -importkeystore -srckeystore $signedPfxPath -srcstoretype pkcs12 -destkeystore $jksPath -deststoretype JKS -deststorepass $jksPass -srcstorepass $jksPass
         else
             echo "Certificate has NOT expired"
         fi
