@@ -71,7 +71,7 @@ resource "azurerm_network_security_group" "wowza" {
     source_address_prefix      = "AzureLoadBalancer"
     source_port_range          = "*"
     destination_port_range     = "22"
-    destination_address_prefix = local.ip_csv
+    destination_address_prefixes = local.ip_list
   }
   tags = var.tags
 }
