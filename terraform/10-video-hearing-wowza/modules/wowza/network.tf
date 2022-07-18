@@ -59,5 +59,20 @@ resource "azurerm_network_security_group" "wowza" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+
+  security_rule {
+    name                   = "Azure-LB-Probe"
+    priority               = 1050
+    direction              = "Inbound"
+    access                 = "Allow"
+    protocol               = "Tcp"
+    source_address_prefix  = "AzureLoadBalancer"
+    source_port_range      = "*"
+    destination_port_range = "22"
+    destination_address_prefix = [
+      for vm in azurerm_linux_virtual_machine.wowza :
+      vm.private_ip_address
+    ]
+  }
   tags = var.tags
 }
