@@ -767,21 +767,21 @@ write_files:
   - owner: wowza:wowza
     path: /home/wowza/migrateWowzaToDisk.sh
     content: |
-      service WowzaStreamingEngine stop
-
-      rm -r -f /wowzadata/blobfusetmp
-      mkdir -p /wowzadata/blobfusetmp
-      mkdir -p /wowzadata/azurecopy
-
       cp /home/wowza/WowzaStreamingEngine/conf/Server.xml /usr/local/WowzaStreamingEngine/conf/Server.xml
       cp /home/wowza/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/conf/VHost.xml
       cp /home/wowza/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/conf/Application.xml
       cp /home/wowza/WowzaStreamingEngine/conf/admin.password /usr/local/WowzaStreamingEngine/conf/admin.password
       cp /home/wowza/WowzaStreamingEngine/conf/publish.password /usr/local/WowzaStreamingEngine/conf/publish.password
+  - owner: wowza:wowza
+    path: /home/wowza/mountBlobFuse.sh
+    content: |
+
+      rm -r -f /wowzadata/blobfusetmp
+      mkdir -p /wowzadata/blobfusetmp
+      mkdir -p /wowzadata/azurecopy
 
       bash /home/wowza/mount.sh /wowzadata/azurecopy /home/wowza/recordings.cfg /wowzadata/blobfusetmp
 
-      service WowzaStreamingEngine start
   - owner: wowza:wowza
     path: /home/wowza/WowzaStreamingEngine/conf/admin.password
     content: |
@@ -913,6 +913,8 @@ write_files:
         /home/wowza/log4j-fix.sh
         wget https://www.wowza.com/downloads/forums/collection/wse-plugin-autorecord.zip && unzip wse-plugin-autorecord.zip && mv lib/wse-plugin-autorecord.jar /usr/local/WowzaStreamingEngine/lib/ && chown wowza: /usr/local/WowzaStreamingEngine/lib/wse-plugin-autorecord.jar
   
+        /home/wowza/mountBlobFuse.sh
+        
         # install certificates
         sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash # Az cli install
         sudo /home/wowza/renew-cert.sh
