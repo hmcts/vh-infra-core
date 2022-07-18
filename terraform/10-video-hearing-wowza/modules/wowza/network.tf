@@ -3,6 +3,8 @@ data "azurerm_client_config" "current" {
 
 locals {
   dns_zone_name = var.environment == "prod" ? "platform.hmcts.net" : "sandbox.platform.hmcts.net"
+  ip_list       = [for vm in azurerm_linux_virtual_machine.wowza : vm.private_ip_address]
+  ip_csv        = join(",", local.ip_list)
 }
 
 resource "azurerm_virtual_network" "wowza" {
@@ -61,15 +63,17 @@ resource "azurerm_network_security_group" "wowza" {
   }
 
   security_rule {
-    name                   = "Azure-LB-Probe"
-    priority               = 1050
-    direction              = "Inbound"
-    access                 = "Allow"
-    protocol               = "Tcp"
-    source_address_prefix  = "AzureLoadBalancer"
-    source_port_range      = "*"
-    destination_port_range = "22"
-    destination_address_prefix = [for vm in azurerm_linux_virtual_machine.wowza : vm.private_ip_address]
+    name                       = "Azure-LB-Probe"
+    priority                   = 1050
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_address_prefix      = "AzureLoadBalancer"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    destination_address_prefix = local.ip_csv
   }
   tags = var.tags
 }
+
+
