@@ -81,7 +81,7 @@ resource "azurerm_user_assigned_identity" "wowza_cert" {
   resource_group_name = azurerm_resource_group.wowza.name
   location            = azurerm_resource_group.wowza.location
 
-  name = "wowza-cert-${var.environment}-mi"
+  name = "vh-wowza-cert-${var.environment}-mi"
   tags = var.tags
 }
 data "azurerm_key_vault" "acmekv" {
