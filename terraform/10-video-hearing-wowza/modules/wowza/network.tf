@@ -63,16 +63,18 @@ resource "azurerm_network_security_group" "wowza" {
   }
 
   security_rule {
-    name                         = "Azure-LB-Probe"
-    priority                     = 1050
-    direction                    = "Inbound"
-    access                       = "Allow"
-    protocol                     = "Tcp"
-    source_address_prefix        = "AzureLoadBalancer"
-    source_port_range            = "*"
-    destination_port_range       = "22"
-    destination_address_prefixes = local.ip_list
+    name                       = "Azure-LB-Probe"
+    priority                   = 1050
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_address_prefix      = "AzureLoadBalancer"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    destination_address_prefix = "*"
+    #destination_address_prefixes = local.ip_list #TODO: this fails on second run everytime and do not know why
   }
+
   tags = var.tags
 }
 
