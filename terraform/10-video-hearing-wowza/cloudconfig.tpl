@@ -827,7 +827,7 @@ write_files:
 
         export PATH=$PATH:/usr/local/WowzaStreamingEngine/java/bin
 
-        expiryDate=$(keytool -list -v -keystore $jksPath -storepass $jksPass | grep until | sed 's/.*until: //')
+        expiryDate=$(keytool -list -v -keystore $jksPath -storepass $jksPass | grep until | head -1 | sed 's/.*until: //')
 
         echo "Certificate Expires $expiryDate"
         expiryDate="$(date -d "$expiryDate - 14 days" +%Y%m%d)"
@@ -851,55 +851,6 @@ write_files:
         else
             echo "Certificate has NOT expired"
         fi
-  - owner: wowza:wowza
-    permissions: 0775
-    path: /home/wowza/log4j-fix.sh
-    content: |
-        #!/bin/bash
-
-        home_dir="/home/wowza"
-        wowza_version="4.8.10"
-
-        ## Vars
-        log4core_name="log4j-core-2.15.0.jar"
-        log4api_name="log4j-api-2.15.0.jar"
-
-        lof4j_zip_name="apache-log4j-2.15.0-bin"
-        lof4j_zip_url="https://dlcdn.apache.org/logging/log4j/2.15.0/$lof4j_zip_name.zip"
-
-        wowza_dir="/usr/local/WowzaStreamingEngine-$wowza_version"
-        wowza_lib_dir="$wowza_dir/lib"
-        wowza_tune_dir="$wowza_dir/conf/Tune.xml"
-        wowza_startmgr_dir="$wowza_dir/manager/bin/startmgr.sh"
-
-        ## Installs
-        sudo apt install curl
-        sudo apt install unzip
-
-        ## Patch Directory
-        patch_dir="$home_dir/patch"
-        mkdir $patch_dir
-        cd $patch_dir
-
-        ## Download ZIP
-        curl -O $lof4j_zip_url
-        unzip $lof4j_zip_name -d .
-
-        ## Stop Wowza
-        sudo service WowzaStreamingEngine stop
-
-        ## Delete old files
-        sudo mv "$wowza_lib_dir/log4j-core-2.13.3.jar" "$home_dir/patch"
-        sudo mv "$wowza_lib_dir/log4j-api-2.13.3.jar" "$home_dir/patch"
-
-        ## Move new files
-        sudo mv "$home_dir/patch/$lof4j_zip_name/$log4core_name" "$wowza_lib_dir"
-        sudo mv "$home_dir/patch/$lof4j_zip_name/$log4api_name" "$wowza_lib_dir"
-        chmod 775 "$wowza_lib_dir/$log4core_name"
-        chmod 775 "$wowza_lib_dir/$log4api_name"
-
-        ## Start Wowza
-        sudo service WowzaStreamingEngine start
   # PLEASE LEAVE THIS AT THE BOTTOM
   - owner: wowza:wowza
     permissions: 0775
@@ -909,8 +860,7 @@ write_files:
 
         chmod +x /etc/rc.local && systemctl enable rc-local.service && systemctl start rc-local.service
 
-        /home/wowza/migrateWowzaToDisk.sh
-        /home/wowza/log4j-fix.sh
+        sudo sh /home/wowza/migrateWowzaToDisk.sh
         wget https://www.wowza.com/downloads/forums/collection/wse-plugin-autorecord.zip && unzip wse-plugin-autorecord.zip && mv lib/wse-plugin-autorecord.jar /usr/local/WowzaStreamingEngine/lib/ && chown wowza: /usr/local/WowzaStreamingEngine/lib/wse-plugin-autorecord.jar
   
         /home/wowza/mountBlobFuse.sh
