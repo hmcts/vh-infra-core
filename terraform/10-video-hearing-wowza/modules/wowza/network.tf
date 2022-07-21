@@ -39,40 +39,50 @@ resource "azurerm_network_security_group" "wowza" {
   location            = azurerm_resource_group.wowza.location
 
   security_rule {
-    name                       = "REST"
-    priority                   = 1030
+    name                       = "DenyAllAzureLoadBalancerInbound"
+    priority                   = 4096
     direction                  = "Inbound"
-    access                     = "Allow"
+    access                     = "Deny"
     protocol                   = "Tcp"
+    source_address_prefix      = "AzureLoadBalancer"
     source_port_range          = "*"
-    destination_port_range     = "8087"
-    source_address_prefix      = "*"
+    destination_port_range     = "*"
+    destination_address_prefix = "*"
+  }
+  security_rule {
+    name                       = "DenyAllVnetInbound"
+    priority                   = 4095
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "Tcp"
+    source_address_prefix      = "VirtualNetwork"
+    source_port_range          = "*"
+    destination_port_range     = "*"
     destination_address_prefix = "*"
   }
 
   security_rule {
-    name                       = "RTMPS"
+    name                       = "App-Rules"
     priority                   = 1040
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "443"
+    destination_port_range     = "443,8087"
     source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    destination_address_prefixes = local.ip_list
   }
 
   security_rule {
-    name                   = "Azure-LB-Probe"
-    priority               = 1050
-    direction              = "Inbound"
-    access                 = "Allow"
-    protocol               = "Tcp"
-    source_address_prefix  = "AzureLoadBalancer"
-    source_port_range      = "*"
-    destination_port_range = "22"
-    #destination_address_prefix = "*"
-    destination_address_prefixes = local.ip_list #TODO: this fails on second run everytime and do not know why
+    name                         = "Azure-LB-Probe"
+    priority                     = 1050
+    direction                    = "Inbound"
+    access                       = "Allow"
+    protocol                     = "Tcp"
+    source_address_prefix        = "AzureLoadBalancer"
+    source_port_range            = "*"
+    destination_port_range       = "22"
+    destination_address_prefixes = local.ip_list
   }
 
   tags = var.tags
