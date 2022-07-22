@@ -1,4 +1,5 @@
 variables:
-  dynatrace_host_group: "SDS_VH_STG"
   dynatrace_tenant_id: "yrk32651"
+  central_infra_kv: 'infra-vault-nonprod'
+  dynatrace_token_secret_name: 'dynatrace-nonprod-token'
   env_long: "staging"
