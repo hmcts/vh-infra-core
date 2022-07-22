@@ -6,16 +6,16 @@ variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic
   - group: vh-admin-web
-  - group: vh-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: vh-${{ parameters.environment }}
   - group: vh test users
   - group: Saucelabs
-  - group: vh-wowza-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
-  - group: govuk-notify-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: vh-wowza-${{ parameters.environment }}
+  - group: govuk-notify-${{ parameters.environment }}
   - group: vh-booking-queue-subscriber
-  - group: vh-video-web-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: vh-video-web-${{ parameters.environment }}
   - group: vh-test-web
   - group: vh-user-groups
-  - group: cvp-wowza-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: cvp-wowza-${{ parameters.environment }}
   - group: vh-video-api
   - group: QuickLinks_${{ parameters.environment }}
   - group: FeatureFlags_${{ parameters.environment }}
