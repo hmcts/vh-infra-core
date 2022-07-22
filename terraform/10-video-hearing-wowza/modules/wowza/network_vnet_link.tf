@@ -1,5 +1,5 @@
 locals {
-  domain_env          = var.environment == "prod" ? "" : "${var.environment}."
+  domain_env          = var.environment == "prod" ? "" : var.environment == "stg" ? "staging." : "${var.environment}."
   private_dns_zone    = "${local.domain_env}platform.hmcts.net"
   private_dns_zone_rg = "core-infra-intsvc-rg"
 }
