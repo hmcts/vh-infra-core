@@ -319,7 +319,7 @@ module "VHDataServices" {
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   key_vault_id        = module.KeyVaults.keyvault_id
-  key_vault_name      = module.KeyVaults.keyvault_name
+  keyvault_name       = module.KeyVaults.keyvault_name
 
   tags = local.common_tags
 
