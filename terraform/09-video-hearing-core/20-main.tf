@@ -155,7 +155,7 @@ module "KeyVault_Secrets" {
     },
     {
       name         = "storage-account-container-elinks-name"
-      value        = local.primary_container_name
+      value        = local.elinks_container_name
       tags         = local.common_tags
       content_type = "secret"
     }
