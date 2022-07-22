@@ -42,7 +42,7 @@ steps:
           hostGroup          = $dynatrace_host_group
           networkZone        = $dynatrace_network_zone
           enableLogAnalytics = "yes"
-          installerArguments = "--loglevel=Verbose"
+          installerArguments = "--set-app-log-content-access=true --loglevel=Verbose"
         }
         $settingsJson = $settings | ConvertTo-Json -Compress -Depth 100
         $settingsJson = $settingsJson -replace "`"", "\`""

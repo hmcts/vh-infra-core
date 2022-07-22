@@ -3,6 +3,17 @@ data "azurerm_client_config" "current" {
 
 locals {
   dns_zone_name = var.environment == "prod" ? "platform.hmcts.net" : "sandbox.platform.hmcts.net"
+  ip_list       = [for vm in azurerm_linux_virtual_machine.wowza : vm.private_ip_address]
+  ip_csv        = join(",", local.ip_list)
+  aks_address = {
+    prod = "10.144.0.0/18"
+    stg  = "10.148.0.0/18"
+    dev  = "10.145.0.0/18"
+    demo = "10.51.64.0/18"
+    test = "10.51.64.0/18"
+    sbox = "10.140.0.0/18"
+    ithc = "10.143.0.0/18"
+  }
 }
 
 resource "azurerm_virtual_network" "wowza" {
@@ -37,27 +48,57 @@ resource "azurerm_network_security_group" "wowza" {
   location            = azurerm_resource_group.wowza.location
 
   security_rule {
-    name                       = "REST"
-    priority                   = 1030
+    name                       = "DenyAllAzureLoadBalancerInbound"
+    priority                   = 4096
     direction                  = "Inbound"
-    access                     = "Allow"
+    access                     = "Deny"
     protocol                   = "Tcp"
+    source_address_prefix      = "AzureLoadBalancer"
     source_port_range          = "*"
-    destination_port_range     = "8087"
-    source_address_prefix      = "*"
+    destination_port_range     = "*"
+    destination_address_prefix = "*"
+  }
+  security_rule {
+    name                       = "DenyAllVnetInbound"
+    priority                   = 4095
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "Tcp"
+    source_address_prefix      = "VirtualNetwork"
+    source_port_range          = "*"
+    destination_port_range     = "*"
     destination_address_prefix = "*"
   }
 
   security_rule {
-    name                       = "RTMPS"
-    priority                   = 1040
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    name                         = "App-Rules"
+    priority                     = 1040
+    direction                    = "Inbound"
+    access                       = "Allow"
+    protocol                     = "Tcp"
+    source_port_range            = "*"
+    destination_port_range       = "443,8087"
+    source_address_prefix        = lookup(local.aks_address, var.environment, "*")
+    destination_address_prefixes = local.ip_list
   }
+
+  security_rule {
+    name                         = "Azure-LB-Probe"
+    priority                     = 1050
+    direction                    = "Inbound"
+    access                       = "Allow"
+    protocol                     = "Tcp"
+    source_address_prefix        = "AzureLoadBalancer"
+    source_port_range            = "*"
+    destination_port_range       = "22"
+    destination_address_prefixes = local.ip_list
+  }
+
   tags = var.tags
+
+  depends_on = [
+    azurerm_linux_virtual_machine.wowza
+  ]
 }
+
+

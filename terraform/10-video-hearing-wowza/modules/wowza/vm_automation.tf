@@ -1,7 +1,6 @@
 locals {
   cert_env     = var.environment == "prod" ? "" : "${var.environment}-"
-  domain_env   = var.environment == "prod" ? "" : "${var.environment}."
-  wowza_domain = "vh-wowza.${local.domain_env}platform.hmcts.net"
+  wowza_domain = "vh-wowza.${local.private_dns_zone}"
 }
 
 resource "random_password" "certPassword" {
@@ -21,7 +20,6 @@ resource "random_password" "streamPassword" {
   special          = true
   override_special = "_%*"
 }
-
 
 data "template_file" "cloudconfig" {
   template = file(var.cloud_init_file)

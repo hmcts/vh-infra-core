@@ -60,7 +60,8 @@ resource "azurerm_linux_virtual_machine" "wowza" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.wowza_storage.id
+      azurerm_user_assigned_identity.wowza_storage.id,
+      azurerm_user_assigned_identity.wowza_cert.id
     ]
   }
   tags = var.tags
