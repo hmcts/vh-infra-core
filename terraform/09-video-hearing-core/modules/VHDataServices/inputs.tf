@@ -8,6 +8,9 @@ variable "resource_prefix" {
 variable "key_vault_id" {
   type = string
 }
+variable "keyvault_name" {
+  type = string
+}
 variable "public_env" {
   type    = number
   default = 0

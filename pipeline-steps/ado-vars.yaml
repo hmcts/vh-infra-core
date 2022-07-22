@@ -2,7 +2,18 @@ parameters:
   - name: environment
     type: string
 
-
 variables:
   - group: vh-key-vault-vars
+  - group: vh-admin-web
+  - group: vh-test-users
+  - group: Saucelabs
+  - group: govuk-notify-${{ parameters.environment }}
+  - group: vh-booking-queue-subscriber
+  - group: vh-video-web-${{ parameters.environment }}
+  - group: vh-test-web
+  - group: vh-user-groups
+  - group: vh-video-api
+  - group: QuickLinks_${{ parameters.environment }}
+  - group: FeatureFlags_${{ parameters.environment }}
+  - group: vh-video-web
   - group: KinlyConfiguration_${{ parameters.environment }}
