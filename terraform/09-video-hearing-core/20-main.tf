@@ -137,19 +137,19 @@ module "KeyVault_Secrets" {
     },
     {
       name         = "storage-account-key"
-      value        = module.wowza_recordings.storageaccount_primary_access_key
+      value        = module.storage.storageaccount_primary_access_key
       tags         = local.common_tags
       content_type = "secret"
     },
     {
       name         = "storage-account-name"
-      value        = module.wowza_recordings.storageaccount_name
+      value        = module.storage.storageaccount_name
       tags         = local.common_tags
       content_type = "secret"
     },
     {
       name         = "storage-account-endpoint"
-      value        = module.wowza_recordings.storageaccount_primary_blob_endpoint
+      value        = module.storage.storageaccount_primary_blob_endpoint
       tags         = local.common_tags
       content_type = "secret"
     },
