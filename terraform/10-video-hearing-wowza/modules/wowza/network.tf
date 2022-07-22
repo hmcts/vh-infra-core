@@ -77,7 +77,7 @@ resource "azurerm_network_security_group" "wowza" {
     access                       = "Allow"
     protocol                     = "Tcp"
     source_port_range            = "*"
-    destination_port_range       = "443,8087"
+    destination_port_ranges      = ["443", "8087"]
     source_address_prefix        = lookup(local.aks_address, var.environment, "*")
     destination_address_prefixes = local.ip_list
   }
