@@ -89,6 +89,14 @@ steps:
           Write-Host "##vso[task.setvariable variable=SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
           Write-Host "Subscription ID: $subscriptionId"
 
+  - ${{ if eq(parameters.activity_name, 'Video_Hearing_Wowza') }}:
+    - template: templates\Azure\Vm\approve-terms.yaml@templates
+      parameters:
+        subscription: ${{ parameters.serviceConnection }}
+        publisher: "wowza"
+        offer: "wowzastreamingengine"
+        sku: "linux-paid-4-8"
+
   - bash: |
       variableName="vars"
       

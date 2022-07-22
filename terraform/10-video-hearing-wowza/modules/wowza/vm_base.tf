@@ -8,12 +8,6 @@ resource "tls_private_key" "vm" {
   rsa_bits  = 4096
 }
 
-resource "azurerm_marketplace_agreement" "barracuda" {
-  publisher = local.publisher
-  offer     = local.offer
-  plan      = local.sku
-}
-
 resource "azurerm_linux_virtual_machine" "wowza" {
   count = var.wowza_instance_count
 
