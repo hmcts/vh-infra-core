@@ -165,7 +165,7 @@ stages:
                 vmRgName: "vh-infra-wowza-${{parameters.env}}"
                 env: ${{parameters.env}}
     
-    - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
+    - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
       - job: SqlAccess
         displayName: SQL AD Access 
         dependsOn: Terraform_Apply_${{ parameters.env }}
