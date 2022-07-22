@@ -208,7 +208,7 @@ module "storage" {
   env = var.environment
 
   storage_account_name = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
-  common_tags          = var.tags
+  common_tags          = local.common_tags
 
   default_action = "Allow"
 
