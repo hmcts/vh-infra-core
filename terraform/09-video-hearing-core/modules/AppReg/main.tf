@@ -46,9 +46,10 @@ resource "azuread_application" "app_reg" {
 
 
 # Create app reg secret
-resource "time_rotating" "app_Reg_password" {
+resource "time_rotating" "app_reg_password" {
   rotation_days = 365
 }
+
 resource "azuread_application_password" "create_secret" {
   for_each              = var.app_conf
   application_object_id = azuread_application.app_reg[each.key].id
