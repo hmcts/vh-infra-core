@@ -1,7 +1,7 @@
 
 ## Loop secrets
 resource "azurerm_key_vault_secret" "secret" {
-  for_each        = { for secret in var.secrets : secret.name => secret }
+  for_each        = { for secret in var.secrets : "${secret.name}-${var.key_vault_name}-secret" => secret }
   key_vault_id    = var.key_vault_id
   name            = each.value.name
   value           = each.value.value

@@ -13,8 +13,9 @@ data "azurerm_storage_account" "cvp" {
 }
 
 module "KeyVault_Cvp_Secrets" {
-  source       = "./modules/KeyVaults/Secrets"
-  key_vault_id = module.KeyVaults.keyvault_id
+  source         = "./modules/KeyVaults/Secrets"
+  key_vault_id   = module.KeyVaults.keyvault_id
+  key_vault_name = module.KeyVaults.keyvault_name
 
   tags = local.common_tags
   secrets = [

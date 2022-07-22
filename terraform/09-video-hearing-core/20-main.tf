@@ -39,8 +39,9 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
   ]
 }
 module "KeyVault_Secrets" {
-  source       = "./modules/KeyVaults/Secrets"
-  key_vault_id = module.KeyVaults.keyvault_id
+  source         = "./modules/KeyVaults/Secrets"
+  key_vault_id   = module.KeyVaults.keyvault_id
+  key_vault_name = module.KeyVaults.keyvault_name
 
   tags = local.common_tags
   secrets = [
@@ -143,9 +144,10 @@ module "KeyVault_Secrets" {
 }
 
 module "input_Secrets" {
-  for_each     = { for secret in var.kv_secrets : secret.key_vault_name => secret }
-  source       = "./modules/KeyVaults/Secrets"
-  key_vault_id = lookup(module.KeyVaults.keyvault_resource, each.value.key_vault_name).resource_id
+  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret }
+  source         = "./modules/KeyVaults/Secrets"
+  key_vault_id   = lookup(module.KeyVaults.keyvault_resource, each.value.key_vault_name).resource_id
+  key_vault_name = each.value.key_vault_name
 
   tags = local.common_tags
   secrets = [
@@ -317,6 +319,7 @@ module "VHDataServices" {
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   key_vault_id        = module.KeyVaults.keyvault_id
+  keyvault_name       = module.KeyVaults.keyvault_name
 
   tags = local.common_tags
 

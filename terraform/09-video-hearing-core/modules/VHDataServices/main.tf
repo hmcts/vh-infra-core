@@ -117,8 +117,9 @@ resource "azurerm_sql_database" "vh-infra-core" {
 }
 
 module "db_secrets" {
-  source       = "../KeyVaults/Secrets"
-  key_vault_id = var.key_vault_id
+  source         = "../KeyVaults/Secrets"
+  key_vault_id   = var.key_vault_id
+  key_vault_name = var.keyvault_name
 
   tags = var.tags
   secrets = [
