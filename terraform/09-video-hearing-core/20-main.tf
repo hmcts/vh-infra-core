@@ -134,12 +134,37 @@ module "KeyVault_Secrets" {
       value        = module.VHDataServices.admin_password
       tags         = local.common_tags
       content_type = "secret"
+    },
+    {
+      name         = "storage-account-key"
+      value        = module.storage.storageaccount_primary_access_key
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "storage-account-name"
+      value        = module.storage.storageaccount_name
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "storage-account-endpoint"
+      value        = module.storage.storageaccount_primary_blob_endpoint
+      tags         = local.common_tags
+      content_type = "secret"
+    },
+    {
+      name         = "storage-account-container-elinks-name"
+      value        = local.elinks_container_name
+      tags         = local.common_tags
+      content_type = "secret"
     }
   ]
 
   depends_on = [
     module.KeyVaults,
-    module.AppReg
+    module.AppReg,
+    module.storage
   ]
 }
 
@@ -168,21 +193,41 @@ module "input_Secrets" {
 #--------------------------------------------------------------
 # VH - Storage Group
 #--------------------------------------------------------------
-
+locals {
+  containers = [{
+    name        = local.elinks_container_name
+    access_type = "private"
+  }]
+  tables                = []
+  elinks_container_name = "elinks-people"
+}
 #tfsec:ignore:azure-storage-default-action-deny
-resource "azurerm_storage_account" "vh-infra-core" {
-  name                = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
+module "storage" {
+  source = "git::https://github.com/hmcts/cnp-module-storage-account?ref=master"
+
+  env = var.environment
+
+  storage_account_name = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
+  common_tags          = local.common_tags
+
+  default_action = "Allow"
+
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   location            = azurerm_resource_group.vh-infra-core.location
-  min_tls_version     = "TLS1_2"
 
-  access_tier               = "Hot"
-  account_kind              = "StorageV2"
-  account_tier              = "Standard"
-  account_replication_type  = "LRS"
-  enable_https_traffic_only = true
+  access_tier                     = "Hot"
+  account_kind                    = "StorageV2"
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
+  allow_nested_items_to_be_public = "true"
 
-  tags = local.common_tags
+  enable_data_protection = true
+
+  team_name    = "VH"
+  team_contact = "#vh-devops"
+
+  tables     = local.tables
+  containers = local.containers
 }
 
 #--------------------------------------------------------------
@@ -211,7 +256,7 @@ module "AMS" {
   resource_prefix     = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   location            = azurerm_resource_group.vh-infra-core.location
-  storage_account_id  = azurerm_storage_account.vh-infra-core.id
+  storage_account_id  = module.storage.storageaccount_id
 
 
   tags = local.common_tags

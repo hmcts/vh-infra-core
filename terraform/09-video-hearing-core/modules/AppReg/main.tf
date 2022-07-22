@@ -46,10 +46,16 @@ resource "azuread_application" "app_reg" {
 
 
 # Create app reg secret
+resource "time_rotating" "app_reg_password" {
+  rotation_days = 365
+}
+
 resource "azuread_application_password" "create_secret" {
   for_each              = var.app_conf
   application_object_id = azuread_application.app_reg[each.key].id
-  end_date_relative     = "8760h"
+  rotate_when_changed = {
+    rotation = time_rotating.app_reg_password.id
+  }
 }
 
 # Create service principal
