@@ -1,6 +1,17 @@
+locals {
+  publisher = "wowza"
+  offer     = "wowzastreamingengine"
+  sku       = "linux-paid-4-8"
+}
 resource "tls_private_key" "vm" {
   algorithm = "RSA"
   rsa_bits  = 4096
+}
+
+resource "azurerm_marketplace_agreement" "barracuda" {
+  publisher = local.publisher
+  offer     = local.offer
+  plan      = local.sku
 }
 
 resource "azurerm_linux_virtual_machine" "wowza" {
@@ -35,26 +46,20 @@ resource "azurerm_linux_virtual_machine" "wowza" {
   }
 
   provision_vm_agent = true
-  /* secret {
-    certificate {
-      url = var.service_certificate_kv_url
-    }
-    key_vault_id = var.key_vault_id
-  } */
 
   custom_data = data.template_cloudinit_config.wowza_setup.rendered
 
   source_image_reference {
-    publisher = "wowza"
-    offer     = "wowzastreamingengine"
-    sku       = "linux-paid-4-8"
+    publisher = local.publisher
+    offer     = local.offer
+    sku       = local.sku
     version   = "latest"
   }
 
   plan {
-    name      = "linux-paid-4-8"
-    product   = "wowzastreamingengine"
-    publisher = "wowza"
+    name      = local.sku
+    product   = local.offer
+    publisher = local.publisher
   }
 
   identity {
