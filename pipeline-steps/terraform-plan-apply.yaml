@@ -164,6 +164,7 @@ stages:
                 vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
                 vmRgName: "vh-infra-wowza-${{parameters.env}}"
                 env: ${{parameters.env}}
+                env_long: ${{ variables.env_long }}
     
     - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
       - job: SqlAccess
