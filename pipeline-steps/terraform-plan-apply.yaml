@@ -165,38 +165,39 @@ stages:
                 vmRgName: "vh-infra-wowza-${{parameters.env}}"
                 env: ${{parameters.env}}
     
-    - job: SqlAccess
-      displayName: SQL AD Access 
-      dependsOn: Terraform_Apply_${{ parameters.env }}
-      steps:
-        - template: sql-access.yaml
-          parameters:
-            azureSubscription: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
-            sqlServerResourceGroup: vh-infra-core-${{ parameters.env }}
-            sqlServerName: vh-infra-core-${{ parameters.env }}
-            dbAccess:
-              - user: 'DTS SDS Developers'
-                databaseNames: 
-                  - vhbookings
-                  - vhnotification
-                  - vhvideo
-                roles:
-                  - db_datareader
-                  - ${{ if ne(lower(parameters.env), 'prod') }}:
-                    - db_datawriter
-              - ${{ if eq(lower(parameters.env), 'demo') }}:
-                - user: mi-ingestion-adf-test
+    - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
+      - job: SqlAccess
+        displayName: SQL AD Access 
+        dependsOn: Terraform_Apply_${{ parameters.env }}
+        steps:
+          - template: sql-access.yaml
+            parameters:
+              azureSubscription: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
+              sqlServerResourceGroup: vh-infra-core-${{ parameters.env }}
+              sqlServerName: vh-infra-core-${{ parameters.env }}
+              dbAccess:
+                - user: 'DTS SDS Developers'
                   databaseNames: 
                     - vhbookings
                     - vhnotification
                     - vhvideo
                   roles:
                     - db_datareader
-              - ${{ else }}:
-                - user: mi-ingestion-adf-${{ lower(parameters.env)}}
-                  databaseNames:
-                    - vhbookings
-                    - vhnotification
-                    - vhvideo
-                  roles:
-                    - db_datareader
+                    - ${{ if ne(lower(parameters.env), 'prod') }}:
+                      - db_datawriter
+                - ${{ if eq(lower(parameters.env), 'demo') }}:
+                  - user: mi-ingestion-adf-test
+                    databaseNames: 
+                      - vhbookings
+                      - vhnotification
+                      - vhvideo
+                    roles:
+                      - db_datareader
+                - ${{ else }}:
+                  - user: mi-ingestion-adf-${{ lower(parameters.env)}}
+                    databaseNames:
+                      - vhbookings
+                      - vhnotification
+                      - vhvideo
+                    roles:
+                      - db_datareader
