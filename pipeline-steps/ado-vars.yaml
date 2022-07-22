@@ -2,7 +2,23 @@ parameters:
   - name: environment
     type: string
 
-
 variables:
+  - group: vh-domains-and-urls
+  - group: vh-apps-settings-generic
+  - group: vh-admin-web
+  - group: vh-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: vh test users
+  - group: Saucelabs
+  - group: vh-wowza-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: govuk-notify-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: vh-booking-queue-subscriber
+  - group: vh-video-web-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: vh-test-web
+  - group: vh-user-groups
+  - group: cvp-wowza-${{ parameters.environment }} # do we need to convert this parameter to lowercase?
+  - group: vh-video-api
+  - group: QuickLinks_${{ parameters.environment }}
+  - group: FeatureFlags_${{ parameters.environment }}
+  - group: vh-video-web
   - group: vh-key-vault-vars
   - group: KinlyConfiguration_${{ parameters.environment }}
