@@ -2,7 +2,8 @@
 resource "azuread_application" "app_reg" {
   for_each        = var.app_conf
   display_name    = "a${each.key}.${var.environment}.platform.hmcts.net"
-  identifier_uris = each.value.identifier_uris
+  identifier_uris = [for item in each.value.identifier_uris:
+                      replace(item, "stg", "staging")]
   #reply_urls                 = each.value.reply_urls
   #available_to_other_tenants = each.value.available_to_other_tenants
   #oauth2_allow_implicit_flow = each.value.oauth2_allow_implicit_flow
@@ -12,7 +13,8 @@ resource "azuread_application" "app_reg" {
 
   web {
     homepage_url  = replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
-    redirect_uris = each.value.reply_urls
+    redirect_uris = [for item in each.value.reply_urls:
+                      replace(item, "stg", "staging")]
   }
 
   owners = [data.azuread_client_config.current.object_id]
