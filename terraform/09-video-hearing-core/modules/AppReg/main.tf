@@ -14,7 +14,7 @@ resource "azuread_application" "app_reg" {
   web {
     homepage_url  = replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
     redirect_uris = [for item in each.value.reply_urls:
-                      replace(item, "stg", "staging")]
+                      replace(item, "dev", "devi")]
   }
 
   owners = [data.azuread_client_config.current.object_id]
