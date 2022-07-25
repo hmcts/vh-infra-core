@@ -189,12 +189,12 @@ locals {
   #  )
 
   reply_urls = [
-    replace("https://vh-service-web.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-    replace("https://vh-service-web.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-    replace("https://vh-service-web.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-    replace("https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-    replace("https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-    replace("https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/",
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
+    "https://vh-service-web.${local.environment}.platform.hmcts.net/home",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/login",
+    "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/home",
     "https://localhost/home",
     "https://localhost/login",
     "https://localhost/",
@@ -209,14 +209,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = true
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-service-web.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-service-web.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-service-web.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-service-web.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-service-web.${local.environment}.platform.hmcts.net/",
+        "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
+        "https://vh-service-web.${local.environment}.platform.hmcts.net/home",
+        "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-service-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -229,14 +229,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = true
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-video-web.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-video-web.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-video-web.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-video-web.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-video-web.${local.environment}.platform.hmcts.net/",
+        "https://vh-video-web.${local.environment}.platform.hmcts.net/login",
+        "https://vh-video-web.${local.environment}.platform.hmcts.net/home",
+        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -249,14 +249,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = true
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-test-web.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-test-web.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-test-web.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-test-web.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-test-web.${local.environment}.platform.hmcts.net/",
+        "https://vh-test-web.${local.environment}.platform.hmcts.net/login",
+        "https://vh-test-web.${local.environment}.platform.hmcts.net/home",
+        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -269,14 +269,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = true
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-admin-web.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-admin-web.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-admin-web.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-admin-web.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-admin-web.${local.environment}.platform.hmcts.net/",
+        "https://vh-admin-web.${local.environment}.platform.hmcts.net/login",
+        "https://vh-admin-web.${local.environment}.platform.hmcts.net/home",
+        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -292,14 +292,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = false
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-notification-api.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-notification-api.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-notification-api.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-notification-api.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-notification-api.${local.environment}.platform.hmcts.net/",
+        "https://vh-notification-api.${local.environment}.platform.hmcts.net/login",
+        "https://vh-notification-api.${local.environment}.platform.hmcts.net/home",
+        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -309,7 +309,7 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = false
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-test-api.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-test-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
         #"https://vh-test-api.${local.environment}.platform.hmcts.net",
         #"https://vh-test-api.${local.environment}.platform.hmcts.net/login",
@@ -326,14 +326,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = false
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-video-api.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-video-api.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-video-api.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-video-api.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-video-api.${local.environment}.platform.hmcts.net/",
+        "https://vh-video-api.${local.environment}.platform.hmcts.net/login",
+        "https://vh-video-api.${local.environment}.platform.hmcts.net/home",
+        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -343,14 +343,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = false
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-bookings-api.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-bookings-api.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-bookings-api.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-bookings-api.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/",
+        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/login",
+        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/home",
+        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -360,14 +360,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = false
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-user-api.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-user-api.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-user-api.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-user-api.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-user-api.${local.environment}.platform.hmcts.net/",
+        "https://vh-user-api.${local.environment}.platform.hmcts.net/login",
+        "https://vh-user-api.${local.environment}.platform.hmcts.net/home",
+        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -377,14 +377,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = false
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/",
+        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/login",
+        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/home",
+        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
@@ -394,14 +394,14 @@ locals {
       available_to_other_tenants = false
       oauth2_allow_implicit_flow = false
       type                       = "webapp/api"
-      identifier_uris            = [replace("https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net", "stg", "staging")]
+      identifier_uris            = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
       reply_urls = [
-        replace("https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/home", "stg", "staging"),
-        replace("https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/", "stg", "staging"),
-        replace("https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/login", "stg", "staging"),
-        replace("https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/home", "stg", "staging"),
+        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/",
+        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/login",
+        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/home",
+        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/",
+        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/home",
         "https://localhost/home",
         "https://localhost/login",
         "https://localhost/",
