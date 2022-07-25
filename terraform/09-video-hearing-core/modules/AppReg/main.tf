@@ -2,7 +2,7 @@
 resource "azuread_application" "app_reg" {
   for_each        = var.app_conf
   display_name    = "a${each.key}.${var.environment}.platform.hmcts.net"
-  identifier_uris = replace(each.value.identifier_uris, "stg", "staging")
+  identifier_uris = each.value.identifier_uris
   #reply_urls                 = each.value.reply_urls
   #available_to_other_tenants = each.value.available_to_other_tenants
   #oauth2_allow_implicit_flow = each.value.oauth2_allow_implicit_flow
