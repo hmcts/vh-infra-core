@@ -113,7 +113,7 @@ stages:
 
 - stage: 'Terraform_Apply_${{ parameters.env }}'
   displayName: 'Terraform Apply ${{ parameters.env }}'
-  dependsOn: 'Terraform_Plan_${{ parameters.dependsOn }}'
+  dependsOn: 'Terraform_Plan_${{ parameters.env }}'
   variables:
     - name: environment
       value: ${{ parameters.env }}
