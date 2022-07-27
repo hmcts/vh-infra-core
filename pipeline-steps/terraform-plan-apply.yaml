@@ -44,10 +44,18 @@ parameters:
 - name: tfStateStorageAccountName 
   type: string
 
+- name: dependsOnEnv 
+  type: string
+  default: ''
+
 
 stages:
 - stage: 'Terraform_Plan_${{ parameters.env }}'
   displayName: 'Terraform Plan ${{ parameters.env }}'
+  ${{ if eq(parameters.dependsOnEnv, '') }}:
+    dependsOn: Validate_Terraform_Code
+  ${{ else }}:
+    dependsOn: 'Terraform_Apply_${{ parameters.dependsOnEnv }}'
   variables:
     - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/common.yaml
     - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
@@ -105,6 +113,7 @@ stages:
 
 - stage: 'Terraform_Apply_${{ parameters.env }}'
   displayName: 'Terraform Apply ${{ parameters.env }}'
+  dependsOn: 'Terraform_Plan_${{ parameters.env }}'
   variables:
     - name: environment
       value: ${{ parameters.env }}
