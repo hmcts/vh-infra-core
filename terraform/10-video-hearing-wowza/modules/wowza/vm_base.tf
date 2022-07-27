@@ -36,7 +36,7 @@ resource "azurerm_linux_virtual_machine" "wowza" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = var.os_disk_type
-    disk_size_gb         = 128
+    disk_size_gb         = 1024
   }
 
   provision_vm_agent = true
@@ -77,13 +77,4 @@ resource "azurerm_managed_disk" "wowza_data" {
   create_option        = "Empty"
   disk_size_gb         = 512
   tags                 = var.tags
-}
-
-resource "azurerm_virtual_machine_data_disk_attachment" "wowza_data" {
-  count = var.wowza_instance_count
-
-  managed_disk_id    = azurerm_managed_disk.wowza_data[count.index].id
-  virtual_machine_id = azurerm_linux_virtual_machine.wowza[count.index].id
-  lun                = "10"
-  caching            = "ReadWrite"
 }

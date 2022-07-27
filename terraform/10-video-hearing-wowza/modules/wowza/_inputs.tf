@@ -26,7 +26,7 @@ variable "admin_user" {
 
 variable "os_disk_type" {
   type    = string
-  default = "Standard_LRS"
+  default = "Premium_LRS"
 }
 
 variable "key_vault_id" {
