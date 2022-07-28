@@ -7,6 +7,8 @@ locals {
     "streamPassword"            = random_password.streamPassword.result,
     "azure-storage-directory"   = "/wowzadata/azurecopy",
     "endpoint"                  = "https://${local.wowza_domain}:443",
+    "restendpoint--0"           = "https://${local.wowza_domain}:8090",
+    "restendpoint--1"           = "https://${local.wowza_domain}:8091",
     "storage-account"           = module.wowza_recordings.storageaccount_name,
     "storage-account-endpoint"  = module.wowza_recordings.storageaccount_primary_blob_endpoint,
     "storage-account-container" = local.recordings_container_name,
