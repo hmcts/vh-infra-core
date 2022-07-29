@@ -21,14 +21,15 @@ resource "azurerm_subnet_route_table_association" "wowza" {
   route_table_id = azurerm_route_table.wowza.id
 }
 
-resource "azurerm_route" "aks_route_rule" {
-  provider = azurerm.peering_client
+resource "azurerm_route" "aks_route_rule_stg" {
+  count    = var.environment != "prod" ? 1 : 0
+  provider = azurerm.networking_staging
 
   name                   = "${var.service_name}-${var.environment}"
-  resource_group_name    = "ss-${var.environment}-network-rg"
-  route_table_name       = "aks-${var.environment}-appgw-route-table"
+  resource_group_name    = "ss-stg-network-rg"
+  route_table_name       = "aks-stg-appgw-route-table"
   address_prefix         = var.address_space
   next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = var.environment == "prod" ? "" : "10.11.8.36"
+  next_hop_in_ip_address = "10.11.8.36"
 }
 
