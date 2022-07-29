@@ -98,3 +98,8 @@ variable "stop_time" {
 variable "schedules" {
   default = []
 }
+
+
+variable "route_table" {
+  description = "Route Table routes"
+}
