@@ -158,6 +158,12 @@ module "KeyVault_Secrets" {
       value        = local.elinks_container_name
       tags         = local.common_tags
       content_type = "secret"
+    },
+    {
+      name         = "storage-account-web-jobs-connection-string"
+      value        = "DefaultEndpointsProtocol=https;AccountName=${module.storage.storageaccount_name};AccountKey=${module.storage.storageaccount_primary_access_key};EndpointSuffix=core.windows.net"
+      tags         = local.common_tags
+      content_type = "secret"
     }
   ]
 
