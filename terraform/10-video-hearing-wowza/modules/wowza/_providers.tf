@@ -51,6 +51,14 @@ provider "azurerm" {
   client_secret   = var.network_client_secret
   tenant_id       = var.network_tenant_id
 }
+provider "azurerm" {
+  features {}
+  alias           = "networking_prod"
+  subscription_id = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c" # SDS PROD SUB
+  client_id       = var.network_client_id
+  client_secret   = var.network_client_secret
+  tenant_id       = var.network_tenant_id
+}
 
 
 
