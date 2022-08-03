@@ -13,3 +13,18 @@ schedules = [
     start_vm  = false
   }
 ]
+
+route_table = [
+  {
+    name                   = "ss_test_aks"
+    address_prefix         = "0.0.0.0/0"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "azure_control_plane"
+    address_prefix         = "51.145.56.125/32"
+    next_hop_type          = "Internet"
+    next_hop_in_ip_address = null
+  }
+]
