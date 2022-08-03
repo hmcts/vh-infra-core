@@ -438,7 +438,6 @@ resource "azurerm_private_dns_a_record" "endpoint-dns" {
   records             = [lookup(each.value, "resource_ip")]
 }
 
-
 module "vh_kv_endpoint" {
 
   source              = "./modules/PrivateEndpoint"
