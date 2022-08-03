@@ -431,7 +431,7 @@ resource "azurerm_private_dns_a_record" "endpoint-dns" {
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_endpoint.endpoint_resource
 
-  name                = lower(format("%s-%s.%s", "vh-infra-core", var.environment))
+  name                = lower(format("%s-%s", "vh-infra-core", var.environment))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = local.dns_zone_resource_group_name
   ttl                 = 3600
@@ -464,7 +464,7 @@ resource "azurerm_private_dns_a_record" "kv-dns" {
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_kv_endpoint.endpoint_resource
 
-  name                = lower(format("%s-%s.%s", lookup(each.value, "resource_name"), var.environment))
+  name                = lower(format("%s-%s", lookup(each.value, "resource_name"), var.environment))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = local.dns_zone_resource_group_name
   ttl                 = 3600
