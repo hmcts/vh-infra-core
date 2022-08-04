@@ -147,12 +147,6 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
   tags                = var.tags
 }
 
-resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
-  scope                = azurerm_servicebus_namespace.vh-infra-core.id
-  role_definition_name = "Azure Service Bus Data Receiver"
-  principal_id         = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/managed-identities-${local.environment}-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/keda-${local.environment}-mi"
-}
-
 resource "azurerm_servicebus_queue" "vh-infra-core" {
   for_each = var.queues
 
@@ -163,4 +157,15 @@ resource "azurerm_servicebus_queue" "vh-infra-core" {
   enable_partitioning   = false
   lock_duration         = "PT5M"
   max_size_in_megabytes = 1024
+}
+
+data "azurerm_user_assigned_identity" "keda_mi" {
+  name                = "keda-${local.environment}-mi"
+  resource_group_name = "managed-identities-${local.environment}-rg"
+}
+
+resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
+  scope                = azurerm_servicebus_namespace.vh-infra-core.id
+  role_definition_name = "Azure Service Bus Data Receiver"
+  principal_id         = data.azurerm_user_assigned_identity.keda_mi.principal_id
 }
