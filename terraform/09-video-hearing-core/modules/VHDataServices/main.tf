@@ -147,6 +147,12 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
   tags                = var.tags
 }
 
+resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
+  scope                = azurerm_servicebus_namespace.vh-infra-core.id
+  role_definition_name = "Azure Service Bus Data Receiver"
+  principal_id         = "/subscriptions/${data.azurerm_client_config.subscription_id}/resourceGroups/managed-identities-${local.environment}-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/keda-${local.environment}-mi"
+}
+
 resource "azurerm_servicebus_queue" "vh-infra-core" {
   for_each = var.queues
 
