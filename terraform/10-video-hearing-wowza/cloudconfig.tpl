@@ -784,7 +784,6 @@ write_files:
       authType MSI
       identityResourceId ${msiClientId}
   - owner: wowza:wowza
-    permissions: 0775
     path: /home/wowza/migrateWowzaToDisk.sh
     content: |
       cp /home/wowza/WowzaStreamingEngine/conf/Server.xml /usr/local/WowzaStreamingEngine/conf/Server.xml
