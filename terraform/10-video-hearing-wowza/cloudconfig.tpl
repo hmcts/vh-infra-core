@@ -711,7 +711,7 @@ write_files:
         </Root>
   - owner: root:root
     path: /etc/rc.local
-    permissions: '770'
+    permissions: 0775
     content: |
       #!/bin/sh -e
       #
@@ -784,6 +784,7 @@ write_files:
       authType MSI
       identityResourceId ${msiClientId}
   - owner: wowza:wowza
+    permissions: 0775
     path: /home/wowza/migrateWowzaToDisk.sh
     content: |
       cp /home/wowza/WowzaStreamingEngine/conf/Server.xml /usr/local/WowzaStreamingEngine/conf/Server.xml
@@ -792,6 +793,7 @@ write_files:
       cp /home/wowza/WowzaStreamingEngine/conf/admin.password /usr/local/WowzaStreamingEngine/conf/admin.password
       cp /home/wowza/WowzaStreamingEngine/conf/publish.password /usr/local/WowzaStreamingEngine/conf/publish.password
   - owner: wowza:wowza
+    permissions: 0775
     path: /home/wowza/mountBlobFuse.sh
     content: |
 
