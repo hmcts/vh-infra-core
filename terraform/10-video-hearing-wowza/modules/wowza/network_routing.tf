@@ -25,7 +25,7 @@ resource "azurerm_route" "aks_route_rule_stg" {
   count    = var.environment != "prod" ? 1 : 0
   provider = azurerm.networking_staging
 
-  name                   = "${var.service_name}-${var.environment}"
+  name                   = "${var.service_name}"
   resource_group_name    = "ss-stg-network-rg"
   route_table_name       = "aks-stg-appgw-route-table"
   address_prefix         = var.address_space
@@ -36,7 +36,7 @@ resource "azurerm_route" "aks_route_rule_prod" {
   count    = var.environment == "prod" ? 1 : 0
   provider = azurerm.networking_prod
 
-  name                   = "${var.service_name}-${var.environment}"
+  name                   = "${var.service_name}"
   resource_group_name    = "ss-prod-network-rg"
   route_table_name       = "aks-prod-route-table"
   address_prefix         = var.address_space
