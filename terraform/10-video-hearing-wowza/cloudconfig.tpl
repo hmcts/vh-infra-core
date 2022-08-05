@@ -722,7 +722,7 @@ write_files:
       # value on error.
       #
       # In order to enable or disable this script just change the execution
-      # bits.
+      # bits. 
       #
       # By default this script does nothing.
 
