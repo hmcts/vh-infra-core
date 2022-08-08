@@ -160,12 +160,21 @@ resource "azurerm_servicebus_queue" "vh-infra-core" {
 }
 
 data "azurerm_user_assigned_identity" "keda_mi" {
+  count               = local.environment == "dev" ? 0 : 1
   name                = "keda-${local.environment}-mi"
   resource_group_name = "managed-identities-${local.environment}-rg"
 }
 
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
+  count                = local.environment == "dev" ? 0 : 1
   scope                = azurerm_servicebus_namespace.vh-infra-core.id
   role_definition_name = "Azure Service Bus Data Receiver"
-  principal_id         = data.azurerm_user_assigned_identity.keda_mi.principal_id
+  principal_id         = data.azurerm_user_assigned_identity.keda_mi[0].principal_id
+}
+
+resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
+  count                = local.environment == "dev" ? 1 : 0
+  scope                = azurerm_servicebus_namespace.vh-infra-core.id
+  role_definition_name = "Azure Service Bus Data Receiver"
+  principal_id         = "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" # Dev uses Staging MI.
 }
