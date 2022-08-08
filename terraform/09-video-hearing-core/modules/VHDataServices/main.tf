@@ -172,7 +172,7 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
   principal_id         = data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
 
-resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
+resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_Dev" {
   count                = local.environment == "dev" ? 1 : 0
   scope                = azurerm_servicebus_namespace.vh-infra-core.id
   role_definition_name = "Azure Service Bus Data Receiver"
