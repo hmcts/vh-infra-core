@@ -166,15 +166,7 @@ data "azurerm_user_assigned_identity" "keda_mi" {
 }
 
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
-  count                = local.environment == "dev" ? 0 : 1
   scope                = azurerm_servicebus_namespace.vh-infra-core.id
   role_definition_name = "Azure Service Bus Data Receiver"
-  principal_id         = data.azurerm_user_assigned_identity.keda_mi[0].principal_id
-}
-
-resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_Dev" {
-  count                = local.environment == "dev" ? 1 : 0
-  scope                = azurerm_servicebus_namespace.vh-infra-core.id
-  role_definition_name = "Azure Service Bus Data Receiver"
-  principal_id         = "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" # Dev uses Staging MI.
+  principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
