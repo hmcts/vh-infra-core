@@ -6,7 +6,9 @@ locals {
     "restPassword"              = random_password.restPassword.result,
     "streamPassword"            = random_password.streamPassword.result,
     "azure-storage-directory"   = "/wowzadata/azurecopy",
+    "wowza-storage-directory"   = "$${com.wowza.wms.context.VHostConfigHome}/content/"
     "endpoint"                  = "https://${local.wowza_domain}:443",
+    "endpoint-streaming"        = "rtmps://${local.wowza_domain}:443",
     "restendpoint--0"           = "https://${local.wowza_domain}:8090",
     "restendpoint--1"           = "https://${local.wowza_domain}:8091",
     "public-endpoint"           = "https://${local.wowza_public_domain}:443",
@@ -19,6 +21,7 @@ locals {
     "ssh-public"                = tls_private_key.vm.public_key_openssh
     "ssh-private"               = tls_private_key.vm.private_key_openssh
     "ServerName"                = "_defaultServer_"
+    "HostName"                  = "_defaultVHost_"
   }
 }
 
