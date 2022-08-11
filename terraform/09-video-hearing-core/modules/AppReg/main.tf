@@ -4,19 +4,14 @@ resource "azuread_application" "app_reg" {
   display_name = "a${each.key}.${var.environment}.platform.hmcts.net"
   identifier_uris = [for item in each.value.identifier_uris :
   var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
-  #reply_urls                 = each.value.reply_urls
-  #available_to_other_tenants = each.value.available_to_other_tenants
-  #oauth2_allow_implicit_flow = each.value.oauth2_allow_implicit_flow
-  #type                       = each.value.type
-  #public_client              = false
-  #group_membership_claims    = "None"
 
   web {
     homepage_url = var.environment == "prod" ? replace("https://${each.key}.${var.environment}.platform.hmcts.net", ".prod.", ".") : replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
-
+    redirect_uris = [for item in each.value.reply_urls_web :
+    var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
   }
   single_page_application {
-    redirect_uris = [for item in each.value.reply_urls :
+    redirect_uris = [for item in each.value.reply_urls_spa :
     var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
   }
 
