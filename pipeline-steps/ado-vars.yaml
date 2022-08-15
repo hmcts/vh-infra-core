@@ -22,3 +22,4 @@ variables:
     - group: vh-common-${{ parameters.environment }}
   - ${{ else }}:
     - group: vh-common
+  - group: Ejud_${{ parameters.environment }}
