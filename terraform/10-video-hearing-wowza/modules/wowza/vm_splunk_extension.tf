@@ -1,10 +1,10 @@
 module "splunk-uf" {
   for_each                   = azurerm_linux_virtual_machine.wowza
-  source                     = "git::https://github.com/hmcts/terraform-module-splunk-universal-forwarder.git?ref=master"
+  source                     = "git::https://github.com/hmcts/terraform-module-splunk-universal-forwarder.git?ref=VIH-8976"
   auto_upgrade_minor_version = true
   virtual_machine_type       = "vm"
   virtual_machine_id         = each.value.id
   splunk_username            = try(data.azurerm_key_vault_secret.splunk_username[0].value, null)
   splunk_password            = try(data.azurerm_key_vault_secret.splunk_password[0].value, null)
-  splunk_pass4symmkey        = try(data.azurerm_key_vault_secret.splunk_pass4symmkey[0].value, null)
+  # splunk_pass4symmkey        = try(data.azurerm_key_vault_secret.splunk_pass4symmkey[0].value, null)
 }
