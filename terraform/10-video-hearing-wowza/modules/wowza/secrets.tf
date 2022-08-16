@@ -23,7 +23,7 @@ locals {
     "ServerName"                = "_defaultServer_"
     "HostName"                  = "_defaultVHost_"
     "Splunk-admin"              = local.splunk_admin_username
-    "Splunk-password"           = random_passowrd.splunk_admin_password.result
+    "Splunk-password"           = random_password.splunk_admin_password.result
   }
 }
 
