@@ -306,10 +306,6 @@ module "AppReg" {
   ]
   tags = local.common_tags
 }
-output "test_out" {
-  value = module.AppReg.scope_list
-}
-
 
 #--------------------------------------------------------------
 # VH - Monitoring

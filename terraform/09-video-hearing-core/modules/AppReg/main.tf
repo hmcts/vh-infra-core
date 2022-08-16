@@ -12,9 +12,6 @@ locals {
     for scopes in local.scope_list : "${scopes.name}_${scopes.scope}" => scopes
   }
 }
-output "scope_list" {
-  value = random_uuid.scopes
-}
 
 resource "random_uuid" "scopes" {
   for_each = local.scope_map
@@ -41,7 +38,7 @@ resource "azuread_application" "app_reg" {
 
   api {
     mapped_claims_enabled          = false
-    requested_access_token_version = 2
+    requested_access_token_version = 1
 
     dynamic "oauth2_permission_scope" {
       for_each = lookup(var.api_scopes, each.key, )
