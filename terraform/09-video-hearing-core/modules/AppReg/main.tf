@@ -1,9 +1,29 @@
+locals {
+  scope_list = flatten([
+    for scope_key, scopes in var.api_scopes : [
+      for scope in scopes :
+      {
+        "name" : scope_key
+        "scope" : scope.value
+      }
+    ]
+  ])
+  scope_map = {
+    for scopes in local.scope_list : "${scopes.name}_${scopes.scope}" => scopes
+  }
+}
+
+resource "random_uuid" "scopes" {
+  for_each = local.scope_map
+}
+
 
 resource "azuread_application" "app_reg" {
   for_each     = var.app_conf
   display_name = "a${each.key}.${var.environment}.platform.hmcts.net"
   identifier_uris = [for item in each.value.identifier_uris :
   var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+<<<<<<< HEAD
   #reply_urls                 = each.value.reply_urls
   #available_to_other_tenants = each.value.available_to_other_tenants
   #oauth2_allow_implicit_flow = each.value.oauth2_allow_implicit_flow
@@ -14,10 +34,39 @@ resource "azuread_application" "app_reg" {
   web {
     homepage_url = var.environment == "prod" ? replace("https://${each.key}.${var.environment}.platform.hmcts.net", ".prod.", ".") : replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
     redirect_uris = [for item in each.value.reply_urls :
+=======
+
+  web {
+    homepage_url = var.environment == "prod" ? replace("https://${each.key}.${var.environment}.platform.hmcts.net", ".prod.", ".") : replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
+    redirect_uris = [for item in each.value.reply_urls_web :
+    var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+  }
+  single_page_application {
+    redirect_uris = [for item in each.value.reply_urls_spa :
+>>>>>>> master
     var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
   }
 
   owners = [data.azuread_client_config.current.object_id]
+
+  api {
+    mapped_claims_enabled          = false
+    requested_access_token_version = 1
+
+    dynamic "oauth2_permission_scope" {
+      for_each = lookup(var.api_scopes, each.key, )
+      content {
+        admin_consent_description  = oauth2_permission_scope.value.admin_consent_description
+        admin_consent_display_name = oauth2_permission_scope.value.admin_consent_display_name
+        user_consent_description   = oauth2_permission_scope.value.user_consent_description
+        user_consent_display_name  = oauth2_permission_scope.value.user_consent_display_name
+        enabled                    = oauth2_permission_scope.value.enabled
+        id                         = lookup(random_uuid.scopes, "${each.key}_${oauth2_permission_scope.value.value}").result
+        type                       = "Admin"
+        value                      = oauth2_permission_scope.value.value
+      }
+    }
+  }
 
   dynamic "required_resource_access" {
     for_each = lookup(var.api_permissions, each.key, )
@@ -101,7 +150,7 @@ resource "azurerm_key_vault_secret" "secret" {
 resource "azurerm_key_vault_secret" "identifier_uri" {
   for_each = var.app_conf
   name     = "azuread--identifieruri"
-  value    = each.value.identifier_uris[0]
+  value    = replace(each.value.identifier_uris[0], "stg", "staging")
   #key_vault_id = data.azurerm_key_vault.key_vault[each.key].id
   key_vault_id = var.app_keyvaults_map[each.key].id
   # FromTFSec

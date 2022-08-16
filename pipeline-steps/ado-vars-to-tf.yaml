@@ -18,9 +18,9 @@ steps:
           $all_secrets += $bookings_secrets
       }
 
-
+      $na2_obj = $($env:notifications_secrets_v2) | ConvertFrom-Json
       $na_obj = $($env:notifications_secrets) | ConvertFrom-Json
-      $secrets_obj = $na_obj
+      $secrets_obj = $($na_obj + $na2_obj)
       if ($null -ne $secrets_obj) {
           $notifications_secrets = [pscustomobject]@{
               "key_vault_name" = "vh-notification-api"
@@ -128,6 +128,7 @@ steps:
       bookings_secrets: $(vh-bookings-api-secrets)
       bookings_secrets_v2: $(vh-bookings-api-v2-secrets)
       notifications_secrets: $(vh-notifications-api-secrets)
+      notifications_secrets_v2: $(vh-notifications-api-v2-secrets)
       user_api_secrets: $(vh-user-api-secrets)
       video_api_secrets: $(vh-video-api-secrets)
       test_api_secrets: $(vh-test-api-secrets)
