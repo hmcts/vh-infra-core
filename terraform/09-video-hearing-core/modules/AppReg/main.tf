@@ -9,8 +9,7 @@ locals {
   }
   scope_map = {
     for scope_key, scopes in local.scope_list : scope_key => {
-      "name" : scopes.name
-      "scope" : scopes.scope
+      "scope" : scopes
     }
   }
 }
