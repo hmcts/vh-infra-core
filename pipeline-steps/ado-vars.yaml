@@ -17,3 +17,9 @@ variables:
   - group: FeatureFlags_${{ parameters.environment }}
   - group: vh-video-web
   - group: KinlyConfiguration_${{ parameters.environment }}
+  - group: vh-scheduler-jobs
+  - ${{ if eq(parameters.environment, 'prod') }}:
+    - group: vh-common-${{ parameters.environment }}
+  - ${{ else }}:
+    - group: vh-common
+  - group: Ejud_${{ parameters.environment }}

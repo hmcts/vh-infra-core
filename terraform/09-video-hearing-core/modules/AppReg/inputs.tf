@@ -10,6 +10,10 @@ variable "app_roles" {
   type = map(any)
 }
 
+variable "api_scopes" {
+  type = map(any)
+}
+
 variable "api_permissions" {
   type = map(any)
 }

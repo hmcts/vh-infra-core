@@ -158,6 +158,12 @@ module "KeyVault_Secrets" {
       value        = local.elinks_container_name
       tags         = local.common_tags
       content_type = "secret"
+    },
+    {
+      name         = "storage-account-web-jobs-connection-string"
+      value        = "DefaultEndpointsProtocol=https;AccountName=${module.storage.storageaccount_name};AccountKey=${module.storage.storageaccount_primary_access_key};EndpointSuffix=core.windows.net"
+      tags         = local.common_tags
+      content_type = "secret"
     }
   ]
 
@@ -291,6 +297,7 @@ module "AppReg" {
   app_conf          = local.app_conf
   app_roles         = local.app_roles
   api_permissions   = local.api_permissions
+  api_scopes        = local.api_scopes
   app_keyvaults_map = module.KeyVaults.app_keyvaults_out
 
   depends_on = [
@@ -299,7 +306,6 @@ module "AppReg" {
   ]
   tags = local.common_tags
 }
-
 
 #--------------------------------------------------------------
 # VH - Monitoring
@@ -425,13 +431,12 @@ resource "azurerm_private_dns_a_record" "endpoint-dns" {
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_endpoint.endpoint_resource
 
-  name                = lower(format("%s-%s.%s", "vh-infra-core", var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))))
+  name                = lower(format("%s-%s", "vh-infra-core", var.environment))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = local.dns_zone_resource_group_name
   ttl                 = 3600
   records             = [lookup(each.value, "resource_ip")]
 }
-
 
 module "vh_kv_endpoint" {
 
@@ -458,7 +463,7 @@ resource "azurerm_private_dns_a_record" "kv-dns" {
   provider = azurerm.private-endpoint-dns
   for_each = module.vh_kv_endpoint.endpoint_resource
 
-  name                = lower(format("%s-%s.%s", lookup(each.value, "resource_name"), var.environment, lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))))
+  name                = lower(format("%s-%s", lookup(each.value, "resource_name"), var.environment))
   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
   resource_group_name = local.dns_zone_resource_group_name
   ttl                 = 3600
