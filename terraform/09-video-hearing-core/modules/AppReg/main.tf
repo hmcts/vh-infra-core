@@ -1,12 +1,13 @@
 locals {
-  scope_list = {
-    for scope_key, scopes in var.api_scopes : scope_key => {
-      for scope in scopes : scope_key => {
+  scope_list = flatten([
+    for scope_key, scopes in var.api_scopes : [
+      for scope in scopes :
+      {
         "name" : scope_key
         "scope" : scope.value
       }
-    }
-  }
+    ]
+  ])
   scope_map = {
     for scopes in local.scope_list : "${scopes.name}_${scopes.scope}" => scopes
   }
@@ -16,7 +17,7 @@ output "scope_list" {
 }
 
 /* resource "random_uuid" "scopes" {
-  for_each = local.scope_map
+  for_each = local.scope_list
 }
 output "scope_list_guid" {
   value = random_uuid.scopes
