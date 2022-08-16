@@ -8,7 +8,7 @@ resource "random_password" "splunk_admin_password" {
   override_special = "_%*"
 }
 
-
+#
 # module "splunk-uf" {
 #   for_each                   = azurerm_linux_virtual_machine.wowza
 #   source                     = "git::https://github.com/hmcts/terraform-module-splunk-universal-forwarder.git?ref=VIH-8976"
