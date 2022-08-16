@@ -419,7 +419,19 @@ locals {
       ]
     }
   }
+  api_scopes = {
+    "vh-admin-web" = {
+      "feapi" = {
+        admin_consent_description  = "Frontend API Authentication"
+        admin_consent_display_name = "FE API"
+        user_consent_description   = "Frontend API Authentication"
+        user_consent_display_name  = "FE API"
+        enabled                    = true
+        value                      = "feapi"
+      }
+    }
 
+  }
   # API Permissions
   api_permissions = {
     "vh-booking-queue" = {

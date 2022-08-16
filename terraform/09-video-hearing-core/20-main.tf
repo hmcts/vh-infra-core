@@ -297,6 +297,7 @@ module "AppReg" {
   app_conf          = local.app_conf
   app_roles         = local.app_roles
   api_permissions   = local.api_permissions
+  api_scopes        = local.api_scopes
   app_keyvaults_map = module.KeyVaults.app_keyvaults_out
 
   depends_on = [
