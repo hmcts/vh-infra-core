@@ -419,7 +419,29 @@ locals {
       ]
     }
   }
+  api_scopes = {
+    "vh-admin-web" = {
+      "feapi" = {
+        admin_consent_description  = "Frontend API Authentication"
+        admin_consent_display_name = "FE API"
+        user_consent_description   = "Frontend API Authentication"
+        user_consent_display_name  = "FE API"
+        enabled                    = true
+        value                      = "feapi"
+      }
+    }
+    "vh-booking-queue"    = {}
+    "vh-scheduler-jobs"   = {}
+    "vh-service-web"      = {}
+    "vh-video-web"        = {}
+    "vh-bookings-api"     = {}
+    "vh-user-api"         = {}
+    "vh-video-api"        = {}
+    "vh-notification-api" = {}
+    "vh-test-web"         = {}
+    "vh-test-api"         = {}
 
+  }
   # API Permissions
   api_permissions = {
     "vh-booking-queue" = {
