@@ -1,12 +1,19 @@
 locals {
   secret_prefix = "wowzaconfiguration"
   secrets = {
-    "managedidentityclientid"   = azurerm_user_assigned_identity.wowza_storage.client_id,
+      "managedidentityclientid"   = azurerm_user_assigned_identity.wowza_storage.client_id,
     "storageaccountkey"         = module.wowza_recordings.storageaccount_primary_access_key,
     "restPassword"              = random_password.restPassword.result,
     "streamPassword"            = random_password.streamPassword.result,
     "azure-storage-directory"   = "/wowzadata/azurecopy",
+    "wowza-storage-directory"   = "$${com.wowza.wms.context.VHostConfigHome}/content/"
     "endpoint"                  = "https://${local.wowza_domain}:443",
+    "endpoint-streaming"        = "rtmps://${local.wowza_domain}:443",
+    "restendpoint--0"           = "https://${local.wowza_domain}:8090",
+    "restendpoint--1"           = "https://${local.wowza_domain}:8091",
+    "public-endpoint"           = "https://${local.wowza_public_domain}:443",
+    "public-restendpoint--0"    = "https://${local.wowza_public_domain}:8090",
+    "public-restendpoint--1"    = "https://${local.wowza_public_domain}:8091",
     "storage-account"           = module.wowza_recordings.storageaccount_name,
     "storage-account-endpoint"  = module.wowza_recordings.storageaccount_primary_blob_endpoint,
     "storage-account-container" = local.recordings_container_name,
@@ -14,6 +21,7 @@ locals {
     "ssh-public"                = tls_private_key.vm.public_key_openssh
     "ssh-private"               = tls_private_key.vm.private_key_openssh
     "ServerName"                = "_defaultServer_"
+    "HostName"                  = "_defaultVHost_"
     "Splunk-admin"              = local.splunk_admin_username
     "Splunk-password"           = random.splunk_admin_password.result
   }

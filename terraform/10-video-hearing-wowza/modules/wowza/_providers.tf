@@ -69,11 +69,3 @@ provider "azurerm" {
   subscription_id            = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
 }
 
-# provider "azurerm" {
-#   alias = "soc"
-#   features {}
-#   subscription_id = "8ae5b3b6-0b12-4888-b894-4cec33c92292"
-#   client_id       = var.splunk_client_id
-#   client_secret   = var.splunk_client_secret
-#   tenant_id       = var.splunk_tenant_id
-# }

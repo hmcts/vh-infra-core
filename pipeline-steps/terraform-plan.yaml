@@ -104,9 +104,6 @@ steps:
       variables="${variables} -var \"network_client_id=${GNP_CLIENT_ID} \""
       variables="${variables} -var \"network_client_secret=${GNP_CLIENT_SECRET} \""
       variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
-      variables="${variables} -var \"splunk_client_id=${GNP_CLIENT_ID} \""
-      variables="${variables} -var \"splunk_client_secret=${GNP_CLIENT_SECRET} \""
-      variables="${variables} -var \"splunk_tenant_id=${GNP_TENANT_ID} \""
       if [ ! -z "${ADDITIONAL_VAR}" ]; then
         variables="${variables} -var \"kv_secrets=${ADDITIONAL_VAR} \""
       fi
