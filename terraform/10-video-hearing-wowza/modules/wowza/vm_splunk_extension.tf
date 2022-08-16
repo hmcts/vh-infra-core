@@ -1,5 +1,5 @@
 locals {
-  splunk_admin_username     = "splunkadmin"
+  splunk_admin_username = "splunkadmin"
 }
 
 resource "random_password" "splunk_admin_password" {

@@ -1,7 +1,7 @@
 locals {
   secret_prefix = "wowzaconfiguration"
   secrets = {
-      "managedidentityclientid"   = azurerm_user_assigned_identity.wowza_storage.client_id,
+    "managedidentityclientid"   = azurerm_user_assigned_identity.wowza_storage.client_id,
     "storageaccountkey"         = module.wowza_recordings.storageaccount_primary_access_key,
     "restPassword"              = random_password.restPassword.result,
     "streamPassword"            = random_password.streamPassword.result,
