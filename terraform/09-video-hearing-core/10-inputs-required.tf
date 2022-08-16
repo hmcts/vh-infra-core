@@ -430,6 +430,16 @@ locals {
         value                      = "feapi"
       }
     }
+    "vh-booking-queue"    = {}
+    "vh-scheduler-jobs"   = {}
+    "vh-service-web"      = {}
+    "vh-video-web"        = {}
+    "vh-bookings-api"     = {}
+    "vh-user-api"         = {}
+    "vh-video-api"        = {}
+    "vh-notification-api" = {}
+    "vh-test-web"         = {}
+    "vh-test-api"         = {}
 
   }
   # API Permissions

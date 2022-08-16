@@ -46,14 +46,14 @@ resource "azuread_application" "app_reg" {
     dynamic "oauth2_permission_scope" {
       for_each = lookup(var.api_scopes, each.key, )
       content {
-        admin_consent_description  = oauth2_permission_scope.admin_consent_description
-        admin_consent_display_name = oauth2_permission_scope.admin_consent_display_name
-        user_consent_description   = oauth2_permission_scope.user_consent_description
-        user_consent_display_name  = oauth2_permission_scope.user_consent_display_name
-        enabled                    = oauth2_permission_scope.enabled
-        id                         = lookup(random_uuid.scopes, "${each.key}_${oauth2_permission_scope.value}").result
+        admin_consent_description  = oauth2_permission_scope.value.admin_consent_description
+        admin_consent_display_name = oauth2_permission_scope.value.admin_consent_display_name
+        user_consent_description   = oauth2_permission_scope.value.user_consent_description
+        user_consent_display_name  = oauth2_permission_scope.value.user_consent_display_name
+        enabled                    = oauth2_permission_scope.value.enabled
+        id                         = lookup(random_uuid.scopes, "${each.key}_${oauth2_permission_scope.value.value}").result
         type                       = "Admin"
-        value                      = oauth2_permission_scope.value
+        value                      = oauth2_permission_scope.value.value
       }
     }
   }
