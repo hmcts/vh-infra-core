@@ -13,15 +13,12 @@ locals {
   }
 }
 output "scope_list" {
-  value = local.scope_map
+  value = random_uuid.scopes
 }
 
-/* resource "random_uuid" "scopes" {
-  for_each = local.scope_list
+resource "random_uuid" "scopes" {
+  for_each = local.scope_map
 }
-output "scope_list_guid" {
-  value = random_uuid.scopes
-} */
 
 
 resource "azuread_application" "app_reg" {
@@ -42,7 +39,7 @@ resource "azuread_application" "app_reg" {
 
   owners = [data.azuread_client_config.current.object_id]
 
-  /*  api {
+  api {
     mapped_claims_enabled          = false
     requested_access_token_version = 2
 
@@ -54,12 +51,12 @@ resource "azuread_application" "app_reg" {
         user_consent_description   = oauth2_permission_scope.user_consent_description
         user_consent_display_name  = oauth2_permission_scope.user_consent_display_name
         enabled                    = oauth2_permission_scope.enabled
-        id                         = lookup(random_uuid.scopes, oauth2_permission_scope.value).result
+        id                         = lookup(random_uuid.scopes, "${each.key}_${oauth2_permission_scope.value}").result
         type                       = "Admin"
         value                      = oauth2_permission_scope.value
       }
     }
-  } */
+  }
 
   dynamic "required_resource_access" {
     for_each = lookup(var.api_permissions, each.key, )
