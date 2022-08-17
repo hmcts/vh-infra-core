@@ -38,7 +38,7 @@ resource "azuread_application" "app_reg" {
 
   api {
     mapped_claims_enabled          = false
-    requested_access_token_version = 1
+    requested_access_token_version = 2
 
     dynamic "oauth2_permission_scope" {
       for_each = lookup(var.api_scopes, each.key, )
