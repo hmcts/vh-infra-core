@@ -206,11 +206,12 @@ locals {
   # new apps that need registration can be added as a block below
   app_conf = {
     vh-service-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
       reply_urls_spa = [
         "https://vh-service-web.${local.environment}.platform.hmcts.net/",
         "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
@@ -227,11 +228,12 @@ locals {
       ]
     }
     vh-video-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
       reply_urls_spa = [
         "https://vh-video-web.${local.environment}.platform.hmcts.net/",
         "https://vh-video-web.${local.environment}.platform.hmcts.net/login",
@@ -248,11 +250,12 @@ locals {
       ]
     }
     vh-test-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
       reply_urls_spa = [
         "https://vh-test-web.${local.environment}.platform.hmcts.net/",
         "https://vh-test-web.${local.environment}.platform.hmcts.net/login",
@@ -269,11 +272,12 @@ locals {
       ]
     }
     vh-admin-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
       reply_urls_spa = [
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/",
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/login",
@@ -293,11 +297,12 @@ locals {
       ]
     }
     vh-notification-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
       reply_urls_web = [
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/",
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/login",
@@ -311,11 +316,12 @@ locals {
       ]
     }
     vh-test-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-test-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-test-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
       reply_urls_web = [
         #"https://vh-test-api.${local.environment}.platform.hmcts.net",
         #"https://vh-test-api.${local.environment}.platform.hmcts.net/login",
@@ -329,11 +335,12 @@ locals {
       ]
     }
     vh-video-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
       reply_urls_web = [
         "https://vh-video-api.${local.environment}.platform.hmcts.net/",
         "https://vh-video-api.${local.environment}.platform.hmcts.net/login",
@@ -347,11 +354,12 @@ locals {
       ]
     }
     vh-bookings-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
       reply_urls_web = [
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/",
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/login",
@@ -365,11 +373,12 @@ locals {
       ]
     }
     vh-user-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
       reply_urls_web = [
         "https://vh-user-api.${local.environment}.platform.hmcts.net/",
         "https://vh-user-api.${local.environment}.platform.hmcts.net/login",
@@ -383,11 +392,12 @@ locals {
       ]
     }
     vh-booking-queue = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
       reply_urls_web = [
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/",
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/login",
@@ -401,11 +411,12 @@ locals {
       ]
     }
     vh-scheduler-jobs = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
       reply_urls_web = [
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/",
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/login",
