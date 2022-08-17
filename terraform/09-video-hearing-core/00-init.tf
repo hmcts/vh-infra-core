@@ -50,7 +50,6 @@ provider "azuread" {
 
 provider "azuread" {
   #version = "~> 0.6"
-
   alias = "infra"
 }
 
