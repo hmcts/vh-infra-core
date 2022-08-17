@@ -177,6 +177,13 @@ steps:
       publishLocation: pipeline
       artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}'
 
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Terraform Artifacts'
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
+      publishLocation: pipeline
+      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}-vars'
+
   - template: templates\Azure\Storage\break-lease.yaml@templates
     parameters:
       azureSubscription: ${{ parameters.serviceConnection }}
