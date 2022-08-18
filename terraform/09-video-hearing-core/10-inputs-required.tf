@@ -661,7 +661,7 @@ locals {
       "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
         is_enabled  = true
-        value       = "VirtualRoomAdministrator"
+        value       = "VHO"
         allowed_member_types = [
           "User",
         ],
@@ -721,7 +721,7 @@ locals {
       "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
         is_enabled  = true
-        value       = "VirtualRoomAdministrator"
+        value       = "VHO"
         allowed_member_types = [
           "User",
         ],
