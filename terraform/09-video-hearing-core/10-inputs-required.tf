@@ -619,7 +619,7 @@ locals {
     # Service Web
     "vh-service-web" = {
       "JudicialOfficeHolder" = {
-        description = "avh Judicial Office Holder"
+        description = "Judicial Office Holder"
         is_enabled  = true
         value       = "JudicialOfficeHolder"
         allowed_member_types = [
@@ -631,7 +631,7 @@ locals {
     # Video Web
     "vh-video-web" = {
       "JudicialOfficeHolder" = {
-        description = "avh Judicial Office Holder"
+        description = "Judicial Office Holder"
         is_enabled  = true
         value       = "JudicialOfficeHolder"
         allowed_member_types = [
@@ -679,7 +679,7 @@ locals {
     # Test Web
     "vh-test-web" = {
       "Video Hearing QA" = {
-        description = "avh Video Hearing QA"
+        description = "Video Hearing QA"
         is_enabled  = true
         value       = "VHQA"
         allowed_member_types = [
