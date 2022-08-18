@@ -49,7 +49,7 @@ resource "azuread_application" "app_reg" {
         user_consent_display_name  = oauth2_permission_scope.value.user_consent_display_name
         enabled                    = oauth2_permission_scope.value.enabled
         id                         = lookup(random_uuid.scopes, "${each.key}_${oauth2_permission_scope.value.value}").result
-        type                       = "Admin"
+        type                       = "User"
         value                      = oauth2_permission_scope.value.value
       }
     }
