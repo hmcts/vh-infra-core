@@ -253,6 +253,10 @@ data "azuread_service_principal" "app_sp" {
   application_id = each.value.application_id
 }
 
+output "app_sp" {
+  value = data.azuread_service_principal.app_sp
+}
+
 resource "azuread_app_role_assignment" "groups" {
   for_each            = local.app_roles_map
   app_role_id         = data.azuread_service_principal.app_sp[each.value.app_key].app_role_ids[each.value.app_role_value]

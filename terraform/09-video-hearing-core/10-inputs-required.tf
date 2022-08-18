@@ -635,7 +635,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "c24533b6-9c16-4a11-b1a3-5aceea71254b"
+        id = "510c1477-6a88-4897-9da4-4dd9b156c32a"
       }
     }
     # Video Web
@@ -647,25 +647,25 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "c24533b6-9c16-4a11-b1a3-5aceea71254b"
+        id = "510c1477-6a88-4897-9da4-4dd9b156c32a"
       }
       "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
         is_enabled  = true
-        value       = "Citizen"
+        value       = "External"
         allowed_member_types = [
           "User",
         ],
-        id = "16c30e15-2f33-42c7-aa55-88a28e2cd7c0"
+        id = "121fa058-1796-4531-a9ee-63be1d4dc630"
       }
       "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
         is_enabled  = true
-        value       = "VHO"
+        value       = "VirtualRoomAdministrator"
         allowed_member_types = [
           "User",
         ],
-        id = "719bcfb2-f82e-4328-af8d-1e9b2666aa15"
+        id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
       "Judge" = {
         description = "This user is able to conduct hearings as a judge."
@@ -674,12 +674,21 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "48b7f135-4448-4b88-9dd6-56834943421b"
+        id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
+      }
+      "JudgeVR" = {
+        description = "This Group for users who are judge or decsion maker."
+        is_enabled  = true
+        value       = "Judge"
+        allowed_member_types = [
+          "User",
+        ],
+        id = "431f50b2-fb30-4937-9e91-9b9eeb54097f"
       }
       "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
         is_enabled  = true
-        value       = "ProfessionalUser"
+        value       = "VirtualRoomProfessionalUser"
         allowed_member_types = [
           "User",
         ],
@@ -703,20 +712,20 @@ locals {
       "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
         is_enabled  = true
-        value       = "Citizen"
+        value       = "External"
         allowed_member_types = [
           "User",
         ],
-        id = "16c30e15-2f33-42c7-aa55-88a28e2cd7c0"
+        id = "121fa058-1796-4531-a9ee-63be1d4dc630"
       }
       "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
         is_enabled  = true
-        value       = "VHO"
+        value       = "VirtualRoomAdministrator"
         allowed_member_types = [
           "User",
         ],
-        id = "719bcfb2-f82e-4328-af8d-1e9b2666aa15"
+        id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
       "Judge" = {
         description = "This user is able to conduct hearings as a judge."
@@ -725,7 +734,16 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "48b7f135-4448-4b88-9dd6-56834943421b"
+        id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
+      }
+      "JudgeVR" = {
+        description = "This Group for users who are judge or decsion maker."
+        is_enabled  = true
+        value       = "Judge"
+        allowed_member_types = [
+          "User",
+        ],
+        id = "431f50b2-fb30-4937-9e91-9b9eeb54097f"
       }
       "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
