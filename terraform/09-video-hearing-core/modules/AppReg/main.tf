@@ -247,7 +247,7 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   tags            = var.tags
 }
 
-resource "azuread_service_principal" "app_sp" {
+data "azuread_service_principal" "app_sp" {
   for_each       = azuread_application.app_reg
   application_id = each.value.application_id
 }
