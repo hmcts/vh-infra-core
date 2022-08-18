@@ -618,10 +618,10 @@ locals {
   app_roles = {
     # Service Web
     "vh-service-web" = {
-      "avh JudicialOfficeHolder" = {
+      "JudicialOfficeHolder" = {
         description = "avh Judicial Office Holder"
         is_enabled  = true
-        value       = "avh-JudicialOfficeHolder"
+        value       = "JudicialOfficeHolder"
         allowed_member_types = [
           "User",
         ],
@@ -630,46 +630,46 @@ locals {
     }
     # Video Web
     "vh-video-web" = {
-      "avh JudicialOfficeHolder" = {
+      "JudicialOfficeHolder" = {
         description = "avh Judicial Office Holder"
         is_enabled  = true
-        value       = "avh-JudicialOfficeHolder"
+        value       = "JudicialOfficeHolder"
         allowed_member_types = [
           "User",
         ],
         id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
       }
-      "avh Citizen" = {
+      "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
         is_enabled  = true
-        value       = "avh-Citizen"
+        value       = "Citizen"
         allowed_member_types = [
           "User",
         ],
         id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
       }
-      "avh Video Hearings Officer" = {
+      "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
         is_enabled  = true
-        value       = "avh-VHO"
+        value       = "VHO"
         allowed_member_types = [
           "User",
         ],
         id = "b64edf41-6393-4726-8bbf-bcee33455b97"
       }
-      "avh Judge" = {
+      "Judge" = {
         description = "This user is able to conduct hearings as a judge."
         is_enabled  = true
-        value       = "avh-Judge"
+        value       = "Judge"
         allowed_member_types = [
           "User",
         ],
         id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
       }
-      "avh Legal Representative" = {
+      "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
         is_enabled  = true
-        value       = "avh-ProfessionalUser"
+        value       = "ProfessionalUser"
         allowed_member_types = [
           "User",
         ],
@@ -678,10 +678,10 @@ locals {
     }
     # Test Web
     "vh-test-web" = {
-      "avh Video Hearing QA" = {
+      "Video Hearing QA" = {
         description = "avh Video Hearing QA"
         is_enabled  = true
-        value       = "avh-VHQA"
+        value       = "VHQA"
         allowed_member_types = [
           "User",
         ],
@@ -690,37 +690,37 @@ locals {
     }
     # Admin Web
     "vh-admin-web" = {
-      "avh Citizen" = {
+      "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
         is_enabled  = true
-        value       = "avh-Citizen"
+        value       = "Citizen"
         allowed_member_types = [
           "User",
         ],
         id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
       }
-      "avh Video Hearings Officer" = {
+      "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
         is_enabled  = true
-        value       = "avh-VHO"
+        value       = "VHO"
         allowed_member_types = [
           "User",
         ],
         id = "b64edf41-6393-4726-8bbf-bcee33455b97"
       }
-      "avh Judge" = {
+      "Judge" = {
         description = "This user is able to conduct hearings as a judge."
         is_enabled  = true
-        value       = "avh-Judge"
+        value       = "Judge"
         allowed_member_types = [
           "User",
         ],
         id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
       }
-      "avh Legal Representative" = {
+      "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
         is_enabled  = true
-        value       = "avh-ProfessionalUser"
+        value       = "ProfessionalUser"
         allowed_member_types = [
           "User",
         ],
