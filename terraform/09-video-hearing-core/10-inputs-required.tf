@@ -652,7 +652,7 @@ locals {
       "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
         is_enabled  = true
-        value       = "External"
+        value       = "Citizen"
         allowed_member_types = [
           "User",
         ],
@@ -688,7 +688,7 @@ locals {
       "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
         is_enabled  = true
-        value       = "VirtualRoomProfessionalUser"
+        value       = "ProfessionalUser"
         allowed_member_types = [
           "User",
         ],
@@ -712,7 +712,7 @@ locals {
       "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
         is_enabled  = true
-        value       = "External"
+        value       = "Citizen"
         allowed_member_types = [
           "User",
         ],
@@ -794,7 +794,7 @@ variable "network_tenant_id" {
   type        = string
 }
 
-variable "external_passwords" {
+variable "Citizen_passwords" {
 
   type = map(string)
   default = {
