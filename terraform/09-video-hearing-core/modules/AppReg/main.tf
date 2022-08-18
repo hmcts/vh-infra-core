@@ -11,6 +11,25 @@ locals {
   scope_map = {
     for scopes in local.scope_list : "${scopes.name}_${scopes.scope}" => scopes
   }
+
+  app_roles_list = flatten([
+    for app_key, app_roles in var.app_roles : [
+      for app_role_key, app_role in app_roles :
+      {
+        "app_key" : app_key
+        "app_role_name" : app_role_key
+        "app_role" : app_role
+      }
+    ]
+  ])
+  app_roles_map = {
+    for app_role in local.app_roles_list : "${app_role.app_key}_${app_role.app_role_name}" =>
+    {
+      "app_key" : app_role.app_key
+      "app_role_name" : app_role.app_role_name
+      "app_role_id" : app_role.app_role.id
+    }
+  }
 }
 
 resource "random_uuid" "scopes" {
@@ -228,15 +247,10 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   tags            = var.tags
 }
 
-data "azuread_group" "vhqa" {
-  display_name     = "VHQA"
-  security_enabled = true
+resource "azuread_group_member" "member" {
+  for_each         = local.app_roles_map
+  group_object_id  = each.value.app_role_id
+  member_object_id = azuread_application.app_reg[each.value.app_key].id
 }
-
-/* resource "azuread_group_member" "member" {
-  for_each         = var.environment == "prod" ? {} : var.app_conf
-  group_object_id  = data.azuread_group.vhqa.id
-  member_object_id = azuread_application.app_reg[each.key].id
-}  */
 
 data "azuread_client_config" "current" {}
