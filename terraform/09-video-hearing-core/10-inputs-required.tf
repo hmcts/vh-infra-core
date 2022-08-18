@@ -673,7 +673,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "397ac395-5b44-4f34-a9d5-d083476a0a99"
+        id = "f3340a0e-2ea2-45c6-b19c-d601b8dac13f"
       }
     }
     # Test Web
@@ -724,7 +724,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "397ac395-5b44-4f34-a9d5-d083476a0a99"
+        id = "f3340a0e-2ea2-45c6-b19c-d601b8dac13f"
       }
     }
     "vh-notification-api" = {}
