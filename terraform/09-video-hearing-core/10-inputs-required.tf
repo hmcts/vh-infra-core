@@ -794,7 +794,7 @@ variable "network_tenant_id" {
   type        = string
 }
 
-variable "Citizen_passwords" {
+variable "external_passwords" {
 
   type = map(string)
   default = {
