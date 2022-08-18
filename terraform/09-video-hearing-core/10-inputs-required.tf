@@ -462,6 +462,7 @@ locals {
     "vh-test-api"         = {}
 
   }
+
   # API Permissions
   api_permissions = {
     "vh-booking-queue" = {
@@ -614,6 +615,15 @@ locals {
       }
     }
   }
+
+  /*   
+    allowed_member_types = ["Application", "User"]
+    description          = "Admins can perform all task actions"
+    display_name         = "Admin"
+    enabled              = true
+    id                   = "00000000-0000-0000-0000-222222222222"
+    value                = "Admin.All"
+*/
   #App Roles
   app_roles = {
     # Service Web

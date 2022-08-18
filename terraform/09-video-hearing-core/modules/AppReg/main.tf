@@ -28,6 +28,7 @@ locals {
       "app_key" : app_role.app_key
       "app_role_name" : app_role.app_role_name
       "app_role_id" : app_role.app_role.id
+      "app_role_value" : app_role.app_role.value
     }
   }
 }
@@ -254,7 +255,7 @@ data "azuread_service_principal" "app_sp" {
 
 resource "azuread_app_role_assignment" "groups" {
   for_each            = local.app_roles_map
-  app_role_id         = data.azuread_service_principal.app_sp[each.value.app_key].app_role_ids["Admin.All"]
+  app_role_id         = data.azuread_service_principal.app_sp[each.value.app_key].app_role_ids[each.value.app_role_value]
   principal_object_id = each.value.app_role_id
   resource_object_id  = data.azuread_service_principal.app_sp[each.value.app_key].object_id
 }
