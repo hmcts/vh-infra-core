@@ -254,9 +254,9 @@ data "azuread_service_principal" "app_sp" {
 
 resource "azuread_app_role_assignment" "groups" {
   for_each            = local.app_roles_map
-  app_role_id         = azuread_service_principal.app_sp[each.value.app_key].app_role_ids["Admin.All"]
+  app_role_id         = data.azuread_service_principal.app_sp[each.value.app_key].app_role_ids["Admin.All"]
   principal_object_id = each.value.app_role_id
-  resource_object_id  = azuread_service_principal.app_sp[each.value.app_key].object_id
+  resource_object_id  = data.azuread_service_principal.app_sp[each.value.app_key].object_id
 }
 
 data "azuread_client_config" "current" {}
