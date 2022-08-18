@@ -625,7 +625,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
+        id = "c24533b6-9c16-4a11-b1a3-5aceea71254b"
       }
     }
     # Video Web
@@ -637,7 +637,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
+        id = "c24533b6-9c16-4a11-b1a3-5aceea71254b"
       }
       "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
@@ -646,7 +646,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
+        id = "16c30e15-2f33-42c7-aa55-88a28e2cd7c0"
       }
       "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
@@ -655,7 +655,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "b64edf41-6393-4726-8bbf-bcee33455b97"
+        id = "719bcfb2-f82e-4328-af8d-1e9b2666aa15"
       }
       "Judge" = {
         description = "This user is able to conduct hearings as a judge."
@@ -664,7 +664,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
+        id = "48b7f135-4448-4b88-9dd6-56834943421b"
       }
       "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
@@ -673,7 +673,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "5e49645a-2af9-4d2d-b9ef-7d4b659e91c7"
+        id = "397ac395-5b44-4f34-a9d5-d083476a0a99"
       }
     }
     # Test Web
@@ -685,7 +685,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "bb339a15-17ac-4988-a628-7f1abe4c0165"
+        id = "48207c0c-5239-482b-8400-6ff9ae02b1f3"
       }
     }
     # Admin Web
@@ -697,7 +697,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
+        id = "16c30e15-2f33-42c7-aa55-88a28e2cd7c0"
       }
       "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
@@ -706,7 +706,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "b64edf41-6393-4726-8bbf-bcee33455b97"
+        id = "719bcfb2-f82e-4328-af8d-1e9b2666aa15"
       }
       "Judge" = {
         description = "This user is able to conduct hearings as a judge."
@@ -715,7 +715,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
+        id = "48b7f135-4448-4b88-9dd6-56834943421b"
       }
       "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
@@ -724,7 +724,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "5e49645a-2af9-4d2d-b9ef-7d4b659e91c7"
+        id = "397ac395-5b44-4f34-a9d5-d083476a0a99"
       }
     }
     "vh-notification-api" = {}
