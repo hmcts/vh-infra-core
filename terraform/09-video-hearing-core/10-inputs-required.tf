@@ -676,10 +676,10 @@ locals {
         ],
         id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
       }
-      "JudgeVR" = {
+      "VirtualRoomJudge" = {
         description = "This Group for users who are judge or decsion maker."
         is_enabled  = true
-        value       = "Judge"
+        value       = "VirtualRoomJudge"
         allowed_member_types = [
           "User",
         ],
@@ -736,10 +736,10 @@ locals {
         ],
         id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
       }
-      "JudgeVR" = {
+      "VirtualRoomJudge" = {
         description = "This Group for users who are judge or decsion maker."
         is_enabled  = true
-        value       = "Judge"
+        value       = "VirtualRoomJudge"
         allowed_member_types = [
           "User",
         ],
