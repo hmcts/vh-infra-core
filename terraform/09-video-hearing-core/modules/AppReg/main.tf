@@ -24,14 +24,14 @@ resource "azuread_application" "app_reg" {
   identifier_uris = [for item in each.value.identifier_uris :
   var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
 
-  implicit_grant {
-    id_token_issuance_enabled = true
-  }
-  
+
   web {
     homepage_url = var.environment == "prod" ? replace("https://${each.key}.${var.environment}.platform.hmcts.net", ".prod.", ".") : replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
     redirect_uris = [for item in each.value.reply_urls_web :
     var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+    implicit_grant {
+      id_token_issuance_enabled = true
+    }
   }
   single_page_application {
     redirect_uris = [for item in each.value.reply_urls_spa :
