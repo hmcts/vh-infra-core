@@ -28,6 +28,6 @@ module "splunk-uf" {
   virtual_machine_id         = azurerm_linux_virtual_machine.wowza[count.index].id
   splunk_username            = local.splunk_admin_username
   splunk_password            = random_password.splunk_admin_password.result
-  tags                       = local.common_tags
+  tags                       = var.tags
   # splunk_pass4symmkey        = try(data.azurerm_key_vault_secret.splunk_pass4symmkey[0].value, null)
 }
