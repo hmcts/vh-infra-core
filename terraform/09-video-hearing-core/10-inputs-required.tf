@@ -234,20 +234,15 @@ locals {
       identifier_uris                = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
-      reply_urls_spa = [
-        "https://vh-video-web.${local.environment}.platform.hmcts.net/",
-        "https://vh-video-web.${local.environment}.platform.hmcts.net/login",
+      reply_urls_spa = flatten([
         "https://vh-video-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-video-web.${local.environment}.platform.hmcts.net/logout",
+        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/logout",
         "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-        "https://videoweb_ac/login",
-        "https://videoweb_ac/home",
-        "https://videoweb_ac/",
-      ]
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+        var.environment == "prod" ? ["https://video.hearings.reform.hmcts.net/home", "https://video.hearings.reform.hmcts.net/logout"] : [],
+        var.environment == "stg" ? ["https://video.staging.hearings.reform.hmcts.net/home", "https://video.staging.hearings.reform.hmcts.net/logout"] : []
+      ])
     }
     vh-test-web = {
       available_to_other_tenants     = false
@@ -256,20 +251,14 @@ locals {
       identifier_uris                = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
-      reply_urls_spa = [
-        "https://vh-test-web.${local.environment}.platform.hmcts.net/",
-        "https://vh-test-web.${local.environment}.platform.hmcts.net/login",
+      reply_urls_spa = flatten([
         "https://vh-test-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-test-web.${local.environment}.platform.hmcts.net/logout",
         "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-        "https://testweb_ac/login",
-        "https://testweb_ac/home",
-        "https://testweb_ac/",
-      ]
+        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/logout",
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+        var.environment == "stg" ? ["https://test.staging.hearings.reform.hmcts.net/home", "https://test.staging.hearings.reform.hmcts.net/logout"] : []
+      ])
     }
     vh-admin-web = {
       available_to_other_tenants     = false
@@ -278,23 +267,15 @@ locals {
       identifier_uris                = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
-      reply_urls_spa = [
-        "https://vh-admin-web.${local.environment}.platform.hmcts.net/",
-        "https://vh-admin-web.${local.environment}.platform.hmcts.net/login",
+      reply_urls_spa = flatten([
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-admin-web.${local.environment}.platform.hmcts.net/logout",
         "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-        "https://1905f943.ngrok.io/",
-        "https://1905f943.ngrok.io/login",
-        "https://1905f943.ngrok.io/home",
-        "https://adminweb_ac/login",
-        "https://adminweb_ac/home",
-        "https://adminweb_ac/",
-      ]
+        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/logout",
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+        var.environment == "prod" ? ["https://admin.hearings.reform.hmcts.net/home", "https://admin.hearings.reform.hmcts.net/logout"] : [],
+        var.environment == "stg" ? ["https://admin.staging.hearings.reform.hmcts.net/home", "https://admin.staging.hearings.reform.hmcts.net/logout"] : []
+      ])
     }
     vh-notification-api = {
       available_to_other_tenants     = false
@@ -303,17 +284,13 @@ locals {
       identifier_uris                = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      reply_urls_web = [
-        "https://vh-notification-api.${local.environment}.platform.hmcts.net/",
-        "https://vh-notification-api.${local.environment}.platform.hmcts.net/login",
+      reply_urls_web = flatten([
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-notification-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/logout",
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      ])
     }
     vh-test-api = {
       available_to_other_tenants     = false
@@ -341,17 +318,13 @@ locals {
       identifier_uris                = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      reply_urls_web = [
-        "https://vh-video-api.${local.environment}.platform.hmcts.net/",
-        "https://vh-video-api.${local.environment}.platform.hmcts.net/login",
+      reply_urls_web = flatten([
         "https://vh-video-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-video-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/logout",
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      ])
     }
     vh-bookings-api = {
       available_to_other_tenants     = false
@@ -360,17 +333,13 @@ locals {
       identifier_uris                = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      reply_urls_web = [
-        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/",
-        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/login",
+      reply_urls_web = flatten([
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/logout",
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      ])
     }
     vh-user-api = {
       available_to_other_tenants     = false
@@ -379,17 +348,13 @@ locals {
       identifier_uris                = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      reply_urls_web = [
-        "https://vh-user-api.${local.environment}.platform.hmcts.net/",
-        "https://vh-user-api.${local.environment}.platform.hmcts.net/login",
+      reply_urls_web = flatten([
         "https://vh-user-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-user-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/logout",
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      ])
     }
     vh-booking-queue = {
       available_to_other_tenants     = false
@@ -399,15 +364,11 @@ locals {
       requested_access_token_version = 1
       reply_urls_spa                 = []
       reply_urls_web = [
-        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/",
-        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/login",
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/home",
-        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/logout",
         "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
+        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/logout",
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
       ]
     }
     vh-scheduler-jobs = {
@@ -417,17 +378,13 @@ locals {
       identifier_uris                = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      reply_urls_web = [
-        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/",
-        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/login",
+      reply_urls_web = flatten([
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/home",
-        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/logout",
         "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/logout",
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      ])
     }
   }
   api_scopes = {
