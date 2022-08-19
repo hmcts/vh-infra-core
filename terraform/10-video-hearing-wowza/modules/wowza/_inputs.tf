@@ -49,10 +49,6 @@ variable "tags" {
   default = {}
 }
 
-variable "splunk_tags" {
-  description = "splunk tags."
-  type        = string
-}
 
 # variable "schedule_actions"{
 #  description = "The time and action required for the Wowza VM automation"
