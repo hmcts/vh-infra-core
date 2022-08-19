@@ -339,7 +339,7 @@ locals {
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/home",
         "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/logout"],
-      var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : []
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : []
       )
     }
     vh-user-api = {
