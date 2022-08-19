@@ -46,7 +46,7 @@ resource "azuread_application" "app_reg" {
 
   web {
     homepage_url = var.environment == "prod" ? replace("https://${each.key}.${var.environment}.platform.hmcts.net", ".prod.", ".") : replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
-    redirect_uris = [for item in each.value.reply_urls_web : var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+    redirect_uris = [for item in each.value.reply_urls_web : var.environment == "prod" ? tostring(replace(item, ".prod.", ".")) : tostring(replace(item, "stg", "staging"))]
     
     implicit_grant {
       id_token_issuance_enabled = true
@@ -54,7 +54,7 @@ resource "azuread_application" "app_reg" {
   }
 
   single_page_application {
-    redirect_uris = [for item in each.value.reply_urls_spa : var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+    redirect_uris = [for item in each.value.reply_urls_spa : var.environment == "prod" ? tostring(replace(item, ".prod.", ".")) : tostring(replace(item, "stg", "staging"))]
   }
 
   owners = [data.azuread_client_config.current.object_id]
