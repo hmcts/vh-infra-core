@@ -49,6 +49,7 @@ variable "tags" {
   default = {}
 }
 
+
 # variable "schedule_actions"{
 #  description = "The time and action required for the Wowza VM automation"
 #  type = map(string)
