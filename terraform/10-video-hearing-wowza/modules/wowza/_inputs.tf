@@ -48,7 +48,9 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
-
+variable "splunktags" {
+  type = string
+}
 
 # variable "schedule_actions"{
 #  description = "The time and action required for the Wowza VM automation"
