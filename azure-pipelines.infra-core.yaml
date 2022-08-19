@@ -51,16 +51,16 @@ stages:
 ################################################
 # Validate Infra Code. #########################
 
-# - stage: Validate_Terraform_Code
-#   displayName: 'Validate Terraform Code'
-#   jobs:
-#     - job: Validate_Terraform_Code
-#       displayName: Validate Terraform Code
-#       steps:
-#         - template: pipeline-steps/terraform-validate.yaml
-#           parameters:
-#             tfversion: ${{ variables.tfversion }}
-#             stack: '09-video-hearing-core'
+- stage: Validate_Terraform_Code
+  displayName: 'Validate Terraform Code'
+  jobs:
+    - job: Validate_Terraform_Code
+      displayName: Validate Terraform Code
+      steps:
+        - template: pipeline-steps/terraform-validate.yaml
+          parameters:
+            tfversion: ${{ variables.tfversion }}
+            stack: '09-video-hearing-core'
 
 
 ################################################
