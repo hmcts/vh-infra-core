@@ -676,14 +676,14 @@ locals {
         ],
         id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
       }
-      "VirtualRoomJudge" = {
-        description = "This Group for users who are judge or decsion maker."
+      "Staff Member" = {
+        description = "This user is able to conduct hearings as a staff member."
         is_enabled  = true
-        value       = "VirtualRoomJudge"
+        value       = "StaffMember"
         allowed_member_types = [
           "User",
         ],
-        id = "431f50b2-fb30-4937-9e91-9b9eeb54097f"
+        id = "94b44a32-4f2a-4e3e-9332-d9ddd8de8284"
       }
       "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
