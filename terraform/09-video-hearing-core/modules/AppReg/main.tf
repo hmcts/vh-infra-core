@@ -41,27 +41,27 @@ resource "random_uuid" "scopes" {
 resource "azuread_application" "app_reg" {
   for_each     = var.app_conf
   display_name = "a${each.key}.${var.environment}.platform.hmcts.net"
-  identifier_uris = [for item in each.value.identifier_uris : var.environment == "prod" ? replace(tostring(item), ".prod.", ".") : replace(tostring(item), "stg", "staging")]
+  identifier_uris = [for item in each.value.identifier_uris : var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
 
 
   web {
     homepage_url = var.environment == "prod" ? replace("https://${each.key}.${var.environment}.platform.hmcts.net", ".prod.", ".") : replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
-    redirect_uris = [for item in each.value.reply_urls_web :
-    var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+    redirect_uris = [for item in each.value.reply_urls_web : var.environment == "prod" ? replace(tostring(item), ".prod.", ".") : replace(tostring(item), "stg", "staging")]
+
     implicit_grant {
       id_token_issuance_enabled = true
     }
   }
+  
   single_page_application {
-    redirect_uris = [for item in each.value.reply_urls_spa :
-    var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+    redirect_uris = [for item in each.value.reply_urls_spa : var.environment == "prod" ? replace(tostring(item), ".prod.", ".") : replace(tostring(item), "stg", "staging")]
   }
 
   owners = [data.azuread_client_config.current.object_id]
 
   api {
     mapped_claims_enabled          = false
-    requested_access_token_version  = each.value.requested_access_token_version
+    requested_access_token_version = each.value.requested_access_token_version
 
     dynamic "oauth2_permission_scope" {
       for_each = lookup(var.api_scopes, each.key, )
