@@ -3,7 +3,6 @@ variable "environment" {
 }
 
 variable "app_conf" {
-  type = map(any)
 }
 
 variable "app_roles" {
