@@ -206,11 +206,12 @@ locals {
   # new apps that need registration can be added as a block below
   app_conf = {
     vh-service-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
       reply_urls_spa = [
         "https://vh-service-web.${local.environment}.platform.hmcts.net/",
         "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
