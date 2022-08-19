@@ -306,9 +306,7 @@ module "AppReg" {
   ]
   tags = local.common_tags
 }
-output "app_sp" {
-  value = module.AppReg.app_sp
-}
+
 #--------------------------------------------------------------
 # VH - Monitoring
 #--------------------------------------------------------------
