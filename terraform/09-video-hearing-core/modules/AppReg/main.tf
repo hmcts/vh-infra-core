@@ -41,7 +41,7 @@ resource "random_uuid" "scopes" {
 resource "azuread_application" "app_reg" {
   for_each     = var.app_conf
   display_name = "a${each.key}.${var.environment}.platform.hmcts.net"
-  identifier_uris = [for item in each.value.identifier_uris : var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+  identifier_uris = [for item in each.value.identifier_uris : var.environment == "prod" ? replace(tostring(item), ".prod.", ".") : replace(tostring(item), "stg", "staging")]
 
 
   web {
@@ -61,7 +61,7 @@ resource "azuread_application" "app_reg" {
 
   api {
     mapped_claims_enabled          = false
-    requested_access_token_version = each.value.requested_access_token_version
+    requested_access_token_version  = each.value.requested_access_token_version
 
     dynamic "oauth2_permission_scope" {
       for_each = lookup(var.api_scopes, each.key, )
