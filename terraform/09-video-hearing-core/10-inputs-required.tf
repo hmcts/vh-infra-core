@@ -271,11 +271,11 @@ locals {
       requested_access_token_version = 2
       reply_urls_web                 = []
       optional_claims = {
-        access_token_0 = {
+        access_token = {
           name      = "family_name"
           essential = true
         }
-        access_token_1 = {
+        access_token = {
           name      = "given_name"
           essential = true
         }
