@@ -114,7 +114,7 @@ resource "azuread_application" "app_reg" {
 
   optional_claims {
     dynamic "access_token" {
-      for_each = lookup(each.value.optional_claims, "access_token", )
+      for_each = try(each.value.optional_claims, "access_token", null)
       content {
         name      = access_token.value.name
         essential = access_token.value.essential
@@ -122,8 +122,6 @@ resource "azuread_application" "app_reg" {
     }
   }
 }
-
-
 
 # Create app reg secret
 resource "time_rotating" "app_reg_password" {
