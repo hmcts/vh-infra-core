@@ -112,17 +112,14 @@ resource "azuread_application" "app_reg" {
     }
   }
 
-  dynamic "optional_claims" {
-    for_each = each.value.optional_claims
-    content {
-      dynamic "access_token" {
-        for_each = contains(optional_claims.key, "access_token") 
-        content {
-          name      = access_token.name
-          essential = access_token.essential
-        }
+  optional_claims {
+    dynamic "access_token" {
+      for_each = contains(each.value.optional_claims, "access_token")
+      content {
+        name      = access_token.value.name
+        essential = access_token.value.essential
       }
-    } 
+    }
   }
 }
 
