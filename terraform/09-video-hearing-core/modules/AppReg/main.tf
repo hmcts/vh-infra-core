@@ -124,6 +124,7 @@ dynamic "optional_claims" {
       }
     }
   }
+}
 
 # Create app reg secret
 resource "time_rotating" "app_reg_password" {
