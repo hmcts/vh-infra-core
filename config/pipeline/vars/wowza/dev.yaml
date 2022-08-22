@@ -1,2 +1,6 @@
 variables:
   env_long: "development"
+  dynatrace_tenant_id: "yrk32651"
+  central_infra_kv: 'infra-vault-nonprod'
+  dynatrace_token_secret_name: 'dynatrace-nonprod-token'
+  dynatrace_api_token_secret_name: 'dynatrace-nonprod-api-event-token'
