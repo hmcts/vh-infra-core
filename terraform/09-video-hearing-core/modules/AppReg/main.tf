@@ -111,6 +111,19 @@ resource "azuread_application" "app_reg" {
       allowed_member_types = app_role.value.allowed_member_types
     }
   }
+
+  dynamic "optional_claims" {
+    for_each = each.value.optional_claims
+    content {
+      dynamic "access_token" {
+        for_each = contains(optional_claims.key, "access_token") 
+        content {
+          name      = access_token.name
+          essential = access_token.essential
+        }
+      }
+    } 
+  }
 }
 
 
