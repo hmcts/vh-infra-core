@@ -212,7 +212,7 @@ locals {
       identifier_uris                = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_spa = [
         "https://vh-service-web.${local.environment}.platform.hmcts.net/",
         "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
@@ -235,7 +235,50 @@ locals {
       identifier_uris                = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
-      optional_claims                = {}
+      optional_claims = [
+        {
+          name                  = "family_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "family_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "groups"
+          type                  = "saml2"
+          essential             = false
+          additional_properties = []
+        }
+      ]
       reply_urls_spa = concat([
         "https://vh-video-web.${local.environment}.platform.hmcts.net/home",
         "https://vh-video-web.${local.environment}.platform.hmcts.net/logout",
@@ -253,7 +296,7 @@ locals {
       identifier_uris                = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_spa = concat([
         "https://vh-test-web.${local.environment}.platform.hmcts.net/home",
         "https://vh-test-web.${local.environment}.platform.hmcts.net/logout",
@@ -270,20 +313,50 @@ locals {
       identifier_uris                = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
-      optional_claims = {
-        access_token = {
-          name      = "family_name"
-          essential = true
+      optional_claims = [
+        {
+          name                  = "family_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "family_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "groups"
+          type                  = "saml2"
+          essential             = false
+          additional_properties = []
         }
-        access_token = {
-          name      = "given_name"
-          essential = true
-        }
-        access_token = {
-          name      = "groups"
-          essential = true
-        }
-      }
+      ]
       reply_urls_spa = concat([
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/home",
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/logout",
@@ -301,7 +374,7 @@ locals {
       identifier_uris                = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/home",
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/logout",
@@ -317,7 +390,7 @@ locals {
       identifier_uris                = ["https://vh-test-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_web = [
         #"https://vh-test-api.${local.environment}.platform.hmcts.net",
         #"https://vh-test-api.${local.environment}.platform.hmcts.net/login",
@@ -337,7 +410,7 @@ locals {
       identifier_uris                = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-video-api.${local.environment}.platform.hmcts.net/home",
         "https://vh-video-api.${local.environment}.platform.hmcts.net/logout",
@@ -354,7 +427,7 @@ locals {
       identifier_uris                = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/home",
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/logout",
@@ -370,7 +443,7 @@ locals {
       identifier_uris                = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-user-api.${local.environment}.platform.hmcts.net/home",
         "https://vh-user-api.${local.environment}.platform.hmcts.net/logout",
@@ -386,7 +459,7 @@ locals {
       identifier_uris                = ["https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/home",
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/logout",
@@ -402,7 +475,7 @@ locals {
       identifier_uris                = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
-      optional_claims                = {}
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/home",
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/logout",

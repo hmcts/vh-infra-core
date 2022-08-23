@@ -100,6 +100,7 @@ resource "azuread_application" "app_reg" {
       }
     }
   }
+
   dynamic "app_role" {
     for_each = lookup(var.app_roles, each.key, )
     content {
@@ -112,15 +113,40 @@ resource "azuread_application" "app_reg" {
     }
   }
 
-dynamic "optional_claims" {
-    for_each = each.value.optional_claims != {} ? each.value.optional_claims : {}
-    content {
-      dynamic "access_token" {
-        for_each = lookup(optional_claims.value, "access_token", )
-        content {
-          name      = access_token.value.name
-          essential = access_token.value.essential
-        }
+  optional_claims {
+    dynamic "access_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "access_token"
+      ]
+      content {
+        name                  = access_token.value.name
+        essential             = access_token.value.essential
+        additional_properties = access_token.value.additional_properties
+      }
+    }
+
+    dynamic "id_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "id_token"
+      ]
+      content {
+        name                  = access_token.value.name
+        essential             = access_token.value.essential
+        additional_properties = access_token.value.additional_properties
+      }
+    }
+
+    dynamic "saml2_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "saml2"
+      ]
+      content {
+        name                  = access_token.value.name
+        essential             = access_token.value.essential
+        additional_properties = access_token.value.additional_properties
       }
     }
   }
