@@ -563,7 +563,7 @@ locals {
             type = "Scope"
           }
           GroupReadWriteAll = {
-            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0" 
+            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
             type = "Scope"
           }
         }
@@ -610,7 +610,7 @@ locals {
             type = "Scope"
           }
           GroupReadWriteAll = {
-            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0" 
+            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
             type = "Scope"
           }
         }
