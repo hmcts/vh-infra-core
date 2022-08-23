@@ -298,11 +298,11 @@ data "azuread_service_principal" "app_sp" {
   application_id = each.value.application_id
 }
 
-resource "azuread_app_role_assignment" "groups" {
-  for_each            = local.app_roles_map
-  app_role_id         = data.azuread_service_principal.app_sp[each.value.app_key].app_role_ids[each.value.app_role_value]
-  principal_object_id = each.value.app_role_id
-  resource_object_id  = data.azuread_service_principal.app_sp[each.value.app_key].object_id
-}
+# resource "azuread_app_role_assignment" "groups" {
+#   for_each            = local.app_roles_map
+#   app_role_id         = data.azuread_service_principal.app_sp[each.value.app_key].app_role_ids[each.value.app_role_value]
+#   principal_object_id = each.value.app_role_id
+#   resource_object_id  = data.azuread_service_principal.app_sp[each.value.app_key].object_id
+# }
 
 data "azuread_client_config" "current" {}
