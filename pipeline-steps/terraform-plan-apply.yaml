@@ -63,7 +63,7 @@ stages:
 
     - job: MonitoringTasks
       displayName: 'Monitoring Tasks ${{parameters.env}}'
-      dependsOn: Terraform_Plan_${{ parameters.env }}
+      #dependsOn: Terraform_Plan_${{ parameters.env }}
       steps:
         - template: az-dynatrace-credentials.yaml
           parameters:
@@ -72,7 +72,7 @@ stages:
             dynatraceTenantId: ${{ variables.dynatrace_tenant_id }}
             infraCoreKvName: ${{ variables.central_infra_kv }}
             dynatraceApiTokenSecretName: ${{ variables.dynatrace_api_token_secret_name }}
-            kvName: "vh-infra-core-${{ parameters.env }}"
+            kvName: "vh-infra-core-stg" #"vh-infra-core-${{ parameters.env }}"
             wowzaUsernameSecretName: "wowzaconfiguration--username"
             wowzaPasswordSecretName: "wowzaconfiguration--restPassword"
 
