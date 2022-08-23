@@ -132,9 +132,9 @@ resource "azuread_application" "app_reg" {
         token if token.type == "id_token"
       ]
       content {
-        name                  = access_token.value.name
-        essential             = access_token.value.essential
-        additional_properties = access_token.value.additional_properties
+        name                  = id_token.value.name
+        essential             = id_token.value.essential
+        additional_properties = id_token.value.additional_properties
       }
     }
 
@@ -144,9 +144,9 @@ resource "azuread_application" "app_reg" {
         token if token.type == "saml2"
       ]
       content {
-        name                  = access_token.value.name
-        essential             = access_token.value.essential
-        additional_properties = access_token.value.additional_properties
+        name                  = saml2_token.value.name
+        essential             = saml2_token.value.essential
+        additional_properties = saml2_token.value.additional_properties
       }
     }
   }
