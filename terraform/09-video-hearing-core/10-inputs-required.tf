@@ -725,10 +725,10 @@ locals {
         ],
         id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
-      "Judge" = {
+      "VirtualRoomJudge" = {
         description = "This user is able to conduct hearings as a judge."
         is_enabled  = true
-        value       = "Judge"
+        value       = "VirtualRoomJudge"
         allowed_member_types = [
           "User",
         ],
@@ -785,15 +785,7 @@ locals {
         ],
         id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
-      "Judge" = {
-        description = "This user is able to conduct hearings as a judge."
-        is_enabled  = true
-        value       = "Judge"
-        allowed_member_types = [
-          "User",
-        ],
-        id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
-      }
+
       "VirtualRoomJudge" = {
         description = "This Group for users who are judge or decsion maker."
         is_enabled  = true
