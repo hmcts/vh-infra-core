@@ -551,22 +551,17 @@ locals {
       }
     }
     "vh-admin-web" = {
-      "Azure AD Graph" = {
-        id = "00000002-0000-0000-c000-000000000000"
-        access = {
-          UserRead = {
-            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
-            type = "Scope"
-          }
-          DirectoryReadWriteAll = {
-            id   = "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175"
-            type = "Role"
-          }
-        }
-      }
       "Microsoft Graph" = {
         id = "00000003-0000-0000-c000-000000000000"
         access = {
+          Profile = {
+            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            type = "Scope"
+          }
+          UserRead = {
+            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+            type = "Role"
+          }
           GroupReadWriteAll = {
             id   = "62a82d76-70ea-41e2-9197-370581804d09"
             type = "Role"
@@ -603,12 +598,16 @@ locals {
       }
     }
     "vh-video-web" = {
-      "Azure AD Graph" = {
-        id = "00000002-0000-0000-c000-000000000000"
+      "Microsoft Graph" = {
+        id = "00000003-0000-0000-c000-000000000000"
         access = {
-          UserRead = {
-            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
+          Profile = {
+            id   = "14dad69e-099b-42c9-810b-d002981feec1"
             type = "Scope"
+          }
+          UserRead = {
+            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+            type = "Role"
           }
         }
       }
