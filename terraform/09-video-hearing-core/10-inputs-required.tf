@@ -732,7 +732,7 @@ locals {
         allowed_member_types = [
           "User",
         ],
-        id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
+        id = "431f50b2-fb30-4937-9e91-9b9eeb54097f"
       }
       "Staff Member" = {
         description = "This user is able to conduct hearings as a staff member."
