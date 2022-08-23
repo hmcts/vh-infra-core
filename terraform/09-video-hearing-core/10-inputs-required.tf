@@ -555,16 +555,16 @@ locals {
         id = "00000003-0000-0000-c000-000000000000"
         access = {
           Profile = {
-            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
             type = "Scope"
           }
           UserRead = {
-            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
-            type = "Role"
+            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            type = "Scope"
           }
           GroupReadWriteAll = {
-            id   = "62a82d76-70ea-41e2-9197-370581804d09"
-            type = "Role"
+            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0" 
+            type = "Scope"
           }
         }
       }
@@ -602,12 +602,16 @@ locals {
         id = "00000003-0000-0000-c000-000000000000"
         access = {
           Profile = {
-            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
             type = "Scope"
           }
           UserRead = {
-            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
-            type = "Role"
+            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            type = "Scope"
+          }
+          GroupReadWriteAll = {
+            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0" 
+            type = "Scope"
           }
         }
       }
