@@ -100,6 +100,7 @@ resource "azuread_application" "app_reg" {
       }
     }
   }
+
   dynamic "app_role" {
     for_each = lookup(var.app_roles, each.key, )
     content {
@@ -111,9 +112,45 @@ resource "azuread_application" "app_reg" {
       allowed_member_types = app_role.value.allowed_member_types
     }
   }
+
+  optional_claims {
+    dynamic "access_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "access_token"
+      ]
+      content {
+        name                  = access_token.value.name
+        essential             = access_token.value.essential
+        additional_properties = access_token.value.additional_properties
+      }
+    }
+
+    dynamic "id_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "id_token"
+      ]
+      content {
+        name                  = id_token.value.name
+        essential             = id_token.value.essential
+        additional_properties = id_token.value.additional_properties
+      }
+    }
+
+    dynamic "saml2_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "saml2"
+      ]
+      content {
+        name                  = saml2_token.value.name
+        essential             = saml2_token.value.essential
+        additional_properties = saml2_token.value.additional_properties
+      }
+    }
+  }
 }
-
-
 
 # Create app reg secret
 resource "time_rotating" "app_reg_password" {
