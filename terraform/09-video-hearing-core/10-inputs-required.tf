@@ -212,6 +212,7 @@ locals {
       identifier_uris                = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
+      optional_claims                = []
       reply_urls_spa = [
         "https://vh-service-web.${local.environment}.platform.hmcts.net/",
         "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
@@ -234,6 +235,50 @@ locals {
       identifier_uris                = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
+      optional_claims = [
+        {
+          name                  = "family_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "family_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "groups"
+          type                  = "saml2"
+          essential             = false
+          additional_properties = []
+        }
+      ]
       reply_urls_spa = concat([
         "https://vh-video-web.${local.environment}.platform.hmcts.net/home",
         "https://vh-video-web.${local.environment}.platform.hmcts.net/logout",
@@ -251,6 +296,7 @@ locals {
       identifier_uris                = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
+      optional_claims                = []
       reply_urls_spa = concat([
         "https://vh-test-web.${local.environment}.platform.hmcts.net/home",
         "https://vh-test-web.${local.environment}.platform.hmcts.net/logout",
@@ -267,6 +313,50 @@ locals {
       identifier_uris                = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 2
       reply_urls_web                 = []
+      optional_claims = [
+        {
+          name                  = "family_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "family_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "groups"
+          type                  = "saml2"
+          essential             = false
+          additional_properties = []
+        }
+      ]
       reply_urls_spa = concat([
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/home",
         "https://vh-admin-web.${local.environment}.platform.hmcts.net/logout",
@@ -284,6 +374,7 @@ locals {
       identifier_uris                = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/home",
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/logout",
@@ -299,6 +390,7 @@ locals {
       identifier_uris                = ["https://vh-test-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
+      optional_claims                = []
       reply_urls_web = [
         #"https://vh-test-api.${local.environment}.platform.hmcts.net",
         #"https://vh-test-api.${local.environment}.platform.hmcts.net/login",
@@ -318,6 +410,7 @@ locals {
       identifier_uris                = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-video-api.${local.environment}.platform.hmcts.net/home",
         "https://vh-video-api.${local.environment}.platform.hmcts.net/logout",
@@ -334,6 +427,7 @@ locals {
       identifier_uris                = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/home",
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/logout",
@@ -349,6 +443,7 @@ locals {
       identifier_uris                = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-user-api.${local.environment}.platform.hmcts.net/home",
         "https://vh-user-api.${local.environment}.platform.hmcts.net/logout",
@@ -364,6 +459,7 @@ locals {
       identifier_uris                = ["https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/home",
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/logout",
@@ -379,6 +475,7 @@ locals {
       identifier_uris                = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
       requested_access_token_version = 1
       reply_urls_spa                 = []
+      optional_claims                = []
       reply_urls_web = concat([
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/home",
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/logout",
@@ -454,25 +551,20 @@ locals {
       }
     }
     "vh-admin-web" = {
-      "Azure AD Graph" = {
-        id = "00000002-0000-0000-c000-000000000000"
-        access = {
-          UserRead = {
-            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
-            type = "Scope"
-          }
-          DirectoryReadWriteAll = {
-            id   = "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175"
-            type = "Role"
-          }
-        }
-      }
       "Microsoft Graph" = {
         id = "00000003-0000-0000-c000-000000000000"
         access = {
+          Profile = {
+            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+            type = "Scope"
+          }
+          UserRead = {
+            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            type = "Scope"
+          }
           GroupReadWriteAll = {
-            id   = "62a82d76-70ea-41e2-9197-370581804d09"
-            type = "Role"
+            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
+            type = "Scope"
           }
         }
       }
@@ -506,11 +598,19 @@ locals {
       }
     }
     "vh-video-web" = {
-      "Azure AD Graph" = {
-        id = "00000002-0000-0000-c000-000000000000"
+      "Microsoft Graph" = {
+        id = "00000003-0000-0000-c000-000000000000"
         access = {
+          Profile = {
+            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+            type = "Scope"
+          }
           UserRead = {
-            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
+            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            type = "Scope"
+          }
+          GroupReadWriteAll = {
+            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
             type = "Scope"
           }
         }
@@ -625,14 +725,14 @@ locals {
         ],
         id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
-      "Judge" = {
+      "VirtualRoomJudge" = {
         description = "This user is able to conduct hearings as a judge."
         is_enabled  = true
-        value       = "Judge"
+        value       = "VirtualRoomJudge"
         allowed_member_types = [
           "User",
         ],
-        id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
+        id = "431f50b2-fb30-4937-9e91-9b9eeb54097f"
       }
       "Staff Member" = {
         description = "This user is able to conduct hearings as a staff member."
@@ -685,15 +785,7 @@ locals {
         ],
         id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
-      "Judge" = {
-        description = "This user is able to conduct hearings as a judge."
-        is_enabled  = true
-        value       = "Judge"
-        allowed_member_types = [
-          "User",
-        ],
-        id = "e8625671-8c33-45c2-8e2b-11aee9909a2f"
-      }
+
       "VirtualRoomJudge" = {
         description = "This Group for users who are judge or decsion maker."
         is_enabled  = true
