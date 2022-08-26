@@ -46,12 +46,6 @@ module "KeyVault_Secrets" {
   tags = local.common_tags
   secrets = [
     {
-      name         = "connectionstrings--appconfig"
-      value        = module.appconfig.connection_string
-      tags         = local.common_tags
-      content_type = "secret"
-    },
-    {
       name         = "applicationinsights--instrumentationkey"
       value        = module.Monitoring.instrumentation_key
       tags         = local.common_tags
