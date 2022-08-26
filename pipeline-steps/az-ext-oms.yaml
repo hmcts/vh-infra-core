@@ -39,7 +39,7 @@ steps:
                     autoUpgradeMinorVersion = 'true'
             }
             "tags" = [PSCustomObject]@{
-                    application  = 'video-hearing-service'
+                    application  = 'video-hearings-service'
                     BuiltFrom    = 'hmcts/vh-shared-infrastructure'
                     BusinessArea = 'Cross-Cutting'
                     environment  = $env_long
