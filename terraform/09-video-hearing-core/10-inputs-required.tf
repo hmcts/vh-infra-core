@@ -206,11 +206,13 @@ locals {
   # new apps that need registration can be added as a block below
   app_conf = {
     vh-service-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-service-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
+      optional_claims                = []
       reply_urls_spa = [
         "https://vh-service-web.${local.environment}.platform.hmcts.net/",
         "https://vh-service-web.${local.environment}.platform.hmcts.net/login",
@@ -227,95 +229,168 @@ locals {
       ]
     }
     vh-video-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
-      reply_urls_spa = [
-        "https://vh-video-web.${local.environment}.platform.hmcts.net/",
-        "https://vh-video-web.${local.environment}.platform.hmcts.net/login",
-        "https://vh-video-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/login",
-        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-        "https://videoweb_ac/login",
-        "https://videoweb_ac/home",
-        "https://videoweb_ac/",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-video-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
+      optional_claims = [
+        {
+          name                  = "family_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "family_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "groups"
+          type                  = "saml2"
+          essential             = false
+          additional_properties = []
+        }
       ]
+      reply_urls_spa = concat([
+        "https://vh-video-web.${local.environment}.platform.hmcts.net/home",
+        "https://vh-video-web.${local.environment}.platform.hmcts.net/logout",
+        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/logout",
+        "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/home"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+        var.environment == "prod" ? ["https://video.hearings.reform.hmcts.net/home", "https://video.hearings.reform.hmcts.net/logout"] : [],
+        var.environment == "stg" ? ["https://video.staging.hearings.reform.hmcts.net/home", "https://video.staging.hearings.reform.hmcts.net/logout"] : []
+      )
     }
     vh-test-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
-      reply_urls_spa = [
-        "https://vh-test-web.${local.environment}.platform.hmcts.net/",
-        "https://vh-test-web.${local.environment}.platform.hmcts.net/login",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
+      optional_claims                = []
+      reply_urls_spa = concat([
         "https://vh-test-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-test-web.${local.environment}.platform.hmcts.net/logout",
         "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-        "https://testweb_ac/login",
-        "https://testweb_ac/home",
-        "https://testweb_ac/",
-      ]
+        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/logout"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+        var.environment == "stg" ? ["https://test.staging.hearings.reform.hmcts.net/home", "https://test.staging.hearings.reform.hmcts.net/logout"] : []
+      )
     }
     vh-admin-web = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = true
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
-      reply_urls_web             = []
-      reply_urls_spa = [
-        "https://vh-admin-web.${local.environment}.platform.hmcts.net/",
-        "https://vh-admin-web.${local.environment}.platform.hmcts.net/login",
-        "https://vh-admin-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/login",
-        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-        "https://1905f943.ngrok.io/",
-        "https://1905f943.ngrok.io/login",
-        "https://1905f943.ngrok.io/home",
-        "https://adminweb_ac/login",
-        "https://adminweb_ac/home",
-        "https://adminweb_ac/",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = true
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-admin-web.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 2
+      reply_urls_web                 = []
+      optional_claims = [
+        {
+          name                  = "family_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "access_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "family_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "given_name"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = []
+        },
+        {
+          name                  = "groups"
+          type                  = "id_token"
+          essential             = true
+          additional_properties = ["sam_account_name"]
+        },
+        {
+          name                  = "groups"
+          type                  = "saml2"
+          essential             = false
+          additional_properties = []
+        }
       ]
+      reply_urls_spa = concat([
+        "https://vh-admin-web.${local.environment}.platform.hmcts.net/home",
+        "https://vh-admin-web.${local.environment}.platform.hmcts.net/logout",
+        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/home",
+        "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/logout"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+        var.environment == "prod" ? ["https://admin.hearings.reform.hmcts.net/home", "https://admin.hearings.reform.hmcts.net/logout"] : [],
+        var.environment == "stg" ? ["https://admin.staging.hearings.reform.hmcts.net/home", "https://admin.staging.hearings.reform.hmcts.net/logout"] : []
+      )
     }
     vh-notification-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
-      reply_urls_web = [
-        "https://vh-notification-api.${local.environment}.platform.hmcts.net/",
-        "https://vh-notification-api.${local.environment}.platform.hmcts.net/login",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-notification-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
+      optional_claims                = []
+      reply_urls_web = concat([
         "https://vh-notification-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-notification-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/logout"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      )
     }
     vh-test-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-test-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-test-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
+      optional_claims                = []
       reply_urls_web = [
         #"https://vh-test-api.${local.environment}.platform.hmcts.net",
         #"https://vh-test-api.${local.environment}.platform.hmcts.net/login",
@@ -329,94 +404,85 @@ locals {
       ]
     }
     vh-video-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
-      reply_urls_web = [
-        "https://vh-video-api.${local.environment}.platform.hmcts.net/",
-        "https://vh-video-api.${local.environment}.platform.hmcts.net/login",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-video-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
+      optional_claims                = []
+      reply_urls_web = concat([
         "https://vh-video-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-video-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-video-api.${local.environment}.hearings.reform.hmcts.net/logout"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      )
     }
     vh-bookings-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
-      reply_urls_web = [
-        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/",
-        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/login",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-bookings-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
+      optional_claims                = []
+      reply_urls_web = concat([
         "https://vh-bookings-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-bookings-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-bookings-api.${local.environment}.hearings.reform.hmcts.net/logout"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : []
+      )
     }
     vh-user-api = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
-      reply_urls_web = [
-        "https://vh-user-api.${local.environment}.platform.hmcts.net/",
-        "https://vh-user-api.${local.environment}.platform.hmcts.net/login",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-user-api.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
+      optional_claims                = []
+      reply_urls_web = concat([
         "https://vh-user-api.${local.environment}.platform.hmcts.net/home",
-        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-user-api.${local.environment}.platform.hmcts.net/logout",
         "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-user-api.${local.environment}.hearings.reform.hmcts.net/logout"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      )
     }
     vh-booking-queue = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
-      reply_urls_web = [
-        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/",
-        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/login",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
+      optional_claims                = []
+      reply_urls_web = concat([
         "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/home",
-        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-booking-queue-subscriber.${local.environment}.platform.hmcts.net/logout",
         "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-booking-queue-subscriber.${local.environment}.hearings.reform.hmcts.net/logout"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      )
     }
     vh-scheduler-jobs = {
-      available_to_other_tenants = false
-      oauth2_allow_implicit_flow = false
-      type                       = "webapp/api"
-      identifier_uris            = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
-      reply_urls_spa             = []
-      reply_urls_web = [
-        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/",
-        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/login",
+      available_to_other_tenants     = false
+      oauth2_allow_implicit_flow     = false
+      type                           = "webapp/api"
+      identifier_uris                = ["https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net"]
+      requested_access_token_version = 1
+      reply_urls_spa                 = []
+      optional_claims                = []
+      reply_urls_web = concat([
         "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/home",
-        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/",
-        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/login",
+        "https://vh-scheduler-jobs.${local.environment}.platform.hmcts.net/logout",
         "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://localhost/home",
-        "https://localhost/login",
-        "https://localhost/",
-      ]
+        "https://vh-scheduler-jobs.${local.environment}.hearings.reform.hmcts.net/logout"],
+        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
+      )
     }
   }
   api_scopes = {
@@ -451,6 +517,7 @@ locals {
     "vh-test-api"         = {}
 
   }
+
   # API Permissions
   api_permissions = {
     "vh-booking-queue" = {
@@ -484,25 +551,20 @@ locals {
       }
     }
     "vh-admin-web" = {
-      "Azure AD Graph" = {
-        id = "00000002-0000-0000-c000-000000000000"
-        access = {
-          UserRead = {
-            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
-            type = "Scope"
-          }
-          DirectoryReadWriteAll = {
-            id   = "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175"
-            type = "Role"
-          }
-        }
-      }
       "Microsoft Graph" = {
         id = "00000003-0000-0000-c000-000000000000"
         access = {
+          Profile = {
+            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+            type = "Scope"
+          }
+          UserRead = {
+            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            type = "Scope"
+          }
           GroupReadWriteAll = {
-            id   = "62a82d76-70ea-41e2-9197-370581804d09"
-            type = "Role"
+            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
+            type = "Scope"
           }
         }
       }
@@ -536,11 +598,19 @@ locals {
       }
     }
     "vh-video-web" = {
-      "Azure AD Graph" = {
-        id = "00000002-0000-0000-c000-000000000000"
+      "Microsoft Graph" = {
+        id = "00000003-0000-0000-c000-000000000000"
         access = {
+          Profile = {
+            id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+            type = "Scope"
+          }
           UserRead = {
-            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
+            id   = "14dad69e-099b-42c9-810b-d002981feec1"
+            type = "Scope"
+          }
+          GroupReadWriteAll = {
+            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
             type = "Scope"
           }
         }
@@ -603,117 +673,136 @@ locals {
       }
     }
   }
+
+  /*   
+    allowed_member_types = ["Application", "User"]
+    description          = "Admins can perform all task actions"
+    display_name         = "Admin"
+    enabled              = true
+    id                   = "00000000-0000-0000-0000-222222222222"
+    value                = "Admin.All"
+*/
   #App Roles
   app_roles = {
     # Service Web
     "vh-service-web" = {
-      "avh JudicialOfficeHolder" = {
-        description = "avh Judicial Office Holder"
+      "JudicialOfficeHolder" = {
+        description = "Judicial Office Holder"
         is_enabled  = true
-        value       = "avh-JudicialOfficeHolder"
+        value       = "JudicialOfficeHolder"
         allowed_member_types = [
           "User",
         ],
-        id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
+        id = "510c1477-6a88-4897-9da4-4dd9b156c32a"
       }
     }
     # Video Web
     "vh-video-web" = {
-      "avh JudicialOfficeHolder" = {
-        description = "avh Judicial Office Holder"
+      "JudicialOfficeHolder" = {
+        description = "Judicial Office Holder"
         is_enabled  = true
-        value       = "avh-JudicialOfficeHolder"
+        value       = "JudicialOfficeHolder"
         allowed_member_types = [
           "User",
         ],
-        id = "0f8383ee-d710-4ca9-8a02-7c318b81e623"
+        id = "510c1477-6a88-4897-9da4-4dd9b156c32a"
       }
-      "avh Citizen" = {
+      "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
         is_enabled  = true
-        value       = "avh-Citizen"
+        value       = "Citizen"
         allowed_member_types = [
           "User",
         ],
-        id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
+        id = "121fa058-1796-4531-a9ee-63be1d4dc630"
       }
-      "avh Video Hearings Officer" = {
+      "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
         is_enabled  = true
-        value       = "avh-VHO"
+        value       = "VHO"
         allowed_member_types = [
           "User",
         ],
-        id = "b64edf41-6393-4726-8bbf-bcee33455b97"
+        id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
-      "avh Judge" = {
+      "VirtualRoomJudge" = {
         description = "This user is able to conduct hearings as a judge."
         is_enabled  = true
-        value       = "avh-Judge"
+        value       = "VirtualRoomJudge"
         allowed_member_types = [
           "User",
         ],
-        id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
+        id = "431f50b2-fb30-4937-9e91-9b9eeb54097f"
       }
-      "avh Legal Representative" = {
+      "Staff Member" = {
+        description = "This user is able to conduct hearings as a staff member."
+        is_enabled  = true
+        value       = "StaffMember"
+        allowed_member_types = [
+          "User",
+        ],
+        id = "94b44a32-4f2a-4e3e-9332-d9ddd8de8284"
+      }
+      "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
         is_enabled  = true
-        value       = "avh-ProfessionalUser"
+        value       = "ProfessionalUser"
         allowed_member_types = [
           "User",
         ],
-        id = "5e49645a-2af9-4d2d-b9ef-7d4b659e91c7"
+        id = "f3340a0e-2ea2-45c6-b19c-d601b8dac13f"
       }
     }
     # Test Web
     "vh-test-web" = {
-      "avh Video Hearing QA" = {
-        description = "avh Video Hearing QA"
+      "Video Hearing QA" = {
+        description = "Video Hearing QA"
         is_enabled  = true
-        value       = "avh-VHQA"
+        value       = "VHQA"
         allowed_member_types = [
           "User",
         ],
-        id = "bb339a15-17ac-4988-a628-7f1abe4c0165"
+        id = "48207c0c-5239-482b-8400-6ff9ae02b1f3"
       }
     }
     # Admin Web
     "vh-admin-web" = {
-      "avh Citizen" = {
+      "Citizen" = {
         description = "This user is able to attend a hearing and perform self tests"
         is_enabled  = true
-        value       = "avh-Citizen"
+        value       = "Citizen"
         allowed_member_types = [
           "User",
         ],
-        id = "9ab0c0d2-4826-455b-ada1-60788e4ce7d2"
+        id = "121fa058-1796-4531-a9ee-63be1d4dc630"
       }
-      "avh Video Hearings Officer" = {
+      "Video Hearings Officer" = {
         description = "This user can book hearings and support live hearings via the admin portal"
         is_enabled  = true
-        value       = "avh-VHO"
+        value       = "VHO"
         allowed_member_types = [
           "User",
         ],
-        id = "b64edf41-6393-4726-8bbf-bcee33455b97"
+        id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
-      "avh Judge" = {
-        description = "This user is able to conduct hearings as a judge."
+
+      "VirtualRoomJudge" = {
+        description = "This Group for users who are judge or decsion maker."
         is_enabled  = true
-        value       = "avh-Judge"
+        value       = "VirtualRoomJudge"
         allowed_member_types = [
           "User",
         ],
-        id = "df7e44d4-4ba5-4759-9a9d-83cf1815c34e"
+        id = "431f50b2-fb30-4937-9e91-9b9eeb54097f"
       }
-      "avh Legal Representative" = {
+      "Legal Representative" = {
         description = "This user is able to attend a hearing and perform self tests."
         is_enabled  = true
-        value       = "avh-ProfessionalUser"
+        value       = "ProfessionalUser"
         allowed_member_types = [
           "User",
         ],
-        id = "5e49645a-2af9-4d2d-b9ef-7d4b659e91c7"
+        id = "f3340a0e-2ea2-45c6-b19c-d601b8dac13f"
       }
     }
     "vh-notification-api" = {}

@@ -3,4 +3,5 @@ variables:
   dynatrace_tenant_id: "ebe20728"
   env_long: "production"
   dynatrace_token_secret_name: 'dynatrace-prod-api-key'
+  dynatrace_api_token_secret_name: 'dynatrace-prod-api-event-token'
   central_infra_kv: 'infra-vault-prod'

@@ -46,12 +46,6 @@ module "KeyVault_Secrets" {
   tags = local.common_tags
   secrets = [
     {
-      name         = "connectionstrings--appconfig"
-      value        = module.appconfig.connection_string
-      tags         = local.common_tags
-      content_type = "secret"
-    },
-    {
       name         = "applicationinsights--instrumentationkey"
       value        = module.Monitoring.instrumentation_key
       tags         = local.common_tags
@@ -256,7 +250,7 @@ module "SignalR" {
 #--------------------------------------------------------------
 
 
-module "AMS" {
+/* module "AMS" {
   source = "./modules/AMS"
 
   resource_prefix     = "${local.std_prefix}${local.suffix}"
@@ -267,7 +261,7 @@ module "AMS" {
 
   tags = local.common_tags
 
-}
+} */
 
 #--------------------------------------------------------------
 # VH - Redis Cache Standard
@@ -384,13 +378,13 @@ module "VHDataServices" {
 # VH - AppConfiguration
 #--------------------------------------------------------------
 
-module "appconfig" {
+/* module "appconfig" {
   source              = "./modules/AppConfiguration"
   location            = azurerm_resource_group.vh-infra-core.location
   resource_group_name = azurerm_resource_group.vh-infra-core.name
 
   tags = local.common_tags
-}
+} */
 
 #--------------------------------------------------------------
 # VH - PrivateEndpoint

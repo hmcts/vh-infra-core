@@ -11,6 +11,26 @@ locals {
   scope_map = {
     for scopes in local.scope_list : "${scopes.name}_${scopes.scope}" => scopes
   }
+
+  app_roles_list = flatten([
+    for app_key, app_roles in var.app_roles : [
+      for app_role_key, app_role in app_roles :
+      {
+        "app_key" : app_key
+        "app_role_name" : app_role_key
+        "app_role" : app_role
+      }
+    ]
+  ])
+  app_roles_map = {
+    for app_role in local.app_roles_list : "${app_role.app_key}_${app_role.app_role_name}" =>
+    {
+      "app_key" : app_role.app_key
+      "app_role_name" : app_role.app_role_name
+      "app_role_id" : app_role.app_role.id
+      "app_role_value" : app_role.app_role.value
+    }
+  }
 }
 
 resource "random_uuid" "scopes" {
@@ -21,24 +41,36 @@ resource "random_uuid" "scopes" {
 resource "azuread_application" "app_reg" {
   for_each     = var.app_conf
   display_name = "a${each.key}.${var.environment}.platform.hmcts.net"
-  identifier_uris = [for item in each.value.identifier_uris :
-  var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+  identifier_uris = [
+    for item in each.value.identifier_uris :
+    var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")
+  ]
+
 
   web {
     homepage_url = var.environment == "prod" ? replace("https://${each.key}.${var.environment}.platform.hmcts.net", ".prod.", ".") : replace("https://${each.key}.${var.environment}.platform.hmcts.net", "stg", "staging")
-    redirect_uris = [for item in each.value.reply_urls_web :
-    var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+    redirect_uris = [
+      for item in each.value.reply_urls_web :
+      var.environment == "prod" ? tostring(replace(item, ".prod.", ".")) : tostring(replace(item, "stg", "staging"))
+    ]
+
+    implicit_grant {
+      id_token_issuance_enabled = true
+    }
   }
+
   single_page_application {
-    redirect_uris = [for item in each.value.reply_urls_spa :
-    var.environment == "prod" ? replace(item, ".prod.", ".") : replace(item, "stg", "staging")]
+    redirect_uris = [
+      for item in each.value.reply_urls_spa :
+      var.environment == "prod" ? tostring(replace(item, ".prod.", ".")) : tostring(replace(item, "stg", "staging"))
+    ]
   }
 
   owners = [data.azuread_client_config.current.object_id]
 
   api {
     mapped_claims_enabled          = false
-    requested_access_token_version = 1
+    requested_access_token_version = each.value.requested_access_token_version
 
     dynamic "oauth2_permission_scope" {
       for_each = lookup(var.api_scopes, each.key, )
@@ -49,7 +81,7 @@ resource "azuread_application" "app_reg" {
         user_consent_display_name  = oauth2_permission_scope.value.user_consent_display_name
         enabled                    = oauth2_permission_scope.value.enabled
         id                         = lookup(random_uuid.scopes, "${each.key}_${oauth2_permission_scope.value.value}").result
-        type                       = "Admin"
+        type                       = "User"
         value                      = oauth2_permission_scope.value.value
       }
     }
@@ -68,6 +100,7 @@ resource "azuread_application" "app_reg" {
       }
     }
   }
+
   dynamic "app_role" {
     for_each = lookup(var.app_roles, each.key, )
     content {
@@ -79,9 +112,45 @@ resource "azuread_application" "app_reg" {
       allowed_member_types = app_role.value.allowed_member_types
     }
   }
+
+  optional_claims {
+    dynamic "access_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "access_token"
+      ]
+      content {
+        name                  = access_token.value.name
+        essential             = access_token.value.essential
+        additional_properties = access_token.value.additional_properties
+      }
+    }
+
+    dynamic "id_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "id_token"
+      ]
+      content {
+        name                  = id_token.value.name
+        essential             = id_token.value.essential
+        additional_properties = id_token.value.additional_properties
+      }
+    }
+
+    dynamic "saml2_token" {
+      for_each = [
+        for token in each.value.optional_claims :
+        token if token.type == "saml2"
+      ]
+      content {
+        name                  = saml2_token.value.name
+        essential             = saml2_token.value.essential
+        additional_properties = saml2_token.value.additional_properties
+      }
+    }
+  }
 }
-
-
 
 # Create app reg secret
 resource "time_rotating" "app_reg_password" {
@@ -224,15 +293,16 @@ resource "azurerm_key_vault_secret" "azuread-userapiclientssecret" {
   tags            = var.tags
 }
 
-data "azuread_group" "vhqa" {
-  display_name     = "VHQA"
-  security_enabled = true
+data "azuread_service_principal" "app_sp" {
+  for_each       = azuread_application.app_reg
+  application_id = each.value.application_id
 }
 
-/* resource "azuread_group_member" "member" {
-  for_each         = var.environment == "prod" ? {} : var.app_conf
-  group_object_id  = data.azuread_group.vhqa.id
-  member_object_id = azuread_application.app_reg[each.key].id
-}  */
+resource "azuread_app_role_assignment" "groups" {
+  for_each            = local.app_roles_map
+  app_role_id         = data.azuread_service_principal.app_sp[each.value.app_key].app_role_ids[each.value.app_role_value]
+  principal_object_id = each.value.app_role_id
+  resource_object_id  = data.azuread_service_principal.app_sp[each.value.app_key].object_id
+}
 
 data "azuread_client_config" "current" {}
