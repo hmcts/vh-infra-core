@@ -823,11 +823,9 @@ write_files:
         sudo touch $cronTaskPath
         sudo chmod 777 $cronTaskPath
 
-        echo "0 0 * * * /home/wowza/renew-cert.sh
-        " > $cronTaskPath
+        echo "0 0 * * * /home/wowza/renew-cert.sh" >> $cronTaskPath
 
-        echo "10 0 * * * /home/wowza/check-cert.sh
-        " > $cronTaskPath
+        echo "10 0 * * * /home/wowza/check-cert.sh" >> $cronTaskPath
 
         sudo -u wowza bash -c "crontab $cronTaskPath"
   - owner: wowza:wowza
