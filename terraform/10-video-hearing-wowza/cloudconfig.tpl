@@ -827,7 +827,62 @@ write_files:
         " > $cronTaskPath
 
         sudo -u wowza bash -c "crontab $cronTaskPath"
+  - owner: wowza:wowza
+    permissions: 0775
+    path: /home/wowza/check-cert.sh
+    content: |
+        #!/bin/bash
 
+        # Project
+        project="${project}" 
+
+        # Set Dynatrace Details.
+        dynatrace_token="${dynatrace_token}"
+        dynatrace_tenant="${dynatrace_tenant}"
+
+        # Java Key Store Details.
+        jksPath="/usr/local/WowzaStreamingEngine/conf/ssl.wowza.jks"
+        wowzaServerPath="/usr/local/WowzaStreamingEngine/conf/Server.xml"
+        jksPass=$(cat $wowzaServerPath | grep -i KeyStorePassword | sed 's/<KeyStorePassword>//' | sed 's/<\/KeyStorePassword>//')
+
+        # Set Log Path.
+        logFolder="/home/wowza/logs"
+        logPath="/home/wowza/logs/check-cert.log"
+
+        # Wowza Engine Path.
+        export PATH=$PATH:/usr/local/WowzaStreamingEngine/java/bin
+
+        # Get Certificate Expiry Date.
+        expiryDate=$(keytool -list -v -keystore $jksPath -storepass $jksPass | grep until | head -1 | sed 's/.*until: //')
+        echo "Certificate Expires $expiryDate"
+        certExpiryDate=$expiryDate
+        expiryDate="$(date -d "$expiryDate - 12 days" +%Y%m%d)"
+        echo "Certificate Forced Expiry is $expiryDate"
+        today=$(date +%Y%m%d)
+
+        # Send Alert to Dynatrace if Expirary Date within 12 Days.
+        NOW=`date '+%F %H:%M:%S'`
+        mkdir -p $logFolder
+        touch $logPath
+
+        echo "Starting Check at $NOW" >> $logPath
+        if [[ $expiryDate -lt $today ]]; then
+                echo "Wowza Certificate Has Expired" >> $logPath
+                curl --location --request POST "https://$dynatrace_tenant.live.dynatrace.com/api/v2/events/ingest" \
+                --header "Authorization: API-Token $dynatrace_token" \
+                --header 'Content-Type: application/json' \
+                --data-raw "{
+                        \"eventType\": \"ERROR_EVENT\",
+                        \"title\": \"FH - $project - Wowza Certificte Expiry\",
+                        \"entitySelector\": \"type(HOST),entityName.startsWith($HOSTNAME)\",
+                        \"properties\": {
+                        \"Certificte.expiry\": \"$certExpiryDate\",
+                        \"Certificte.renewal\": \"$expiryDate\"
+                        }
+                }" >> $logPath
+        else
+                echo "Wowza Certificate Has NOT Expired" >> $logPath
+        fi
   - owner: wowza:wowza
     permissions: 0775
     path: /home/wowza/renew-cert.sh

@@ -35,6 +35,9 @@ data "template_file" "cloudconfig" {
     certName                = "wildcard-${local.cert_env}platform-hmcts-net"
     keyVaultName            = data.azurerm_key_vault.acmekv.name
     domain                  = local.wowza_domain
+    project                 = "VH"
+    dynatrace_tenant        = var.environment == "prod" ? "ebe20728" : "yrk32651" 
+    dynatrace_token         = "token"
   }
 }
 
