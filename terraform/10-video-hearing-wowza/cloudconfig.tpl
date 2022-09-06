@@ -5,18 +5,6 @@ package_upgrade: true
 packages:
   - blobfuse
   - fuse
-# device_aliases: {'ephemeral0': '/dev/sdb','datadisk': '/dev/sdc1'}
-# disk_setup:
-#   /dev/disk/azure/scsi1/lun10:
-#     table_type: gpt
-#     layout: true
-#     overwrite: true
-# fs_setup:
-#   - device: /dev/disk/azure/scsi1/lun10
-#     partition: 1
-#     filesystem: ext4
-# mounts:
-#     - ["/dev/disk/azure/scsi1/lun10-part1", "/wowzadata", auto, "defaults,noexec,nofail"]
 write_files:
   - owner: wowza:wowza
     path: /home/wowza/WowzaStreamingEngine/conf/Server.xml
@@ -734,8 +722,9 @@ write_files:
     permissions: 0775
     content: |
       #!/bin/bash
-       
-      ## Add the blob mounts:
+      # Mount Blob.
+      mkdir -p /wowzadata/blobfusetmp
+      mkdir -p /wowzadata/azurecopy
       blobfuse $1 --tmp-path=$3 -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 --file-cache-timeout-in-seconds=0 --config-file=$2 -o allow_other -o nonempty
 
 #       ## Cron to check remounting
@@ -744,23 +733,23 @@ write_files:
 #       sudo chmod 777 $cronTaskPath
 #       echo "*/5 * * * * /home/wowza/remount.sh $1 $2 $3 $4 $5" > $cronTaskPath
 #       sudo -u wowza bash -c "crontab $cronTaskPath"
-  - owner: wowza:wowza
-    path: /home/wowza/remount.sh
-    permissions: 0775
-    content: |
-        mountDir="$1"
-        logPath="/usr/local/WowzaStreamingEngine/logs/blob-mount.log"
-        dt=$(date '+%d/%m/%Y %H:%M:%S')
+#   - owner: wowza:wowza
+#     path: /home/wowza/remount.sh
+#     permissions: 0775
+#     content: |
+#         mountDir="$1"
+#         logPath="/usr/local/WowzaStreamingEngine/logs/blob-mount.log"
+#         dt=$(date '+%d/%m/%Y %H:%M:%S')
 
-        context="failed"
-        if grep -qs $mountDir /proc/mounts; then
-         context="IS"
-        else
-          context="WAS NOT"
-          echo "Remounting $mountDir"
-          sudo /home/wowza/mount.sh $1 $2 $3
-        fi
-        echo "$dt :: drive $context mounted. :: $mountDir" >> $logPath
+#         context="failed"
+#         if grep -qs $mountDir /proc/mounts; then
+#          context="IS"
+#         else
+#           context="WAS NOT"
+#           echo "Remounting $mountDir"
+#           sudo /home/wowza/mount.sh $1 $2 $3
+#         fi
+#         echo "$dt :: drive $context mounted. :: $mountDir" >> $logPath
   - owner: wowza:wowza
     path: /home/wowza/recordings.cfg
     content: |
@@ -921,7 +910,7 @@ write_files:
         sudo chmod 777 $cronTaskPath
 
         # Cron For Mounting.
-        echo "*/5 * * * * /home/wowza/remount.sh $1 $2 $3" >> $cronTaskPath
+        # echo "*/5 * * * * /home/wowza/remount.sh $1 $2 $3" >> $cronTaskPath
 
         # Cron For Certs.
         echo "0 0 * * * /home/wowza/renew-cert.sh" >> $cronTaskPath
@@ -939,20 +928,26 @@ write_files:
     path: /home/wowza/runcmd.sh
     content: |
         #!/bin/bash
+        # Inputs.
+        $blobMount="/wowzadata/azurecopy"
+        $blobTmp="/wowzadata/blobfusetmp"
+        $blobCfg="/home/wowza/recordings.cfg"
 
+        # Migrate Wowza.
         sudo sh /home/wowza/migrateWowzaToDisk.sh
         wget https://www.wowza.com/downloads/forums/collection/wse-plugin-autorecord.zip && unzip wse-plugin-autorecord.zip && mv lib/wse-plugin-autorecord.jar /usr/local/WowzaStreamingEngine/lib/ && chown wowza: /usr/local/WowzaStreamingEngine/lib/wse-plugin-autorecord.jar
   
-        /home/wowza/mountBlobFuse.sh
+        # Mount Blob.
+        /home/wowza/mount.sh $blobMount $blobCfg $blobTmp
         
-        # install certificates
+        # Install Certs.
         sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash # Az cli install
         sudo /home/wowza/renew-cert.sh
 
-        # set up CronJobs.
-        sudo /home/wowza/cron.sh /wowzadata/azurecopy /home/wowza/recordings.cfg /wowzadata/blobfusetmp
+        # Set-up CronJobs.
+        sudo /home/wowza/cron.sh $blobMount $blobCfg $blobTmp
 
-        # restart wowza
+        # Restart Wowza.
         sudo service WowzaStreamingEngine restart
 runcmd:
   - 'sudo /home/wowza/runcmd.sh'
