@@ -64,38 +64,38 @@ resource "azurerm_monitor_diagnostic_setting" "nics" {
 }
 
 
-resource "azurerm_monitor_diagnostic_setting" "load_balancer" {
-  name                       = "vh-lb-${var.environment}-diag-set"
-  target_resource_id         = azurerm_lb.wowza.id
-  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
+# resource "azurerm_monitor_diagnostic_setting" "load_balancer" {
+#   name                       = "vh-lb-${var.environment}-diag-set"
+#   target_resource_id         = azurerm_lb.wowza.id
+#   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
 
-  log {
-    category = "LoadBalancerAlertEvent"
-    enabled  = true
+#   log {
+#     category = "LoadBalancerAlertEvent"
+#     enabled  = true
 
-    retention_policy {
-      enabled = false
-    }
-  }
+#     retention_policy {
+#       enabled = false
+#     }
+#   }
 
-  log {
-    category = "LoadBalancerProbeHealthStatus"
-    enabled  = true
+#   log {
+#     category = "LoadBalancerProbeHealthStatus"
+#     enabled  = true
 
-    retention_policy {
-      enabled = false
-    }
-  }
+#     retention_policy {
+#       enabled = false
+#     }
+#   }
 
-  metric {
-    category = "AllMetrics"
-    enabled  = true
+#   metric {
+#     category = "AllMetrics"
+#     enabled  = true
 
-    retention_policy {
-      enabled = false
-    }
-  }
-}
+#     retention_policy {
+#       enabled = false
+#     }
+#   }
+# }
 resource "azurerm_monitor_diagnostic_setting" "load_balancer_public" {
   name                       = "vh-lb-public-${var.environment}-diag-set"
   target_resource_id         = azurerm_lb.wowza-public.id
