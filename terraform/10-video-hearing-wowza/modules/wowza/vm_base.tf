@@ -16,8 +16,7 @@ resource "azurerm_linux_virtual_machine" "wowza" {
 
   depends_on = [
     azurerm_private_dns_a_record.wowza_storage,
-    azurerm_private_dns_zone_virtual_network_link.wowza,
-    azurerm_managed_disk.wowza_data
+    azurerm_private_dns_zone_virtual_network_link.wowza
   ]
 
   resource_group_name = azurerm_resource_group.wowza.name
