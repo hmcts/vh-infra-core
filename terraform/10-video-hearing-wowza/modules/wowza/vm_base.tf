@@ -67,15 +67,15 @@ resource "azurerm_linux_virtual_machine" "wowza" {
   tags = var.tags
 }
 
-resource "azurerm_managed_disk" "wowza_data" {
-  count = var.wowza_instance_count
+# resource "azurerm_managed_disk" "wowza_data" {
+#   count = var.wowza_instance_count
 
-  name = "${var.service_name}_${count.index}-wowzadata"
+#   name = "${var.service_name}_${count.index}-wowzadata"
 
-  resource_group_name  = azurerm_resource_group.wowza.name
-  location             = azurerm_resource_group.wowza.location
-  storage_account_type = "Premium_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = 512
-  tags                 = var.tags
-}
+#   resource_group_name  = azurerm_resource_group.wowza.name
+#   location             = azurerm_resource_group.wowza.location
+#   storage_account_type = "Premium_LRS"
+#   create_option        = "Empty"
+#   disk_size_gb         = 512
+#   tags                 = var.tags
+# }
