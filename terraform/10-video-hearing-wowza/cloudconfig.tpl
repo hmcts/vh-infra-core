@@ -703,6 +703,8 @@ write_files:
     content: |
         #!/bin/bash
 
+        # This Script Should Be Run As ROOT!
+
         # Mount Blob.
         mkdir -p '/wowzadata/blobfusetmp'
         mkdir -p '/wowzadata/azurecopy'
@@ -874,11 +876,10 @@ write_files:
         #!/bin/bash
         # Prepare Script.
         cronTaskPath='/home/wowza/cronjobs.txt'
-        touch $cronTaskPath
-        sudo chmod 777 $cronTaskPath
+        cronTaskPathRoot='/home/wowza/cronjobsRoot.txt'
 
         # Cron For Mounting/Re-Mounting.
-        echo "*/5 * * * * /home/wowza/mount.sh $1 $2 $3" >> $cronTaskPath
+        echo "*/5 * * * * /home/wowza/mount.sh $1 $2 $3" >> $cronTaskPathRoot
 
         # Cron For Certs.
         echo "0 0 * * * /home/wowza/renew-cert.sh" >> $cronTaskPath
@@ -887,10 +888,13 @@ write_files:
           echo "10 0 * * * /home/wowza/check-cert.sh" >> $cronTaskPath
         fi
 
-        sudo -u wowza bash -c "crontab $cronTaskPath"
+        # Set Up Cron Jobs for Wowza & Root.
+        crontab -u wowza $cronTaskPath
+        crontab $cronTaskPathRoot
         
         # Remove To Avoid Duplicates.
         rm -f $cronTaskPath
+        rm -f $cronTaskPathRoot
   # PLEASE LEAVE THIS AT THE BOTTOM
   - owner: wowza:wowza
     permissions: 0775
@@ -914,7 +918,7 @@ write_files:
         sudo /home/wowza/renew-cert.sh
 
         # Set-up CronJobs.
-        sudo /home/wowza/cron.sh $blobMount $blobCfg $blobTmp
+        /home/wowza/cron.sh $blobMount $blobCfg $blobTmp
 
         # Restart Wowza.
         sudo service WowzaStreamingEngine restart
