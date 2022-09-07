@@ -52,5 +52,5 @@ module "wowza" {
   network_tenant_id           = var.network_tenant_id
   tags                        = local.common_tags
   route_table                 = var.route_table
-  dynatrace_tenant            = var.dynatrace_tenant 
+  dynatrace_tenant            = var.dynatrace_tenant
 }
