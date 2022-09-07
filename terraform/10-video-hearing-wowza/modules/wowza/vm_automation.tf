@@ -36,7 +36,7 @@ data "template_file" "cloudconfig" {
     keyVaultName            = data.azurerm_key_vault.acmekv.name
     domain                  = local.wowza_domain
     project                 = "VH"
-    dynatrace_tenant        = var.environment == "prod" ? "ebe20728" : "yrk32651" 
+    dynatrace_tenant        = var.dynatrace_tenant
     dynatrace_token         = "token"
   }
 }
