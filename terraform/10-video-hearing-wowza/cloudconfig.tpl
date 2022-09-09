@@ -705,14 +705,12 @@ write_files:
 
         # This Script Should Be Run As ROOT!
 
-        # Mount Blob.
-        mkdir -p '/wowzadata/blobfusetmp'
-        mkdir -p '/wowzadata/azurecopy'
+        mkdir -p $1 $3
 
         mountsTmp='/home/wowza/mounts.txt'
         df -h > $mountsTmp
 
-        if grep -q "/wowzadata/azurecopy" $mountsTmp && grep -q "blobfuse" $mountsTmp; then
+        if grep -q "$(realpath $1)" $mountsTmp && grep -q "blobfuse" $mountsTmp; then
            echo "Blob IS Mounted."
         else
            echo "Blob IS NOT Mounted, Mounting Blob Fuse..."
@@ -879,7 +877,9 @@ write_files:
         cronTaskPathRoot='/home/wowza/cronjobsRoot.txt'
 
         # Cron For Mounting/Re-Mounting.
-        echo "*/5 * * * * /home/wowza/mount.sh $1 $2 $3" >> $cronTaskPathRoot
+        logFolder='/home/wowza/logs'
+        mkdir -p $logFolder
+        echo "*/5 * * * * /home/wowza/mount.sh $1 $2 $3 >> $logFolder/wowza_mount.log 2>&1" >> $cronTaskPathRoot
 
         # Cron For Certs.
         echo "0 0 * * * /home/wowza/renew-cert.sh" >> $cronTaskPath
