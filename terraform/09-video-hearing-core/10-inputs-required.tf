@@ -725,10 +725,10 @@ locals {
         ],
         id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
-      "VirtualRoomJudge" = {
+      "Judge" = {
         description = "This user is able to conduct hearings as a judge."
         is_enabled  = true
-        value       = "VirtualRoomJudge"
+        value       = "Judge"
         allowed_member_types = [
           "User",
         ],
