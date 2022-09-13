@@ -605,10 +605,10 @@ locals {
             id   = "14dad69e-099b-42c9-810b-d002981feec1"
             type = "Scope"
           }
-          GroupReadWriteAll = {
-            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
-            type = "Scope"
-          }
+          # GroupReadWriteAll = {
+          #   id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
+          #   type = "Scope"
+          # }
         }
       }
     }
@@ -642,6 +642,10 @@ locals {
           UserReadWrite = {
             id   = "b4e74841-8e56-480b-be8b-910348b18b4c"
             type = "Scope"
+          }
+          DirectoryReadWriteAll = {
+            id   = "19dbc75e-c2e2-444c-a770-ec69d8559fc7"
+            type = "Role"
           }
         }
       }
