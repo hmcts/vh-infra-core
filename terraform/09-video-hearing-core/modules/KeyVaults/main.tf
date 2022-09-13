@@ -1,6 +1,21 @@
 
 data "azurerm_client_config" "current" {}
 
+resource "random_password" "host_key" {
+  length  = 45
+  special = false
+}
+
+locals {
+  application_secrets = [
+    {
+      "kv_name"  = "vh-scheduler-jobs"
+      "sec_name" = "host-master-key"
+      "value"    = random_password.host_key.result
+    }
+  ]
+}
+
 #### Per App Key Vault
 
 #tfsec:ignore:azure-keyvault-no-Purge
@@ -20,6 +35,23 @@ resource "azurerm_key_vault" "app_keyvaults" {
   tags     = var.tags
 
 
+}
+resource "azurerm_key_vault_secret" "app_secrets" {
+  for_each = { for item in local.application_secrets :
+    item["sec_name"] => item
+  }
+
+  name         = each.value.sec_name
+  value        = each.value.value
+  key_vault_id = lookup(azurerm_key_vault.app_keyvaults, each.value.kv_name).id
+  # FromTFSec
+  content_type    = "secret"
+  expiration_date = "2032-12-31T00:00:00Z"
+  tags            = var.tags
+
+  depends_on = [
+    azurerm_key_vault.app_keyvaults
+  ]
 }
 
 resource "azurerm_key_vault_access_policy" "app_access_policy" {
