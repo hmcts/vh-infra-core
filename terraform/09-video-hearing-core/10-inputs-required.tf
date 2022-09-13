@@ -562,10 +562,6 @@ locals {
             id   = "14dad69e-099b-42c9-810b-d002981feec1"
             type = "Scope"
           }
-          GroupReadWriteAll = {
-            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
-            type = "Scope"
-          }
         }
       }
     }
@@ -619,19 +615,19 @@ locals {
     "vh-bookings-api" = {
     }
     "vh-user-api" = {
-      # "Azure AD Graph" = {
-      #   id = "00000002-0000-0000-c000-000000000000"
-      #   access = {
-      #     UserRead = {
-      #       id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
-      #       type = "Scope"
-      #     }
-      #     DirectoryReadWriteAll = {
-      #       id   = "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175"
-      #       type = "Role"
-      #     }
-      #   }
-      # }
+      "Azure AD Graph" = {
+        id = "00000002-0000-0000-c000-000000000000"
+        access = {
+          UserRead = {
+            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
+            type = "Scope"
+          }
+          DirectoryReadWriteAll = {
+            id   = "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175"
+            type = "Role"
+          }
+        }
+      }
       "Microsoft Graph" = {
         id = "00000003-0000-0000-c000-000000000000"
         access = {
