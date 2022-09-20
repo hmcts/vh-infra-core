@@ -12,19 +12,19 @@ data "azurerm_subnet" "aks01-subnet" {
   resource_group_name  = "ss-${local.environment}-network-rg"
 }
 
-resource "azurerm_mssql_virtual_network_rule" "aks00vnetrule" {
+# resource "azurerm_mssql_virtual_network_rule" "aks00vnetrule" {
 
-  name      = "ss-${local.environment}-vnet-aks00"
-  server_id = azurerm_mssql_server.vh-infra-core.id
-  subnet_id = data.azurerm_subnet.aks00-subnet.id
-}
+#   name      = "ss-${local.environment}-vnet-aks00"
+#   server_id = azurerm_mssql_server.vh-infra-core.id
+#   subnet_id = data.azurerm_subnet.aks00-subnet.id
+# }
 
-resource "azurerm_mssql_virtual_network_rule" "aks01vnetrule" {
+# resource "azurerm_mssql_virtual_network_rule" "aks01vnetrule" {
 
-  name      = "ss-${local.environment}-vnet-aks01"
-  server_id = azurerm_mssql_server.vh-infra-core.id
-  subnet_id = data.azurerm_subnet.aks01-subnet.id
-}
+#   name      = "ss-${local.environment}-vnet-aks01"
+#   server_id = azurerm_mssql_server.vh-infra-core.id
+#   subnet_id = data.azurerm_subnet.aks01-subnet.id
+# }
 
 
 locals {

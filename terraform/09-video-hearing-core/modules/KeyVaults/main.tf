@@ -529,11 +529,10 @@ data "azurerm_resource_group" "managed-identities-rg" {
 }
 
 resource "azurerm_user_assigned_identity" "vh_mi" {
+  name                = "vh-${var.environment}-mi"
   resource_group_name = data.azurerm_resource_group.managed-identities-rg.name
   location            = data.azurerm_resource_group.managed-identities-rg.location
-
-  name = "${var.resource_prefix}-${var.environment}-mi"
-  tags = var.tags
+  tags                = var.tags
 }
 
 resource "azurerm_role_assignment" "Reader" {
