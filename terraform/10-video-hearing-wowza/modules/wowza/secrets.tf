@@ -1,7 +1,7 @@
 locals {
   secret_prefix = "wowzaconfiguration"
   secrets = {
-    "managedidentityclientid"   = azurerm_user_assigned_identity.vh_mi.client_id,
+    "managedidentityclientid"   = data.azurerm_user_assigned_identity.vh_mi.client_id,
     "storageaccountkey"         = module.wowza_recordings.storageaccount_primary_access_key,
     "restPassword"              = random_password.restPassword.result,
     "streamPassword"            = random_password.streamPassword.result,
@@ -33,4 +33,9 @@ resource "azurerm_key_vault_secret" "secret" {
   tags            = var.tags
   content_type    = ""
   expiration_date = "2032-12-31T00:00:00Z"
+}
+
+data "azurerm_user_assigned_identity" "vh_mi" {
+  name                = "vh-${var.environment}-mi"
+  resource_group_name = "managed-identities-${var.environment}-rg"
 }
