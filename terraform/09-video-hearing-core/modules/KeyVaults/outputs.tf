@@ -1,5 +1,5 @@
-output "kvuser" {
-  value = azurerm_user_assigned_identity.kvuser
+output "vh_mi" {
+  value = azurerm_user_assigned_identity.vh_mi.name
 }
 
 
