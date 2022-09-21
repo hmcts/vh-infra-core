@@ -123,11 +123,11 @@ steps:
       $vh_obj = $($env:vh_infra_core_secrets) | ConvertFrom-Json
       $secrets_obj = $vh_obj
       if ($null -ne $secrets_obj) {
-          $vh_infra_secrets = [pscustomobject]@{
+          $vh_infra_core_secrets = [pscustomobject]@{
               "key_vault_name" = "vh-infra-core"
               "secrets"        = $secrets_obj
           }
-          $all_secrets += $vh_infra_secrets
+          $all_secrets += $vh_infra_core_secrets
       }
 
       $all_secrets = $all_secrets | ConvertTo-Json  -Compress -Depth 100
