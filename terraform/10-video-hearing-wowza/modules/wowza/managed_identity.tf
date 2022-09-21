@@ -24,6 +24,12 @@ resource "azurerm_role_assignment" "wowza_storage_access" {
   principal_id         = azurerm_user_assigned_identity.wowza_storage.principal_id
 }
 
+resource "azurerm_role_assignment" "wowza_storage_vh_mi" {
+  scope                = module.wowza_recordings.storageaccount_id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_user_assigned_identity.vh_mi.principal_id
+}
+
 
 #-----------------------
 # VM Automation account

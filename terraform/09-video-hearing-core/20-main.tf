@@ -21,6 +21,7 @@ module "KeyVaults" {
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   keyvaults           = local.keyvaults
+  vh_mi_principal_id  = azurerm_user_assigned_identity.vh_mi.principal_id
 
   tags = local.common_tags
 }
@@ -462,4 +463,15 @@ resource "azurerm_private_dns_a_record" "kv-dns" {
   resource_group_name = local.dns_zone_resource_group_name
   ttl                 = 3600
   records             = [lookup(each.value, "resource_ip")]
+}
+
+data "azurerm_resource_group" "managed-identities-rg" {
+  name = "managed-identities-${var.environment}-rg"
+}
+
+resource "azurerm_user_assigned_identity" "vh_mi" {
+  name                = "vh-${var.environment}-mi"
+  resource_group_name = data.azurerm_resource_group.managed-identities-rg.name
+  location            = data.azurerm_resource_group.managed-identities-rg.location
+  tags                = local.common_tags
 }
