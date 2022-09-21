@@ -32,7 +32,7 @@ variable "external_passwords" {
 }
 
 variable "vh_mi_principal_id" {
-  type        = "string"
+  type        = string
   description = "Principal ID of the Environments Managed Identity."
 }
 
