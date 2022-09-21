@@ -15,11 +15,8 @@ resource "azurerm_key_vault" "app_keyvaults" {
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
-
-  sku_name = "standard"
-  tags     = var.tags
-
-
+  sku_name                    = "standard"
+  tags                        = var.tags
 }
 
 resource "azurerm_key_vault_access_policy" "app_access_policy" {
@@ -249,7 +246,7 @@ resource "azurerm_key_vault_access_policy" "user_identity" {
 
   key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = azurerm_user_assigned_identity.kvuser.principal_id
+  object_id    = var.vh_mi_principal_id # vh-ENV-mi 
 
   certificate_permissions = [
     "Get",
@@ -355,12 +352,86 @@ resource "azurerm_key_vault" "vh-infra-core-ht" {
 
 }
 
+resource "azurerm_key_vault_access_policy" "dts_sds_dev_infrakv" {
+  count = var.environment != "prod" ? 1 : 0
+
+  key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = "7bde62e7-b39f-487c-95c9-b4c794fdbb96" # DTS SDS Developers AD Group
+
+  certificate_permissions = [
+    "Backup",
+    "Create",
+    "Delete",
+    "DeleteIssuers",
+    "Get",
+    "GetIssuers",
+    "Import",
+    "List",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "Purge",
+    "Recover",
+    "Restore",
+    "SetIssuers",
+    "Update"
+  ]
+
+  key_permissions = [
+    "Backup",
+    "Create",
+    "Decrypt",
+    "Delete",
+    "Encrypt",
+    "Get",
+    "Import",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Sign",
+    "UnwrapKey",
+    "Update",
+    "Verify",
+    "WrapKey"
+  ]
+
+  secret_permissions = [
+    "Backup",
+    "Delete",
+    "Get",
+    "List",
+    "Purge",
+    "Recover",
+    "Restore",
+    "Set"
+  ]
+
+  storage_permissions = [
+    "Backup",
+    "Delete",
+    "DeleteSAS",
+    "Get",
+    "GetSAS",
+    "List",
+    "ListSAS",
+    "Purge",
+    "Recover",
+    "RegenerateKey",
+    "Restore",
+    "Set",
+    "SetSAS",
+    "Update"
+  ]
+}
+
 # kv user identity
 resource "azurerm_key_vault_access_policy" "kv_user_identity" {
 
   key_vault_id = azurerm_key_vault.vh-infra-core-ht.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = azurerm_user_assigned_identity.kvuser.principal_id
+  object_id    = var.vh_mi_principal_id
 
   certificate_permissions = [
     "Get",
@@ -450,27 +521,15 @@ resource "azurerm_key_vault_access_policy" "azkvap" {
   ]
 }
 
-data "azurerm_resource_group" "managed-identities-rg" {
-  name = "managed-identities-${var.environment}-rg"
-}
-
-resource "azurerm_user_assigned_identity" "kvuser" {
-  resource_group_name = data.azurerm_resource_group.managed-identities-rg.name
-  location            = data.azurerm_resource_group.managed-identities-rg.location
-
-  name = "${var.resource_prefix}-${var.environment}-kvuser"
-  tags = var.tags
-}
-
 resource "azurerm_role_assignment" "Reader" {
-  principal_id         = azurerm_user_assigned_identity.kvuser.principal_id
+  principal_id         = var.vh_mi_principal_id
   role_definition_name = "Reader"
   scope                = azurerm_key_vault.vh-infra-core-ht.id
 }
 
 resource "azurerm_role_assignment" "App-Reader" {
   for_each             = azurerm_key_vault.app_keyvaults
-  principal_id         = azurerm_user_assigned_identity.kvuser.principal_id
+  principal_id         = var.vh_mi_principal_id
   role_definition_name = "Reader"
   scope                = each.value.id
 }

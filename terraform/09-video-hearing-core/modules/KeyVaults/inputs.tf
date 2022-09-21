@@ -28,8 +28,11 @@ variable "tags" {
 }
 
 variable "external_passwords" {
-
   type = map(string)
+}
 
+variable "vh_mi_principal_id" {
+  type        = string
+  description = "Principal ID of the Environments Managed Identity."
 }
 
