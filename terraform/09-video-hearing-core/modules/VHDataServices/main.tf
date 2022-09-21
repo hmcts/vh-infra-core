@@ -1,32 +1,5 @@
 data "azurerm_client_config" "current" {}
 
-data "azurerm_subnet" "aks00-subnet" {
-  name                 = "aks-00"
-  virtual_network_name = "ss-${local.environment}-vnet"
-  resource_group_name  = "ss-${local.environment}-network-rg"
-}
-
-data "azurerm_subnet" "aks01-subnet" {
-  name                 = "aks-01"
-  virtual_network_name = "ss-${local.environment}-vnet"
-  resource_group_name  = "ss-${local.environment}-network-rg"
-}
-
-# resource "azurerm_mssql_virtual_network_rule" "aks00vnetrule" {
-
-#   name      = "ss-${local.environment}-vnet-aks00"
-#   server_id = azurerm_mssql_server.vh-infra-core.id
-#   subnet_id = data.azurerm_subnet.aks00-subnet.id
-# }
-
-# resource "azurerm_mssql_virtual_network_rule" "aks01vnetrule" {
-
-#   name      = "ss-${local.environment}-vnet-aks01"
-#   server_id = azurerm_mssql_server.vh-infra-core.id
-#   subnet_id = data.azurerm_subnet.aks01-subnet.id
-# }
-
-
 locals {
   environment         = var.environment
   sql_server_username = "hvhearingsapiadmin"
