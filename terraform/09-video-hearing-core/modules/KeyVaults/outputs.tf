@@ -1,8 +1,3 @@
-output "vh_mi" {
-  value = azurerm_user_assigned_identity.vh_mi.name
-}
-
-
 output "keyvault_id" {
   value = azurerm_key_vault.vh-infra-core-ht.id
 }
