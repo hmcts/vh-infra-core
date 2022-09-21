@@ -21,7 +21,7 @@ module "KeyVaults" {
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   keyvaults           = local.keyvaults
-  vh_mi_principal_id  = azurerm_user_assigned_identity.vh_mi.principal_id 
+  vh_mi_principal_id  = azurerm_user_assigned_identity.vh_mi.principal_id
 
   tags = local.common_tags
 }
