@@ -1,14 +1,15 @@
 terraform {
   required_providers {
-      azapi = {
-        source = "azure/azapi"
+    azapi = {
+      source = "azure/azapi"
     }
 
-    provider "azapi" {
-    }
+
   }
 }
 
+provider "azapi" {
+}
 
 resource "azapi_resource" "signalR" {
   type      = "Microsoft.SignalRService/signalR@2022-02-01"

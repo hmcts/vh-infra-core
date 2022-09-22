@@ -23,6 +23,6 @@ variable "signalr_custom_certificate_id" {
   type = string
 }
 
-variable "signalr_custom_domain"{
+variable "signalr_custom_domain" {
   type = string
 }
