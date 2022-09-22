@@ -69,7 +69,3 @@ provider "azurerm" {
   client_secret   = var.cvp_client_secret
   tenant_id       = data.azurerm_client_config.current.tenant_id
 }
-
-provider "azapi" {
-}
-
