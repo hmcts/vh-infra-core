@@ -49,7 +49,7 @@ resource "azurerm_monitor_diagnostic_setting" "nsg" {
 resource "azurerm_monitor_diagnostic_setting" "nics" {
   count = var.wowza_instance_count
 
-  name                       = "vh-nic${count.index}-${var.environment}-diag-set"
+  name                       = "vh-nic${count.index + 1}-${var.environment}-diag-set"
   target_resource_id         = azurerm_network_interface.wowza[count.index].id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.core.id
 
