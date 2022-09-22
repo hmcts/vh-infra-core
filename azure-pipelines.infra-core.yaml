@@ -21,8 +21,6 @@ trigger:
   paths:
     include:
     - terraform/09-video-hearing-core/*
-    exclude:
-    - /*
 
 parameters:
   - name: environment
