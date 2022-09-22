@@ -128,6 +128,7 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $infra_core_secrets
+          Write-Host $infra_core_secrets
       }
 
       $all_secrets = $all_secrets | ConvertTo-Json  -Compress -Depth 100
