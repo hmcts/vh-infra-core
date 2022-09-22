@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "tw_test_signalr_name": {
-            "defaultValue": "tw-test-signalr",
+        "signalr_name": {
+            "defaultValue": "signalr",
             "type": "string"
         },
         "my_location": {
@@ -48,14 +48,9 @@
         {
             "type": "Microsoft.SignalRService/signalR",
             "apiVersion": "2022-02-01",
-            "name": "[parameters('tw_test_signalr_name')]",
+            "name": "[parameters('signalr_name')]",
             "location": "[parameters('my_location')]",
-            "tags": {
-                "Owner": "watsont",
-                "Reason": "test",
-                "Lifespan": "temporary",
-                "Project": "UPDATE PROJECT TAG"
-            },
+            "tags": {"[parameters('tags')]"},
             "sku": {
                 "name": "[parameters('sku_name')]",
                 "tier": "[parameters('sku_type')]",
