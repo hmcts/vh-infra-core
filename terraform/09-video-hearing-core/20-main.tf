@@ -170,7 +170,7 @@ module "KeyVault_Secrets" {
 }
 
 module "input_Secrets" {
-  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret }
+  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret if secret.key_vault_name != "vh-infra-core" }
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = lookup(module.KeyVaults.keyvault_resource, each.value.key_vault_name).resource_id
   key_vault_name = each.value.key_vault_name
@@ -185,6 +185,29 @@ module "input_Secrets" {
       content_type = "ado_secret"
     }
   ]
+
+  depends_on = [
+    module.KeyVaults
+  ]
+}
+
+module "input_Secrets_infra_core" {
+  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret if secret.key_vault_name == "vh-infra-core" }
+  source         = "./modules/KeyVaults/Secrets"
+  key_vault_id   = module.KeyVaults.keyvault_id
+  key_vault_name = each.value.key_vault_name
+
+  secrets = [
+    for secret in each.value.secrets :
+    {
+      name         = secret.name
+      value        = secret.value
+      tags         = local.common_tags
+      content_type = "ado_secret"
+    }
+  ]
+
+  tags = local.common_tags
 
   depends_on = [
     module.KeyVaults

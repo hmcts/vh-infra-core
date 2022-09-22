@@ -3,6 +3,7 @@
 resource "azurerm_network_watcher_flow_log" "nsg" {
   network_watcher_name = "NetworkWatcher_${azurerm_resource_group.wowza.location}"
   resource_group_name  = "NetworkWatcherRG"
+  location             = data.azurerm_log_analytics_workspace.core.location
 
   name = "${var.service_name}-flow-logs"
 

@@ -5,18 +5,6 @@ package_upgrade: true
 packages:
   - blobfuse
   - fuse
-device_aliases: {'ephemeral0': '/dev/sdb','datadisk': '/dev/sdc1'}
-disk_setup:
-  /dev/disk/azure/scsi1/lun10:
-    table_type: gpt
-    layout: true
-    overwrite: true
-fs_setup:
-  - device: /dev/disk/azure/scsi1/lun10
-    partition: 1
-    filesystem: ext4
-mounts:
-    - ["/dev/disk/azure/scsi1/lun10-part1", "/wowzadata", auto, "defaults,noexec,nofail"]
 write_files:
   - owner: wowza:wowza
     path: /home/wowza/WowzaStreamingEngine/conf/Server.xml
@@ -709,80 +697,48 @@ write_files:
                         </Properties>
                 </Application>
         </Root>
-  - owner: root:root
-    path: /etc/rc.local
-    permissions: 0775
-    content: |
-      #!/bin/sh -e
-      #
-      # rc.local
-      #
-      # This script is executed at the end of each multiuser runlevel.
-      # Make sure that the script will "exit 0" on success or any other
-      # value on error.
-      #
-      # In order to enable or disable this script just change the execution
-      # bits.
-      #
-      # By default this script does nothing.
-
-      sudo bash /home/wowza/mount.sh /wowzadata/azurecopy /home/wowza/recordings.cfg /wowzadata/blobfusetmp
-
-      exit 0
   - owner: wowza:wowza
     path: /home/wowza/mount.sh
     permissions: 0775
     content: |
-      #!/bin/bash
-       
-      ## Add the blob mounts:
-      blobfuse $1 --tmp-path=$3 -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 --file-cache-timeout-in-seconds=0 --config-file=$2 -o allow_other -o nonempty
+        #!/bin/bash
 
-      ## Cron to check remounting
-      cronTaskPath="/home/wowza/remount_$4.txt"
-      sudo touch $cronTaskPath
-      sudo chmod 777 $cronTaskPath
-      echo "*/5 * * * * /home/wowza/remount.sh $1 $2 $3 $4 $5
-      " > $cronTaskPath
-      sudo -u wowza bash -c "crontab $cronTaskPath"
-  - owner: wowza:wowza
-    path: /home/wowza/remount.sh
-    permissions: 0775
-    content: |
-        mountDir="$5"
-        logPath="/usr/local/WowzaStreamingEngine/logs/blob-mount.log"
-        dt=$(date '+%d/%m/%Y %H:%M:%S')
+        # This Script Should Be Run As ROOT!
 
-        context="failed"
-        if grep -qs $mountDir /proc/mounts; then
-         context="IS"
+        mkdir -p $1 $3
+
+        mountsTmp='/home/wowza/mounts.txt'
+        df -h > $mountsTmp
+
+        if grep -q "$(realpath $1)" $mountsTmp && grep -q "blobfuse" $mountsTmp; then
+           echo "Blob IS Mounted."
         else
-          context="WAS NOT"
-          echo "Remounting $mountDir"
-          sudo /home/wowza/mount.sh $1 $2 $3 $4 $5
+           echo "Blob IS NOT Mounted, Mounting Blob Fuse..."
+           blobfuse $1 --tmp-path=$3 -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 --file-cache-timeout-in-seconds=0 --config-file=$2 -o allow_other -o nonempty
         fi
-        echo "$dt :: drive $context mounted. :: $mountDir" >> $logPath
+
+        rm -f $mountsTmp
   - owner: wowza:wowza
     path: /home/wowza/recordings.cfg
     content: |
       accountName ${storageAccountName}
       containerName ${storageContainerName}
       authType MSI
-      identityResourceId ${msiClientId}
+      identityClientId ${msiClientId}
   - owner: wowza:wowza
     path: /home/wowza/wowzaapps.cfg
     content: |
       accountName ${storageAccountName}
       containerName wowzaapps
       authType MSI
-      identityResourceId ${msiClientId}
+      identityClientId ${msiClientId}
   - owner: wowza:wowza
     path: /home/wowza/wowzaconf.cfg
     content: |
       accountName ${storageAccountName}
       containerName wowzaconf
       authType MSI
-      identityResourceId ${msiClientId}
+      identityClientId ${msiClientId}
   - owner: wowza:wowza
     path: /home/wowza/migrateWowzaToDisk.sh
     content: |
@@ -795,13 +751,11 @@ write_files:
     permissions: 0775
     path: /home/wowza/mountBlobFuse.sh
     content: |
-
       rm -r -f /wowzadata/blobfusetmp
       mkdir -p /wowzadata/blobfusetmp
       mkdir -p /wowzadata/azurecopy
 
       bash /home/wowza/mount.sh /wowzadata/azurecopy /home/wowza/recordings.cfg /wowzadata/blobfusetmp
-
   - owner: wowza:wowza
     path: /home/wowza/WowzaStreamingEngine/conf/admin.password
     content: |
@@ -816,18 +770,59 @@ write_files:
       wowza ${streamPassword}
   - owner: wowza:wowza
     permissions: 0775
-    path: /home/wowza/schedule-cert.sh
+    path: /home/wowza/check-cert.sh
     content: |
         #!/bin/bash
-        cronTaskPath="/home/wowza/cert-renew.txt"
-        sudo touch $cronTaskPath
-        sudo chmod 777 $cronTaskPath
 
-        echo "0 0 * * * /home/wowza/renew-cert.sh
-        " > $cronTaskPath
+        # Project
+        project="VH" 
 
-        sudo -u wowza bash -c "crontab $cronTaskPath"
+        # Set Dynatrace Details.
+        dynatrace_token="${dynatrace_token}"
+        dynatrace_tenant="${dynatrace_tenant}"
 
+        # Java Key Store Details.
+        jksPath="/usr/local/WowzaStreamingEngine/conf/ssl.wowza.jks"
+        jksPass="${certPassword}"
+
+        # Set Log Path.
+        logFolder="/home/wowza/logs"
+        logPath="/home/wowza/logs/check-cert.log"
+
+        # Wowza Engine Path.
+        export PATH=$PATH:/usr/local/WowzaStreamingEngine/java/bin
+
+        # Get Certificate Expiry Date.
+        expiryDate=$(keytool -list -v -keystore $jksPath -storepass $jksPass | grep until | head -1 | sed 's/.*until: //')
+        echo "Certificate Expires $expiryDate"
+        certExpiryDate=$expiryDate
+        expiryDate="$(date -d "$expiryDate - 12 days" +%Y%m%d)"
+        echo "Certificate Forced Expiry is $expiryDate"
+        today=$(date +%Y%m%d)
+
+        # Send Alert to Dynatrace if Expirary Date within 12 Days.
+        NOW=`date '+%F %H:%M:%S'`
+        mkdir -p $logFolder
+        touch $logPath
+
+        echo "Starting Check at $NOW" >> $logPath
+        if [[ $expiryDate -lt $today ]]; then
+                echo "Wowza Certificate Has Expired" >> $logPath
+                curl --location --request POST "https://$dynatrace_tenant.live.dynatrace.com/api/v2/events/ingest" \
+                --header "Authorization: API-Token $dynatrace_token" \
+                --header 'Content-Type: application/json' \
+                --data-raw "{
+                        \"eventType\": \"ERROR_EVENT\",
+                        \"title\": \"FH - $project - Wowza Certificte Expiry\",
+                        \"entitySelector\": \"type(HOST),entityName.startsWith($HOSTNAME)\",
+                        \"properties\": {
+                        \"Certificte.expiry\": \"$certExpiryDate\",
+                        \"Certificte.renewal\": \"$expiryDate\"
+                        }
+                }" >> $logPath
+        else
+                echo "Wowza Certificate Has NOT Expired" >> $logPath
+        fi
   - owner: wowza:wowza
     permissions: 0775
     path: /home/wowza/renew-cert.sh
@@ -871,30 +866,62 @@ write_files:
         else
             echo "Certificate has NOT expired"
         fi
+  - owner: wowza:wowza
+    path: /home/wowza/cron.sh
+    permissions: 0775
+    content: |
+        #!/bin/bash
+        # Prepare Script.
+        cronTaskPath='/home/wowza/cronjobs.txt'
+        cronTaskPathRoot='/home/wowza/cronjobsRoot.txt'
+
+        # Cron For Mounting/Re-Mounting.
+        logFolder='/home/wowza/logs'
+        mkdir -p $logFolder
+        echo "*/5 * * * * /home/wowza/mount.sh $1 $2 $3 >> $logFolder/wowza_mount.log 2>&1" >> $cronTaskPathRoot
+
+        # Cron For Certs.
+        echo "0 0 * * * /home/wowza/renew-cert.sh" >> $cronTaskPath
+
+        if [[ $HOSTNAME == *"prod"* ]] || [[ $HOSTNAME == *"stg"* ]]; then
+          echo "10 0 * * * /home/wowza/check-cert.sh" >> $cronTaskPath
+        fi
+
+        # Set Up Cron Jobs for Wowza & Root.
+        crontab -u wowza $cronTaskPath
+        crontab $cronTaskPathRoot
+        
+        # Remove To Avoid Duplicates.
+        rm -f $cronTaskPath
+        rm -f $cronTaskPathRoot
   # PLEASE LEAVE THIS AT THE BOTTOM
   - owner: wowza:wowza
     permissions: 0775
     path: /home/wowza/runcmd.sh
     content: |
         #!/bin/bash
+        # Inputs.
+        blobMount="/wowzadata/azurecopy"
+        blobTmp="/wowzadata/blobfusetmp"
+        blobCfg="/home/wowza/recordings.cfg"
 
-        chmod +x /etc/rc.local && systemctl enable rc-local.service && systemctl start rc-local.service
-
+        # Migrate Wowza.
         sudo sh /home/wowza/migrateWowzaToDisk.sh
         wget https://www.wowza.com/downloads/forums/collection/wse-plugin-autorecord.zip && unzip wse-plugin-autorecord.zip && mv lib/wse-plugin-autorecord.jar /usr/local/WowzaStreamingEngine/lib/ && chown wowza: /usr/local/WowzaStreamingEngine/lib/wse-plugin-autorecord.jar
   
-        /home/wowza/mountBlobFuse.sh
+        # Mount Blob Fuse.
+        /home/wowza/mount.sh $blobMount $blobCfg $blobTmp
         
-        # install certificates
+        # Install Certs.
         sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash # Az cli install
         sudo /home/wowza/renew-cert.sh
-        sudo /home/wowza/schedule-cert.sh
 
-        # restart wowza
+        # Set-up CronJobs.
+        /home/wowza/cron.sh $blobMount $blobCfg $blobTmp
+
+        # Restart Wowza.
         sudo service WowzaStreamingEngine restart
-
 runcmd:
   - 'sudo /home/wowza/runcmd.sh'
-
 
 final_message: "The system is finally up, after $UPTIME seconds"

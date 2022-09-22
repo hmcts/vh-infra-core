@@ -128,3 +128,9 @@ variable "schedules" {
 variable "route_table" {
   description = "Route Table routes"
 }
+
+variable "dynatrace_tenant" {
+  description = "Dynatrace Tenant"
+  default     = ""
+  type        = string
+}

@@ -162,7 +162,7 @@ stages:
           - template: az-ext-oms.yaml
             parameters:
               subscription: ${{parameters.environmentServiceConnection}}
-              vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
+              vmNames: ["vh-infra-wowza-${{parameters.env}}-1","vh-infra-wowza-${{parameters.env}}-2" ]
               vmRgName:  "vh-infra-wowza-${{parameters.env}}"
               env: ${{ parameters.env }}
               env_long: ${{ variables.env_long }}
@@ -170,7 +170,7 @@ stages:
             - template: az-ext-dynatrace-api.yaml
               parameters:
                 subscription: ${{parameters.environmentServiceConnection}}
-                vmNames: ["vh-infra-wowza-${{parameters.env}}-0","vh-infra-wowza-${{parameters.env}}-1" ]
+                vmNames: ["vh-infra-wowza-${{parameters.env}}-1","vh-infra-wowza-${{parameters.env}}-2" ]
                 vmRgName: "vh-infra-wowza-${{parameters.env}}"
                 env: ${{parameters.env}}
                 env_long: ${{ variables.env_long }}
