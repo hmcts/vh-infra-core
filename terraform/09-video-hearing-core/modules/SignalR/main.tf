@@ -1,14 +1,3 @@
-terraform {
-  required_providers {
-    azapi = {
-      source = "azure/azapi"
-    }
-  }
-}
-
-provider "azapi" {
-}
-
 locals {
   sku_name = "Premium_P1"
   sku_type = "Premium"
@@ -72,7 +61,7 @@ resource "azapi_resource" "signalR" {
 # }
 
 data "azurerm_signalr_service" "signalR" {
-  name                = var.resource_prefix
+  name                = var.name
   resource_group_name = var.resource_group_name
   depends_on = [
     azapi_resource.signalR
