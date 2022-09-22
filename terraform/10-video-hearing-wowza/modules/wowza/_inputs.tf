@@ -106,8 +106,11 @@ variable "route_table" {
 
 variable "dynatrace_tenant" {
   description = "Dynatrace Tenant"
+  default     = ""
+  type        = string
 }
 
 variable "dynatrace_token" {
   description = "Dynatrace Token."
+  type        = string
 }

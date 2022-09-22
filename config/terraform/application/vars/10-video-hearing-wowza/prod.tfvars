@@ -28,4 +28,4 @@ route_table = [
     next_hop_in_ip_address = "10.11.8.36"
   }
 ]
-dynatrace_tenant = ebe20728
+dynatrace_tenant = "ebe20728"

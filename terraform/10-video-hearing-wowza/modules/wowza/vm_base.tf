@@ -2,7 +2,7 @@ locals {
   publisher = "wowza"
   offer     = "wowzastreamingengine"
   sku       = "linux-paid-4-8"
-  version   = "4.8.18"
+  version   = "latest"
 }
 resource "tls_private_key" "vm" {
   algorithm = "RSA"

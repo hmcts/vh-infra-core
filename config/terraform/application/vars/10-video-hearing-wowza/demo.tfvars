@@ -41,4 +41,3 @@ route_table = [
     next_hop_in_ip_address = null
   }
 ]
-dynatrace_tenant = "yrk32651"
