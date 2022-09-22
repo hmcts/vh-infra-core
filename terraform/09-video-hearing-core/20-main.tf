@@ -265,9 +265,9 @@ module "SignalR" {
 }
 
 resource "azurerm_role_assignment" "acmmekv_access_policy" {
-  role_definition_name               = "Key Vault Administrator"
-  scope                              = data.azurerm_key_vault.acmekv.id
-  principal_id                       = azurerm_user_assigned_identity.vh_mi.principal_id
+  role_definition_name = "Key Vault Administrator"
+  scope                = data.azurerm_key_vault.acmekv.id
+  principal_id         = azurerm_user_assigned_identity.vh_mi.principal_id
 }
 
 #--------------------------------------------------------------
