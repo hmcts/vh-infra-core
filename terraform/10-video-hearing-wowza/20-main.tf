@@ -13,6 +13,11 @@ data "azurerm_resource_group" "vh-infra-core" {
 # VH - Key Vault Lookup
 #--------------------------------------------------------------
 
+data "azurerm_key_vault_secret" "dynatrace_token" {
+  name         = "dynatrace-token"
+  key_vault_id = data.azurerm_key_vault.vh-infra-core.id
+}
+
 data "azurerm_key_vault" "vh-infra-core" {
   name                = "vh-infra-core-${var.environment}"
   resource_group_name = data.azurerm_resource_group.vh-infra-core.name
@@ -52,7 +57,6 @@ module "wowza" {
   network_tenant_id           = var.network_tenant_id
   tags                        = local.common_tags
   route_table                 = var.route_table
-
-
+  dynatrace_tenant            = var.dynatrace_tenant
+  dynatrace_token             = data.azurerm_key_vault_secret.dynatrace_token.value
 }
-

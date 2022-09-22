@@ -20,7 +20,7 @@ trigger:
     - master
   paths:
     include:
-    - terraform/09-video-hearing-core
+    - terraform/09-video-hearing-core/*
 
 parameters:
   - name: environment
