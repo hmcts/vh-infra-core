@@ -20,7 +20,9 @@ trigger:
     - master
   paths:
     include:
-    - terraform/10-video-hearing-wowza
+    - terraform/10-video-hearing-wowza/*
+    exclude:
+    - terraform/09-video-hearing-core/*
 
 parameters:
 - name: environment
