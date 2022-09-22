@@ -1,3 +1,13 @@
+required_providers {
+      azapi = {
+        source = "azure/azapi"
+    }
+
+    provider "azapi" {
+}
+}
+
+
 resource "azapi_resource" "signalR" {
   type      = "Microsoft.SignalRService/signalR@2022-02-01"
   name      = var.resource_prefix
