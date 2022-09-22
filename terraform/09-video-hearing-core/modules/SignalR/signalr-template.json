@@ -15,7 +15,7 @@
             "type": "string"
         },
         "sku_name":{
-            "defaultValue":"Premiun_P1",
+            "defaultValue":"Premium_P1",
             "type": "string"
         },
         "sku_type":{
