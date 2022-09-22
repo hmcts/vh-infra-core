@@ -170,7 +170,7 @@ module "KeyVault_Secrets" {
 }
 
 module "input_Secrets" {
-  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret }
+  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret if secret.key_vault_name != "vh-infra-core" }
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = lookup(module.KeyVaults.keyvault_resource, each.value.key_vault_name).resource_id
   key_vault_name = each.value.key_vault_name
