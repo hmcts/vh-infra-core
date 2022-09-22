@@ -19,7 +19,7 @@ variable "tags" {
   default = {}
 }
 
-variable "managed_identity" {
+variable "managed_identities" {
   type = list(string)
 }
 

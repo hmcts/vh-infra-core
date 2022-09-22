@@ -9,11 +9,10 @@ resource "azapi_resource" "signalR" {
   name      = var.name
   location  = var.location
   parent_id = var.resource_group_id
-  tags      = var.tags
 
   identity {
     type         = "UserAssigned"
-    identity_ids = var.managed_identity
+    identity_ids = var.managed_identities
   }
 
   body = jsonencode({
@@ -31,6 +30,8 @@ resource "azapi_resource" "signalR" {
     }
     kind = "SignalR"
   })
+  
+  tags      = var.tags
 }
 
 # resource "azapi_resource" "signalr_custom_domain" {
