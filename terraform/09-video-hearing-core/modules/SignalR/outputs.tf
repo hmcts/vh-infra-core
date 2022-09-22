@@ -1,11 +1,11 @@
 output "signalr_id" {
-  value = azurerm_signalr_service.vh.id
+  value = jsondecode(azapi_resource.signalR.output).resource_id
 }
 
 output "name" {
-  value = azurerm_signalr_service.vh.name
+  value = jsondecode(azapi_resource.signalR.output).name
 }
 
 output "connection_string" {
-  value = azurerm_signalr_service.vh.primary_connection_string
+  value = jsondecode(azapi_resource.signalR.output).connection_string
 }

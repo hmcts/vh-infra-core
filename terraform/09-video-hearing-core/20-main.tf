@@ -247,7 +247,7 @@ module "storage" {
 #--------------------------------------------------------------
 
 module "SignalR" {
-  source      = "./modules/SignalR"
+  source = "./modules/SignalR"
 
   resource_prefix     = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
@@ -255,7 +255,7 @@ module "SignalR" {
 
   tags = local.common_tags
 
-  managed_identity = azurerm_user_assigned_identity.vh_mi.principal_id
+  managed_identity = [azurerm_user_assigned_identity.vh_mi.principal_id]
 
   signalr_custom_certificate_id = data.azurerm_key_vault_certificate.acmekv_cert.id
 

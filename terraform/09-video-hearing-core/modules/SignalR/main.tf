@@ -29,8 +29,8 @@ resource "azapi_resource" "signalR" {
     }
     sku = {
       capacity = 1
-      name     = locals.sku_name
-      tier     = locals.sku_type
+      name     = local.sku_name
+      tier     = local.sku_type
     }
     kind = "SignalR"
   })
