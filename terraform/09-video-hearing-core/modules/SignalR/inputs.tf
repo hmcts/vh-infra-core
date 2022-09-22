@@ -26,14 +26,3 @@ variable "signalr_custom_certificate_id" {
 variable "signalr_custom_domain" {
   type = string
 }
-
-terraform {
-  required_providers {
-    azapi = {
-      source = "azure/azapi"
-    }
-  }
-}
-
-provider "azapi" {
-}
