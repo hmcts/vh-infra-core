@@ -12,7 +12,7 @@ resource "tls_private_key" "vm" {
 resource "azurerm_linux_virtual_machine" "wowza" {
   count = var.wowza_instance_count
 
-  name = "${var.service_name}-${count.index}"
+  name = "${var.service_name}-${count.index + 1}"
 
   depends_on = [
     azurerm_private_dns_a_record.wowza_storage,
@@ -34,6 +34,7 @@ resource "azurerm_linux_virtual_machine" "wowza" {
   }
 
   os_disk {
+    name                 = "${var.service_name}-${count.index + 1}-OsDisk"
     caching              = "ReadWrite"
     storage_account_type = var.os_disk_type
     disk_size_gb         = 1024
