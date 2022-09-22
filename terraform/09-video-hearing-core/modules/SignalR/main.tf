@@ -1,124 +1,53 @@
-resource "azapi_resource" "symbolicname" {
-  type = "Microsoft.SignalRService/signalR@2022-02-01"
-  name = "string"
-  location = "string"
-  parent_id = "string"
-  tags = {
-    tagName1 = "tagValue1"
-    tagName2 = "tagValue2"
-  }
+resource "azapi_resource" "signalR" {
+  type      = "Microsoft.SignalRService/signalR@2022-02-01"
+  name      = var.resource_prefix
+  location  = var.location
+  parent_id = var.resource_group_name
+  tags      = var.tags
   identity {
-    type = "string"
-    identity_ids = []
+    type         = "UserAssigned"
+    identity_ids = var.managed_identity
   }
   body = jsonencode({
     properties = {
       cors = {
         allowedOrigins = [
-          "string"
-        ]
-      }
-      disableAadAuth = bool
-      disableLocalAuth = bool
-      features = [
-        {
-          flag = "string"
-          properties = {}
-          value = "string"
-        }
-      ]
-      liveTraceConfiguration = {
-        categories = [
-          {
-            enabled = "string"
-            name = "string"
-          }
-        ]
-        enabled = "string"
-      }
-      networkACLs = {
-        defaultAction = "string"
-        privateEndpoints = [
-          {
-            allow = [
-              "string"
-            ]
-            deny = [
-              "string"
-            ]
-            name = "string"
-          }
-        ]
-        publicNetwork = {
-          allow = [
-            "string"
-          ]
-          deny = [
-            "string"
-          ]
-        }
-      }
-      publicNetworkAccess = "string"
-      resourceLogConfiguration = {
-        categories = [
-          {
-            enabled = "string"
-            name = "string"
-          }
-        ]
-      }
-      tls = {
-        clientCertEnabled = bool
-      }
-      upstream = {
-        templates = [
-          {
-            auth = {
-              managedIdentity = {
-                resource = "string"
-              }
-              type = "string"
-            }
-            categoryPattern = "string"
-            eventPattern = "string"
-            hubPattern = "string"
-            urlTemplate = "string"
-          }
+          "*"
         ]
       }
     }
     sku = {
-      capacity = int
-      name = "string"
-      tier = "string"
+      capacity = 1
+      name     = locals.sku_name
+      tier     = locals.sku_type
     }
-    kind = "string"
+    kind = "SignalR"
   })
 }
 
-resource "azapi_resource" "symbolicname" {
-  type = "Microsoft.SignalRService/signalR/customDomains@2022-02-01"
-  name = "string"
-  parent_id = "string"
+resource "azapi_resource" "signalr_custom_domain" {
+  type      = "Microsoft.SignalRService/signalR/customDomains@2022-02-01"
+  name      = "signalr_custom_domain"
+  parent_id = azapi_resource.signalR.id
   body = jsonencode({
     properties = {
       customCertificate = {
-        id = "string"
+        id = var.signalr_custom_certificate_id
       }
-      domainName = "string"
+      domainName = var.signalr_custom_domain
     }
   })
 }
 
-resource "azapi_resource" "symbolicname" {
-  type = "Microsoft.SignalRService/signalR/customCertificates@2022-02-01"
-  name = "string"
-  parent_id = "string"
-  body = jsonencode({
-    properties = {
-      keyVaultBaseUri = "string"
-      keyVaultSecretName = "string"
-      keyVaultSecretVersion = "string"
-    }
-  })
-}
+# resource "azapi_resource" "signalr_custom_certificate" {
+#   type      = "Microsoft.SignalRService/signalR/customCertificates@2022-02-01"
+#   name      = "signalr_custom_certificate"
+#   parent_id = azapi_resource.signalR.id
+#   body = jsonencode({
+#     properties = {
+#       keyVaultBaseUri       = "string"
+#       keyVaultSecretName    = "string"
+#       keyVaultSecretVersion = "string"
+#     }
+#   })
+# }

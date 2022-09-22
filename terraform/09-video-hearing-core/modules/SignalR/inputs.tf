@@ -14,3 +14,15 @@ variable "tags" {
   type    = map(any)
   default = {}
 }
+
+variable "managed_identity" {
+  type = list(string)
+}
+
+variable "signalr_custom_certificate_id" {
+  type = string
+}
+
+variable "signalr_custom_domain"{
+  type = string
+}

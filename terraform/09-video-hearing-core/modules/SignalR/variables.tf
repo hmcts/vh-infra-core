@@ -55,9 +55,4 @@ locals {
 
   sku_size = "P1"
 
-  signalr_cd_name = "" # needed
-
-  custom_cert_id = "" # needed
-
-  signalr_custom_domain = "" # needs a conditional
 }

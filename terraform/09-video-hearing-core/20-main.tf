@@ -39,6 +39,17 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
     module.KeyVaults
   ]
 }
+
+data "azurerm_key_vault" "acmekv" {
+  name                = "acmedtssds${var.environment}"
+  resource_group_name = "sds-platform-${var.environment}-rg"
+}
+
+data "azurerm_key_vault_certificate" "acmekv_cert" {
+  name         = "wildcard-${var.environment}-platform-hmcts-net"
+  key_vault_id = data.azurerm_key_vault.acmekv.id
+}
+
 module "KeyVault_Secrets" {
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = module.KeyVaults.keyvault_id
@@ -244,6 +255,19 @@ module "SignalR" {
   location            = azurerm_resource_group.vh-infra-core.location
 
   tags = local.common_tags
+
+  managed_identity = azurerm_user_assigned_identity.vh_mi.principal_id
+
+  signalr_custom_certificate_id = data.azurerm_key_vault_certificate.acmekv_cert.id
+
+  signalr_custom_domain = "signalr.${var.environment}.platform.hmcts.net"
+
+}
+
+resource "azurerm_role_assignment" "acmmekv_access_policy" {
+  role_definition_name               = "Key Vault Administrator"
+  scope                              = data.azurerm_key_vault.acmekv.id
+  principal_id                       = azurerm_user_assigned_identity.vh_mi.principal_id
 }
 
 #--------------------------------------------------------------
