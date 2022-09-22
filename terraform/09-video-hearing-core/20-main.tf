@@ -248,7 +248,6 @@ module "storage" {
 
 module "SignalR" {
   source      = "./modules/SignalR"
-  environment = var.environment
 
   resource_prefix     = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name

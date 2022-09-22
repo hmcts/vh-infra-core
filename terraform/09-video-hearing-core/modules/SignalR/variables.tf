@@ -1,5 +1,3 @@
-# variable "environment" {}
-
 # variable "environment_to_sku_map" {
 #   type = map(any)
 #   default = {
@@ -43,7 +41,6 @@
 # }
 
 locals {
-  environment = var.environment
   # sku = lookup(var.environment_to_sku_map, var.environment, {
   #   name     = "Standard_S1"
   #   capacity = 1

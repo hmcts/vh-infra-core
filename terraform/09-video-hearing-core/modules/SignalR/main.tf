@@ -3,8 +3,6 @@ terraform {
     azapi = {
       source = "azure/azapi"
     }
-
-
   }
 }
 
