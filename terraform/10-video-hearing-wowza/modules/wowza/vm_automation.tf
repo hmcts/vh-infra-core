@@ -22,6 +22,8 @@ resource "random_password" "streamPassword" {
   override_special = "_%*"
 }
 
+
+
 data "template_file" "cloudconfig" {
   template = file(var.cloud_init_file)
   vars = {
@@ -37,7 +39,7 @@ data "template_file" "cloudconfig" {
     domain                  = local.wowza_domain
     project                 = "VH"
     dynatrace_tenant        = var.dynatrace_tenant
-    dynatrace_token         = data.azurerm_key_vault_secret.dynatrace_token.value
+    dynatrace_token         = var.dynatrace_token
   }
 }
 
