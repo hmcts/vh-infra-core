@@ -89,9 +89,9 @@ steps:
           Write-Host "##vso[task.setvariable variable=SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
           Write-Host "Subscription ID: $subscriptionId"
 
-  - ${{ if and( eq(parameters.activity_name, 'Video_Hearing_Core'), eq(parameters.environment, 'dev') ) }}:      
+  - ${{ if and( eq(parameters.activity_name, 'Video_Hearing_Core'), eq(parameters.environment, 'stg') ) }}:      
     - task: AzureCLI@2
-      displayName: 'Get ACME Credentials'
+      displayName: 'ACME KV Details'
       name: acme
       inputs: 
         azureSubscription: DTS-SHAREDSERVICES-PROD-Video Hearings
@@ -145,7 +145,7 @@ steps:
         CVP_CLIENT_ID: $(cvp.CLIENT_ID) 
         CVP_CLIENT_SECRET: $(cvp.CLIENT_SECRET) 
         CVP_SUBSCRIPTION_ID: $(cvp.SUBSCRIPTION_ID)
-      ${{ if and( eq(parameters.activity_name, 'Video_Hearing_Core'), eq(parameters.environment, 'dev') ) }}:
+      ${{ if and( eq(parameters.activity_name, 'Video_Hearing_Core'), eq(parameters.environment, 'stg') ) }}:
         ACME_CLIENT_ID: $(acme.ACME_CLIENT_ID) 
         ACME_CLIENT_SECRET: $(acme.ACME_CLIENT_SECRET)
         ACME_SUBSCRIPTION_ID: $(acme.ACME_SUBSCRIPTION_ID)
