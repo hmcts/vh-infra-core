@@ -287,16 +287,16 @@ module "SignalR" {
 }
 
 resource "azurerm_role_assignment" "acmmekv_access_policy" {
-  count                = var.environment != "stg" ? 1 : 0 
+  count                = var.environment != "stg" ? 1 : 0
   role_definition_name = "Key Vault Administrator"
   scope                = data.azurerm_key_vault.acmekv[0].id
   principal_id         = azurerm_user_assigned_identity.vh_mi.principal_id
 }
 
 resource "azurerm_role_assignment" "acmmekv_access_policy_stg" {
-  count                = var.environment == "dev" ? 1 : 0 
+  count                = var.environment == "dev" ? 1 : 0
   role_definition_name = "Key Vault Administrator"
-  scope                = data.azurerm_key_vault.acmekvstg[0].id 
+  scope                = data.azurerm_key_vault.acmekvstg[0].id
   principal_id         = azurerm_user_assigned_identity.vh_mi.principal_id
   provider             = azurerm.acme_cert
 }
