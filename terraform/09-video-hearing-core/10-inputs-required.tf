@@ -898,15 +898,16 @@ variable "acme_client_id" {
   default     = null
 }
 
-variable "acme_subscription_id" {
-  description = "Subscription ID of the ACME Prod SP"
-  type        = string
-  default     = null
-}
-
 variable "acme_client_secret" {
   description = "Client Secret of ACME Prod SP"
   type        = string
   sensitive   = true
   default     = null
 }
+
+variable "acme_subscription_id" {
+  description = "Subscription ID of the ACME Prod Certs."
+  type        = string
+  default     = ""
+}
+
