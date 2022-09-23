@@ -4,11 +4,15 @@ locals {
   sku_size = "P1"
 }
 
+data "azurerm_resource_group" "resource_group" {
+  name = var.resource_group_name
+}
+
 resource "azapi_resource" "signalR" {
   type      = "Microsoft.SignalRService/signalR@2022-02-01"
   name      = var.name
-  location  = var.location
-  parent_id = var.resource_group_id
+  location  = data.azurerm_resource_group.resource_group.location
+  parent_id = data.azurerm_resource_group.resource_group.id
 
   identity {
     type         = "UserAssigned"
@@ -30,8 +34,8 @@ resource "azapi_resource" "signalR" {
     }
     kind = "SignalR"
   })
-  
-  tags      = var.tags
+
+  tags = var.tags
 }
 
 # resource "azapi_resource" "signalr_custom_domain" {
@@ -41,24 +45,28 @@ resource "azapi_resource" "signalR" {
 #   body = jsonencode({
 #     properties = {
 #       customCertificate = {
-#         id = var.signalr_custom_certificate_id
+#         id = 
 #       }
-#       domainName = var.signalr_custom_domain
+#       domainName = var.custom_domain_name
 #     }
 #   })
+#   depends_on = [
+#     azapi_resource.signalr_custom_certificate
+#   ]
 # }
 
- resource "azapi_resource" "signalr_custom_certificate" {
-   type      = "Microsoft.SignalRService/signalR/customCertificates@2022-02-01"
-   name      = "platform-hmcts-net"
-   parent_id = azapi_resource.signalR.id
-   body = jsonencode({
-     properties = {
-       keyVaultBaseUri       = var.key_vault_uri
-       keyVaultSecretName    = var.key_vault_cert_name
-     }
-   })
- }
+resource "azapi_resource" "signalr_custom_certificate" {
+  type      = "Microsoft.SignalRService/signalR/customCertificates@2022-02-01"
+  name      = var.key_vault_cert_name
+  parent_id = azapi_resource.signalR.id
+
+  body = jsonencode({
+    properties = {
+      keyVaultBaseUri    = var.key_vault_uri
+      keyVaultSecretName = var.key_vault_cert_name
+    }
+  })
+}
 
 data "azurerm_signalr_service" "signalR" {
   name                = var.name

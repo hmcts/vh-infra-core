@@ -273,15 +273,12 @@ module "SignalR" {
   source = "./modules/SignalR"
 
   name                = "${local.std_prefix}${local.suffix}"
-  resource_group_id   = azurerm_resource_group.vh-infra-core.id
   resource_group_name = azurerm_resource_group.vh-infra-core.name
-  location            = azurerm_resource_group.vh-infra-core.location
   managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
-  #signalr_custom_certificate_id = data.azurerm_key_vault_certificate.acmekv_cert.id
-  signalr_custom_domain = "signalr.${var.environment}.platform.hmcts.net"
-  key_vault_cert_name   = data.azurerm_key_vault_certificate.acmekv_cert.name
-  key_vault_uri         = data.azurerm_key_vault.acmekv.vault_uri
-  tags                  = local.common_tags
+  custom_domain_name  = "signalr.${var.environment}.platform.hmcts.net"
+  key_vault_cert_name = data.azurerm_key_vault_certificate.acmekv_cert.name
+  key_vault_uri       = data.azurerm_key_vault.acmekv.vault_uri
+  tags                = local.common_tags
 }
 
 resource "azurerm_role_assignment" "acmmekv_access_policy" {
