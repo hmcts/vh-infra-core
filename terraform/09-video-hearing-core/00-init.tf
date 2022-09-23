@@ -74,5 +74,7 @@ provider "azurerm" {
 provider "azurerm" {
   features {}
   alias           = "acme_cert"
-  subscription_id = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
+  subscription_id = var.acme_subscription_id
+  client_id       = var.acme_client_id
+  client_secret   = var.acme_client_secret
 }
