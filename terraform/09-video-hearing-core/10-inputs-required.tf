@@ -908,6 +908,6 @@ variable "acme_client_secret" {
 variable "acme_subscription_id" {
   description = "Subscription ID of the ACME Prod Certs."
   type        = string
-  default     = "00000000-0000-0000-0000-000000000000"
+  default     = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
 }
 
