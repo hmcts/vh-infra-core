@@ -258,20 +258,6 @@ module "storage" {
 #--------------------------------------------------------------
 # VH - SignalR
 #--------------------------------------------------------------
-data "azurerm_key_vault" "acemekvdev" {
-  count               = var.environment == "dev" ? 1 : 0
-  name                = "acmedtssdsprod"
-  resource_group_name = "sds-platform-prod-rg"
-  provider            = azurerm.cert_prod
-}
-
-data "azurerm_key_vault_certificate" "acmekv_cert_dev" {
-  count        = var.environment == "dev" ? 1 : 0
-  name         = "wildcard-hearings-reform-hmcts-net"
-  key_vault_id = data.azurerm_key_vault.acemekvdev[0].id
-  provider     = azurerm.cert_prod
-}
-######################################
 
 data "azurerm_key_vault" "acmekv" {
   count               = var.environment != "stg" ? 1 : 0
@@ -283,20 +269,7 @@ data "azurerm_key_vault" "acmekvstg" {
   count               = var.environment == "stg" ? 1 : 0
   name                = "acmedtssdsprod"
   resource_group_name = "sds-platform-prod-rg"
-  provider            = azurerm.cert_prod
-}
-
-data "azurerm_key_vault_certificate" "acmekv_cert" {
-  count        = var.environment != "stg" ? 1 : 0
-  name         = var.environment == "prod" ? "wildcard-hearings-reform-hmcts-net" : "wildcard-${var.environment}-platform-hmcts-net"
-  key_vault_id = data.azurerm_key_vault.acmekv[0].id
-}
-
-data "azurerm_key_vault_certificate" "acmekv_cert_stg" {
-  count        = var.environment == "stg" ? 1 : 0
-  name         = "wildcard-hearings-reform-hmcts-net"
-  key_vault_id = data.azurerm_key_vault.acmekvstg[0].id
-  provider     = azurerm.cert_prod
+  provider            = azurerm.acme_cert
 }
 
 module "SignalR" {
@@ -306,7 +279,7 @@ module "SignalR" {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
   custom_domain_name  = var.signalr_custom_domain_name
-  key_vault_cert_name = var.environment == "stg" ? data.azurerm_key_vault_certificate.acmekv_cert_stg[0].name : data.azurerm_key_vault_certificate.acmekv_cert[0].name
+  key_vault_cert_name = var.environment == "stg" || var.environment == "prod" ? "wildcard-hearings-reform-hmcts-net" : "wildcard-${var.environment}-platform-hmcts-net"
   key_vault_uri       = var.environment == "stg" ? data.azurerm_key_vault.acmekvstg[0].vault_uri : data.azurerm_key_vault.acmekv[0].vault_uri
   tags                = local.common_tags
 }
