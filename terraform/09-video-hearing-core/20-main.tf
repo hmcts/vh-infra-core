@@ -258,6 +258,20 @@ module "storage" {
 #--------------------------------------------------------------
 # VH - SignalR
 #--------------------------------------------------------------
+data "azurerm_key_vault" "acemekvdev" {
+  count               = var.environment == "dev" ? 1 : 0
+  name                = "acmedtssdsprod"
+  resource_group_name = "sds-platform-prod-rg"
+  provider            = azurerm.cert_prod
+}
+
+data "azurerm_key_vault_certificate" "acmekv_cert_dev" {
+  count        = var.environment == "dev" ? 1 : 0
+  name         = "wildcard-hearings-reform-hmcts-net"
+  key_vault_id = data.azurerm_key_vault.acemekvdev[0].id
+  provider     = azurerm.cert_prod
+}
+######################################
 
 data "azurerm_key_vault" "acmekv" {
   count               = var.environment != "stg" ? 1 : 0
