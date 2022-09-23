@@ -48,18 +48,17 @@ resource "azapi_resource" "signalR" {
 #   })
 # }
 
-# resource "azapi_resource" "signalr_custom_certificate" {
-#   type      = "Microsoft.SignalRService/signalR/customCertificates@2022-02-01"
-#   name      = "signalr_custom_certificate"
-#   parent_id = azapi_resource.signalR.id
-#   body = jsonencode({
-#     properties = {
-#       keyVaultBaseUri       = "string"
-#       keyVaultSecretName    = "string"
-#       keyVaultSecretVersion = "string"
-#     }
-#   })
-# }
+ resource "azapi_resource" "signalr_custom_certificate" {
+   type      = "Microsoft.SignalRService/signalR/customCertificates@2022-02-01"
+   name      = "platform-hmcts-net"
+   parent_id = azapi_resource.signalR.id
+   body = jsonencode({
+     properties = {
+       keyVaultBaseUri       = var.key_vault_uri
+       keyVaultSecretName    = var.key_vault_cert_name
+     }
+   })
+ }
 
 data "azurerm_signalr_service" "signalR" {
   name                = var.name

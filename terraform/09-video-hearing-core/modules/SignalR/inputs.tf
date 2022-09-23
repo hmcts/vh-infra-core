@@ -23,10 +23,14 @@ variable "managed_identities" {
   type = list(string)
 }
 
-variable "signalr_custom_certificate_id" {
+variable "signalr_custom_domain" {
   type = string
 }
 
-variable "signalr_custom_domain" {
+variable "key_vault_cert_name" {
+  type = string
+}
+
+variable "key_vault_uri" {
   type = string
 }
