@@ -886,3 +886,8 @@ variable "cvp_subscription_id" {
   description = "Client Subscription ID of the CVP SP"
   type        = string
 }
+
+variable "signalr_custom_domain_name" {
+  description = "Custom Domain Name for SignalR."
+  type        = string
+}

@@ -69,3 +69,10 @@ provider "azurerm" {
   client_secret   = var.cvp_client_secret
   tenant_id       = data.azurerm_client_config.current.tenant_id
 }
+
+
+provider "azurerm" {
+  features {}
+  alias           = "cert_prod"
+  subscription_id = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
+}

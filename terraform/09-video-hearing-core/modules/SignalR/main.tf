@@ -40,12 +40,13 @@ resource "azapi_resource" "signalR" {
 
 # resource "azapi_resource" "signalr_custom_domain" {
 #   type      = "Microsoft.SignalRService/signalR/customDomains@2022-02-01"
-#   name      = "signalr_custom_domain"
+#   name      = var.custom_domain_name
 #   parent_id = azapi_resource.signalR.id
+
 #   body = jsonencode({
 #     properties = {
 #       customCertificate = {
-#         id = 
+#         id = azapi_resource.signalr_custom_certificate.id
 #       }
 #       domainName = var.custom_domain_name
 #     }
