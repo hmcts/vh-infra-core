@@ -101,8 +101,8 @@ steps:
         InlineScript: |
           Write-Host "##vso[task.setvariable variable=ACME_CLIENT_ID;isOutput=true]$($env:servicePrincipalId)"
           Write-Host "##vso[task.setvariable variable=ACME_CLIENT_SECRET;isOutput=true]$($env:servicePrincipalKey)"
+          $subscriptionId = az account show --query id -o tsv
           Write-Host "##vso[task.setvariable variable=ACME_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
-
   - ${{ if eq(parameters.activity_name, 'Video_Hearing_Wowza') }}:
     - template: templates\Azure\Vm\approve-terms.yaml@templates
       parameters:
