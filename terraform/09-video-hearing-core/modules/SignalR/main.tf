@@ -38,23 +38,23 @@ resource "azapi_resource" "signalR" {
   tags = var.tags
 }
 
-# resource "azapi_resource" "signalr_custom_domain" {
-#   type      = "Microsoft.SignalRService/signalR/customDomains@2022-02-01"
-#   name      = var.custom_domain_name
-#   parent_id = azapi_resource.signalR.id
+resource "azapi_resource" "signalr_custom_domain" {
+  type      = "Microsoft.SignalRService/signalR/customDomains@2022-02-01"
+  name      = var.custom_domain_name
+  parent_id = azapi_resource.signalR.id
 
-#   body = jsonencode({
-#     properties = {
-#       customCertificate = {
-#         id = azapi_resource.signalr_custom_certificate.id
-#       }
-#       domainName = var.custom_domain_name
-#     }
-#   })
-#   depends_on = [
-#     azapi_resource.signalr_custom_certificate
-#   ]
-# }
+  body = jsonencode({
+    properties = {
+      customCertificate = {
+        id = azapi_resource.signalr_custom_certificate.id
+      }
+      domainName = var.custom_domain_name
+    }
+  })
+  depends_on = [
+    azapi_resource.signalr_custom_certificate
+  ]
+}
 
 resource "azapi_resource" "signalr_custom_certificate" {
   type      = "Microsoft.SignalRService/signalR/customCertificates@2022-02-01"
