@@ -31,7 +31,7 @@ resource "azurerm_lb_backend_address_pool" "wowza_vm" {
 
 # resource "azurerm_lb_probe" "wowza_rtmps" {
 #   loadbalancer_id = azurerm_lb.wowza.id
-#   name            = "rtmps-running-probe"
+#   name            = "RTMPS-Probe"
 #   port            = 443
 # }
 
