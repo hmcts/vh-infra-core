@@ -8,6 +8,7 @@ resource "azurerm_public_ip" "wowza" {
   allocation_method   = "Static"
   sku                 = "Standard"
   tags                = var.tags
+  domain_name_label   = var.service_name
 }
 
 resource "azurerm_lb" "wowza-public" {
