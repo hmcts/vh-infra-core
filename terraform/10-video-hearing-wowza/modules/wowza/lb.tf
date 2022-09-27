@@ -29,25 +29,25 @@ resource "azurerm_lb_backend_address_pool" "wowza_vm" {
   name            = "Wowza-Virtual-Machine-${count.index + 1}"
 }
 
-# resource "azurerm_lb_probe" "wowza_rtmps" {
-#   loadbalancer_id = azurerm_lb.wowza.id
-#   name            = "RTMPS-Probe"
-#   port            = 443
-# }
+resource "azurerm_lb_probe" "wowza_rtmps" {
+  loadbalancer_id = azurerm_lb.wowza.id
+  name            = "RTMPS-Probe"
+  port            = 443
+}
 
 
-# resource "azurerm_lb_rule" "wowza" {
-#   loadbalancer_id                = azurerm_lb.wowza.id
-#   name                           = "RTMPS-Rule"
-#   protocol                       = "Tcp"
-#   frontend_port                  = 443
-#   backend_port                   = 443
-#   frontend_ip_configuration_name = local.wowza_frontend_ip_name
-#   probe_id                       = azurerm_lb_probe.wowza_rtmps.id
-#   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.wowza.id]
-#   load_distribution              = "Default"
-#   idle_timeout_in_minutes        = 30
-# }
+resource "azurerm_lb_rule" "wowza" {
+  loadbalancer_id                = azurerm_lb.wowza.id
+  name                           = "RTMPS-Rule"
+  protocol                       = "Tcp"
+  frontend_port                  = 443
+  backend_port                   = 443
+  frontend_ip_configuration_name = local.wowza_frontend_ip_name
+  probe_id                       = azurerm_lb_probe.wowza_rtmps.id
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.wowza.id]
+  load_distribution              = "Default"
+  idle_timeout_in_minutes        = 30
+}
 
 resource "azurerm_lb_probe" "wowza_rest" {
   loadbalancer_id = azurerm_lb.wowza.id
