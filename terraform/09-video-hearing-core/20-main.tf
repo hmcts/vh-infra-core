@@ -460,7 +460,6 @@ module "vh_endpoint" {
       private_dns_zone_id = data.azurerm_private_dns_zone.signalr.id
     }
   }
-
   tags = local.common_tags
 }
 
