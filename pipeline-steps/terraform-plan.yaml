@@ -48,7 +48,6 @@ steps:
       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
-
   - task: AzureCLI@2
     displayName: 'GlobalNetworkPeering SC Details'
     name: GlobalNetworkPeering
@@ -66,7 +65,6 @@ steps:
         $subscriptionId = az account show --query id -o tsv
         Write-Host "##vso[task.setvariable variable=GNP_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
         Write-Host "Subscription ID: $subscriptionId"
-
   - ${{ if eq(parameters.activity_name, 'Video_Hearing_Core') }}:      
     - task: AzureCLI@2
       displayName: 'CVP SC Details'
@@ -88,21 +86,6 @@ steps:
           $subscriptionId = az account show --query id -o tsv
           Write-Host "##vso[task.setvariable variable=SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
           Write-Host "Subscription ID: $subscriptionId"
-
-  - ${{ if and( eq(parameters.activity_name, 'Video_Hearing_Core'), eq(parameters.environment, 'stg') ) }}:      
-    - task: AzureCLI@2
-      displayName: 'ACME KV Details'
-      name: acme
-      inputs: 
-        azureSubscription: DTS-SHAREDSERVICES-PROD-Video Hearings
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        addSpnToEnvironment: true
-        InlineScript: |
-          Write-Host "##vso[task.setvariable variable=ACME_CLIENT_ID;isOutput=true]$($env:servicePrincipalId)"
-          Write-Host "##vso[task.setvariable variable=ACME_CLIENT_SECRET;isOutput=true]$($env:servicePrincipalKey)"
-          $subscriptionId = az account show --query id -o tsv
-          Write-Host "##vso[task.setvariable variable=ACME_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
   - ${{ if eq(parameters.activity_name, 'Video_Hearing_Wowza') }}:
     - template: templates\Azure\Vm\approve-terms.yaml@templates
       parameters:
@@ -126,11 +109,6 @@ steps:
         variables="${variables} -var \"cvp_client_id=${CVP_CLIENT_ID} \""
         variables="${variables} -var \"cvp_client_secret=${CVP_CLIENT_SECRET} \""
       fi
-      if [ ! -z "${ACME_CLIENT_ID}" ]; then
-        variables="${variables} -var \"acme_client_id=${ACME_CLIENT_ID} \""
-        variables="${variables} -var \"acme_client_secret=${ACME_CLIENT_SECRET} \""
-        variables="${variables} -var \"acme_subscription_id=${ACME_SUBSCRIPTION_ID} \""
-      fi
       echo "Variables set as: "
       echo "${variables}"
       echo "##vso[task.setvariable variable=variableName]${variables}"
@@ -144,12 +122,7 @@ steps:
       ${{ if eq(parameters.activity_name, 'Video_Hearing_Core') }}:
         CVP_CLIENT_ID: $(cvp.CLIENT_ID) 
         CVP_CLIENT_SECRET: $(cvp.CLIENT_SECRET) 
-        CVP_SUBSCRIPTION_ID: $(cvp.SUBSCRIPTION_ID)
-      ${{ if and( eq(parameters.activity_name, 'Video_Hearing_Core'), eq(parameters.environment, 'stg') ) }}:
-        ACME_CLIENT_ID: $(acme.ACME_CLIENT_ID) 
-        ACME_CLIENT_SECRET: $(acme.ACME_CLIENT_SECRET)
-        ACME_SUBSCRIPTION_ID: $(acme.ACME_SUBSCRIPTION_ID)
-
+        CVP_SUBSCRIPTION_ID: $(cvp.SUBSCRIPTION_ID) 
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:

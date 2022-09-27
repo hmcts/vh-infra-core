@@ -260,18 +260,8 @@ module "storage" {
 #--------------------------------------------------------------
 
 data "azurerm_key_vault" "acmekv" {
-  count               = var.environment != "stg" ? 1 : 0
   name                = "acmedtssds${var.environment}"
   resource_group_name = "sds-platform-${var.environment}-rg"
-}
-
-# Staging is using the hearings.reform.hmcts.net wildcard which is only available in the Production KV.
-# Hence requirement for this logic.
-data "azurerm_key_vault" "acmekvstg" {
-  count               = var.environment == "stg" ? 1 : 0
-  name                = "acmedtssdsprod"
-  resource_group_name = "sds-platform-prod-rg"
-  provider            = azurerm.acme_cert
 }
 
 module "SignalR" {
@@ -282,23 +272,14 @@ module "SignalR" {
   managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
   custom_domain_name  = var.signalr_custom_domain_name
   key_vault_cert_name = var.environment == "stg" || var.environment == "prod" ? "wildcard-hearings-reform-hmcts-net" : "wildcard-${var.environment}-platform-hmcts-net"
-  key_vault_uri       = var.environment == "stg" ? data.azurerm_key_vault.acmekvstg[0].vault_uri : data.azurerm_key_vault.acmekv[0].vault_uri
+  key_vault_uri       = data.azurerm_key_vault.acmekv.vault_uri
   tags                = local.common_tags
 }
 
 resource "azurerm_role_assignment" "acmmekv_access_policy" {
-  count                = var.environment != "stg" ? 1 : 0
-  role_definition_name = "Key Vault Administrator"
-  scope                = data.azurerm_key_vault.acmekv[0].id
+  role_definition_name = "Key Vault Secrets User"
+  scope                = data.azurerm_key_vault.acmekv.id
   principal_id         = azurerm_user_assigned_identity.vh_mi.principal_id
-}
-
-resource "azurerm_role_assignment" "acmmekv_access_policy_stg" {
-  count                = var.environment == "stg" ? 1 : 0
-  role_definition_name = "Key Vault Administrator"
-  scope                = data.azurerm_key_vault.acmekvstg[0].id
-  principal_id         = azurerm_user_assigned_identity.vh_mi.principal_id
-  provider             = azurerm.acme_cert
 }
 
 #--------------------------------------------------------------

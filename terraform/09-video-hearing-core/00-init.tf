@@ -69,12 +69,3 @@ provider "azurerm" {
   client_secret   = var.cvp_client_secret
   tenant_id       = data.azurerm_client_config.current.tenant_id
 }
-
-
-provider "azurerm" {
-  features {}
-  alias           = "acme_cert"
-  subscription_id = var.acme_subscription_id
-  client_id       = var.acme_client_id     # Will Only Be Injected When Running in Staging.
-  client_secret   = var.acme_client_secret # Will Only Be Injected When Running in Staging.
-}

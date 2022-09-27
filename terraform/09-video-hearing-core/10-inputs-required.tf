@@ -891,23 +891,3 @@ variable "signalr_custom_domain_name" {
   description = "Custom Domain Name for SignalR."
   type        = string
 }
-
-variable "acme_client_id" {
-  description = "Client ID of the ACME Prod SP"
-  type        = string
-  default     = null
-}
-
-variable "acme_client_secret" {
-  description = "Client Secret of ACME Prod SP"
-  type        = string
-  sensitive   = true
-  default     = null
-}
-
-variable "acme_subscription_id" {
-  description = "Subscription ID of the ACME Prod Certs."
-  type        = string
-  default     = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
-}
-
