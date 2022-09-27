@@ -39,6 +39,7 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
     module.KeyVaults
   ]
 }
+
 module "KeyVault_Secrets" {
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = module.KeyVaults.keyvault_id
@@ -258,15 +259,27 @@ module "storage" {
 # VH - SignalR
 #--------------------------------------------------------------
 
+data "azurerm_key_vault" "acmekv" {
+  name                = "acmedtssds${var.environment}"
+  resource_group_name = "sds-platform-${var.environment}-rg"
+}
+
 module "SignalR" {
-  source      = "./modules/SignalR"
-  environment = var.environment
+  source = "./modules/SignalR"
 
-  resource_prefix     = "${local.std_prefix}${local.suffix}"
+  name                = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
-  location            = azurerm_resource_group.vh-infra-core.location
+  managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
+  custom_domain_name  = var.signalr_custom_domain_name
+  key_vault_cert_name = var.environment == "stg" || var.environment == "prod" ? "wildcard-hearings-reform-hmcts-net" : "wildcard-${var.environment}-platform-hmcts-net"
+  key_vault_uri       = data.azurerm_key_vault.acmekv.vault_uri
+  tags                = local.common_tags
+}
 
-  tags = local.common_tags
+resource "azurerm_role_assignment" "acmmekv_access_policy" {
+  role_definition_name = "Key Vault Secrets User"
+  scope                = data.azurerm_key_vault.acmekv.id
+  principal_id         = azurerm_user_assigned_identity.vh_mi.principal_id
 }
 
 #--------------------------------------------------------------

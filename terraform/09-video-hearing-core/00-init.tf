@@ -12,7 +12,14 @@ terraform {
       source  = "hashicorp/azuread"
       version = "~> 2.26.0"
     }
+    azapi = {
+      source  = "Azure/azapi"
+      version = "= 0.6.0"
+    }
   }
+}
+
+provider "azapi" {
 }
 
 provider "azurerm" {
