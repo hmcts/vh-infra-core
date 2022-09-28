@@ -6,7 +6,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "wowza_reconcile" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  evaluation_frequency = "PT11H"
+  evaluation_frequency = "PT6H"
   window_duration      = "PT1H"
   scopes               = [azurerm_application_insights.vh-infra-core.id]
   severity             = 2
