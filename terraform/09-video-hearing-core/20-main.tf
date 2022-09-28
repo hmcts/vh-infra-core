@@ -360,13 +360,13 @@ module "Monitoring" {
 
   action_groups = {
     "kinly" = {
-      emails = split(var.emails_kinly, ",")
+      emails = split(",", var.emails_kinly)
     }
     "dev" = {
-      emails = split(var.emails_dev, ",")
+      emails = split(",", var.emails_dev)
     }
     "devops" = {
-      emails = split(var.emails_devops, ",")
+      emails = split(",", var.emails_devops)
     }
   }
 

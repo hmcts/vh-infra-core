@@ -10,7 +10,7 @@ resource "azurerm_monitor_action_group" "this" {
   dynamic "email_receiver" {
     for_each = each.value.emails
     content {
-      name          = split(email_receiver.value, "@")[0]
+      name          = split("@", email_receiver.value)[0]
       email_address = email_receiver.value
     }
   }
