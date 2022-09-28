@@ -356,6 +356,20 @@ module "Monitoring" {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   resource_prefix     = "${local.std_prefix}${local.suffix}"
 
+  env = local.environment
+
+  action_groups = {
+    "kinly" = {
+      emails = split(var.emails_kinly, ",")
+    }
+    "dev" = {
+      emails = split(var.emails_dev, ",")
+    }
+    "devops" = {
+      emails = split(var.emails_devops, ",")
+    }
+  }
+
   tags = local.common_tags
 }
 

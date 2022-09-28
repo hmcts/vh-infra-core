@@ -3,18 +3,36 @@
 # }
 
 variable "resource_group_name" {
-  type = string
+  description = "Resource Group Name"
+  type        = string
 }
 
 variable "resource_prefix" {
-  type = string
+  description = "Resource Prefix"
+  type        = string
 }
 
 variable "location" {
-  type = string
+  description = "Resource Location"
+  type        = string
 }
 
 variable "tags" {
-  type    = map(any)
+  description = "Common Tags"
+  type        = map(any)
+  default     = {}
+}
+
+variable "env" {
+  description = "Current Environment"
+  type        = string
+}
+
+variable "action_groups" {
+  description = "map of email groups"
+  type = map(object({
+    emails = list(string)
+
+  }))
   default = {}
 }
