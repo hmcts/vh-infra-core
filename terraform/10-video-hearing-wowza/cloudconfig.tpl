@@ -770,6 +770,54 @@ write_files:
       wowza ${streamPassword}
   - owner: wowza:wowza
     permissions: 0775
+    path: /home/wowza/check-file-size.sh
+    content: |
+        #!/bin/bash
+
+        # Project
+        project="VH"
+
+        # Set Log Path.
+        logFolder="/home/wowza/logs"
+        logPath="/home/wowza/logs/check-file-size.log"
+
+        # Set Dynatrace Details.
+        dynatrace_token="${dynatrace_token}"
+        dynatrace_tenant="${dynatrace_tenant}"
+
+        # test 
+        size="1MB"
+        date="_$(date '+%Y-%m-%d')-"
+        fileName="*$date*"
+        sourcePath="/wowzadata/azurecopy/"
+        foundItems=$(find $sourcePath -type f -name  $fileName  -size -1M;)
+
+        # Set logs
+        NOW=`date '+%F %H:%M:%S'`
+        mkdir -p $logFolder
+        touch $logPath
+
+        echo "Starting Check at $NOW" >> $logPath
+        if [ -z "$foundItems" ]; then
+                echo "No files under $size found today" >> $logPath
+        else
+                echo "Files under $size found" >> $logPath
+                echo "$foundItems" >> $logPath
+                curl --location --request POST "https://$dynatrace_tenant.live.dynatrace.com/api/v2/events/ingest" \
+                --header "Authorization: API-Token $dynatrace_token" \
+                --header 'Content-Type: application/json' \
+                --data-raw "{
+                        \"eventType\": \"ERROR_EVENT\",
+                        \"title\": \"FH - $project - Files under $size\",
+                        \"entitySelector\": \"type(HOST),entityName.startsWith($HOSTNAME)\",
+                        \"properties\": {
+                        \"Size\": \"$size\",
+                        \"Files\": \"$foundItems\"
+                        }
+                }" >> $logPath
+        fi
+  - owner: wowza:wowza
+    permissions: 0775
     path: /home/wowza/check-cert.sh
     content: |
         #!/bin/bash
@@ -885,6 +933,7 @@ write_files:
 
         if [[ $HOSTNAME == *"prod"* ]] || [[ $HOSTNAME == *"stg"* ]]; then
           echo "10 0 * * * /home/wowza/check-cert.sh" >> $cronTaskPath
+          echo "10 0 * * * /home/wowza/check-file-size.sh" >> $cronTaskPath
         fi
 
         # Set Up Cron Jobs for Wowza & Root.
