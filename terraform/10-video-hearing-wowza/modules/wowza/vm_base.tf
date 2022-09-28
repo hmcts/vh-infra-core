@@ -2,6 +2,7 @@ locals {
   publisher = "wowza"
   offer     = "wowzastreamingengine"
   sku       = "linux-paid-4-8"
+  version   = "latest"
 }
 resource "tls_private_key" "vm" {
   algorithm = "RSA"
@@ -11,12 +12,11 @@ resource "tls_private_key" "vm" {
 resource "azurerm_linux_virtual_machine" "wowza" {
   count = var.wowza_instance_count
 
-  name = "${var.service_name}-${count.index}"
+  name = "${var.service_name}-${count.index + 1}"
 
   depends_on = [
     azurerm_private_dns_a_record.wowza_storage,
-    azurerm_private_dns_zone_virtual_network_link.wowza,
-    azurerm_managed_disk.wowza_data
+    azurerm_private_dns_zone_virtual_network_link.wowza
   ]
 
   resource_group_name = azurerm_resource_group.wowza.name
@@ -34,6 +34,7 @@ resource "azurerm_linux_virtual_machine" "wowza" {
   }
 
   os_disk {
+    name                 = "${var.service_name}-${count.index + 1}-OsDisk"
     caching              = "ReadWrite"
     storage_account_type = var.os_disk_type
     disk_size_gb         = 1024
@@ -47,7 +48,7 @@ resource "azurerm_linux_virtual_machine" "wowza" {
     publisher = local.publisher
     offer     = local.offer
     sku       = local.sku
-    version   = "latest"
+    version   = local.version
   }
 
   plan {
@@ -64,17 +65,4 @@ resource "azurerm_linux_virtual_machine" "wowza" {
     ]
   }
   tags = var.tags
-}
-
-resource "azurerm_managed_disk" "wowza_data" {
-  count = var.wowza_instance_count
-
-  name = "${var.service_name}_${count.index}-wowzadata"
-
-  resource_group_name  = azurerm_resource_group.wowza.name
-  location             = azurerm_resource_group.wowza.location
-  storage_account_type = "Premium_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = 512
-  tags                 = var.tags
 }

@@ -12,7 +12,10 @@ pr:
     - master
   paths:
     include:
-    - terraform/10-video-hearing-wowza
+    - terraform/10-video-hearing-wowza/*
+    exclude:
+    - terraform/09-video-hearing-core/*
+    - azure-pipelines.infra-core.yaml
 
 trigger:
   branches:
@@ -20,7 +23,10 @@ trigger:
     - master
   paths:
     include:
-    - terraform/10-video-hearing-wowza
+    - terraform/10-video-hearing-wowza/*
+    exclude:
+    - terraform/09-video-hearing-core/*
+    - azure-pipelines.infra-core.yaml
 
 parameters:
 - name: environment

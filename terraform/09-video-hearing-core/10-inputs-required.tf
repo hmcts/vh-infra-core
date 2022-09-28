@@ -562,10 +562,6 @@ locals {
             id   = "14dad69e-099b-42c9-810b-d002981feec1"
             type = "Scope"
           }
-          GroupReadWriteAll = {
-            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
-            type = "Scope"
-          }
         }
       }
     }
@@ -609,10 +605,10 @@ locals {
             id   = "14dad69e-099b-42c9-810b-d002981feec1"
             type = "Scope"
           }
-          GroupReadWriteAll = {
-            id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
-            type = "Scope"
-          }
+          # GroupReadWriteAll = {
+          #   id   = "4e46008b-f24c-477d-8fff-7bb4ec7aafe0"
+          #   type = "Scope"
+          # }
         }
       }
     }
@@ -641,6 +637,14 @@ locals {
           }
           GroupReadWriteAll = {
             id   = "62a82d76-70ea-41e2-9197-370581804d09"
+            type = "Role"
+          }
+          UserReadWrite = {
+            id   = "b4e74841-8e56-480b-be8b-910348b18b4c"
+            type = "Scope"
+          }
+          DirectoryReadWriteAll = {
+            id   = "19dbc75e-c2e2-444c-a770-ec69d8559fc7"
             type = "Role"
           }
         }
@@ -725,10 +729,10 @@ locals {
         ],
         id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
-      "VirtualRoomJudge" = {
+      "Judge" = {
         description = "This user is able to conduct hearings as a judge."
         is_enabled  = true
-        value       = "VirtualRoomJudge"
+        value       = "Judge"
         allowed_member_types = [
           "User",
         ],
@@ -786,10 +790,10 @@ locals {
         id = "9f32ac9e-228c-4919-9f1b-61d8914ccfbe"
       }
 
-      "VirtualRoomJudge" = {
-        description = "This Group for users who are judge or decsion maker."
+      "Judge" = {
+        description = "This user is able to conduct hearings as a judge."
         is_enabled  = true
-        value       = "VirtualRoomJudge"
+        value       = "Judge"
         allowed_member_types = [
           "User",
         ],
@@ -880,5 +884,10 @@ variable "cvp_client_secret" {
 }
 variable "cvp_subscription_id" {
   description = "Client Subscription ID of the CVP SP"
+  type        = string
+}
+
+variable "signalr_custom_domain_name" {
+  description = "Custom Domain Name for SignalR."
   type        = string
 }

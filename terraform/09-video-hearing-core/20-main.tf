@@ -21,6 +21,7 @@ module "KeyVaults" {
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   keyvaults           = local.keyvaults
+  vh_mi_principal_id  = azurerm_user_assigned_identity.vh_mi.principal_id
 
   tags = local.common_tags
 }
@@ -38,6 +39,7 @@ data "azurerm_key_vault" "vh-infra-core-kv" {
     module.KeyVaults
   ]
 }
+
 module "KeyVault_Secrets" {
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = module.KeyVaults.keyvault_id
@@ -71,7 +73,7 @@ module "KeyVault_Secrets" {
     },
     {
       name         = "connectionstrings--signalr"
-      value        = module.SignalR.connection_string
+      value        = replace(module.SignalR.connection_string, "vh-infra-core-${var.environment}.service.signalr.net", var.signalr_custom_domain_name)
       tags         = local.common_tags
       content_type = "secret"
     },
@@ -169,7 +171,7 @@ module "KeyVault_Secrets" {
 }
 
 module "input_Secrets" {
-  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret }
+  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret if secret.key_vault_name != "vh-infra-core" }
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = lookup(module.KeyVaults.keyvault_resource, each.value.key_vault_name).resource_id
   key_vault_name = each.value.key_vault_name
@@ -184,6 +186,29 @@ module "input_Secrets" {
       content_type = "ado_secret"
     }
   ]
+
+  depends_on = [
+    module.KeyVaults
+  ]
+}
+
+module "input_Secrets_infra_core" {
+  for_each       = { for secret in var.kv_secrets : secret.key_vault_name => secret if secret.key_vault_name == "vh-infra-core" }
+  source         = "./modules/KeyVaults/Secrets"
+  key_vault_id   = module.KeyVaults.keyvault_id
+  key_vault_name = each.value.key_vault_name
+
+  secrets = [
+    for secret in each.value.secrets :
+    {
+      name         = secret.name
+      value        = secret.value
+      tags         = local.common_tags
+      content_type = "ado_secret"
+    }
+  ]
+
+  tags = local.common_tags
 
   depends_on = [
     module.KeyVaults
@@ -234,15 +259,34 @@ module "storage" {
 # VH - SignalR
 #--------------------------------------------------------------
 
+data "azurerm_key_vault" "acmekv" {
+  name                = "acmedtssds${var.environment}"
+  resource_group_name = "sds-platform-${var.environment}-rg"
+}
+
+locals {
+  key_vault_cert_name_wildcard = {
+    "prod" = "wildcard-hearings-reform-hmcts-net",
+    "stg"  = "wildcard-staging-hearings-reform-hmcts-net"
+  }
+}
+
 module "SignalR" {
-  source      = "./modules/SignalR"
-  environment = var.environment
+  source = "./modules/SignalR"
 
-  resource_prefix     = "${local.std_prefix}${local.suffix}"
+  name                = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
-  location            = azurerm_resource_group.vh-infra-core.location
+  managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
+  custom_domain_name  = var.signalr_custom_domain_name
+  key_vault_cert_name = var.environment == "stg" || var.environment == "prod" ? lookup(local.key_vault_cert_name_wildcard, var.environment) : "wildcard-${var.environment}-platform-hmcts-net"
+  key_vault_uri       = data.azurerm_key_vault.acmekv.vault_uri
+  tags                = local.common_tags
+}
 
-  tags = local.common_tags
+resource "azurerm_role_assignment" "acmmekv_access_policy" {
+  role_definition_name = "Key Vault Secrets User"
+  scope                = data.azurerm_key_vault.acmekv.id
+  principal_id         = azurerm_user_assigned_identity.vh_mi.principal_id
 }
 
 #--------------------------------------------------------------
@@ -416,20 +460,7 @@ module "vh_endpoint" {
       private_dns_zone_id = data.azurerm_private_dns_zone.signalr.id
     }
   }
-
   tags = local.common_tags
-}
-
-resource "azurerm_private_dns_a_record" "endpoint-dns" {
-
-  provider = azurerm.private-endpoint-dns
-  for_each = module.vh_endpoint.endpoint_resource
-
-  name                = lower(format("%s-%s", "vh-infra-core", var.environment))
-  zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
-  resource_group_name = local.dns_zone_resource_group_name
-  ttl                 = 3600
-  records             = [lookup(each.value, "resource_ip")]
 }
 
 module "vh_kv_endpoint" {
@@ -462,4 +493,15 @@ resource "azurerm_private_dns_a_record" "kv-dns" {
   resource_group_name = local.dns_zone_resource_group_name
   ttl                 = 3600
   records             = [lookup(each.value, "resource_ip")]
+}
+
+data "azurerm_resource_group" "managed-identities-rg" {
+  name = "managed-identities-${var.environment}-rg"
+}
+
+resource "azurerm_user_assigned_identity" "vh_mi" {
+  name                = "vh-${var.environment}-mi"
+  resource_group_name = data.azurerm_resource_group.managed-identities-rg.name
+  location            = data.azurerm_resource_group.managed-identities-rg.location
+  tags                = local.common_tags
 }

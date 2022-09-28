@@ -48,7 +48,6 @@ steps:
       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
-
   - task: AzureCLI@2
     displayName: 'GlobalNetworkPeering SC Details'
     name: GlobalNetworkPeering
@@ -66,7 +65,6 @@ steps:
         $subscriptionId = az account show --query id -o tsv
         Write-Host "##vso[task.setvariable variable=GNP_SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
         Write-Host "Subscription ID: $subscriptionId"
-
   - ${{ if eq(parameters.activity_name, 'Video_Hearing_Core') }}:      
     - task: AzureCLI@2
       displayName: 'CVP SC Details'
@@ -88,7 +86,6 @@ steps:
           $subscriptionId = az account show --query id -o tsv
           Write-Host "##vso[task.setvariable variable=SUBSCRIPTION_ID;isOutput=true]$subscriptionId"
           Write-Host "Subscription ID: $subscriptionId"
-
   - ${{ if eq(parameters.activity_name, 'Video_Hearing_Wowza') }}:
     - template: templates\Azure\Vm\approve-terms.yaml@templates
       parameters:

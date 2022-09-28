@@ -1,7 +1,6 @@
 locals {
   cert_env            = var.environment == "prod" ? "" : "${var.environment}-"
   wowza_domain        = "vh-wowza.${local.private_dns_zone}"
-  wowza_public_domain = "vh-wowza-public.${local.private_dns_zone}"
 }
 
 resource "random_password" "certPassword" {
@@ -22,6 +21,8 @@ resource "random_password" "streamPassword" {
   override_special = "_%*"
 }
 
+
+
 data "template_file" "cloudconfig" {
   template = file(var.cloud_init_file)
   vars = {
@@ -35,6 +36,9 @@ data "template_file" "cloudconfig" {
     certName                = "wildcard-${local.cert_env}platform-hmcts-net"
     keyVaultName            = data.azurerm_key_vault.acmekv.name
     domain                  = local.wowza_domain
+    project                 = "VH"
+    dynatrace_tenant        = var.dynatrace_tenant
+    dynatrace_token         = var.dynatrace_token
   }
 }
 
