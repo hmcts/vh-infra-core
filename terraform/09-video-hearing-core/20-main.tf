@@ -463,17 +463,17 @@ module "vh_endpoint" {
   tags = local.common_tags
 }
 
-resource "azurerm_private_dns_a_record" "endpoint-dns" {
+# resource "azurerm_private_dns_a_record" "endpoint-dns" {
 
-  provider = azurerm.private-endpoint-dns
-  for_each = module.vh_endpoint.endpoint_resource
+#   provider = azurerm.private-endpoint-dns
+#   for_each = module.vh_endpoint.endpoint_resource
 
-  name                = lower(format("%s-%s", "vh-infra-core", var.environment))
-  zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
-  resource_group_name = local.dns_zone_resource_group_name
-  ttl                 = 3600
-  records             = [lookup(each.value, "resource_ip")]
-}
+#   name                = lower(format("%s-%s", "vh-infra-core", var.environment))
+#   zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
+#   resource_group_name = local.dns_zone_resource_group_name
+#   ttl                 = 3600
+#   records             = [lookup(each.value, "resource_ip")]
+# }
 
 module "vh_kv_endpoint" {
 
