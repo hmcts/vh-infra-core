@@ -112,5 +112,3 @@ resource "azurerm_network_security_group" "wowza" {
     azurerm_linux_virtual_machine.wowza
   ]
 }
-
-
