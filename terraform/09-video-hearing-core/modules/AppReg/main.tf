@@ -153,7 +153,7 @@ resource "azuread_application" "app_reg" {
 
   lifecycle {
     ignore_changes = [
-     single_page_application 
+      single_page_application
     ]
   }
 }

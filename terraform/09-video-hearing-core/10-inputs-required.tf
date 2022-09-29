@@ -891,3 +891,21 @@ variable "signalr_custom_domain_name" {
   description = "Custom Domain Name for SignalR."
   type        = string
 }
+
+## Monitoring
+variable "emails_kinly" {
+  description = "CSV of Kinly Email Addresses"
+  type        = string
+  default     = ""
+}
+variable "emails_dev" {
+  description = "CSV of Developer Email Addresses"
+  type        = string
+  default     = ""
+}
+variable "emails_devops" {
+  description = "CSV of DevOps Email Addresses"
+  type        = string
+  default     = ""
+}
+
