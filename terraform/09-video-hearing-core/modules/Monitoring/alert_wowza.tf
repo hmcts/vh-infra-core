@@ -21,7 +21,6 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "wowza_reconcile" {
     time_aggregation_method = "Count"
     threshold               = 0
     operator                = "GreaterThan"
-    metric_measure_column   = "message"
 
     failing_periods {
       minimum_failing_periods_to_trigger_alert = 1
