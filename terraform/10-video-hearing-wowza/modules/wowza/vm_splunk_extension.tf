@@ -10,7 +10,7 @@ resource "random_password" "splunk_admin_password" {
 
 
 module "splunk-uf" {
-  for_each = azurerm_linux_virtual_machine.wowza
+  for_each = toset(azurerm_linux_virtual_machine.wowza)
 
   source = "git::https://github.com/hmcts/terraform-module-splunk-universal-forwarder.git?ref=master"
 
