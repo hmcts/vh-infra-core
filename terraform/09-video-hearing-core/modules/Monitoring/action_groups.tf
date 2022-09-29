@@ -5,7 +5,7 @@ resource "azurerm_monitor_action_group" "this" {
 
   name                = "Vh-Action-Group-${each.key}-${var.env}"
   resource_group_name = var.resource_group_name
-  short_name          = "vh${var.env}${each.key}action"
+  short_name          = "vh${var.env}${each.key}"
 
   dynamic "email_receiver" {
     for_each = each.value.emails
