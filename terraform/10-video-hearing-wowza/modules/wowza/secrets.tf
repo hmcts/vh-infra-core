@@ -22,6 +22,8 @@ locals {
     "streamPassword"            = random_password.streamPassword.result,
     "username"                  = var.admin_user
     "wowza-storage-directory"   = "$${com.wowza.wms.context.VHostConfigHome}/content/"
+    "Splunk-admin"              = local.splunk_admin_username
+    "Splunk-password"           = random_password.splunk_admin_password.result
   }
 }
 
