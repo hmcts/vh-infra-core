@@ -18,8 +18,8 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "wowza_reconcile" {
         | where cloud_RoleName contains "vh-scheduler-jobs"
         | order by timestamp asc
       QUERY
-    time_aggregation_method = "Total"
-    threshold               = 6
+    time_aggregation_method = "Count"
+    threshold               = 0
     operator                = "GreaterThan"
     metric_measure_column   = "message"
 
@@ -62,9 +62,10 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_missing" {
     | where message contains "should not continue without a recording. "
   QUERY
 
-  severity    = 2
-  frequency   = 5
-  time_window = 5
+  severity                = 3
+  frequency               = 5
+  time_window             = 5
+  auto_mitigation_enabled = true
 
   trigger {
     operator  = "GreaterThan"
