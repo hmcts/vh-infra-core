@@ -332,11 +332,12 @@ module "AppReg" {
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   environment         = var.environment
 
-  app_conf          = local.app_conf
-  app_roles         = local.app_roles
-  api_permissions   = local.api_permissions
-  api_scopes        = local.api_scopes
-  app_keyvaults_map = module.KeyVaults.app_keyvaults_out
+  app_conf            = local.app_conf
+  app_roles           = local.app_roles
+  api_permissions     = local.api_permissions
+  api_scopes          = local.api_scopes
+  app_keyvaults_map   = module.KeyVaults.app_keyvaults_out
+  app_directory_roles = local.app_directory_roles
 
   depends_on = [
     azurerm_resource_group.vh-infra-core,
