@@ -1,4 +1,13 @@
 locals {
+  app_directory_roles = flatten([
+    for app, roles in var.app_directory_roles : [
+      for role in roles : {
+        app    = app
+        role   = role
+      }
+    ] if roles != []
+  ])
+
   scope_list = flatten([
     for scope_key, scopes in var.api_scopes : [
       for scope in scopes :
@@ -314,14 +323,7 @@ resource "azuread_app_role_assignment" "groups" {
 data "azuread_client_config" "current" {}
 
 locals {
-  app_directory_roles = flatten([
-    for app, roles in var.app_directory_roles : [
-      for role in roles : {
-        app    = app
-        role   = role
-      }
-    ] if roles != []
-  ])
+
 }
 
 data "azuread_service_principal" "vh_service_principal" {
