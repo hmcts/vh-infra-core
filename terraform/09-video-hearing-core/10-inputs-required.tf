@@ -820,10 +820,10 @@ locals {
 
   app_directory_roles = {
     "vh-notification-api" = []
-    "vh-test-api"         = ["9b895d92-2cd3-44c7-9d02-a6ac2d5ea5c3"]
+    "vh-test-api"         = []
     "vh-video-api"        = []
     "vh-bookings-api"     = []
-    "vh-user-api"         = ["729827e3-9c14-49f7-bb1b-9608f156bbb8", "9b895d92-2cd3-44c7-9d02-a6ac2d5ea5c3"] # Helpdesk Admins
+    "vh-user-api"         = ["729827e3-9c14-49f7-bb1b-9608f156bbb8"] # Helpdesk Admins
     "vh-booking-queue"    = []
     "vh-scheduler-jobs"   = []
   }
