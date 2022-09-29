@@ -329,7 +329,7 @@ data "azuread_service_principal" "vh_service_principal" {
 
 resource "azuread_directory_role_assignment" "app_directory_roles" {
   for_each = {
-    for r in local.app_directory_roles : "${r.app}.${r.role}}" => r
+    for r in local.app_directory_roles : "${r.app}.${r.role}" => r
   }
   role_id             = each.value.role
   principal_object_id = data.azuread_service_principal.vh_service_principal[each.value.app].object_id
