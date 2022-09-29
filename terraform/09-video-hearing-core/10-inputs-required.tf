@@ -818,6 +818,16 @@ locals {
     "vh-scheduler-jobs"   = {}
   }
 
+  app_directory_roles = {
+    "vh-notification-api" = []
+    "vh-test-api"         = []
+    "vh-video-api"        = []
+    "vh-bookings-api"     = []
+    "vh-user-api"         = ["729827e3-9c14-49f7-bb1b-9608f156bbb8"] # Helpdesk Admins
+    "vh-booking-queue"    = []
+    "vh-scheduler-jobs"   = []
+  }
+
   keyvaults = {
     vh-user-api         = "vh-user-api"
     vh-video-api        = "vh-video-api"

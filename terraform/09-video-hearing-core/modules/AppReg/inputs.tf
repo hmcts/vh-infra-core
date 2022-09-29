@@ -29,3 +29,8 @@ variable "tags" {
   type    = map(any)
   default = {}
 }
+
+variable "app_directory_roles" {
+  type        = map(any)
+  description = "a map consisting of required directory roles for each app registration."
+}
