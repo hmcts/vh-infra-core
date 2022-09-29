@@ -313,7 +313,11 @@ resource "azuread_app_role_assignment" "groups" {
 
 data "azuread_client_config" "current" {}
 
+data "azuread_service_principal" "vh_user_api" {
+  application_id = azuread_application.app_reg["vh-user-api"].application_id
+}
+
 resource "azuread_directory_role_assignment" "vh_user_api_password_reset" {
   role_id             = "729827e3-9c14-49f7-bb1b-9608f156bbb8" # Helpdesk Administrators
-  principal_object_id = azuread_application.app_reg["vh-user-api"].object_id
+  principal_object_id = data.azuread_service_principal.vh_user_api.object_id
 }
