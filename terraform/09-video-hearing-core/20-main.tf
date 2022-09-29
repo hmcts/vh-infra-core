@@ -73,7 +73,7 @@ module "KeyVault_Secrets" {
     },
     {
       name         = "connectionstrings--signalr"
-      value        = module.SignalR.connection_string
+      value        = replace(module.SignalR.connection_string, "vh-infra-core-${var.environment}.service.signalr.net", var.signalr_custom_domain_name)
       tags         = local.common_tags
       content_type = "secret"
     },
@@ -474,20 +474,7 @@ module "vh_endpoint" {
       private_dns_zone_id = data.azurerm_private_dns_zone.signalr.id
     }
   }
-
   tags = local.common_tags
-}
-
-resource "azurerm_private_dns_a_record" "endpoint-dns" {
-
-  provider = azurerm.private-endpoint-dns
-  for_each = module.vh_endpoint.endpoint_resource
-
-  name                = lower(format("%s-%s", "vh-infra-core", var.environment))
-  zone_name           = lookup(local.dns_zone_mapping, (lookup(each.value, "resource_type")))
-  resource_group_name = local.dns_zone_resource_group_name
-  ttl                 = 3600
-  records             = [lookup(each.value, "resource_ip")]
 }
 
 module "vh_kv_endpoint" {
