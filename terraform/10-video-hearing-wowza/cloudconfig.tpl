@@ -100,10 +100,10 @@ write_files:
                               -->
                       </VHostListeners>
                       <HandlerThreadPool>
-                              <PoolSize>$${com.wowza.wms.TuningAuto}</PoolSize>
+                              <PoolSize>1024</PoolSize>
                       </HandlerThreadPool>
                       <TransportThreadPool>
-                              <PoolSize>$${com.wowza.wms.TuningAuto}</PoolSize>
+                              <PoolSize>1024</PoolSize>
                       </TransportThreadPool>
                       <RTP>
                               <DatagramStartingPort>6970</DatagramStartingPort>
