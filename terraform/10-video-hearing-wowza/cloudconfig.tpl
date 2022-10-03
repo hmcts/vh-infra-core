@@ -569,19 +569,19 @@ write_files:
                         <StreamRecorder>
                                 <Properties>
                                         <Property>
-                                                                                <Name>streamRecorderFileVersionTemplate</Name>
-                                                                <Value>$${SourceStreamName}_$${RecordingStartTime}_$${SegmentNumber}</Value>
-                                                                                <Type>String</Type>
-                                                                </Property>
-                                                                <Property>
-                                                                                <Name>streamRecorderSegmentationType</Name>
-                                                                                <Value>duration</Value>
-                                                                                <Type>String</Type>
-                                                                </Property>
-                                                                <Property>
-                                                                                <Name>streamRecorderSegmentDuration</Name>
-                                                                                <Value>20000000</Value>
-                                                                                <Type>long</Type>
+                                                <Name>streamRecorderFileVersionTemplate</Name>
+                                                <Value>$${SourceStreamName}_$${RecordingStartTime}_$${SegmentNumber}</Value>
+                                                <Type>String</Type>
+                                        </Property>
+                                        <Property>
+                                                        <Name>streamRecorderSegmentationType</Name>
+                                                        <Value>duration</Value>
+                                                        <Type>String</Type>
+                                        </Property>
+                                        <Property>
+                                                        <Name>streamRecorderSegmentDuration</Name>
+                                                        <Value>20000000</Value>
+                                                        <Type>long</Type>
                                         </Property>
                                 </Properties>
                         </StreamRecorder>
