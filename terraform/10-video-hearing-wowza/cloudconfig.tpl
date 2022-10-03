@@ -569,6 +569,11 @@ write_files:
                         <StreamRecorder>
                                 <Properties>
                                         <Property>
+                                                <Name>streamRecorderFileVersionDelegate</Name>
+                                                <Value>LiveStreamRecordFileVersionDelegate</Value>
+                                                <Type>String</Type>
+                                        </Property>
+                                        <Property>
                                                 <Name>streamRecorderFileVersionTemplate</Name>
                                                 <Value>$${SourceStreamName}_$${RecordingStartTime}_$${SegmentNumber}</Value>
                                                 <Type>String</Type>
