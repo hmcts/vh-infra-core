@@ -106,18 +106,6 @@ resource "azurerm_network_security_group" "wowza" {
     destination_address_prefix = var.address_space
   }
 
-  security_rule {
-    name                       = "Allow-Splunk-Outbound"
-    priority                   = 1060
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_address_prefix      = var.address_space
-    source_port_range          = "*"
-    destination_port_ranges    = ["8089", "9997"]
-    destination_address_prefix = "*"
-  }
-
   tags = var.tags
 
   depends_on = [
