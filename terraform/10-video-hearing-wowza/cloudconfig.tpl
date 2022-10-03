@@ -260,9 +260,9 @@ write_files:
                               <IdleFrequency>250</IdleFrequency>
                               <SocketConfiguration>
                                       <ReuseAddress>true</ReuseAddress>
-                                      <ReceiveBufferSize>65000</ReceiveBufferSize>
+                                      <ReceiveBufferSize>0</ReceiveBufferSize>
                                       <ReadBufferSize>65000</ReadBufferSize>
-                                      <SendBufferSize>65000</SendBufferSize>
+                                      <SendBufferSize>0</SendBufferSize>
                                       <KeepAlive>true</KeepAlive>
                                       <!-- <TrafficClass>0</TrafficClass> -->
                                       <!-- <OobInline>false</OobInline> -->
