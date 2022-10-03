@@ -382,7 +382,7 @@ write_files:
         <Root version="1">
                 <Application>
                         <Name></Name>
-                        <AppType></AppType>
+                        <AppType>Live</AppType>
                         <Description></Description>
                         <!-- Uncomment to set application level timeout values
                         <ApplicationTimeout>60000</ApplicationTimeout>
