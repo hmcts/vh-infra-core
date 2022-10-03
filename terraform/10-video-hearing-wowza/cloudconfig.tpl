@@ -158,7 +158,7 @@ write_files:
                                               <KeepAlive>true</KeepAlive>
                                               <AcceptorBackLog>100</AcceptorBackLog>
                                       </SocketConfiguration>
-                                      <HTTPStreamerAdapterIDs>cupertinostreaming,smoothstreaming,sanjosestreaming,dvrchunkstreaming,mpegdashstreaming</HTTPStreamerAdapterIDs>
+                                      <HTTPStreamerAdapterIDs></HTTPStreamerAdapterIDs>
                                       <HTTPProviders>
                                               <HTTPProvider>
                                                       <BaseClass>com.wowza.wms.http.HTTPCrossdomain</BaseClass>
