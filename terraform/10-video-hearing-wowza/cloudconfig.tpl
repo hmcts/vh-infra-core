@@ -135,7 +135,7 @@ write_files:
                               <HostPort>
                                       <Name>Default SSL Streaming</Name>
                                       <Type>Streaming</Type>
-                                      <ProcessorCount>$${com.wowza.wms.TuningAuto}</ProcessorCount>
+                                      <ProcessorCount>256</ProcessorCount>
                                       <IpAddress>*</IpAddress>
                                       <Port>443</Port>
                                       <HTTPIdent2Response></HTTPIdent2Response>
