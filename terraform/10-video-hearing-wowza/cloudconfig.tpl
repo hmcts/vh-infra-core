@@ -242,50 +242,7 @@ write_files:
                                       </HTTPProviders>
                               </HostPort>
                       </HostPortList>
-                      <HTTPStreamerAdapters>
-                              <HTTPStreamerAdapter>
-                                      <ID>smoothstreaming</ID>
-                                      <Name>smoothstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>cupertinostreaming</ID>
-                                      <Name>cupertinostreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>sanjosestreaming</ID>
-                                      <Name>sanjosestreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>dvrchunkstreaming</ID>
-                                      <Name>dvrchunkstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>mpegdashstreaming</ID>
-                                      <Name>mpegdashstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>tsstreaming</ID>
-                                      <Name>tsstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>webmstreaming</ID>
-                                      <Name>webmstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                      </HTTPStreamerAdapters>
+                      <HTTPStreamerAdapters></HTTPStreamerAdapters>
                       <!-- When set to zero, thread pool configuration is done in Server.xml -->
                       <HandlerThreadPool>
                               <PoolSize>0</PoolSize>
