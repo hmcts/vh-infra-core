@@ -458,7 +458,7 @@ write_files:
 
                         <TimedText>
                                 <!-- VOD caption providers (separate with commas): vodcaptionprovidermp4_3gpp, vodcaptionproviderttml, vodcaptionproviderwebvtt,  vodcaptionprovidersrt, vodcaptionproviderscc -->
-                                <VODTimedTextProviders>vodcaptionprovidermp4_3gpp</VODTimedTextProviders>
+                                <VODTimedTextProviders></VODTimedTextProviders>
 
                                 <!-- Properties for TimedText -->
                                 <Properties>
