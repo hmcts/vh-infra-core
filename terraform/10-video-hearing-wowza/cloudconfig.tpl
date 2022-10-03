@@ -607,6 +607,11 @@ write_files:
                                         <Class>com.wowza.wms.module.ModuleFLVPlayback</Class>
                                 </Module>
                                 <Module>
+                                        <Name>ModuleCoreSecurity</Name>
+                                        <Description>Core Security Module for Applications</Description>
+                                        <Class>com.wowza.wms.security.ModuleCoreSecurity</Class>
+                                </Module>
+                                <Module>
                                         <Name>ModuleAutoRecord</Name>
                                         <Description>Auto-record streams that are published to this application instance.</Description>
                                         <Class>com.wowza.wms.plugin.ModuleAutoRecord</Class>
@@ -619,6 +624,16 @@ write_files:
                         </Modules>
                         <!-- Properties defined here will be added to the IApplication.getProperties() and IApplicationInstance.getProperties() collections -->
                         <Properties>
+                                <Property>
+                                        <Name>securityPublishRequirePassword</Name>
+                                        <Value>false</Value>
+                                        <Type>Boolean</Type>
+                                </Property>
+                                <Property>
+                                        <Name>securityPublishBlockDuplicateStreamNames</Name>
+                                        <Value>true</Value>
+                                        <Type>Boolean</Type>
+                                </Property>
                                 <Property>
                                         <Name>fileMoverDestinationPath</Name>
                                         <Value>/wowzadata/azurecopy</Value>
