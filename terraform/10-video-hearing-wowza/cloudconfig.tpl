@@ -100,10 +100,10 @@ write_files:
                               -->
                       </VHostListeners>
                       <HandlerThreadPool>
-                              <PoolSize>$${com.wowza.wms.TuningAuto}</PoolSize>
+                              <PoolSize>1024</PoolSize>
                       </HandlerThreadPool>
                       <TransportThreadPool>
-                              <PoolSize>$${com.wowza.wms.TuningAuto}</PoolSize>
+                              <PoolSize>1024</PoolSize>
                       </TransportThreadPool>
                       <RTP>
                               <DatagramStartingPort>6970</DatagramStartingPort>
@@ -135,7 +135,7 @@ write_files:
                               <HostPort>
                                       <Name>Default SSL Streaming</Name>
                                       <Type>Streaming</Type>
-                                      <ProcessorCount>$${com.wowza.wms.TuningAuto}</ProcessorCount>
+                                      <ProcessorCount>256</ProcessorCount>
                                       <IpAddress>*</IpAddress>
                                       <Port>443</Port>
                                       <HTTPIdent2Response></HTTPIdent2Response>
@@ -152,13 +152,13 @@ write_files:
                                       </SSLConfig>
                                       <SocketConfiguration>
                                               <ReuseAddress>true</ReuseAddress>
-                                              <ReceiveBufferSize>65000</ReceiveBufferSize>
+                                              <ReceiveBufferSize>0</ReceiveBufferSize>
                                               <ReadBufferSize>65000</ReadBufferSize>
-                                              <SendBufferSize>65000</SendBufferSize>
+                                              <SendBufferSize>0</SendBufferSize>
                                               <KeepAlive>true</KeepAlive>
                                               <AcceptorBackLog>100</AcceptorBackLog>
                                       </SocketConfiguration>
-                                      <HTTPStreamerAdapterIDs>cupertinostreaming,smoothstreaming,sanjosestreaming,dvrchunkstreaming,mpegdashstreaming</HTTPStreamerAdapterIDs>
+                                      <HTTPStreamerAdapterIDs></HTTPStreamerAdapterIDs>
                                       <HTTPProviders>
                                               <HTTPProvider>
                                                       <BaseClass>com.wowza.wms.http.HTTPCrossdomain</BaseClass>
@@ -242,50 +242,7 @@ write_files:
                                       </HTTPProviders>
                               </HostPort>
                       </HostPortList>
-                      <HTTPStreamerAdapters>
-                              <HTTPStreamerAdapter>
-                                      <ID>smoothstreaming</ID>
-                                      <Name>smoothstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>cupertinostreaming</ID>
-                                      <Name>cupertinostreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>sanjosestreaming</ID>
-                                      <Name>sanjosestreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>dvrchunkstreaming</ID>
-                                      <Name>dvrchunkstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>mpegdashstreaming</ID>
-                                      <Name>mpegdashstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>tsstreaming</ID>
-                                      <Name>tsstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                              <HTTPStreamerAdapter>
-                                      <ID>webmstreaming</ID>
-                                      <Name>webmstreaming</Name>
-                                      <Properties>
-                                      </Properties>
-                              </HTTPStreamerAdapter>
-                      </HTTPStreamerAdapters>
+                      <HTTPStreamerAdapters></HTTPStreamerAdapters>
                       <!-- When set to zero, thread pool configuration is done in Server.xml -->
                       <HandlerThreadPool>
                               <PoolSize>0</PoolSize>
@@ -303,9 +260,9 @@ write_files:
                               <IdleFrequency>250</IdleFrequency>
                               <SocketConfiguration>
                                       <ReuseAddress>true</ReuseAddress>
-                                      <ReceiveBufferSize>65000</ReceiveBufferSize>
+                                      <ReceiveBufferSize>0</ReceiveBufferSize>
                                       <ReadBufferSize>65000</ReadBufferSize>
-                                      <SendBufferSize>65000</SendBufferSize>
+                                      <SendBufferSize>0</SendBufferSize>
                                       <KeepAlive>true</KeepAlive>
                                       <!-- <TrafficClass>0</TrafficClass> -->
                                       <!-- <OobInline>false</OobInline> -->
@@ -425,7 +382,7 @@ write_files:
         <Root version="1">
                 <Application>
                         <Name></Name>
-                        <AppType></AppType>
+                        <AppType>live</AppType>
                         <Description></Description>
                         <!-- Uncomment to set application level timeout values
                         <ApplicationTimeout>60000</ApplicationTimeout>
@@ -451,7 +408,7 @@ write_files:
 
                         -->
                         <Streams>
-                                <StreamType>default</StreamType>
+                                <StreamType>live</StreamType>
                                 <StorageDir>$${com.wowza.wms.context.VHostConfigHome}/content</StorageDir>
                                 <KeyDir>$${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
                                 <!-- LiveStreamPacketizers (separate with commas): cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer, mpegdashstreamingpacketizer, cupertinostreamingrepeater, smoothstreamingrepeater, sanjosestreamingrepeater, mpegdashstreamingrepeater, dvrstreamingpacketizer, dvrstreamingrepeater -->
@@ -501,7 +458,7 @@ write_files:
 
                         <TimedText>
                                 <!-- VOD caption providers (separate with commas): vodcaptionprovidermp4_3gpp, vodcaptionproviderttml, vodcaptionproviderwebvtt,  vodcaptionprovidersrt, vodcaptionproviderscc -->
-                                <VODTimedTextProviders>vodcaptionprovidermp4_3gpp</VODTimedTextProviders>
+                                <VODTimedTextProviders></VODTimedTextProviders>
 
                                 <!-- Properties for TimedText -->
                                 <Properties>
@@ -520,7 +477,7 @@ write_files:
                                 <IdleFrequency>-1</IdleFrequency>
                                 <Access>
                                         <StreamReadAccess>*</StreamReadAccess>
-                                        <StreamWriteAccess></StreamWriteAccess>
+                                        <StreamWriteAccess>*</StreamWriteAccess>
                                         <StreamAudioSampleAccess></StreamAudioSampleAccess>
                                         <StreamVideoSampleAccess></StreamVideoSampleAccess>
                                         <SharedObjectReadAccess>*</SharedObjectReadAccess>
@@ -547,29 +504,6 @@ write_files:
                                 <Properties>
                                 </Properties>
                         </RTP>
-                        <WebRTC>
-                                <!--  Enable WebRTC publishing to this application -->
-                                <EnablePublish>false</EnablePublish>
-                                <!-- Enable WebRTC playback from this application -->
-                                <EnablePlay>false</EnablePlay>
-                                <!--  Enable query of published stream names for this application -->
-                                <EnableQuery>false</EnableQuery>
-                                <!--  IP address, transport, and port used for WebRTC streaming. -->
-                                <!--TCP format: [wowza-streaming-engine-external-ip-address],tcp,[port] -->
-                                <!--UDP format: [wowza-streaming-engine-external-ip-address],udp -->
-                                <IceCandidateIpAddresses>127.0.0.1,tcp,1935</IceCandidateIpAddresses>
-                                <!-- Local IP address of the network card you want to use for WebRTC UDP traffic -->
-                                <UDPBindAddress></UDPBindAddress>
-                                <!-- Comma-deliniated list of audio codecs, in order of preference, for stream ingestion -->
-                                <PreferredCodecsAudio>opus,vorbis,pcmu,pcma</PreferredCodecsAudio>
-                                <!-- Comma-deliniated list of video codecs, in order of preference, for stream ingestion -->
-                                <PreferredCodecsVideo>vp8,h264</PreferredCodecsVideo>
-                                <!-- Enable WebRTC debug logging -->
-                                <DebugLog>false</DebugLog>
-                                <!-- Properties for WebRTC -->
-                                <Properties>
-                                </Properties>
-                        </WebRTC>
                         <MediaCaster>
                                 <RTP>
                                         <RTSP>
@@ -635,19 +569,24 @@ write_files:
                         <StreamRecorder>
                                 <Properties>
                                         <Property>
-                                                                                <Name>streamRecorderFileVersionTemplate</Name>
-                                                                <Value>$${SourceStreamName}_$${RecordingStartTime}_$${SegmentNumber}</Value>
-                                                                                <Type>String</Type>
-                                                                </Property>
-                                                                <Property>
-                                                                                <Name>streamRecorderSegmentationType</Name>
-                                                                                <Value>duration</Value>
-                                                                                <Type>String</Type>
-                                                                </Property>
-                                                                <Property>
-                                                                                <Name>streamRecorderSegmentDuration</Name>
-                                                                                <Value>20000000</Value>
-                                                                                <Type>long</Type>
+                                                <Name>streamRecorderFileVersionDelegate</Name>
+                                                <Value>LiveStreamRecordFileVersionDelegate</Value>
+                                                <Type>String</Type>
+                                        </Property>
+                                        <Property>
+                                                <Name>streamRecorderFileVersionTemplate</Name>
+                                                <Value>$${SourceStreamName}_$${RecordingStartTime}_$${SegmentNumber}</Value>
+                                                <Type>String</Type>
+                                        </Property>
+                                        <Property>
+                                                <Name>streamRecorderSegmentationType</Name>
+                                                <Value>duration</Value>
+                                                <Type>String</Type>
+                                        </Property>
+                                        <Property>
+                                                <Name>streamRecorderSegmentDuration</Name>
+                                                <Value>20000000</Value>
+                                                <Type>long</Type>
                                         </Property>
                                 </Properties>
                         </StreamRecorder>
@@ -668,6 +607,11 @@ write_files:
                                         <Class>com.wowza.wms.module.ModuleFLVPlayback</Class>
                                 </Module>
                                 <Module>
+                                        <Name>ModuleCoreSecurity</Name>
+                                        <Description>Core Security Module for Applications</Description>
+                                        <Class>com.wowza.wms.security.ModuleCoreSecurity</Class>
+                                </Module>
+                                <Module>
                                         <Name>ModuleAutoRecord</Name>
                                         <Description>Auto-record streams that are published to this application instance.</Description>
                                         <Class>com.wowza.wms.plugin.ModuleAutoRecord</Class>
@@ -680,6 +624,16 @@ write_files:
                         </Modules>
                         <!-- Properties defined here will be added to the IApplication.getProperties() and IApplicationInstance.getProperties() collections -->
                         <Properties>
+                                <Property>
+                                        <Name>securityPublishRequirePassword</Name>
+                                        <Value>false</Value>
+                                        <Type>Boolean</Type>
+                                </Property>
+                                <Property>
+                                        <Name>securityPublishBlockDuplicateStreamNames</Name>
+                                        <Value>true</Value>
+                                        <Type>Boolean</Type>
+                                </Property>
                                 <Property>
                                         <Name>fileMoverDestinationPath</Name>
                                         <Value>/wowzadata/azurecopy</Value>
