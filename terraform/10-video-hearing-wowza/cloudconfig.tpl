@@ -152,9 +152,9 @@ write_files:
                                       </SSLConfig>
                                       <SocketConfiguration>
                                               <ReuseAddress>true</ReuseAddress>
-                                              <ReceiveBufferSize>65000</ReceiveBufferSize>
+                                              <ReceiveBufferSize>0</ReceiveBufferSize>
                                               <ReadBufferSize>65000</ReadBufferSize>
-                                              <SendBufferSize>65000</SendBufferSize>
+                                              <SendBufferSize>0</SendBufferSize>
                                               <KeepAlive>true</KeepAlive>
                                               <AcceptorBackLog>100</AcceptorBackLog>
                                       </SocketConfiguration>
