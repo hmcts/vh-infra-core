@@ -382,7 +382,7 @@ write_files:
         <Root version="1">
                 <Application>
                         <Name></Name>
-                        <AppType>Live</AppType>
+                        <AppType>live</AppType>
                         <Description></Description>
                         <!-- Uncomment to set application level timeout values
                         <ApplicationTimeout>60000</ApplicationTimeout>
@@ -408,7 +408,7 @@ write_files:
 
                         -->
                         <Streams>
-                                <StreamType>default</StreamType>
+                                <StreamType>live</StreamType>
                                 <StorageDir>$${com.wowza.wms.context.VHostConfigHome}/content</StorageDir>
                                 <KeyDir>$${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
                                 <!-- LiveStreamPacketizers (separate with commas): cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer, mpegdashstreamingpacketizer, cupertinostreamingrepeater, smoothstreamingrepeater, sanjosestreamingrepeater, mpegdashstreamingrepeater, dvrstreamingpacketizer, dvrstreamingrepeater -->
