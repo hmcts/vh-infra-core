@@ -477,7 +477,7 @@ write_files:
                                 <IdleFrequency>-1</IdleFrequency>
                                 <Access>
                                         <StreamReadAccess>*</StreamReadAccess>
-                                        <StreamWriteAccess></StreamWriteAccess>
+                                        <StreamWriteAccess>*</StreamWriteAccess>
                                         <StreamAudioSampleAccess></StreamAudioSampleAccess>
                                         <StreamVideoSampleAccess></StreamVideoSampleAccess>
                                         <SharedObjectReadAccess>*</SharedObjectReadAccess>
