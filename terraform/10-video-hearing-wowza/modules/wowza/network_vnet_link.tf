@@ -32,6 +32,7 @@ data "azurerm_private_dns_zone" "platform" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "platform" {
+  count    = var.environment == "prod" ? 0 : 1
   provider = azurerm.private-endpoint-dns
 
   name                  = "${azurerm_virtual_network.wowza.name}-link"
