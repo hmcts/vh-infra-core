@@ -4,6 +4,7 @@ parameters:
 
 variables:
   - group: vh-key-vault-vars
+  - group: vh-user-api
   - group: vh-admin-web
   - group: vh-test-users
   - group: Saucelabs
