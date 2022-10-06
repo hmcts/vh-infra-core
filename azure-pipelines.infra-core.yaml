@@ -34,12 +34,10 @@ parameters:
     default:
     - name: Dev
       dependsOnEnv: ""
-    - name: Demo
-      dependsOnEnv: ""
     - name: Stg
-      dependsOnEnv: "Demo"
+      dependsOnEnv: "Dev"
     - name: Test
-      dependsOnEnv: "Demo"
+      dependsOnEnv: "Dev"
     - name: Prod
       dependsOnEnv: "Stg"
 
