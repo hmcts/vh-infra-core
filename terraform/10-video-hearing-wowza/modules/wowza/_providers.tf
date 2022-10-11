@@ -69,3 +69,9 @@ provider "azurerm" {
   subscription_id            = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
 }
 
+provider "azurerm" {
+  alias = "control"
+  features {}
+  subscription_id = "04d27a32-7a07-48b3-95b8-3c8691e1a263"
+}
+

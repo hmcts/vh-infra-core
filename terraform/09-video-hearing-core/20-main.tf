@@ -260,8 +260,9 @@ module "storage" {
 #--------------------------------------------------------------
 
 data "azurerm_key_vault" "acmekv" {
+  provider            = azurerm.control
   name                = "acmedtssds${var.environment}"
-  resource_group_name = "sds-platform-${var.environment}-rg"
+  resource_group_name = "enterprise-${var.environment}-rg"
 }
 
 locals {

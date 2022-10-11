@@ -91,8 +91,9 @@ resource "azurerm_user_assigned_identity" "wowza_cert" {
   tags = var.tags
 }
 data "azurerm_key_vault" "acmekv" {
+  provider            = azurerm.control
   name                = "acmedtssds${var.environment}"
-  resource_group_name = "sds-platform-${var.environment}-rg"
+  resource_group_name = "enterprise-${var.environment}-rg"
 }
 resource "azurerm_role_assignment" "kv_access" {
   scope                = data.azurerm_key_vault.acmekv.id
