@@ -34,7 +34,6 @@ parameters:
     values:
     - ITHC
     - DEV
-    - DEMO
     - SBOX
     - TEST
     - STG

@@ -22,11 +22,6 @@ variable "environment_to_sku_map" {
       capacity = "0"
       family   = "C"
     }
-    Demo = {
-      sku_name = "Basic"
-      capacity = "0"
-      family   = "C"
-    }
     Dev = {
       sku_name = "Basic"
       capacity = "0"
