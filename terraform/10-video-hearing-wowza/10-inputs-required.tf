@@ -57,6 +57,18 @@ variable "workspace_to_address_space_map" {
   }
 }
 
+variable "schedules" {
+  type = list(object({
+    name      = string
+    frequency = string
+    interval  = number
+    run_time  = string
+    start_vm  = bool
+  }))
+  default     = []
+  description = "List of Schedules to trigger the VM turn on and/or off."
+}
+
 
 # Networking Client Details
 variable "network_client_id" {
@@ -117,12 +129,6 @@ module "ctags" {
   product     = var.product
   builtFrom   = var.builtFrom
 }
-
-## Automation Accounts
-variable "schedules" {
-  default = []
-}
-
 
 variable "route_table" {
   description = "Route Table routes"

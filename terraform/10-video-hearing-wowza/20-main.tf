@@ -59,4 +59,5 @@ module "wowza" {
   route_table                 = var.route_table
   dynatrace_tenant            = var.dynatrace_tenant
   dynatrace_token             = data.azurerm_key_vault_secret.dynatrace_token.value
+  schedules                   = var.schedules
 }

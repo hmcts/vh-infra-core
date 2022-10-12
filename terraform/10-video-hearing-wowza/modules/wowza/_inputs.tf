@@ -97,7 +97,15 @@ variable "stop_time" {
 
 ## Automation Accounts
 variable "schedules" {
-  default = []
+  type = list(object({
+    name      = string
+    frequency = string
+    interval  = number
+    run_time  = string
+    start_vm  = bool
+  }))
+  default     = []
+  description = "List of Schedules to trigger the VM turn on and/or off."
 }
 
 
