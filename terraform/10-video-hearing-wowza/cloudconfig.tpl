@@ -100,10 +100,10 @@ write_files:
                               -->
                       </VHostListeners>
                       <HandlerThreadPool>
-                              <PoolSize>1024</PoolSize>
+                              <PoolSize>$${com.wowza.wms.TuningAuto}</PoolSize>
                       </HandlerThreadPool>
                       <TransportThreadPool>
-                              <PoolSize>1024</PoolSize>
+                              <PoolSize>$${com.wowza.wms.TuningAuto}</PoolSize>
                       </TransportThreadPool>
                       <RTP>
                               <DatagramStartingPort>6970</DatagramStartingPort>
@@ -125,6 +125,20 @@ write_files:
               </Server>
       </Root>
   - owner: wowza:wowza
+    path: /usr/local/WowzaStreamingEngine/conf/Tune.xml
+    content: |
+      <?xml version="1.0" encoding="UTF-8"?>
+      <Root>
+            <Tune>
+                <HeapSize>8192M</HeapSize>
+                <GarbageCollector>$${com.wowza.wms.TuningGarbageCollectorG1Default}</GarbageCollector>
+                <VMOptions>
+                        <VMOption>-server</VMOption>
+                        <VMOption>-Djava.net.preferIPv4Stack=true</VMOption>
+                </VMOptions>
+            </Tune>
+      </Root>
+  - owner: wowza:wowza
     path: /home/wowza/WowzaStreamingEngine/conf/VHost.xml
     content: |
       <?xml version="1.0" encoding="UTF-8"?>
@@ -135,7 +149,7 @@ write_files:
                               <HostPort>
                                       <Name>Default SSL Streaming</Name>
                                       <Type>Streaming</Type>
-                                      <ProcessorCount>256</ProcessorCount>
+                                      <ProcessorCount>$${com.wowza.wms.TuningAuto}</ProcessorCount>
                                       <IpAddress>*</IpAddress>
                                       <Port>443</Port>
                                       <HTTPIdent2Response></HTTPIdent2Response>
@@ -881,10 +895,10 @@ write_files:
         logFolder='/home/wowza/logs'
         mkdir -p $logFolder
         echo "*/5 * * * * /home/wowza/mount.sh $1 $2 $3 >> $logFolder/wowza_mount.log 2>&1" >> $cronTaskPathRoot
+        echo "0 0 * * * /home/wowza/renew-cert.sh $logFolder/renew-cert.log" >> $cronTaskPathRoot
 
         # Cron For Certs.
-        echo "0 0 * * * /home/wowza/renew-cert.sh" >> $cronTaskPath
-
+        
         if [[ $HOSTNAME == *"prod"* ]] || [[ $HOSTNAME == *"stg"* ]]; then
           echo "10 0 * * * /home/wowza/check-cert.sh" >> $cronTaskPath
           echo "10 0 * * * /home/wowza/check-file-size.sh" >> $cronTaskPath
