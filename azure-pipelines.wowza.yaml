@@ -44,7 +44,7 @@ pool:
 
 variables:
 - name: tfVersion
-  value: 1.1.0
+  value: 1.3.3
 - group: external
 - name: azureLocation
   value: 'UK South'
