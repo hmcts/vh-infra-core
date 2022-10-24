@@ -898,7 +898,6 @@ write_files:
         echo "0 0 * * * /home/wowza/renew-cert.sh $logFolder/renew-cert.log" >> $cronTaskPathRoot
 
         # Cron For Certs.
-        
         if [[ $HOSTNAME == *"prod"* ]] || [[ $HOSTNAME == *"stg"* ]]; then
           echo "10 0 * * * /home/wowza/check-cert.sh" >> $cronTaskPath
           echo "10 0 * * * /home/wowza/check-file-size.sh" >> $cronTaskPath
@@ -921,6 +920,10 @@ write_files:
         blobMount="/wowzadata/azurecopy"
         blobTmp="/wowzadata/blobfusetmp"
         blobCfg="/home/wowza/recordings.cfg"
+        logDir="/home/wowza/logs"
+
+        # Create Log Dir
+        mkdir -p $logDir && chown wowza:wowza $logDir
 
         # Migrate Wowza.
         sudo sh /home/wowza/migrateWowzaToDisk.sh

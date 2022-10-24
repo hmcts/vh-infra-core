@@ -1,5 +1,5 @@
 locals {
-  cert_env     = var.environment == "prod" ? "" : "${var.environment}-"
+  cert_env     = var.environment == "prod" ? "" : replace("${var.environment}-", "stg", "staging")
   wowza_domain = "vh-wowza.${local.private_dns_zone}"
 }
 
