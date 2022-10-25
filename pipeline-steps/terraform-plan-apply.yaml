@@ -162,7 +162,10 @@ stages:
           - template: az-ext-oms.yaml
             parameters:
               subscription: ${{parameters.environmentServiceConnection}}
-              vmNames: ["vh-infra-wowza-${{parameters.env}}-1","vh-infra-wowza-${{parameters.env}}-2" ]
+              ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
+                vmNames: ["vh-infra-wowza-${{parameters.env}}-1","vh-infra-wowza-${{parameters.env}}-2" ]
+              ${{ else }}:
+                vmNames: ["vh-infra-wowza-${{parameters.env}}-1"]
               vmRgName:  "vh-infra-wowza-${{parameters.env}}"
               env: ${{ parameters.env }}
               env_long: ${{ variables.env_long }}

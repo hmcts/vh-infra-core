@@ -60,4 +60,5 @@ module "wowza" {
   dynatrace_tenant            = var.dynatrace_tenant
   dynatrace_token             = data.azurerm_key_vault_secret.dynatrace_token.value
   schedules                   = var.schedules
+  wowza_instance_count        = var.environment == "dev" || var.environment == "test" ? 1 : 2
 }
