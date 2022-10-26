@@ -11,8 +11,9 @@ resource "azurerm_lb" "wowza" {
   sku = "Standard"
 
   frontend_ip_configuration {
-    name      = local.wowza_frontend_ip_name
-    subnet_id = azurerm_subnet.wowza.id
+    name                          = local.wowza_frontend_ip_name
+    subnet_id                     = azurerm_subnet.wowza.id
+    private_ip_address_allocation = "Static"
   }
   tags = var.tags
 }
