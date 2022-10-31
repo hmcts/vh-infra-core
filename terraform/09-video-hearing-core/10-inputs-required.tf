@@ -285,7 +285,7 @@ locals {
         "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/logout",
         "https://vh-video-web.${local.environment}.hearings.reform.hmcts.net/home"],
         var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
-        var.environment == "prod" ? ["https://video.hearings.reform.hmcts.net/home", "https://video.hearings.reform.hmcts.net/logout","https://video-sds.hearings.reform.hmcts.net/home", "https://video-sds.hearings.reform.hmcts.net/logout"] : [],
+        var.environment == "prod" ? ["https://video.hearings.reform.hmcts.net/home", "https://video.hearings.reform.hmcts.net/logout", "https://video-sds.hearings.reform.hmcts.net/home", "https://video-sds.hearings.reform.hmcts.net/logout"] : [],
         var.environment == "stg" ? ["https://video.staging.hearings.reform.hmcts.net/home", "https://video.staging.hearings.reform.hmcts.net/logout"] : []
       )
     }
@@ -363,7 +363,7 @@ locals {
         "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/home",
         "https://vh-admin-web.${local.environment}.hearings.reform.hmcts.net/logout"],
         var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
-        var.environment == "prod" ? ["https://admin.hearings.reform.hmcts.net/home", "https://admin.hearings.reform.hmcts.net/logout","https://admin-sds.hearings.reform.hmcts.net/home", "https://admin-sds.hearings.reform.hmcts.net/logout"] : [],
+        var.environment == "prod" ? ["https://admin.hearings.reform.hmcts.net/home", "https://admin.hearings.reform.hmcts.net/logout", "https://admin-sds.hearings.reform.hmcts.net/home", "https://admin-sds.hearings.reform.hmcts.net/logout"] : [],
         var.environment == "stg" ? ["https://admin.staging.hearings.reform.hmcts.net/home", "https://admin.staging.hearings.reform.hmcts.net/logout"] : []
       )
     }
