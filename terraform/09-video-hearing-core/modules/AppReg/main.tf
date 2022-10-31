@@ -160,11 +160,11 @@ resource "azuread_application" "app_reg" {
     }
   }
 
-  lifecycle {
-    ignore_changes = [
-      single_page_application
-    ]
-  }
+  # lifecycle {
+  #   ignore_changes = [
+  #     single_page_application
+  #   ]
+  # }
 }
 
 # Create app reg secret
