@@ -1185,14 +1185,14 @@ write_files:
         for i in "$conferenceIds"; do
           conferenceId="$i"
           
-          applicationDir="${rootDir}/applications"
-          contentDir="${rootDir}/content"
-          confDir="${rootDir}/conf"
-          confAppDir="${confDir}/${conferenceId}/${applicationFileName}"
+          applicationDir="$rootDir/applications"
+          contentDir="$rootDir/content"
+          confDir="$rootDir/conf"
+          confAppDir="$confDir/$conferenceId/$applicationFileName"
 
-          mkdir -p "${applicationDir}/${conferenceId}"
-          mkdir -p "${contentDir}/${conferenceId}"
-          mkdir -p "${confDir}/${conferenceId}"
+          mkdir -p "$applicationDir/$conferenceId"
+          mkdir -p "$contentDir/$conferenceId"
+          mkdir -p "$confDir/$conferenceId"
 
           cp $exampleDir $confAppDir
           chmod 755 $confAppDir
