@@ -3,6 +3,8 @@ parameters:
     type: string
 
 variables:
+  - group: vh-test-api
+  - group: vh-bookings-api
   - group: vh-key-vault-vars
   - group: vh-user-api
   - group: vh-admin-web
