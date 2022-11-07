@@ -1182,9 +1182,9 @@ write_files:
         rootDir="/usr/local/WowzaStreamingEngine"
         applicationFileName="Application.xml"
 
-        for i in "${conferenceIds[@]}"; do
+        for i in "$conferenceIds"; do
           conferenceId="$i"
-
+          
           applicationDir="${rootDir}/applications"
           contentDir="${rootDir}/content"
           confDir="${rootDir}/conf"
