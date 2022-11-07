@@ -11,221 +11,263 @@ write_files:
     content: |
         <?xml version="1.0" encoding="UTF-8"?>
         <Root version="1">
-        <Application>
-                <Name>vh-recording-app</Name>
-                <AppType>Live</AppType>
-                <Description>Video Hearings Application for Audio Recordings</Description>        <!-- Uncomment to set application level timeout values <ApplicationTimeout>60000</ApplicationTimeout> <PingTimeout>12000</PingTimeout> <ValidationFrequency>8000</ValidationFrequency> <MaximumPendingWriteBytes>0</MaximumPendingWriteBytes> <MaximumSetBufferTime>60000</MaximumSetBufferTime> <MaximumStorageDirDepth>25</MaximumStorageDirDepth> -->
-                <Connections>
-                <AutoAccept>true</AutoAccept>
-                <AllowDomains></AllowDomains>
-                </Connections>        <!-- StorageDir path variables ${com.wowza.wms.AppHome} - Application home directory ${com.wowza.wms.ConfigHome} - Configuration home directory ${com.wowza.wms.context.VHost} - Virtual host name ${com.wowza.wms.context.VHostConfigHome} - Virtual host home directory ${com.wowza.wms.context.Application} - Application name ${com.wowza.wms.context.ApplicationInstance} - Application instance name -->
-                <Streams>
-                <StreamType>live</StreamType>
-                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/content/vh-recording-app</StorageDir>
-                <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>            <!-- LiveStreamPacketizers (separate with commas): cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer, mpegdashstreamingpacketizer, cupertinostreamingrepeater, smoothstreamingrepeater, sanjosestreamingrepeater, mpegdashstreamingrepeater, dvrstreamingpacketizer, dvrstreamingrepeater -->
-                <LiveStreamPacketizers></LiveStreamPacketizers>            <!-- Properties defined here will override any properties defined in conf/Streams.xml for any streams types loaded by this application -->
-                <Properties></Properties>
-                </Streams>
-                <Transcoder>            <!-- To turn on transcoder set to: transcoder -->
-                <LiveStreamTranscoder></LiveStreamTranscoder>            <!-- [templatename].xml or ${SourceStreamName}.xml -->
-                <Templates>${SourceStreamName}.xml,transrate.xml</Templates>
-                <ProfileDir>${com.wowza.wms.context.VHostConfigHome}/transcoder/profiles</ProfileDir>
-                <TemplateDir>${com.wowza.wms.context.VHostConfigHome}/transcoder/templates</TemplateDir>
-                <Properties></Properties>
-                </Transcoder>
-                <DVR>            <!-- As a single server or as an origin, use dvrstreamingpacketizer in LiveStreamPacketizers above -->            <!-- Or, in an origin-edge configuration, edges use dvrstreamingrepeater in LiveStreamPacketizers above -->            <!-- As an origin, also add dvrchunkstreaming to HTTPStreamers below -->            <!-- If this is a dvrstreamingrepeater, define Application/Repeater/OriginURL to point back to the origin -->            <!-- To turn on DVR recording set Recorders to dvrrecorder. This works with dvrstreamingpacketizer -->
-                <Recorders></Recorders>            <!-- As a single server or as an origin, set the Store to dvrfilestorage-->            <!-- edges should have this empty -->
-                <Store></Store>            <!-- Window Duration is length of live DVR window in seconds. 0 means the window is never trimmed. -->
-                <WindowDuration>0</WindowDuration>            <!-- Storage Directory is top level location where dvr is stored. e.g. c:/temp/dvr -->
-                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/dvr</StorageDir>            <!-- valid ArchiveStrategy values are append, version, delete -->
-                <ArchiveStrategy>append</ArchiveStrategy>            <!-- Properties for DVR -->
-                <Properties></Properties>
-                </DVR>
-                <TimedText>            <!-- VOD caption providers (separate with commas): vodcaptionprovidermp4_3gpp, vodcaptionproviderttml, vodcaptionproviderwebvtt, vodcaptionprovidersrt, vodcaptionproviderscc -->
-                <VODTimedTextProviders>vodcaptionprovidermp4_3gpp</VODTimedTextProviders>            <!-- Properties for TimedText -->
-                <Properties></Properties>
-                </TimedText>        <!-- HTTPStreamers (separate with commas): cupertinostreaming, smoothstreaming, sanjosestreaming, mpegdashstreaming, dvrchunkstreaming -->
-                <HTTPStreamers>cupertinostreaming,smoothstreaming,sanjosestreaming,mpegdashstreaming</HTTPStreamers>
-                <MediaCache>
-                <MediaCacheSourceList></MediaCacheSourceList>
-                </MediaCache>
-                <SharedObjects>
-                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/applications/${com.wowza.wms.context.Application}/sharedobjects/${com.wowza.wms.context.ApplicationInstance}</StorageDir>
-                </SharedObjects>
-                <Client>
-                <IdleFrequency>-1</IdleFrequency>
-                <Access>
-                        <StreamReadAccess>*</StreamReadAccess>
-                        <StreamWriteAccess>*</StreamWriteAccess>
-                        <StreamAudioSampleAccess></StreamAudioSampleAccess>
-                        <StreamVideoSampleAccess></StreamVideoSampleAccess>
-                        <SharedObjectReadAccess>*</SharedObjectReadAccess>
-                        <SharedObjectWriteAccess>*</SharedObjectWriteAccess>
-                </Access>
-                </Client>
-                <RTP>            <!-- RTP/Authentication/[type]Methods defined in Authentication.xml. Default setup includes; none, basic, digest -->
-                <Authentication>
-                        <PublishMethod>block</PublishMethod>
-                        <PlayMethod>none</PlayMethod>
-                </Authentication>            <!-- RTP/AVSyncMethod. Valid values are: senderreport, systemclock, rtptimecode -->
-                <AVSyncMethod>senderreport</AVSyncMethod>
-                <MaxRTCPWaitTime>0</MaxRTCPWaitTime>
-                <IdleFrequency>75</IdleFrequency>
-                <RTSPSessionTimeout>90000</RTSPSessionTimeout>
-                <RTSPMaximumPendingWriteBytes>0</RTSPMaximumPendingWriteBytes>
-                <RTSPBindIpAddress></RTSPBindIpAddress>
-                <RTSPConnectionIpAddress>0.0.0.0</RTSPConnectionIpAddress>
-                <RTSPOriginIpAddress>127.0.0.1</RTSPOriginIpAddress>
-                <IncomingDatagramPortRanges>*</IncomingDatagramPortRanges>            <!-- Properties defined here will override any properties defined in conf/RTP.xml for any depacketizers loaded by this application -->
-                <Properties></Properties>
-                </RTP>
-                <WebRTC>            <!-- Enable WebRTC publishing to this application -->
-                <EnablePublish>false</EnablePublish>            <!-- Enable WebRTC playback from this application -->
-                <EnablePlay>false</EnablePlay>            <!-- Enable query of published stream names for this application -->
-                <EnableQuery>false</EnableQuery>            <!-- IP address, transport, and port used for WebRTC streaming. -->            <!--TCP format: [wowza-streaming-engine-external-ip-address],tcp,[port] -->            <!--UDP format: [wowza-streaming-engine-external-ip-address],udp -->
-                <IceCandidateIpAddresses>127.0.0.1,tcp,1935</IceCandidateIpAddresses>            <!-- Local IP address of the network card you want to use for WebRTC UDP traffic -->
-                <UDPBindAddress></UDPBindAddress>            <!-- Comma-deliniated list of audio codecs, in order of preference, for stream ingestion -->
-                <PreferredCodecsAudio>opus,vorbis,pcmu,pcma</PreferredCodecsAudio>            <!-- Comma-deliniated list of video codecs, in order of preference, for stream ingestion -->
-                <PreferredCodecsVideo>vp8,h264</PreferredCodecsVideo>            <!-- Enable WebRTC debug logging -->
-                <DebugLog>false</DebugLog>            <!-- Properties for WebRTC -->
-                <Properties></Properties>
-                </WebRTC>
-                <MediaCaster>
-                <RTP>
-                        <RTSP>                    <!-- udp, interleave -->
-                        <RTPTransportMode>interleave</RTPTransportMode>
-                        </RTSP>
-                </RTP>
-                <StreamValidator>
-                        <Enable>true</Enable>
-                        <ResetNameGroups>true</ResetNameGroups>
-                        <StreamStartTimeout>20000</StreamStartTimeout>
-                        <StreamTimeout>12000</StreamTimeout>
-                        <VideoStartTimeout>0</VideoStartTimeout>
-                        <VideoTimeout>0</VideoTimeout>
-                        <AudioStartTimeout>0</AudioStartTimeout>
-                        <AudioTimeout>0</AudioTimeout>
-                        <VideoTCToleranceEnable>false</VideoTCToleranceEnable>
-                        <VideoTCPosTolerance>3000</VideoTCPosTolerance>
-                        <VideoTCNegTolerance>-500</VideoTCNegTolerance>
-                        <AudioTCToleranceEnable>false</AudioTCToleranceEnable>
-                        <AudioTCPosTolerance>3000</AudioTCPosTolerance>
-                        <AudioTCNegTolerance>-500</AudioTCNegTolerance>
-                        <DataTCToleranceEnable>false</DataTCToleranceEnable>
-                        <DataTCPosTolerance>3000</DataTCPosTolerance>
-                        <DataTCNegTolerance>-500</DataTCNegTolerance>
-                        <AVSyncToleranceEnable>false</AVSyncToleranceEnable>
-                        <AVSyncTolerance>1500</AVSyncTolerance>
-                        <DebugLog>false</DebugLog>
-                </StreamValidator>            <!-- Properties defined here will override any properties defined in conf/MediaCasters.xml for any MediaCasters loaded by this applications -->
-                <Properties></Properties>
-                </MediaCaster>
-                <MediaReader>            <!-- Properties defined here will override any properties defined in conf/MediaReaders.xml for any MediaReaders loaded by this applications -->
-                <Properties></Properties>
-                </MediaReader>
-                <MediaWriter>            <!-- Properties defined here will override any properties defined in conf/MediaWriter.xml for any MediaWriter loaded by this applications -->
-                <Properties></Properties>
-                </MediaWriter>
-                <LiveStreamPacketizer>            <!-- Properties defined here will override any properties defined in conf/LiveStreamPacketizers.xml for any LiveStreamPacketizers loaded by this applications -->
-                <Properties></Properties>
-                </LiveStreamPacketizer>
-                <HTTPStreamer>            <!-- Properties defined here will override any properties defined in conf/HTTPStreamers.xml for any HTTPStreamer loaded by this applications -->
-                <Properties>
-                        <Property>
-                        <Name>httpCORSHeadersEnabled</Name>
-                        <Value>false</Value>
-                        <Type>Boolean</Type>
-                        </Property>
-                </Properties>
-                </HTTPStreamer>
-                <Manager>            <!-- Properties defined are used by the Manager -->
-                <Properties></Properties>
-                </Manager>
-                <Repeater>
-                <OriginURL></OriginURL>
-                <QueryString></QueryString>
-                </Repeater>
-                <StreamRecorder>
-                <Properties>
-                        <Property>
-                        <Name>streamRecorderFileVersionTemplate</Name>
-                        <Value>${SourceStreamName}_${RecordingStartTime}_${SegmentNumber}</Value>
-                        <Type>String</Type>
-                        </Property>
-                        <Property>
-                        <Name>streamRecorderSegmentationType</Name>
-                        <Value>duration</Value>
-                        <Type>String</Type>
-                        </Property>
-                        <Property>
-                        <Name>streamRecorderSegmentDuration</Name>
-                        <Value>20000000</Value>
-                        <Type>long</Type>
-                        </Property>
-                </Properties>
-                </StreamRecorder>
-                <Modules>
-                <Module>
-                        <Name>base</Name>
-                        <Description>Base</Description>
-                        <Class>com.wowza.wms.module.ModuleCore</Class>
-                </Module>
-                <Module>
-                        <Name>logging</Name>
-                        <Description>Client Logging</Description>
-                        <Class>com.wowza.wms.module.ModuleClientLogging</Class>
-                </Module>
-                <Module>
-                        <Name>flvplayback</Name>
-                        <Description>FLVPlayback12</Description>
-                        <Class>com.wowza.wms.module.ModuleFLVPlayback</Class>
-                </Module>
-                <Module>
-                        <Name>ModuleCoreSecurity</Name>
-                        <Description>Core Security Module for Applications</Description>
-                        <Class>com.wowza.wms.module.ModuleCoreSecurity</Class>
-                </Module>
-                <Module>
-                        <Name>ModuleMediaWriterFileMover</Name>
-                        <Description>ModuleMediaWriterFileMover</Description>
-                        <Class>com.wowza.wms.module.ModuleMediaWriterFileMover</Class>
-                </Module>
-                <Module>
-                        <Name>ModuleAutoRecord</Name>
-                        <Description>ModuleAutoRecord</Description>
-                        <Class>com.wowza.wms.plugin.ModuleAutoRecord</Class>
-                </Module>
-                </Modules>        <!-- Properties defined here will be added to the IApplication.getProperties() and IApplicationInstance.getProperties() collections -->
-                <Properties>
-                <Property>
-                        <Name>securityPublishIPWhiteList</Name>
-                        <Value>*</Value>
-                        <Type>String</Type>
-                </Property>
-                <Property>
-                        <Name>securityPublishBlockDuplicateStreamNames</Name>
-                        <Value>true</Value>
-                        <Type>Boolean</Type>
-                </Property>
-                <Property>
-                        <Name>fileMoverDestinationPath</Name>
-                        <Value>/wowzadata/azurecopy</Value>
-                        <Type>String</Type>
-                </Property>
-                <Property>
-                        <Name>fileMoverDeleteOriginal</Name>
-                        <Value>true</Value>
-                        <Type>Boolean</Type>
-                </Property>
-                <Property>
-                        <Name>fileMoverVersionFile</Name>
-                        <Value>true</Value>
-                        <Type>Boolean</Type>
-                </Property>
-                </Properties>
-                <ApplicationTimeout>0</ApplicationTimeout>
-                <PingTimeout>0</PingTimeout>
-        </Application>
+                <Application>
+                        <Name>vh-recording-app</Name>
+                        <AppType>Live</AppType>
+                        <Description>Video Hearings Application for Audio Recordings</Description>
+                        <!-- Uncomment to set application level timeout values <ApplicationTimeout>60000</ApplicationTimeout><PingTimeout>12000</PingTimeout><ValidationFrequency>8000</ValidationFrequency><MaximumPendingWriteBytes>0</MaximumPendingWriteBytes><MaximumSetBufferTime>60000</MaximumSetBufferTime><MaximumStorageDirDepth>25</MaximumStorageDirDepth> -->
+                        <Connections>
+                                <AutoAccept>true</AutoAccept>
+                                <AllowDomains></AllowDomains>
+                        </Connections>
+                        <!-- StorageDir path variables ${com.wowza.wms.AppHome} - Application home directory ${com.wowza.wms.ConfigHome} - Configuration home directory ${com.wowza.wms.context.VHost} - Virtual host name ${com.wowza.wms.context.VHostConfigHome} - Virtual host home directory ${com.wowza.wms.context.Application} - Application name ${com.wowza.wms.context.ApplicationInstance} - Application instance name -->
+                        <Streams>
+                                <StreamType>live</StreamType>
+                                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/content/vh-recording-app</StorageDir>
+                                <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
+                                <!-- LiveStreamPacketizers (separate with commas): cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer, mpegdashstreamingpacketizer, cupertinostreamingrepeater, smoothstreamingrepeater, sanjosestreamingrepeater, mpegdashstreamingrepeater, dvrstreamingpacketizer, dvrstreamingrepeater -->
+                                <LiveStreamPacketizers></LiveStreamPacketizers>
+                                <!-- Properties defined here will override any properties defined in conf/Streams.xml for any streams types loaded by this application -->
+                                <Properties></Properties>
+                        </Streams>
+                        <Transcoder>
+                                <!-- To turn on transcoder set to: transcoder -->
+                                <LiveStreamTranscoder></LiveStreamTranscoder>
+                                <!-- [templatename].xml or ${SourceStreamName}.xml -->
+                                <Templates>${SourceStreamName}.xml,transrate.xml</Templates>
+                                <ProfileDir>${com.wowza.wms.context.VHostConfigHome}/transcoder/profiles</ProfileDir>
+                                <TemplateDir>${com.wowza.wms.context.VHostConfigHome}/transcoder/templates</TemplateDir>
+                                <Properties></Properties>
+                        </Transcoder>
+                        <DVR>
+                                <!-- As a single server or as an origin, use dvrstreamingpacketizer in LiveStreamPacketizers above -->
+                                <!-- Or, in an origin-edge configuration, edges use dvrstreamingrepeater in LiveStreamPacketizers above -->
+                                <!-- As an origin, also add dvrchunkstreaming to HTTPStreamers below -->
+                                <!-- If this is a dvrstreamingrepeater, define Application/Repeater/OriginURL to point back to the origin -->
+                                <!-- To turn on DVR recording set Recorders to dvrrecorder. This works with dvrstreamingpacketizer -->
+                                <Recorders></Recorders>
+                                <!-- As a single server or as an origin, set the Store to dvrfilestorage-->
+                                <!-- edges should have this empty -->
+                                <Store></Store>
+                                <!-- Window Duration is length of live DVR window in seconds. 0 means the window is never trimmed. -->
+                                <WindowDuration>0</WindowDuration>
+                                <!-- Storage Directory is top level location where dvr is stored. e.g. c:/temp/dvr -->
+                                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/dvr</StorageDir>
+                                <!-- valid ArchiveStrategy values are append, version, delete -->
+                                <ArchiveStrategy>append</ArchiveStrategy>
+                                <!-- Properties for DVR -->
+                                <Properties></Properties>
+                        </DVR>
+                        <TimedText>
+                                <!-- VOD caption providers (separate with commas): vodcaptionprovidermp4_3gpp, vodcaptionproviderttml, vodcaptionproviderwebvtt, vodcaptionprovidersrt, vodcaptionproviderscc -->
+                                <VODTimedTextProviders>vodcaptionprovidermp4_3gpp</VODTimedTextProviders>
+                                <!-- Properties for TimedText -->
+                                <Properties></Properties>
+                        </TimedText>
+                        <!-- HTTPStreamers (separate with commas): cupertinostreaming, smoothstreaming, sanjosestreaming, mpegdashstreaming, dvrchunkstreaming -->
+                        <HTTPStreamers>cupertinostreaming,smoothstreaming,sanjosestreaming,mpegdashstreaming</HTTPStreamers>
+                        <MediaCache>
+                                <MediaCacheSourceList></MediaCacheSourceList>
+                        </MediaCache>
+                        <SharedObjects>
+                                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/applications/${com.wowza.wms.context.Application}/sharedobjects/${com.wowza.wms.context.ApplicationInstance}</StorageDir>
+                        </SharedObjects>
+                        <Client>
+                                <IdleFrequency>-1</IdleFrequency>
+                                <Access>
+                                        <StreamReadAccess>*</StreamReadAccess>
+                                        <StreamWriteAccess>*</StreamWriteAccess>
+                                        <StreamAudioSampleAccess></StreamAudioSampleAccess>
+                                        <StreamVideoSampleAccess></StreamVideoSampleAccess>
+                                        <SharedObjectReadAccess>*</SharedObjectReadAccess>
+                                        <SharedObjectWriteAccess>*</SharedObjectWriteAccess>
+                                </Access>
+                        </Client>
+                        <RTP>
+                                <!-- RTP/Authentication/[type]Methods defined in Authentication.xml. Default setup includes; none, basic, digest -->
+                                <Authentication>
+                                        <PublishMethod>block</PublishMethod>
+                                        <PlayMethod>none</PlayMethod>
+                                </Authentication>
+                                <!-- RTP/AVSyncMethod. Valid values are: senderreport, systemclock, rtptimecode -->
+                                <AVSyncMethod>senderreport</AVSyncMethod>
+                                <MaxRTCPWaitTime>0</MaxRTCPWaitTime>
+                                <IdleFrequency>75</IdleFrequency>
+                                <RTSPSessionTimeout>90000</RTSPSessionTimeout>
+                                <RTSPMaximumPendingWriteBytes>0</RTSPMaximumPendingWriteBytes>
+                                <RTSPBindIpAddress></RTSPBindIpAddress>
+                                <RTSPConnectionIpAddress>0.0.0.0</RTSPConnectionIpAddress>
+                                <RTSPOriginIpAddress>127.0.0.1</RTSPOriginIpAddress>
+                                <IncomingDatagramPortRanges>*</IncomingDatagramPortRanges>
+                                <!-- Properties defined here will override any properties defined in conf/RTP.xml for any depacketizers loaded by this application -->
+                                <Properties></Properties>
+                        </RTP>
+                        <WebRTC>
+                                <!-- Enable WebRTC publishing to this application -->
+                                <EnablePublish>false</EnablePublish>
+                                <!-- Enable WebRTC playback from this application -->
+                                <EnablePlay>false</EnablePlay>
+                                <!-- Enable query of published stream names for this application -->
+                                <EnableQuery>false</EnableQuery>
+                                <!-- IP address, transport, and port used for WebRTC streaming. -->
+                                <!--TCP format: [wowza-streaming-engine-external-ip-address],tcp,[port] -->
+                                <!--UDP format: [wowza-streaming-engine-external-ip-address],udp -->
+                                <IceCandidateIpAddresses>127.0.0.1,tcp,1935</IceCandidateIpAddresses>
+                                <!-- Local IP address of the network card you want to use for WebRTC UDP traffic -->
+                                <UDPBindAddress></UDPBindAddress>
+                                <!-- Comma-deliniated list of audio codecs, in order of preference, for stream ingestion -->
+                                <PreferredCodecsAudio>opus,vorbis,pcmu,pcma</PreferredCodecsAudio>
+                                <!-- Comma-deliniated list of video codecs, in order of preference, for stream ingestion -->
+                                <PreferredCodecsVideo>vp8,h264</PreferredCodecsVideo>
+                                <!-- Enable WebRTC debug logging -->
+                                <DebugLog>false</DebugLog>
+                                <!-- Properties for WebRTC -->
+                                <Properties></Properties>
+                        </WebRTC>
+                        <MediaCaster>
+                                <RTP>
+                                        <RTSP>
+                                                <!-- udp, interleave -->
+                                                <RTPTransportMode>interleave</RTPTransportMode>
+                                        </RTSP>
+                                </RTP>
+                                <StreamValidator>
+                                        <Enable>true</Enable>
+                                        <ResetNameGroups>true</ResetNameGroups>
+                                        <StreamStartTimeout>20000</StreamStartTimeout>
+                                        <StreamTimeout>12000</StreamTimeout>
+                                        <VideoStartTimeout>0</VideoStartTimeout>
+                                        <VideoTimeout>0</VideoTimeout>
+                                        <AudioStartTimeout>0</AudioStartTimeout>
+                                        <AudioTimeout>0</AudioTimeout>
+                                        <VideoTCToleranceEnable>false</VideoTCToleranceEnable>
+                                        <VideoTCPosTolerance>3000</VideoTCPosTolerance>
+                                        <VideoTCNegTolerance>-500</VideoTCNegTolerance>
+                                        <AudioTCToleranceEnable>false</AudioTCToleranceEnable>
+                                        <AudioTCPosTolerance>3000</AudioTCPosTolerance>
+                                        <AudioTCNegTolerance>-500</AudioTCNegTolerance>
+                                        <DataTCToleranceEnable>false</DataTCToleranceEnable>
+                                        <DataTCPosTolerance>3000</DataTCPosTolerance>
+                                        <DataTCNegTolerance>-500</DataTCNegTolerance>
+                                        <AVSyncToleranceEnable>false</AVSyncToleranceEnable>
+                                        <AVSyncTolerance>1500</AVSyncTolerance>
+                                        <DebugLog>false</DebugLog>
+                                </StreamValidator>
+                                <!-- Properties defined here will override any properties defined in conf/MediaCasters.xml for any MediaCasters loaded by this applications -->
+                                <Properties></Properties>
+                        </MediaCaster>
+                        <MediaReader>
+                                <!-- Properties defined here will override any properties defined in conf/MediaReaders.xml for any MediaReaders loaded by this applications -->
+                                <Properties></Properties>
+                        </MediaReader>
+                        <MediaWriter>
+                                <!-- Properties defined here will override any properties defined in conf/MediaWriter.xml for any MediaWriter loaded by this applications -->
+                                <Properties></Properties>
+                        </MediaWriter>
+                        <LiveStreamPacketizer>
+                                <!-- Properties defined here will override any properties defined in conf/LiveStreamPacketizers.xml for any LiveStreamPacketizers loaded by this applications -->
+                                <Properties></Properties>
+                        </LiveStreamPacketizer>
+                        <HTTPStreamer>
+                                <!-- Properties defined here will override any properties defined in conf/HTTPStreamers.xml for any HTTPStreamer loaded by this applications -->
+                                <Properties>
+                                        <Property>
+                                                <Name>httpCORSHeadersEnabled</Name>
+                                                <Value>false</Value>
+                                                <Type>Boolean</Type>
+                                        </Property>
+                                </Properties>
+                        </HTTPStreamer>
+                        <Manager>
+                                <!-- Properties defined are used by the Manager -->
+                                <Properties></Properties>
+                        </Manager>
+                        <Repeater>
+                                <OriginURL></OriginURL>
+                                <QueryString></QueryString>
+                        </Repeater>
+                        <StreamRecorder>
+                                <Properties>
+                                        <Property>
+                                                <Name>streamRecorderFileVersionTemplate</Name>
+                                                <Value>${SourceStreamName}_${RecordingStartTime}_${SegmentNumber}</Value>
+                                                <Type>String</Type>
+                                        </Property>
+                                        <Property>
+                                                <Name>streamRecorderSegmentationType</Name>
+                                                <Value>duration</Value>
+                                                <Type>String</Type>
+                                        </Property>
+                                        <Property>
+                                                <Name>streamRecorderSegmentDuration</Name>
+                                                <Value>20000000</Value>
+                                                <Type>long</Type>
+                                        </Property>
+                                </Properties>
+                        </StreamRecorder>
+                        <Modules>
+                                <Module>
+                                        <Name>base</Name>
+                                        <Description>Base</Description>
+                                        <Class>com.wowza.wms.module.ModuleCore</Class>
+                                </Module>
+                                <Module>
+                                        <Name>logging</Name>
+                                        <Description>Client Logging</Description>
+                                        <Class>com.wowza.wms.module.ModuleClientLogging</Class>
+                                </Module>
+                                <Module>
+                                        <Name>flvplayback</Name>
+                                        <Description>FLVPlayback12</Description>
+                                        <Class>com.wowza.wms.module.ModuleFLVPlayback</Class>
+                                </Module>
+                                <Module>
+                                        <Name>ModuleCoreSecurity</Name>
+                                        <Description>Core Security Module for Applications</Description>
+                                        <Class>com.wowza.wms.module.ModuleCoreSecurity</Class>
+                                </Module>
+                                <Module>
+                                        <Name>ModuleMediaWriterFileMover</Name>
+                                        <Description>ModuleMediaWriterFileMover</Description>
+                                        <Class>com.wowza.wms.module.ModuleMediaWriterFileMover</Class>
+                                </Module>
+                                <Module>
+                                        <Name>ModuleAutoRecord</Name>
+                                        <Description>ModuleAutoRecord</Description>
+                                        <Class>com.wowza.wms.plugin.ModuleAutoRecord</Class>
+                                </Module>
+                        </Modules>
+                        <!-- Properties defined here will be added to the IApplication.getProperties() and IApplicationInstance.getProperties() collections -->
+                        <Properties>
+                                <Property>
+                                        <Name>securityPublishIPWhiteList</Name>
+                                        <Value>*</Value>
+                                        <Type>String</Type>
+                                </Property>
+                                <Property>
+                                        <Name>securityPublishBlockDuplicateStreamNames</Name>
+                                        <Value>true</Value>
+                                        <Type>Boolean</Type>
+                                </Property>
+                                <Property>
+                                        <Name>fileMoverDestinationPath</Name>
+                                        <Value>/wowzadata/azurecopy</Value>
+                                        <Type>String</Type>
+                                </Property>
+                                <Property>
+                                        <Name>fileMoverDeleteOriginal</Name>
+                                        <Value>true</Value>
+                                        <Type>Boolean</Type>
+                                </Property>
+                                <Property>
+                                        <Name>fileMoverVersionFile</Name>
+                                        <Value>true</Value>
+                                        <Type>Boolean</Type>
+                                </Property>
+                        </Properties>
+                        <ApplicationTimeout>0</ApplicationTimeout>
+                        <PingTimeout>0</PingTimeout>
+                </Application>
         </Root>
   - owner: wowza:wowza
     path: /home/wowza/WowzaStreamingEngine/conf/Server.xml
@@ -1148,13 +1190,12 @@ write_files:
           confDir="${rootDir}/conf"
           confAppDir="${confDir}/${conferenceId}/${applicationFileName}"
 
-          mkdir "${applicationDir}/${conferenceId}"
-          mkdir "${contentDir}/${conferenceId}"
-          mkdir "${confDir}/${conferenceId}"
+          mkdir -p "${applicationDir}/${conferenceId}"
+          mkdir -p "${contentDir}/${conferenceId}"
+          mkdir -p "${confDir}/${conferenceId}"
 
-          touch $confAppDir
-          cp $exampleDir > $confAppDir
-          sudo chmod 755 $confAppDir
+          cp $exampleDir $confAppDir
+          chmod 755 $confAppDir
         done
   # PLEASE LEAVE THIS AT THE BOTTOM
   - owner: wowza:wowza
