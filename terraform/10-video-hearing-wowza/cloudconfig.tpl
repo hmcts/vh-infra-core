@@ -20,11 +20,11 @@ write_files:
                                 <AutoAccept>true</AutoAccept>
                                 <AllowDomains></AllowDomains>
                         </Connections>
-                        <!-- StorageDir path variables ${com.wowza.wms.AppHome} - Application home directory ${com.wowza.wms.ConfigHome} - Configuration home directory ${com.wowza.wms.context.VHost} - Virtual host name ${com.wowza.wms.context.VHostConfigHome} - Virtual host home directory ${com.wowza.wms.context.Application} - Application name ${com.wowza.wms.context.ApplicationInstance} - Application instance name -->
+                        <!-- StorageDir path variables $${com.wowza.wms.AppHome} - Application home directory $${com.wowza.wms.ConfigHome} - Configuration home directory $${com.wowza.wms.context.VHost} - Virtual host name $${com.wowza.wms.context.VHostConfigHome} - Virtual host home directory $${com.wowza.wms.context.Application} - Application name $${com.wowza.wms.context.ApplicationInstance} - Application instance name -->
                         <Streams>
                                 <StreamType>live</StreamType>
-                                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/content/vh-recording-app</StorageDir>
-                                <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
+                                <StorageDir>$${com.wowza.wms.context.VHostConfigHome}/content/vh-recording-app</StorageDir>
+                                <KeyDir>$${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
                                 <!-- LiveStreamPacketizers (separate with commas): cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer, mpegdashstreamingpacketizer, cupertinostreamingrepeater, smoothstreamingrepeater, sanjosestreamingrepeater, mpegdashstreamingrepeater, dvrstreamingpacketizer, dvrstreamingrepeater -->
                                 <LiveStreamPacketizers></LiveStreamPacketizers>
                                 <!-- Properties defined here will override any properties defined in conf/Streams.xml for any streams types loaded by this application -->
@@ -33,10 +33,10 @@ write_files:
                         <Transcoder>
                                 <!-- To turn on transcoder set to: transcoder -->
                                 <LiveStreamTranscoder></LiveStreamTranscoder>
-                                <!-- [templatename].xml or ${SourceStreamName}.xml -->
-                                <Templates>${SourceStreamName}.xml,transrate.xml</Templates>
-                                <ProfileDir>${com.wowza.wms.context.VHostConfigHome}/transcoder/profiles</ProfileDir>
-                                <TemplateDir>${com.wowza.wms.context.VHostConfigHome}/transcoder/templates</TemplateDir>
+                                <!-- [templatename].xml or $${SourceStreamName}.xml -->
+                                <Templates>$${SourceStreamName}.xml,transrate.xml</Templates>
+                                <ProfileDir>$${com.wowza.wms.context.VHostConfigHome}/transcoder/profiles</ProfileDir>
+                                <TemplateDir>$${com.wowza.wms.context.VHostConfigHome}/transcoder/templates</TemplateDir>
                                 <Properties></Properties>
                         </Transcoder>
                         <DVR>
@@ -52,7 +52,7 @@ write_files:
                                 <!-- Window Duration is length of live DVR window in seconds. 0 means the window is never trimmed. -->
                                 <WindowDuration>0</WindowDuration>
                                 <!-- Storage Directory is top level location where dvr is stored. e.g. c:/temp/dvr -->
-                                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/dvr</StorageDir>
+                                <StorageDir>$${com.wowza.wms.context.VHostConfigHome}/dvr</StorageDir>
                                 <!-- valid ArchiveStrategy values are append, version, delete -->
                                 <ArchiveStrategy>append</ArchiveStrategy>
                                 <!-- Properties for DVR -->
@@ -70,7 +70,7 @@ write_files:
                                 <MediaCacheSourceList></MediaCacheSourceList>
                         </MediaCache>
                         <SharedObjects>
-                                <StorageDir>${com.wowza.wms.context.VHostConfigHome}/applications/${com.wowza.wms.context.Application}/sharedobjects/${com.wowza.wms.context.ApplicationInstance}</StorageDir>
+                                <StorageDir>$${com.wowza.wms.context.VHostConfigHome}/applications/$${com.wowza.wms.context.Application}/sharedobjects/$${com.wowza.wms.context.ApplicationInstance}</StorageDir>
                         </SharedObjects>
                         <Client>
                                 <IdleFrequency>-1</IdleFrequency>
@@ -190,7 +190,7 @@ write_files:
                                 <Properties>
                                         <Property>
                                                 <Name>streamRecorderFileVersionTemplate</Name>
-                                                <Value>${SourceStreamName}_${RecordingStartTime}_${SegmentNumber}</Value>
+                                                <Value>$${SourceStreamName}_$${RecordingStartTime}_$${SegmentNumber}</Value>
                                                 <Type>String</Type>
                                         </Property>
                                         <Property>
