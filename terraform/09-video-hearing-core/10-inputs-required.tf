@@ -858,15 +858,6 @@ variable "network_tenant_id" {
   type        = string
 }
 
-variable "external_passwords" {
-
-  type = map(string)
-  default = {
-    azuread--temporarypassword = "temp"
-    defaultpassword            = "temp"
-  }
-}
-
 ## Key Vault Secrets
 variable "kv_secrets" {
   description = "Collection of Secrets to import into the Key Vaults"

@@ -12,10 +12,29 @@ resource "azurerm_resource_group" "vh-infra-core" {
 # VH - KeyVaults
 #--------------------------------------------------------------
 
+resource "random_password" "temporarypassword" {
+  length           = 16
+  special          = true
+  override_special = "!"
+}
+
+resource "random_password" "defaultpassword" {
+  length           = 16
+  special          = true
+  override_special = "!"
+}
+
+locals {
+  external_passwords = {
+    "azuread--temporarypassword" = random_password.temporarypassword.result
+    "defaultpassword"            = random_password.temporarypassword.result
+  }
+}
+
 module "KeyVaults" {
   source             = "./modules/KeyVaults"
   environment        = var.environment
-  external_passwords = var.external_passwords
+  external_passwords = local.external_passwords
 
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   location            = azurerm_resource_group.vh-infra-core.location
