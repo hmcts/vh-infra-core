@@ -21,7 +21,7 @@ locals {
     "storageaccountkey"         = module.wowza_recordings.storageaccount_primary_access_key,
     "streamPassword"            = random_password.streamPassword.result,
     "username"                  = var.admin_user
-    "wowza-storage-directory"   = "$${com.wowza.wms.context.VHostConfigHome}/content/"
+    "wowza-storage-directory"   = "usr/local/WowzaStreamingEngine/content/"
     "Splunk-admin"              = local.splunk_admin_username
     "Splunk-password"           = random_password.splunk_admin_password.result
   }
