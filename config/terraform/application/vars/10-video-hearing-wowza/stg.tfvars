@@ -34,6 +34,12 @@ route_table = [
     address_prefix         = "10.148.0.0/18"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "soc-prod-vnet"
+    address_prefix         = "10.146.0.0/21"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
   }
 ]
 dynatrace_tenant = "yrk32651"
