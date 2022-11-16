@@ -220,7 +220,7 @@ stages:
                     - vhvideo
                   roles:
                     - db_datareader
-                - user: vh-report-ingestion-adf-${{ lower(parameters.env)}}
+                - user: vh-adf-mi-${{ lower(parameters.env)}}
                   databaseNames:
                     - vhbookings
                     - vhnotification
