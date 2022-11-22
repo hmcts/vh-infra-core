@@ -1,42 +1,42 @@
 locals {
   scheduler_jobs_name = "vh-scheduler-jobs"
   cron_jobs = {
-    "AnonymiseHearingsConferencesAndDeleteAadUsersFunction" = {
+    "vh-anonymise-hearings-and-conferences-job" = {
       "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
-    "ClearConferenceInstantMessageHistory" = {
+    "vh-clear-conference-message-history-job" = {
       "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
-    "ClearHearingsFunction" = {
+    "vh-send-hearing-notifications-job" = {
       "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
-    "DeleteAudiorecordingApplicationsFunction" = {
+    "vh-delete-audio-recording-applications-job" = {
       "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
-    "GetJudiciaryUsersFunction" = {
+    "vh-get-judiciary-users-job" = {
       "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
-    "ReconcileHearingAudioWithStorageFunction" = {
+    "vh-reconcile-hearing-audio-with-storage-job" = {
       "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
-    "RemoveHeartbeatsForConferencesFunction" = {
+    "vh-remove-heartbeats-for-conferences-job" = {
       "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
-    "SendHearingNotificationsFunction" = {
+    "vh-send-hearing-notifications-job" = {
       "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
@@ -60,17 +60,8 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
   severity             = each.value.severity
   criteria {
     query                   = <<-QUERY
-      requests
-        | project
-            timestamp,
-            id,
-            cloud_RoleName,
-            operation_Name,
-            success,
-            resultCode
-        | where timestamp > ago(1d)
-        | where cloud_RoleName =~ '${each.value.job_name}' and operation_Name =~ '${each.key}'
-        | where success == 'False'
+      exceptions 
+        | where cloud_RoleInstance like '${each.key}'
         | order by timestamp desc
       QUERY
     time_aggregation_method = "Count"
