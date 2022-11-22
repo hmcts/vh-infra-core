@@ -1,43 +1,34 @@
 locals {
-  scheduler_jobs_name = "vh-scheduler-jobs"
   cron_jobs = {
     "vh-anonymise-hearings-and-conferences-job" = {
-      "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
     "vh-clear-conference-message-history-job" = {
-      "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
     "vh-send-hearing-notifications-job" = {
-      "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
     "vh-delete-audio-recording-applications-job" = {
-      "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
     "vh-get-judiciary-users-job" = {
-      "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
     "vh-reconcile-hearing-audio-with-storage-job" = {
-      "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
     "vh-remove-heartbeats-for-conferences-job" = {
-      "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
     "vh-send-hearing-notifications-job" = {
-      "job_name"  = local.scheduler_jobs_name
       "threshold" = 0
       "severity"  = 2
     }
@@ -46,7 +37,7 @@ locals {
 
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
-  for_each = local.cron_jobs
+  for_each = var.env == "prod" ? local.cron_jobs : {}
 
   name                = "vh-cron-${each.key}-issues-${var.env}"
   description         = "The job ${each.key} in ${var.env} has had failures in the last day. Please investigate ASAP as it may impact the service."
@@ -62,6 +53,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
     query                   = <<-QUERY
       exceptions 
         | where cloud_RoleInstance like '${each.key}'
+        | where timestamp > ago(1d)
         | order by timestamp desc
       QUERY
     time_aggregation_method = "Count"
