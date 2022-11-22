@@ -1,43 +1,34 @@
 locals {
-  scheduler_jobs_name = "vh-scheduler-jobs"
   cron_jobs = {
-    "AnonymiseHearingsConferencesAndDeleteAadUsersFunction" = {
-      "job_name"  = local.scheduler_jobs_name
+    "vh-anonymise-hearings-and-conferences-job" = {
       "threshold" = 0
       "severity"  = 2
     }
-    "ClearConferenceInstantMessageHistory" = {
-      "job_name"  = local.scheduler_jobs_name
+    "vh-clear-conference-message-history-job" = {
       "threshold" = 0
       "severity"  = 2
     }
-    "ClearHearingsFunction" = {
-      "job_name"  = local.scheduler_jobs_name
+    "vh-send-hearing-notifications-job" = {
       "threshold" = 0
       "severity"  = 2
     }
-    "DeleteAudiorecordingApplicationsFunction" = {
-      "job_name"  = local.scheduler_jobs_name
+    "vh-delete-audio-recording-applications-job" = {
       "threshold" = 0
       "severity"  = 2
     }
-    "GetJudiciaryUsersFunction" = {
-      "job_name"  = local.scheduler_jobs_name
+    "vh-get-judiciary-users-job" = {
       "threshold" = 0
       "severity"  = 2
     }
-    "ReconcileHearingAudioWithStorageFunction" = {
-      "job_name"  = local.scheduler_jobs_name
+    "vh-reconcile-hearing-audio-with-storage-job" = {
       "threshold" = 0
       "severity"  = 2
     }
-    "RemoveHeartbeatsForConferencesFunction" = {
-      "job_name"  = local.scheduler_jobs_name
+    "vh-remove-heartbeats-for-conferences-job" = {
       "threshold" = 0
       "severity"  = 2
     }
-    "SendHearingNotificationsFunction" = {
-      "job_name"  = local.scheduler_jobs_name
+    "vh-send-hearing-notifications-job" = {
       "threshold" = 0
       "severity"  = 2
     }
@@ -46,11 +37,11 @@ locals {
 
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
-  for_each = local.cron_jobs
+  for_each = var.env == "prod" ? local.cron_jobs : {}
 
-  name                = "vh-cron-${each.value.job_name}-${each.key}-issues-${var.env}"
-  description         = "The job ${each.key} in ${each.value.job_name} ${var.env} has had failures in the last day. Please investigate ASAP as it may impact the service."
-  display_name        = "vh-cron-${each.value.job_name}-${each.key}-issues-${var.env}"
+  name                = "vh-cron-${each.key}-issues-${var.env}"
+  description         = "The job ${each.key} in ${var.env} has had failures in the last day. Please investigate ASAP as it may impact the service."
+  display_name        = "vh-cron-${each.key}-issues-${var.env}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
@@ -60,17 +51,9 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
   severity             = each.value.severity
   criteria {
     query                   = <<-QUERY
-      requests
-        | project
-            timestamp,
-            id,
-            cloud_RoleName,
-            operation_Name,
-            success,
-            resultCode
+      exceptions 
+        | where cloud_RoleInstance like '${each.key}'
         | where timestamp > ago(1d)
-        | where cloud_RoleName =~ '${each.value.job_name}' and operation_Name =~ '${each.key}'
-        | where success == 'False'
         | order by timestamp desc
       QUERY
     time_aggregation_method = "Count"
