@@ -8,7 +8,7 @@ locals {
       "threshold" = 0
       "severity"  = 2
     }
-    "vh-send-hearing-notifications-job" = {
+    "vh-clear-hearings-job" = {
       "threshold" = 0
       "severity"  = 2
     }
@@ -32,9 +32,12 @@ locals {
       "threshold" = 0
       "severity"  = 2
     }
+    "vh-hearing-allocations-job" = {
+      "threshold" = 0
+      "severity"  = 2
+    }
   }
 }
-
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
   for_each = var.env == "prod" ? local.cron_jobs : {}
