@@ -35,3 +35,21 @@ route_table = [
   }
 ]
 dynatrace_tenant = "ebe20728"
+
+databases = {
+    vhbookings = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S3"
+    }
+    vhvideo = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S4"
+    }
+    vhnotification = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+  }
