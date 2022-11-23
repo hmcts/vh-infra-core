@@ -403,57 +403,9 @@ module "VHDataServices" {
   environment = var.environment
   public_env  = local.environment == "dev" ? 1 : 0
 
-  databases = local.environment == "prod" ? {
-    vhbookings = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S3"
-    }
-    vhvideo = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S4"
-    }
-    vhnotification = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
-    } : {
-    vhbookings = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
-    vhvideo = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
-    vhnotification = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
+  databases = var.databases
+  queues    = var.queues
 
-    vhtest = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
-  }
-  queues = {
-    booking = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
-    video = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
-  }
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix

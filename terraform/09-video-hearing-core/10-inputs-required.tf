@@ -41,7 +41,47 @@ variable "dev_group" {
   description = "specifies group to which permissions will be assigned when deploying the dev environment"
 }
 
+variable "databases" {
+  type = map(any)
+  default = {
+    vhbookings = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+    vhvideo = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+    vhnotification = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+    vhtest = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+  }
+}
 
+variable "queues" {
+  type = map(any)
+  default = {
+    booking = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+    video = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+  }
+}
 
 #########################################################
 
