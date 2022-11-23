@@ -403,7 +403,23 @@ module "VHDataServices" {
   environment = var.environment
   public_env  = local.environment == "dev" ? 1 : 0
 
-  databases = {
+  databases = local.environment == "prod" ? {
+    vhbookings = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S3"
+    }
+    vhvideo = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S4"
+    }
+    vhnotification = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+    } : {
     vhbookings = {
       collation         = "SQL_Latin1_General_CP1_CI_AS"
       edition           = "Standard"
