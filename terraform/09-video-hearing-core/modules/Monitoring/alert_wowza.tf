@@ -114,7 +114,7 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
   }
 
   severity                = 2
-  frequency               = 1
+  frequency               = "PT1H"
   window_size             = "PT5M"
 
   action {
