@@ -84,7 +84,7 @@ data "azurerm_lb" "wowza_lb_public"{
   resource_group_name = "vh-infra-wowza-${var.env}-public"
 }
 
-locals{
+locals {
   wowzaLoadBalancers = {
     private = {
       scope = [data.azurerm_lb.wowza_lb_private.id]
@@ -98,7 +98,7 @@ locals{
 }
 
 resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
-  for_each = var.env == "prod" ? local.wowzaLoadBalancers : {}
+  for_each = local.wowzaLoadBalancers
 
   name                = "${each.value.name}${var.env}"
   resource_group_name = var.resource_group_name
@@ -111,9 +111,6 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
     aggregation      = "Average"
     operator         = "LessThan"
     threshold        = 95
-
-    dimension {
-    }
   }
 
   severity                = 1
@@ -121,6 +118,10 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
   window_size             = 5
 
   action {
-    action_group = [azurerm_monitor_action_group.this["dev"].id, azurerm_monitor_action_group.this["devops"].id]
+    action_group_id  = azurerm_monitor_action_group.this["dev"].id 
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.this["devops"].id
   }
 }
