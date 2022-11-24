@@ -73,3 +73,31 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_missing" {
 
   tags = var.tags
 }
+
+resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
+  count = var.env == "prod" ? 1 : 0
+
+  name                = "vh-wowza-load-balancer-alert-${var.env}"
+  resource_group_name = var.resource_group_name
+  scopes              = [ azurerm_lb.wowza.id, azurerm_lb.wowza-public.id ]
+  description         = "Wowza Load balancer reports that the Health Check is below 95%. This may impact the service. Please investigate ASAP."
+
+  criteria {
+    metric_namespace = "Microsoft.Network/loadBalancers"
+    metric_name      = "DipAvailability"
+    aggregation      = "Average"
+    operator         = "LessThan"
+    threshold        = 95
+
+    dimension {
+    }
+  }
+
+  severity                = 1
+  frequency               = 5
+  window_size             = PT5M
+
+  action {
+    action_group = [azurerm_monitor_action_group.this["dev"].id, azurerm_monitor_action_group.this["devops"].id]
+  }
+}
