@@ -74,12 +74,35 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_missing" {
   tags = var.tags
 }
 
-resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
-  count = var.env == "prod" ? 1 : 0
+data "azurerm_lb" "wowza_lb_private" {
+  name                = "vh-infra-wowza-${var.env}"
+  resource_group_name = "vh-infra-wowza-${var.env}"
+}
 
-  name                = "vh-wowza-load-balancer-alert-${var.env}"
+data "azurerm_lb" "wowza_lb_public"{
+  name                = "vh-infra-wowza-${var.env}"
+  resource_group_name = "vh-infra-wowza-${var.env}-public"
+}
+
+locals{
+  wowzaLoadBalancers = {
+    private = {
+      scope = [data.azurerm_lb.wowza_lb_private.id]
+      name  = "vh-wowza-lb-private-alert-"
+    }
+    public = {
+      scope = [data.azurerm_lb.wowza_lb_public.id]
+      name  = "vh-wowza-lb-public-alert-"
+    }
+  }
+}
+
+resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
+  for_each = var.env == "prod" ? local.wowzaLoadBalancers : {}
+
+  name                = "${each.name}${var.env}"
   resource_group_name = var.resource_group_name
-  scopes              = [ azurerm_lb.wowza.id, azurerm_lb.wowza-public.id ]
+  scopes              = each.scope
   description         = "Wowza Load balancer reports that the Health Check is below 95%. This may impact the service. Please investigate ASAP."
 
   criteria {
@@ -95,7 +118,7 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
 
   severity                = 1
   frequency               = 5
-  window_size             = PT5M
+  window_size             = 5
 
   action {
     action_group = [azurerm_monitor_action_group.this["dev"].id, azurerm_monitor_action_group.this["devops"].id]
