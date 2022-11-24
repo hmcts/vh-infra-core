@@ -113,9 +113,9 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
     threshold        = 95
   }
 
-  severity                = 1
-  frequency               = 5
-  window_size             = 5
+  severity                = 2
+  frequency               = 1
+  window_size             = "PT5M"
 
   action {
     action_group_id  = azurerm_monitor_action_group.this["dev"].id 
