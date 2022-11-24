@@ -80,8 +80,8 @@ data "azurerm_lb" "wowza_lb_private" {
 }
 
 data "azurerm_lb" "wowza_lb_public"{
-  name                = "vh-infra-wowza-${var.env}"
-  resource_group_name = "vh-infra-wowza-${var.env}-public"
+  name                = "vh-infra-wowza-${var.env}-public"
+  resource_group_name = "vh-infra-wowza-${var.env}"
 }
 
 locals {
