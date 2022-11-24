@@ -100,7 +100,7 @@ locals{
 resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
   for_each = var.env == "prod" ? local.wowzaLoadBalancers : {}
 
-  name                = "${each.name}${var.env}"
+  name                = "${each.value.name}${var.env}"
   resource_group_name = var.resource_group_name
   scopes              = each.scope
   description         = "Wowza Load balancer reports that the Health Check is below 95%. This may impact the service. Please investigate ASAP."
