@@ -102,7 +102,7 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
 
   name                = "${each.value.name}${var.env}"
   resource_group_name = var.resource_group_name
-  scopes              = each.scope
+  scopes              = each.value.scope
   description         = "Wowza Load balancer reports that the Health Check is below 95%. This may impact the service. Please investigate ASAP."
 
   criteria {
