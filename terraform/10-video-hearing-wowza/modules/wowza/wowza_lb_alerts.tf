@@ -3,7 +3,7 @@ data "azurerm_monitor_action_group" "dev" {
   name                = "Vh-Action-Group-dev-${var.env}"
 }
 
-data "azurerm_monitor_action_group" "dev" {
+data "azurerm_monitor_action_group" "devops" {
   resource_group_name = "vh-infra-core-${env}"
   name                = "Vh-Action-Group-devops-${var.env}"
 }
