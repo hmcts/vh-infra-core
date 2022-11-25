@@ -79,7 +79,7 @@ data "azurerm_lb" "wowza_lb_private" {
   resource_group_name = "vh-infra-wowza-${var.env}"
 }
 
-data "azurerm_lb" "wowza_lb_public"{
+data "azurerm_lb" "wowza_lb_public" {
   name                = "vh-infra-wowza-${var.env}-public"
   resource_group_name = "vh-infra-wowza-${var.env}"
 }
@@ -97,8 +97,8 @@ locals {
   }
 }
 
-resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
-  for_each = local.wowzaLoadBalancers
+resource "azurerm_monitor_metric_alert" "wowza_lb_alert" {
+  for_each = var.env == "prod" ? local.wowzaLoadBalancers : {}
 
   name                = "${each.value.name}${var.env}"
   resource_group_name = var.resource_group_name
@@ -113,12 +113,12 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert"{
     threshold        = 95
   }
 
-  severity                = 2
-  frequency               = "PT5M"
-  window_size             = "PT5M"
+  severity    = 2
+  frequency   = "PT5M"
+  window_size = "PT5M"
 
   action {
-    action_group_id  = azurerm_monitor_action_group.this["dev"].id 
+    action_group_id = azurerm_monitor_action_group.this["dev"].id
   }
 
   action {
