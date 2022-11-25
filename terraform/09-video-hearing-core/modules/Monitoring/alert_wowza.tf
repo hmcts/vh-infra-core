@@ -105,7 +105,7 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert" {
   name                = "${each.value.name}${var.env}"
   resource_group_name = var.resource_group_name
   scopes              = each.value.scope
-  description         = "Wowza Load Balancer Health is Below 95%, Please Investigate ASAP as This May Impact Service."
+  description         = "Wowza Load Balancer Health is Below 95%, Please Investigate ASAP as This May Impact the Service."
 
   criteria {
     metric_namespace = "Microsoft.Network/loadBalancers"
