@@ -75,11 +75,13 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_missing" {
 }
 
 data "azurerm_lb" "wowza_lb_private" {
+  count               = var.environment == "prod" ? 1 : 0
   name                = "vh-infra-wowza-${var.env}"
   resource_group_name = "vh-infra-wowza-${var.env}"
 }
 
 data "azurerm_lb" "wowza_lb_public" {
+  count               = var.environment == "prod" ? 1 : 0
   name                = "vh-infra-wowza-${var.env}-public"
   resource_group_name = "vh-infra-wowza-${var.env}"
 }
