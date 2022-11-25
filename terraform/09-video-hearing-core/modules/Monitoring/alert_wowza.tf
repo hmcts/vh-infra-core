@@ -89,11 +89,11 @@ data "azurerm_lb" "wowza_lb_public" {
 locals {
   wowzaLoadBalancers = {
     private = {
-      scope = [data.azurerm_lb.wowza_lb_private.id]
+      scope = [data.azurerm_lb.wowza_lb_private.id[0]]
       name  = "vh-wowza-lb-private-alert-"
     }
     public = {
-      scope = [data.azurerm_lb.wowza_lb_public.id]
+      scope = [data.azurerm_lb.wowza_lb_public.id[0]]
       name  = "vh-wowza-lb-public-alert-"
     }
   }
