@@ -25,7 +25,7 @@ resource "azurerm_monitor_metric_alert" "wowza_lb_alert" {
   for_each = var.environment == "prod" ? local.wowzaLoadBalancers : {}
 
   name                = "${each.value.name}"
-  resource_group_name = var.resource_group_name
+  resource_group_name = azurerm_resource_group.wowza.name
   scopes              = each.value.scope
   description         = "Wowza Load Balancer Health is Below 95%, Please Investigate ASAP as this may impact the service."
 
