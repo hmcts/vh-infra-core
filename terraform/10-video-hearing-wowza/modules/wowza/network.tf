@@ -70,7 +70,19 @@ resource "azurerm_network_security_group" "wowza" {
   }
 
   security_rule {
-    name                       = "AllowAzureLoadBalancerWowza"
+    name                       = "App-Rules"
+    priority                   = 1040
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_ranges    = ["443", "8087"]
+    source_address_prefix      = "*" #lookup(local.aks_address, var.environment, "*")
+    destination_address_prefix = var.address_space
+  }
+
+  security_rule {
+    name                       = "Azure-LB-Probe"
     priority                   = 1050
     direction                  = "Inbound"
     access                     = "Allow"
