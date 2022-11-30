@@ -51,6 +51,9 @@ resource "azapi_resource" "signalr_custom_domain" {
       domainName = var.custom_domain_name
     }
   })
+
+  ignore_casing = true
+
   depends_on = [
     azapi_resource.signalr_custom_certificate
   ]
