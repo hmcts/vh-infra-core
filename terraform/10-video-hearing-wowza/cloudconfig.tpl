@@ -1076,21 +1076,20 @@ write_files:
         touch $logPath
 
         echo "Starting Azure Blob mount Check at $NOW" >> $logPath
-        if (($number_of_files < $limit))
-        then
-        echo "Blob Storage NOT mounted"  >> $logPath
+        if (($number_of_files < $limit)); then
+                echo "Blob Storage NOT mounted"  >> $logPath
 
-        curl --location --request POST "https://$dynatrace_tenant.live.dynatrace.com/api/v2/events/ingest" \
-                        --header "Authorization: API-Token $dynatrace_token" \
-                        --header 'Content-Type: application/json' \
-                        --data-raw "{
-                                \"eventType\": \"ERROR_EVENT\",
-                                \"title\": \"FH - $project - Wowza BlobStorage UnMounted\",
-                                \"entitySelector\": \"type(HOST),entityName.startsWith($HOSTNAME)\",
-                                \"properties\": {}
-                        }" >> $logPath
+                curl --location --request POST "https://$dynatrace_tenant.live.dynatrace.com/api/v2/events/ingest" \
+                                --header "Authorization: API-Token $dynatrace_token" \
+                                --header 'Content-Type: application/json' \
+                                --data-raw "{
+                                        \"eventType\": \"ERROR_EVENT\",
+                                        \"title\": \"FH - $project - Wowza BlobStorage UnMounted\",
+                                        \"entitySelector\": \"type(HOST),entityName.startsWith($HOSTNAME)\",
+                                        \"properties\": {}
+                                }" >> $logPath
         else
-        echo "Found $number_of_files in /wowzadata/azurecopy - Blob Storage IS mounted." >> $logPath
+                echo "Found $number_of_files in /wowzadata/azurecopy - Blob Storage IS mounted." >> $logPath
         fi
   - owner: wowza:wowza
     permissions: 0775
