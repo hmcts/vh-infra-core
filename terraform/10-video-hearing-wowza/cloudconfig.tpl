@@ -1049,6 +1049,50 @@ write_files:
         fi
   - owner: wowza:wowza
     permissions: 0775
+    path: /home/wowza/check-blobMount.sh
+    content: |
+        #!/bin/bash
+
+        # Project
+        project="VH"
+
+        # Set Dynatrace Details.
+        dynatrace_token="${dynatrace_token}"
+        dynatrace_tenant="${dynatrace_tenant}"
+
+        # Set Log Path.
+        logFolder="/home/wowza/logs"
+        logPath="/home/wowza/logs/blobfuseMounted.log"
+
+        # Minimum number of files the directory must contain
+        limit=100
+
+        # Get the number of files in the Wowza directory
+        number_of_files=$(ls /wowzadata/azurecopy| wc -l)
+
+        # Send Alert to Dynatrace if Azure storage is not mounted.
+        NOW=`date '+%F %H:%M:%S'`
+        mkdir -p $logFolder
+        touch $logPath
+
+        echo "Starting Azure Blob mount Check at $NOW" >> $logPath
+        if (($number_of_files < $limit)); then
+                echo "Blob Storage NOT mounted"  >> $logPath
+
+                curl --location --request POST "https://$dynatrace_tenant.live.dynatrace.com/api/v2/events/ingest" \
+                                --header "Authorization: API-Token $dynatrace_token" \
+                                --header 'Content-Type: application/json' \
+                                --data-raw "{
+                                        \"eventType\": \"ERROR_EVENT\",
+                                        \"title\": \"FH - $project - Wowza BlobStorage UnMounted\",
+                                        \"entitySelector\": \"type(HOST),entityName.startsWith($HOSTNAME)\",
+                                        \"properties\": {}
+                                }" >> $logPath
+        else
+                echo "Found $number_of_files in /wowzadata/azurecopy - Blob Storage IS mounted." >> $logPath
+        fi
+  - owner: wowza:wowza
+    permissions: 0775
     path: /home/wowza/check-cert.sh
     content: |
         #!/bin/bash
@@ -1158,12 +1202,13 @@ write_files:
         logFolder='/home/wowza/logs'
         mkdir -p $logFolder
         echo "*/5 * * * * /home/wowza/mount.sh $1 $2 $3 >> $logFolder/wowza_mount.log 2>&1" >> $cronTaskPathRoot
-        echo "0 0 * * * /home/wowza/renew-cert.sh >> $logFolder/renew-cert.log" >> $cronTaskPathRoot
+        echo "0 0 * * * /home/wowza/renew-cert.sh >> $logFolder/renew-cert.log" >> $cronTaskPathRoot    
 
-        # Cron For Certs.
+        # Cron For Certs. Filesizes and BlobMounts
         if [[ $HOSTNAME == *"prod"* ]] || [[ $HOSTNAME == *"stg"* ]]; then
           echo "10 0 * * * /home/wowza/check-cert.sh" >> $cronTaskPath
           echo "10 0 * * * /home/wowza/check-file-size.sh" >> $cronTaskPath
+          echo "*/15 * * * * /home/wowza/check-blobMount.sh >> $cronTaskPath
         fi
 
         # Set Up Cron Jobs for Wowza & Root.
