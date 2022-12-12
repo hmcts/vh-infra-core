@@ -34,7 +34,7 @@ parameters:
       dependsOnEnv: "Stg"
 
 pool:
-  vmImage: 'ubuntu-22.04'
+  vmImage: 'ubuntu-latest'
 
 variables:
 - name: tfVersion
