@@ -5,6 +5,9 @@ trigger:
 pr:
   - none
 
+pool: 
+  vmImage: ubuntu-22.04
+
 schedules:
 - cron: "0 21 * * 1,2,3,4,5"
   displayName: Nightly
