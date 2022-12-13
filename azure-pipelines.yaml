@@ -39,6 +39,9 @@ parameters:
     - STG
     - PROD
 
+pool: 
+  vmImage: ubuntu-22.04
+
 name: VH Shared Services AKS Azure Infrastructure Deployment Pipeline
 trigger:
   - none
@@ -63,8 +66,6 @@ stages:
     displayName: 'Validate Infra'
     jobs: 
       - job: vh_tenant_replacement
-        pool:
-          vmImage: 'ubuntu-latest'
         variables:
           - group: vh-tenant-creds
         steps:
@@ -95,8 +96,6 @@ stages:
     condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Core'), contains('${{ parameters.Run_Stage }}', 'CI'))
     jobs:
       - job: Video_Hearing_Core
-        pool:
-          vmImage: 'ubuntu-latest'
         variables:
           - group: external
           - group: vh-tenant-creds
@@ -137,8 +136,6 @@ stages:
     condition: or(contains('${{ parameters.Run_Stage }}', 'Video_Hearing_Wowza'), contains('${{ parameters.Run_Stage }}', 'CI'))
     jobs:
       - job: Video_Hearing_Wowza
-        pool:
-          vmImage: 'ubuntu-latest'
         variables:
             - group: vh-tenant-creds
         steps:
@@ -162,8 +159,6 @@ stages:
     condition: contains('${{ parameters.Run_Stage }}', 'Destroy_Core')
     jobs:
       - job: Video_Hearing_Core
-        pool:
-          vmImage: 'ubuntu-latest' 
         variables:
           - group: vh-tenant-creds
         steps:
