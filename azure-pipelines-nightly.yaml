@@ -68,8 +68,6 @@ stages:
       dependsOn: []
       jobs:
         - job: Video_Hearing_Core_${{environment}}
-          # pool:
-          #   vmImage: 'Ubuntu 18.04'
           variables:
             - name: serviceConnection
               value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
@@ -103,8 +101,6 @@ stages:
       dependsOn: []
       jobs:
         - job: Video_Hearing_Wowza_${{environment}}
-          # pool:
-          #   vmImage: 'Ubuntu 18.04'
           variables:
             - name: serviceConnection
               value: DTS-SHAREDSERVICES-${{ environment }}-Video Hearings
