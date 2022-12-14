@@ -125,16 +125,16 @@ resource "azurerm_network_security_group" "wowza" {
 }
 
 resource "azurerm_network_security_rule" "AllowDynatrace" {
-  count                      = var.environment == "prod" ? 1 : 0
-  name                       = "AllowDynatrace"
-  resource_group_name        = azurerm_resource_group.wowza.name
-  location                   = azurerm_resource_group.wowza.location
-  priority                   = 1040
-  direction                  = "Inbound"
-  access                     = "Allow"
-  protocol                   = "Tcp"
-  source_address_prefixes    = ["51.105.8.19", "51.105.13.99", "51.105.16.253", "51.105.19.65", "51.145.2.40", "51.145.5.6", "51.145.125.238", "52.151.104.144", "52.151.109.153", "52.151.111.195"]
-  source_port_range          = "*"
-  destination_address_prefix = var.address_space
-  destination_port_range     = "443"
+  count                       = var.environment == "prod" ? 1 : 0
+  name                        = "AllowDynatrace"
+  resource_group_name         = azurerm_resource_group.wowza.name
+  network_security_group_name = azurerm_network_security_group.wowza.name
+  priority                    = 1040
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_address_prefixes     = ["51.105.8.19", "51.105.13.99", "51.105.16.253", "51.105.19.65", "51.145.2.40", "51.145.5.6", "51.145.125.238", "52.151.104.144", "52.151.109.153", "52.151.111.195"]
+  source_port_range           = "*"
+  destination_address_prefix  = var.address_space
+  destination_port_range      = "443"
 }
