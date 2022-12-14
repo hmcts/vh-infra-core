@@ -125,8 +125,10 @@ resource "azurerm_network_security_group" "wowza" {
 }
 
 resource "azurerm_network_security_rule" "AllowDynatrace" {
-  count                      = var.env == "prod" ? 1 : 0
+  count                      = var.environment == "prod" ? 1 : 0
   name                       = "AllowDynatrace"
+  resource_group_name        = azurerm_resource_group.wowza.name
+  location                   = azurerm_resource_group.wowza.location
   priority                   = 1040
   direction                  = "Inbound"
   access                     = "Allow"
