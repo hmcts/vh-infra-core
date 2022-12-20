@@ -1,2 +1,0 @@
-variables:
- dynatrace_network_zone: "azure.sds"
