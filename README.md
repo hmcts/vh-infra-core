@@ -1,6 +1,5 @@
-# vh-shared-infrastructure
-space for sharedservice infrastructure for the VH project
-
+# vh-infra-core
+Repository for the Video Hearings Core Infrastructure. 
 
 ### Adding ADO Librarys to Key Vault
 
