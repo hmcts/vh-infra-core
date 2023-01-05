@@ -45,7 +45,7 @@ steps:
     displayName: 'Subscription Replacement'
     inputs:
       targetType: 'inline'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
   - task: AzureCLI@2
@@ -139,7 +139,7 @@ steps:
     inputs:
           command: init
           terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
           backendType: azurerm
           backendServiceArm: ${{ parameters.serviceConnection }}
           backendAzureRmResourceGroupName: ${{ lower(parameters.tfStateResourceGroup) }}
@@ -154,7 +154,7 @@ steps:
     inputs:
           command: plan
           terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+          workingDirectory: $(System.DefaultWorkingDirectory)/terraform
           environmentServiceName: ${{ parameters.serviceConnection }}
           commandOptions: >
             -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.tfplan
@@ -169,7 +169,7 @@ steps:
   - task: ArchiveFiles@2
     displayName: 'Zip Terraform Files'
     inputs:
-      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform'
       archiveType: zip
       archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
 
