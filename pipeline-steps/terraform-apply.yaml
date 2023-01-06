@@ -55,7 +55,7 @@ steps:
       backendAzureRmStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: tfstate
-      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ vh-infra-core }}/terraform.tfstate'
 
   - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
     - template: templates/Azure/Common/unlock-lock.yaml@templates
@@ -79,4 +79,4 @@ steps:
       azureSubscription: ${{ parameters.serviceConnection }}
       storageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
       containerName: tfstate
-      blobName: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+      blobName: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ vh-infra-core }}/terraform.tfstate'
