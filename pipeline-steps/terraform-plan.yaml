@@ -145,7 +145,7 @@ steps:
           backendAzureRmStorageAccountName:  ${{ lower(parameters.tfStateStorageAccountName) }}
           backendAzureRmStorageAccountSku: Standard_LRS
           backendAzureRmContainerName: tfstate
-          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ vh-infra-core }}/terraform.tfstate'
+          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/core/terraform.tfstate'
 
   - task: TerraformCLI@0
     displayName: Terraform Plan
