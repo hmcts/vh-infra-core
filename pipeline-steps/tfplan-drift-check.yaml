@@ -88,7 +88,7 @@ steps:
     inputs:
           command: init
           terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
           backendType: azurerm
           backendServiceArm: ${{ parameters.serviceConnection }}
           backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
@@ -115,7 +115,7 @@ steps:
             -var builtFrom=${{ parameters.builtFrom }}
             -var product=${{ parameters.product }}
             -var activity_name=${{ parameters.activity_name }}
-            -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
+            -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/$(env).tfvars
             $(variableName)
 
   - task: PowerShell@2

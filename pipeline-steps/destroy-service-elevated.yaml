@@ -3,8 +3,6 @@ parameters:
     type: string
   - name: location
     type: string
-  - name: stack
-    type: string
     default: ''
   - name: project
     type: string

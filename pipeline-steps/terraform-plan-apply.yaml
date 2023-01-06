@@ -90,7 +90,6 @@ stages:
         parameters:
           environment: ${{ variables.environment }}
           location: ${{ parameters.location }}
-          stack: ${{ parameters.stack }}
           project: ${{ parameters.project }}
           product: ${{ parameters.product }}
           builtFrom: $(Build.Repository.Name)
@@ -136,7 +135,6 @@ stages:
               parameters:
                 environment: ${{ parameters.env }}
                 location: ${{ parameters.location }}
-                stack: ${{ parameters.stack }}
                 project: ${{ parameters.project }}
                 product: ${{ parameters.product }}
                 builtFrom: $(Build.Repository.Name)
