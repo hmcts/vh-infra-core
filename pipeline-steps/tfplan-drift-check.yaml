@@ -37,7 +37,7 @@ steps:
     displayName: 'Subscription Replacement'
     inputs:
       targetType: 'inline'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
 
@@ -104,7 +104,7 @@ steps:
     inputs:
           command: plan
           terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+          workingDirectory: $(System.DefaultWorkingDirectory)/terraform
           environmentServiceName: ${{ parameters.serviceConnection }}
           publishPlanResults: vh-shared-infra.tfplan
           commandOptions: >
@@ -124,7 +124,7 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+        cd $(System.DefaultWorkingDirectory)/terraform
         terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
 
   - task: PowerShell@2
@@ -136,7 +136,7 @@ steps:
         $encodedTeamProject=[uri]::EscapeUriString("$(System.TeamProject)")
         $buildUrl = "$(System.TeamFoundationCollectionUri)$encodedTeamProject/_build/results?buildId=$(Build.BuildId)"
         Write-Host $buildUrl
-        cd $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+        cd $(System.DefaultWorkingDirectory)/terraform
         $environment = "${{ parameters.environment }}"
         $planObj = Get-Content "vh-shared-infra-$${{ parameters.stack }}.json" | ConvertFrom-Json
         $resourceChanges = $planObj.resource_changes
