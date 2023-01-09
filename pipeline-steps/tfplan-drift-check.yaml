@@ -106,7 +106,7 @@ steps:
           environmentServiceName: ${{ parameters.serviceConnection }}
           publishPlanResults: vh-shared-infra.tfplan
           commandOptions: >
-            -out tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}
+            -out tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}/core
             -var control_vault=$(controlKeyVault)
             -var environment=${{ lower(parameters.environment) }}
             -var project=${{ parameters.project }}
@@ -142,7 +142,7 @@ steps:
         $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length
         $removeChanges = ($resourceChanges | Where {$_.change.actions -contains "delete"}).length
         $totalChanges = $addChanges + $changeChanges + $removeChanges
-        $msg = "There are $totalChanges differences ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on ${{ parameters.stack }}"
+        $msg = "There are $totalChanges differences ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on VH-infra-core"
         Write-Host $msg
         $sendMsg = (&{If($addChanges -gt 0 -or $changeChanges -gt 0 -or $removeChanges -gt 0) {"true"} Else {"false"}})
         Write-Host "Should send message: $sendMsg"

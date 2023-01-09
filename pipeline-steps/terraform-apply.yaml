@@ -37,7 +37,7 @@ steps:
   - task: ExtractFiles@1
     displayName: 'Extract Terraform Artifacts'
     inputs:
-      archiveFilePatterns: '$(Pipeline.Workspace)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+      archiveFilePatterns: '$(Pipeline.Workspace)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
       destinationFolder: '$(Pipeline.Workspace)/'
       cleanDestinationFolder: false
       overwriteExistingFiles: true
