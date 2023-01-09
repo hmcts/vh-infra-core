@@ -43,10 +43,10 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "wowza_reconcile" {
   tags = var.tags
 }
 
-resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_missing" {
+resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_not_recording" {
   count = var.env == "prod" ? 1 : 0
 
-  name                = "VH - SDS - Wowza Missing Recordings ${title(var.env)}"
+  name                = "VH - SDS - Wowza Stream Not Recording ${title(var.env)}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
