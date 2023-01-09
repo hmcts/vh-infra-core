@@ -40,7 +40,7 @@ locals {
 }
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
-  for_each = local.cron_jobs
+  for_each = var.env == "prod" ? local.cron_jobs : {}
 
   name         = "VH - SDS - CronJob ${each.key} Failure ${title(var.env)}"
   display_name = "VH - SDS - CronJob ${each.key} Failure ${title(var.env)}"
