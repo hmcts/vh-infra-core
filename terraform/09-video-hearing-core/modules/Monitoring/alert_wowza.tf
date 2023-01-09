@@ -1,8 +1,10 @@
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "wowza_reconcile" {
-  name                = "vh-wowza-reconcile-issues-${var.env}"
+  count = var.env == "prod" ? 1 : 0
+
+  name                = "VH - SDS - Wowza Reconcile Issues ${title(var.env)}"
+  display_name        = "VH - SDS - Wowza Reconcile Issues ${title(var.env)}"
   description         = "Video Hearings ${var.env} Reconciles expected hearing recordings against those in blob storage at 22:00 daily"
-  display_name        = "vh-wowza-reconcile-issues-${var.env}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
@@ -41,8 +43,10 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "wowza_reconcile" {
   tags = var.tags
 }
 
-resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_missing" {
-  name                = "vh-wowza-missing-recordings-issues-${var.env}"
+resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_not_recording" {
+  count = var.env == "prod" ? 1 : 0
+
+  name                = "VH - SDS - Wowza Stream Not Recording ${title(var.env)}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
