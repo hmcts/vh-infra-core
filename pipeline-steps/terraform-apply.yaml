@@ -37,7 +37,7 @@ steps:
   - task: ExtractFiles@1
     displayName: 'Extract Terraform Artifacts'
     inputs:
-      archiveFilePatterns: '$(Pipeline.Workspace)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+      archiveFilePatterns: '$(Pipeline.Workspace)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core.zip'
       destinationFolder: '$(Pipeline.Workspace)/'
       cleanDestinationFolder: false
       overwriteExistingFiles: true
@@ -72,7 +72,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(Pipeline.Workspace)'
       environmentServiceName: ${{ parameters.serviceConnection }}
-      commandOptions: '-input=false $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.tfplan'
+      commandOptions: '-input=false $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core.tfplan'
 
   - template: templates\Azure\Storage\break-lease.yaml@templates
     parameters:

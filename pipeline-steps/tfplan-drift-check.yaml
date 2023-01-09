@@ -123,7 +123,7 @@ steps:
       targetType: 'inline'
       script: |
         cd $(System.DefaultWorkingDirectory)/terraform
-        terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}' > vh-shared-infra-$${{ parameters.stack }}.json
+        terraform show -no-color -json 'tfplan-${{ parameters.project }}-${{ lower(parameters.environment) }}/core' > vh-shared-infra-/core.json
 
   - task: PowerShell@2
     name: Check_Difference
@@ -136,7 +136,7 @@ steps:
         Write-Host $buildUrl
         cd $(System.DefaultWorkingDirectory)/terraform
         $environment = "${{ parameters.environment }}"
-        $planObj = Get-Content "vh-shared-infra-$${{ parameters.stack }}.json" | ConvertFrom-Json
+        $planObj = Get-Content "vh-shared-infra-/core.json" | ConvertFrom-Json
         $resourceChanges = $planObj.resource_changes
         $addChanges = ($resourceChanges | Where {$_.change.actions -contains "create"}).length
         $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length

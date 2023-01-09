@@ -155,7 +155,7 @@ steps:
           workingDirectory: $(System.DefaultWorkingDirectory)/terraform
           environmentServiceName: ${{ parameters.serviceConnection }}
           commandOptions: >
-            -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.tfplan
+            -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core.tfplan
             -var control_vault=$(controlKeyVault)
             -var environment=${{ lower(parameters.environment) }}
             -var project=${{ parameters.project }}
@@ -169,12 +169,12 @@ steps:
     inputs:
       rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform'
       archiveType: zip
-      archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core.zip'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish Terraform Artifacts'
     inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+      targetPath: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core.zip'
       publishLocation: pipeline
       artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core'
 
