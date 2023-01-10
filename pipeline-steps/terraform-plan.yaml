@@ -183,4 +183,4 @@ steps:
       azureSubscription: ${{ parameters.serviceConnection }}
       storageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
       containerName: tfstate
-      blobName: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ vh-infra-core }}/terraform.tfstate'
+      blobName: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/core/terraform.tfstate'
