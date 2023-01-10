@@ -1,8 +1,10 @@
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "pexip" {
-  name                = "vh-pexip-issues-${var.env}"
+  count = var.env == "prod" ? 1 : 0
+
+  name                = "VH - SDS - Pexip Issues ${title(var.env)}"
+  display_name        = "VH - SDS - Pexip Issues ${title(var.env)}"
   description         = "If there are multiple Pexip errors in the logs this alert fires. Assuming all availabilty checks are ok this needs to be raised urgently with Kinly"
-  display_name        = "vh-pexip-issues-${var.env}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
