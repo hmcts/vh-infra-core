@@ -176,7 +176,7 @@ steps:
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core.zip'
       publishLocation: pipeline
-      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}/core'
+      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
 
   - template: templates\Azure\Storage\break-lease.yaml@templates
     parameters:
