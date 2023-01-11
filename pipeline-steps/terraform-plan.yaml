@@ -155,7 +155,7 @@ steps:
           workingDirectory: $(System.DefaultWorkingDirectory)/terraform
           environmentServiceName: ${{ parameters.serviceConnection }}
           commandOptions: >
-            -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core/tfplan
+            -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
             -var control_vault=$(controlKeyVault)
             -var environment=${{ lower(parameters.environment) }}
             -var project=${{ parameters.project }}
