@@ -70,7 +70,7 @@ steps:
     inputs:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(Pipeline.Workspace)'
+      workingDirectory: '$(Pipeline.Workspace)/terraform'
       environmentServiceName: ${{ parameters.serviceConnection }}
       commandOptions: '-input=false $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
 
