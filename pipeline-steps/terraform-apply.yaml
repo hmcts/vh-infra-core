@@ -72,7 +72,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(Pipeline.Workspace)/terraform'
       environmentServiceName: ${{ parameters.serviceConnection }}
-      commandOptions: '-input=false $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core/tfplan'
+      commandOptions: '-input=false $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
 
   - template: templates\Azure\Storage\break-lease.yaml@templates
     parameters:
