@@ -3,8 +3,6 @@ parameters:
     type: string
   - name: location
     type: string
-  - name: stack
-    type: string
   - name: project
     type: string
   - name: tfversion
@@ -45,7 +43,7 @@ steps:
     displayName: 'Subscription Replacement'
     inputs:
       targetType: 'inline'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
   - task: AzureCLI@2
@@ -139,7 +137,7 @@ steps:
     inputs:
           command: init
           terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
           backendType: azurerm
           backendServiceArm: ${{ parameters.serviceConnection }}
           backendAzureRmResourceGroupName: ${{ lower(parameters.tfStateResourceGroup) }}
@@ -147,42 +145,42 @@ steps:
           backendAzureRmStorageAccountName:  ${{ lower(parameters.tfStateStorageAccountName) }}
           backendAzureRmStorageAccountSku: Standard_LRS
           backendAzureRmContainerName: tfstate
-          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/core/terraform.tfstate'
 
   - task: TerraformCLI@0
     displayName: Terraform Plan
     inputs:
           command: plan
           terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}
+          workingDirectory: $(System.DefaultWorkingDirectory)/terraform
           environmentServiceName: ${{ parameters.serviceConnection }}
           commandOptions: >
-            -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.tfplan
+            -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
             -var control_vault=$(controlKeyVault)
             -var environment=${{ lower(parameters.environment) }}
             -var project=${{ parameters.project }}
             -var builtFrom=${{ parameters.builtFrom }}
             -var product=${{ parameters.product }}
             -var activity_name=${{ parameters.activity_name }}
-            -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars
+            -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/$(env).tfvars
             $(variableName)
   - task: ArchiveFiles@2
     displayName: 'Zip Terraform Files'
     inputs:
-      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform'
       archiveType: zip
-      archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.zip'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish Terraform Artifacts'
     inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}.zip'
+      targetPath: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.zip'
       publishLocation: pipeline
-      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-${{ parameters.stack }}'
+      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
 
   - template: templates\Azure\Storage\break-lease.yaml@templates
     parameters:
       azureSubscription: ${{ parameters.serviceConnection }}
       storageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
       containerName: tfstate
-      blobName: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/${{ parameters.stack }}/terraform.tfstate'
+      blobName: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/core/terraform.tfstate'

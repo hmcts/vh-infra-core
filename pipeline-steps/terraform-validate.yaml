@@ -2,9 +2,6 @@ parameters:
   - name: tfversion
     type: string
 
-  - name: stack
-    type: string
-
 steps:
 #  - template: keyvault-read.yaml
 #    parameters:
@@ -21,8 +18,8 @@ steps:
     inputs:
       command: 'init'
       commandOptions: '-backend=false -input=false'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
 
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
-      terraformPath: '$(System.DefaultWorkingDirectory)/terraform/${{ parameters.stack }}'
+      terraformPath: '$(System.DefaultWorkingDirectory)/terraform'

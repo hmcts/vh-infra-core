@@ -20,12 +20,6 @@ parameters:
 - name: environmentServiceConnection
   type: string
 
-- name: stack
-  type: string
-  values:
-    - 09-video-hearing-core
-    - 10-video-hearing-wowza
-
 - name: product
   type: string
   values:
@@ -96,7 +90,6 @@ stages:
         parameters:
           environment: ${{ variables.environment }}
           location: ${{ parameters.location }}
-          stack: ${{ parameters.stack }}
           project: ${{ parameters.project }}
           product: ${{ parameters.product }}
           builtFrom: $(Build.Repository.Name)
@@ -142,7 +135,6 @@ stages:
               parameters:
                 environment: ${{ parameters.env }}
                 location: ${{ parameters.location }}
-                stack: ${{ parameters.stack }}
                 project: ${{ parameters.project }}
                 product: ${{ parameters.product }}
                 builtFrom: $(Build.Repository.Name)

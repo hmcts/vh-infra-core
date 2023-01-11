@@ -58,7 +58,6 @@ stages:
         - template: pipeline-steps/terraform-validate.yaml
           parameters:
             tfversion: ${{ variables.tfversion }}
-            stack: '09-video-hearing-core'
 
 
 ################################################
@@ -72,7 +71,6 @@ stages:
         env: ${{ env.name }}
         location: ${{ variables.azureLocation }}
         environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
-        stack: 09-video-hearing-core
         product: vh
         activityName: Video_Hearing_Core
         tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
@@ -86,7 +84,6 @@ stages:
           env: ${{ env.name }}
           location: ${{ variables.azureLocation }}
           environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
-          stack: 09-video-hearing-core
           product: vh
           activityName: Video_Hearing_Core
           tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
