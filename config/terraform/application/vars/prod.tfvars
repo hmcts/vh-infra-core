@@ -23,5 +23,3 @@ databases = {
     performance_level = "S0"
   }
 }
-
-dynatrace_tenant = "ebe20728"

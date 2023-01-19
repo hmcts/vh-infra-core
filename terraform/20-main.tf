@@ -513,6 +513,10 @@ resource "azurerm_user_assigned_identity" "vh_mi" {
 # VH - AutomationAccount
 #--------------------------------------------------------------
 
+locals {
+  dynatrace_tenant = var.environment == "prod" ? "ebe20728" : "yrk32651"
+}
+
 data "azurerm_key_vault_secret" "dynatrace_token" {
   name         = "dynatrace-token"
   key_vault_id = data.azurerm_key_vault.vh-infra-core-kv.id
@@ -550,10 +554,10 @@ module "app_secret_alert" {
   runbook_parameters = {
     applicationids  = [for id in module.AppReg.app_registrations : id.application_id]
     azuretenant     = var.vh_tenant_id
-    dynatracetenant = var.dynatrace_tenant
-    entitytype      = "cloud:azure:keyvault:vault"
+    dynatracetenant = local.dynatrace_tenant
+    entitytype      = "cloud:azure:keyvault:vaults"
     entityname      = "vh-infra-core-${var.environment}"
-    project         = "VH"
+    project         = var.activity_name
   }
 
   tags = local.common_tags
