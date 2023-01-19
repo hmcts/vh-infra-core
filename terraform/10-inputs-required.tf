@@ -950,3 +950,8 @@ variable "emails_devops" {
   default     = ""
 }
 
+variable "dynatrace_tenant" {
+  description = "Dynatrace Tenant"
+  default     = ""
+  type        = string
+}

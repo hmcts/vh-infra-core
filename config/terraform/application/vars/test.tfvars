@@ -5,3 +5,5 @@ vh_client_id     = "replace_vh_client_id"
 vh_client_secret = "replace_vh_client_secret"
 
 signalr_custom_domain_name = "signalr.test.platform.hmcts.net"
+
+dynatrace_tenant = "yrk32651"

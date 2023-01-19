@@ -526,26 +526,35 @@ resource "azurerm_automation_account" "vh_infra_core" {
   tags                = local.common_tags
 }
 
-module "dynatrace_runbook" {
-  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-new-dynatrace-alert.git?ref=v1.0.0"
-  count  = var.environment == "prod" || var.environment == "stg" ? 1 : 0
+module "app_secret_alert" {
+  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-app-secret-alert.git?ref=v1.0.0-beta"
 
   automation_account_name = azurerm_automation_account.vh_infra_core.name
   resource_group_name     = azurerm_resource_group.vh-infra-core.name
   location                = azurerm_resource_group.vh-infra-core.location
 
-  automation_credentials = [
-    {
-      name        = "Dynatrace-Token"
-      username    = "Dynatrace"
-      password    = data.azurerm_key_vault_secret.dynatrace_token.value
-      description = "Dynatrace API Token"
-    }
-  ]
+  azure_credentials = {
+    name        = "AzureAD-SPN"
+    username    = var.vh_client_id
+    password    = var.vh_client_secret
+    description = "Service Principal with Access to Azure AD"
+  }
+
+  dynatrace_credentials = {
+    name        = "Dynatrace-Token"
+    username    = "Dynatrace"
+    password    = data.azurerm_key_vault_secret.dynatrace_token.value
+    description = "Dynatrace API Token"
+  }
+
+  runbook_parameters = {
+    applicationids  = [for id in module.AppReg.app_registrations : id.application_id]
+    azuretenant     = var.vh_tenant_id
+    dynatracetenant = var.dynatrace_tenant
+    entitytype      = "cloud:azure:keyvault:vault"
+    entityname      = "vh-infra-core-${var.environment}"
+    project         = "VH"
+  }
 
   tags = local.common_tags
-
-  depends_on = [
-    azurerm_automation_account.vh_infra_core
-  ]
 }
