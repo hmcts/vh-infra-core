@@ -2,7 +2,7 @@ name: Check PR title and project linting
 on:
   pull_request:
     branches-ignore:
-      - 'renovate/**'
+      - 'renovate/*'
     types:
       - opened
       - reopened
