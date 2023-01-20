@@ -4,15 +4,11 @@ locals {
   sku_size = "P1"
 }
 
-data "azurerm_resource_group" "resource_group" {
-  name = var.resource_group_name
-}
-
 resource "azapi_resource" "signalR" {
   type      = "Microsoft.SignalRService/signalR@2022-02-01"
   name      = var.name
-  location  = data.azurerm_resource_group.resource_group.location
-  parent_id = data.azurerm_resource_group.resource_group.id
+  location  = var.location
+  parent_id = var.resource_group_name
 
   identity {
     type         = "UserAssigned"

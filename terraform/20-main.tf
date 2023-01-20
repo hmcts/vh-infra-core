@@ -295,6 +295,7 @@ module "SignalR" {
 
   name                = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  location            = azurerm_resource_group.vh-infra-core.location
   managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
   custom_domain_name  = var.signalr_custom_domain_name
   key_vault_cert_name = var.environment == "stg" || var.environment == "prod" ? lookup(local.key_vault_cert_name_wildcard, var.environment) : "wildcard-${var.environment}-platform-hmcts-net"
