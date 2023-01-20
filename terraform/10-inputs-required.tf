@@ -949,4 +949,3 @@ variable "emails_devops" {
   type        = string
   default     = ""
 }
-
