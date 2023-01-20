@@ -31,6 +31,8 @@ parameters:
     default:
     - name: Dev
       dependsOnEnv: ""
+    - name: Demo
+      dependsOnEnv: "Dev"
     - name: Stg
       dependsOnEnv: "Dev"
     - name: Test
