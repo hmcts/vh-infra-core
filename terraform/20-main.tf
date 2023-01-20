@@ -295,6 +295,7 @@ module "SignalR" {
 
   name                = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  resource_group_id   = azurerm_resource_group.vh-infra-core.id
   location            = azurerm_resource_group.vh-infra-core.location
   managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
   custom_domain_name  = var.signalr_custom_domain_name

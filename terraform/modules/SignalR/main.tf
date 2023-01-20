@@ -8,7 +8,7 @@ resource "azapi_resource" "signalR" {
   type      = "Microsoft.SignalRService/signalR@2022-02-01"
   name      = var.name
   location  = var.location
-  parent_id = var.resource_group_name
+  parent_id = var.resource_group_id
 
   identity {
     type         = "UserAssigned"
