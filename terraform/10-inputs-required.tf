@@ -949,9 +949,3 @@ variable "emails_devops" {
   type        = string
   default     = ""
 }
-
-variable "dynatrace_tenant" {
-  description = "Dynatrace Tenant"
-  default     = ""
-  type        = string
-}

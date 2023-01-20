@@ -531,7 +531,8 @@ resource "azurerm_automation_account" "vh_infra_core" {
 }
 
 module "app_secret_alert" {
-  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-app-secret-alert.git?ref=v1.0.0-beta"
+  count  = var.environment == "prod" || var.environment == "stg" ? 1 : 0
+  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-app-secret-alert.git?ref=v1.0.0"
 
   automation_account_name = azurerm_automation_account.vh_infra_core.name
   resource_group_name     = azurerm_resource_group.vh-infra-core.name
