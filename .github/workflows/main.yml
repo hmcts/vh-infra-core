@@ -12,7 +12,7 @@ jobs:
     if: "!contains(github.event.pull_request.head.ref, 'renovate')" 
     runs-on: ubuntu-latest
     steps:
-    - name: NameCheck 
+    - name: NameCheck
       env:
         MATRIX_CONTEXT: ${{ toJson(github.event.pull_request) }}
       run: echo "$MATRIX_CONTEXT"
