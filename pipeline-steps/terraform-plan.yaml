@@ -171,7 +171,7 @@ steps:
 
   - ${{ if eq(parameters.destroyInfra, true) }}:
     - task: TerraformCLI@0
-      displayName: Terraform Plan
+      displayName: Terraform Plan Destroy
       inputs:
         command: plan
         terraformVersion: ${{ parameters.tfversion }}
