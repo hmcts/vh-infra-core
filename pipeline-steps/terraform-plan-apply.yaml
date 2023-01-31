@@ -50,7 +50,7 @@ stages:
   displayName: 'Terraform Plan ${{ parameters.env }}'
   ${{ if eq(parameters.dependsOnEnv, '') }}:
     dependsOn: Validate_Terraform_Code
-  ${{ elseif eq(parameters.dependsOnEnv, []) }}:
+  ${{ elseif eq(parameters.dependsOnEnv, '[]') }}:
     dependsOn: []
   ${{ else }}:
     dependsOn: 'Terraform_Apply_${{ parameters.dependsOnEnv }}'
