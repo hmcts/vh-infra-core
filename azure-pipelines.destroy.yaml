@@ -30,7 +30,7 @@ variables:
 ################################################
 # Terraform Plan & Destroy. ####################
 stages:
-  - template: templates/terraform-plan-apply.yaml
+  - template: pipeline-steps/terraform-plan-apply.yaml
     parameters:
       terraformVersion: ${{ variables.tfVersion }}
       env: ${{ parameters.environment }}
