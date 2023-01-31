@@ -38,16 +38,20 @@ parameters:
 - name: tfStateStorageAccountName 
   type: string
 
-- name: dependsOnEnv 
-  type: string
+- name: dependsOnEnv
   default: ''
 
+- name: destroyInfra
+  type: boolean
+  default: false
 
 stages:
 - stage: 'Terraform_Plan_${{ parameters.env }}'
   displayName: 'Terraform Plan ${{ parameters.env }}'
   ${{ if eq(parameters.dependsOnEnv, '') }}:
     dependsOn: Validate_Terraform_Code
+  ${{ elseif eq(parameters.dependsOnEnv, '[]') }}:
+    dependsOn: []
   ${{ else }}:
     dependsOn: 'Terraform_Apply_${{ parameters.dependsOnEnv }}'
   variables:
@@ -98,6 +102,7 @@ stages:
           tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
           tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
           activity_name: ${{ parameters.activityName  }}
+          destroyInfra: ${{ parameters.destroyInfra }}
           ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
             additional_tf_var: $(ado_vars_to_tf.ado_vars)
 
@@ -146,46 +151,7 @@ stages:
                 ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
                   additional_tf_var: $(ado_vars_to_tf.ado_vars)
 
-    - ${{ if eq(parameters.activityName, 'Video_Hearing_Wowza') }}:
-      - job: ApplyExtToEnv
-        displayName: 'Extensions to ${{parameters.env}}'
-        dependsOn: Terraform_Apply_${{ parameters.env }}
-        steps:
-          - template: az-ext-oms.yaml
-            parameters:
-              subscription: ${{parameters.environmentServiceConnection}}
-              ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
-                vmNames: ["vh-infra-wowza-${{parameters.env}}-1","vh-infra-wowza-${{parameters.env}}-2" ]
-              ${{ else }}:
-                vmNames: ["vh-infra-wowza-${{parameters.env}}-1"]
-              vmRgName:  "vh-infra-wowza-${{parameters.env}}"
-              env: ${{ parameters.env }}
-              env_long: ${{ variables.env_long }}
-          - ${{ if or(eq(parameters.env, 'stg'), eq(parameters.env, 'prod')) }}:
-            - template: az-ext-dynatrace-api.yaml
-              parameters:
-                subscription: ${{parameters.environmentServiceConnection}}
-                vmNames: ["vh-infra-wowza-${{parameters.env}}-1","vh-infra-wowza-${{parameters.env}}-2" ]
-                vmRgName: "vh-infra-wowza-${{parameters.env}}"
-                env: ${{parameters.env}}
-                env_long: ${{ variables.env_long }}
-
-      - job: MonitoringTasks
-        displayName: 'Monitoring Tasks ${{parameters.env}}'
-        dependsOn: Terraform_Apply_${{ parameters.env }}
-        steps:
-          - template: az-dynatrace-credentials.yaml
-            parameters:
-              subscription: ${{parameters.environmentServiceConnection}}
-              env: ${{ parameters.env }}
-              dynatraceTenantId: ${{ variables.dynatrace_tenant_id }}
-              infraCoreKvName: ${{ variables.central_infra_kv }}
-              dynatraceApiTokenSecretName: ${{ variables.dynatrace_api_token_secret_name }}
-              kvName: "vh-infra-core-${{ parameters.env }}"
-              wowzaUsernameSecretName: "wowzaconfiguration--username"
-              wowzaPasswordSecretName: "wowzaconfiguration--restPassword"
-    
-    - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
+    - ${{ if eq(parameters.destroyInfra, false) }}:
       - job: SqlAccess
         displayName: SQL AD Access 
         dependsOn: Terraform_Apply_${{ parameters.env }}
