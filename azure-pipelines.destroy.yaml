@@ -40,5 +40,5 @@ stages:
       activityName: Video_Hearing_Core
       tfStateResourceGroup: vh-infra-core-${{ parameters.environment }}-tf
       tfStateStorageAccountName: vhinfracore${{ parameters.environment }}tf
-      dependsonEnv: '[]'
+      dependsonEnv: []
       destroyInfra: true
