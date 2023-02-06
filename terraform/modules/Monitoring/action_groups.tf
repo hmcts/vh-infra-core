@@ -1,5 +1,3 @@
-
-
 resource "azurerm_monitor_action_group" "this" {
   for_each = var.action_groups
 

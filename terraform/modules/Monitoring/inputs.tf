@@ -36,3 +36,23 @@ variable "action_groups" {
   }))
   default = {}
 }
+
+variable "automation_account_name" {
+  description = "name of automation account with dynatrace runbook"
+  type        = string
+}
+
+variable "automation_account_id" {
+  description = "id of automation account with dynatrace runbook"
+  type        = string
+}
+
+variable "dynatrace_runbook_name" {
+  description = "runbook name"
+  type        = string
+}
+
+variable "dynatrace_tenant" {
+  description = "dynatrace tenant"
+  type        = string
+}
