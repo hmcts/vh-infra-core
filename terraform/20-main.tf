@@ -380,7 +380,7 @@ module "Monitoring" {
 
   automation_account_id   = azurerm_automation_account.vh_infra_core.id
   automation_account_name = azurerm_automation_account.vh_infra_core.name
-  dynatrace_runbook_name  = module.dynatrace_runbook.runbook_name
+  dynatrace_runbook_name  = module.dynatrace_runbook[0].runbook_name
   dynatrace_tenant        = local.dynatrace_tenant
 
   env = local.environment
