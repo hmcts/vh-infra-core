@@ -380,7 +380,7 @@ module "Monitoring" {
 
   automation_account_id   = azurerm_automation_account.vh_infra_core.id
   automation_account_name = azurerm_automation_account.vh_infra_core.name
-  dynatrace_runbook_name  = module.dynatrace_runbook[0].runbook_name
+  dynatrace_runbook_name  = module.dynatrace_runbook.runbook_name
   dynatrace_tenant        = local.dynatrace_tenant
 
   env = local.environment
@@ -539,7 +539,6 @@ resource "azurerm_automation_account" "vh_infra_core" {
 
 module "dynatrace_runbook" {
   source = "git::https://github.com/hmcts/cnp-module-automation-runbook-new-dynatrace-alert.git?ref=v1.0.0"
-  count  = var.environment == "prod" || var.environment == "dev" ? 1 : 0
 
   automation_account_name = azurerm_automation_account.vh_infra_core.name
   resource_group_name     = azurerm_resource_group.vh-infra-core.name
@@ -549,7 +548,7 @@ module "dynatrace_runbook" {
 }
 
 module "app_secret_alert" {
-  count  = var.environment == "prod" || var.environment == "dev" ? 1 : 0
+  count  = var.environment == "prod" ? 1 : 0
   source = "git::https://github.com/hmcts/cnp-module-automation-runbook-app-secret-alert.git?ref=v1.0.0"
 
   automation_account_name = azurerm_automation_account.vh_infra_core.name

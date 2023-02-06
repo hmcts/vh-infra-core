@@ -40,7 +40,7 @@ locals {
 }
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
-  for_each = var.env == "dev" ? local.cron_jobs : {}
+  for_each = var.env == "prod" ? local.cron_jobs : {}
 
   name         = "VH - SDS - CronJob ${each.key} Failure ${title(var.env)}"
   display_name = "VH - SDS - CronJob ${each.key} Failure ${title(var.env)}"
@@ -83,7 +83,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
 }
 
 resource "azurerm_automation_webhook" "webhook" {
-  for_each = var.env == "dev" ? local.cron_jobs : {}
+  for_each = var.env == "prod" ? local.cron_jobs : {}
 
   name                    = each.key
   resource_group_name     = var.resource_group_name
@@ -104,7 +104,7 @@ resource "azurerm_automation_webhook" "webhook" {
 }
 
 resource "azurerm_monitor_action_group" "cron_action_group" {
-  for_each = var.env == "dev" ? local.cron_jobs : {}
+  for_each = var.env == "prod" ? local.cron_jobs : {}
 
   name                = each.key
   short_name          = "CronAlert"
