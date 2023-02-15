@@ -17,6 +17,7 @@ variables:
   - group: vh-user-groups
   - group: vh-video-api
   - group: QuickLinks_${{ parameters.environment }}
+  - group: QuickLinks_Common
   - group: FeatureFlags_${{ parameters.environment }}
   - group: vh-video-web
   - group: Ejud_${{ parameters.environment }}
