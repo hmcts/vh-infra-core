@@ -48,6 +48,8 @@ resource "azapi_resource" "signalr_custom_domain" {
     }
   })
 
+  ignore_casing = true
+  
   depends_on = [
     azapi_resource.signalr_custom_certificate
   ]
