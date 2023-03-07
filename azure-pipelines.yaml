@@ -33,6 +33,8 @@ parameters:
       dependsOnEnv: ""
     - name: Demo
       dependsOnEnv: "Dev"
+    - name: ITHC
+      dependsOnEnv: "Dev"
     - name: Stg
       dependsOnEnv: "Dev"
     - name: Prod
