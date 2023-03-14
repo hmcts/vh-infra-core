@@ -538,7 +538,7 @@ resource "azurerm_automation_account" "vh_infra_core" {
 }
 
 module "dynatrace_runbook" {
-  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-new-dynatrace-alert.git?ref=v1.0.0"
+  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-new-dynatrace-alert.git?ref=v1.0.1"
 
   automation_account_name = azurerm_automation_account.vh_infra_core.name
   resource_group_name     = azurerm_resource_group.vh-infra-core.name
