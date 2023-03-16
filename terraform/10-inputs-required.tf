@@ -59,11 +59,6 @@ variable "databases" {
       edition           = "Standard"
       performance_level = "S0"
     }
-    vhtest = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
   }
 }
 
