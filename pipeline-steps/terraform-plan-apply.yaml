@@ -171,6 +171,7 @@ stages:
                     - db_datareader
                     - ${{ if ne(lower(parameters.env), 'prod') }}:
                       - db_datawriter
+                - ${{ if ne(lower(parameters.env), 'demo') }}:
                 - user: mi-ingestion-adf-${{ lower(parameters.env)}}
                   databaseNames:
                     - vhbookings
