@@ -28,3 +28,4 @@ variables:
     - group: vh-common-${{ parameters.environment }}
   - ${{ else }}:
     - group: vh-common
+  - group: DOM1_${{ parameters.environment }}
