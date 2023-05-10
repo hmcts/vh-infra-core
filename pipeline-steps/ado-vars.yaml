@@ -23,7 +23,11 @@ variables:
   - group: Ejud_${{ parameters.environment }}
   - group: Dynatrace_${{ parameters.environment }}
   - group: KinlyConfiguration_${{ parameters.environment }}
-  - group: vh-scheduler-jobs
+  - group: vh-scheduler-jobs # Common values for vh-scheduler-jobs, prod/non-prod set below
+  - ${{ if eq(parameters.environment, 'prod') }}:
+    - group: vh-scheduler-jobs-prod
+  - ${{ else }}:
+    - group: vh-scheduler-jobs-non-prod
   - ${{ if eq(parameters.environment, 'prod') }}:
     - group: vh-common-${{ parameters.environment }}
   - ${{ else }}:
