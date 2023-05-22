@@ -247,7 +247,7 @@ locals {
 }
 #tfsec:ignore:azure-storage-default-action-deny
 module "storage" {
-  source = "git::https://github.com/hmcts/cnp-module-storage-account?ref=master"
+  source = "git::https://github.com/hmcts/cnp-module-storage-account?ref=Fix-enable_change_feed"
 
   env = var.environment
 
