@@ -3,7 +3,7 @@ Repository for the Video Hearings Core Infrastructure.
 
 ### Adding ADO Librarys to Key Vault
 
-#### Create a ADO Variable
+#### Create an ADO Variable
 
 1. Go to the ADO Library and edit `vh-key-vault-vars` group
 2. Add a new variable with the value in the format of an array of object. Call the variable the name of the key vault plus `-secrets` <br/>
