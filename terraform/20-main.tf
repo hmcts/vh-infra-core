@@ -78,6 +78,13 @@ module "KeyVault_Secrets" {
       tags         = local.common_tags
       content_type = "secret"
     },
+
+    {
+      name         = "connectionstrings--applicationinsights"
+      value        = module.Monitoring.ai_connectionstring
+      tags         = local.common_tags
+      content_type = "secret"
+    },
     {
       name         = "azuread--tenantid"
       value        = var.vh_tenant_id
