@@ -17,6 +17,11 @@ resource "azapi_resource" "signalR" {
 
   body = jsonencode({
     properties = {
+      features = [
+          {
+            serviceMode = "Default"
+          }
+        ],
       cors = {
         allowedOrigins = [
           "*"
@@ -71,7 +76,6 @@ resource "azapi_resource" "signalr_custom_certificate" {
 data "azurerm_signalr_service" "signalR" {
   name                = var.name
   resource_group_name = var.resource_group_name
-  service_mode = "Default"
   depends_on = [
     azapi_resource.signalR
   ]
