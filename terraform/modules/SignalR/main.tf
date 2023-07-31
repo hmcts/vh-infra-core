@@ -81,7 +81,7 @@ data "azurerm_signalr_service" "signalR" {
   ]
 }
 
-resource "azurerm_monitor_diagnostic_setting" "signalR_diag" {
+/**resource "azurerm_monitor_diagnostic_setting" "signalR_diag" {
   name                 = var.name
   target_resource_id   = data.azurerm_signalr_service.signalR.id
 
@@ -103,4 +103,4 @@ resource "azurerm_monitor_diagnostic_setting" "signalR_diag" {
     }
   }
   
-}
+}**/
