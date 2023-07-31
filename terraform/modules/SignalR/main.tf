@@ -5,7 +5,7 @@ locals {
 }
 
 resource "azapi_resource" "signalR" {
-  type      = "Microsoft.SignalRService/signalR@2022-02-01"
+  type      = "Microsoft.SignalRService/signalR@2023-01-01"
   name      = var.name
   location  = var.location
   parent_id = var.resource_group_id
@@ -35,7 +35,7 @@ resource "azapi_resource" "signalR" {
 }
 
 resource "azapi_resource" "signalr_custom_domain" {
-  type      = "Microsoft.SignalRService/signalR/customDomains@2022-02-01"
+  type      = "Microsoft.SignalRService/signalR/customDomains@2023-01-01"
   name      = var.custom_domain_name
   parent_id = azapi_resource.signalR.id
 
@@ -56,7 +56,7 @@ resource "azapi_resource" "signalr_custom_domain" {
 }
 
 resource "azapi_resource" "signalr_custom_certificate" {
-  type      = "Microsoft.SignalRService/signalR/customCertificates@2022-02-01"
+  type      = "Microsoft.SignalRService/signalR/customCertificates@2023-01-01"
   name      = var.key_vault_cert_name
   parent_id = azapi_resource.signalR.id
 
@@ -74,4 +74,29 @@ data "azurerm_signalr_service" "signalR" {
   depends_on = [
     azapi_resource.signalR
   ]
+  service_mode = "Default"
+}
+
+resource "azurerm_monitor_diagnostic_setting" "signalR_diag" {
+  name                 = var.name
+  target_resource_id   = data.azurerm_signalr_service.signalR.id
+
+  log {
+    category = "AllLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = false
+    }
+  }
+
+  metric {
+    category = "AllMetrics"
+    enabled  = true
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  
 }
