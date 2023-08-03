@@ -81,7 +81,7 @@ data "azurerm_signalr_service" "signalR" {
 resource "azurerm_monitor_diagnostic_setting" "signalR_diag" {
   name                 = var.name
   target_resource_id   = data.azurerm_signalr_service.signalR.id
-  log_analytics_workspace_id = var.log_analytics_workspace_id
+  storage_account_id = var.storage_account_id
 
   log {
     category = "AllLogs"

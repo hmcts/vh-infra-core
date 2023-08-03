@@ -35,7 +35,7 @@ variable "tags" {
   default = {}
 }
 
-variable "log_analytics_workspace_id" {
+variable "storage_account_id" {
   type = string
 }
 
