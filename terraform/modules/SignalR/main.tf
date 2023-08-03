@@ -78,29 +78,26 @@ data "azurerm_signalr_service" "signalR" {
   ]
 }
 
-# resource "azurerm_monitor_diagnostic_setting" "signalR_diag" {
-#   name                 = var.name
-#   target_resource_id   = data.azurerm_signalr_service.signalR.id
-#   partner_solution_id = 
-#   eventhub_authorization_rule_id =
-#   storage_account_id =  
+resource "azurerm_monitor_diagnostic_setting" "signalR_diag" {
+  name                 = var.name
+  target_resource_id   = data.azurerm_signalr_service.signalR.id
 
-#   log {
-#     category = "AllLogs"
-#     enabled  = true
+  log {
+    category = "AllLogs"
+    enabled  = true
 
-#     retention_policy {
-#       enabled = false
-#     }
-#   }
+    retention_policy {
+      enabled = false
+    }
+  }
 
-#   metric {
-#     category = "AllMetrics"
-#     enabled  = true
+  metric {
+    category = "AllMetrics"
+    enabled  = true
 
-#     retention_policy {
-#       enabled = false
-#     }
-#   }
+    retention_policy {
+      enabled = false
+    }
+  }
   
-# }
+}
