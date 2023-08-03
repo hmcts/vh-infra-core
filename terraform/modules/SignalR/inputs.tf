@@ -35,3 +35,7 @@ variable "tags" {
   default = {}
 }
 
+variable "log_analytics_workspace_id" {
+  type = string
+}
+
