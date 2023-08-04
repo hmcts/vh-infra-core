@@ -29,8 +29,7 @@ resource "azapi_resource" "signalR" {
       name     = local.sku_name
       tier     = local.sku_type
     }
-    kind = local.signalr_kind
-   
+    kind = "SignalR"
   })
 
   tags = var.tags
