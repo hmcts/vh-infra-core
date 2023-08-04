@@ -18,11 +18,6 @@ resource "azapi_resource" "signalR" {
 
   body = jsonencode({
     properties = {
-      features = {
-        serviceMode = [
-          "Default"
-        ]
-      }
       cors = {
         allowedOrigins = [
           "*"
@@ -34,7 +29,7 @@ resource "azapi_resource" "signalR" {
       name     = local.sku_name
       tier     = local.sku_type
     }
-    kind = "SignalR"
+    kind = local.signalr_kind
   })
 
   tags = var.tags
