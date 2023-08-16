@@ -22,6 +22,13 @@ resource "azapi_resource" "signalR" {
           "*"
         ]
       }
+      features = [
+        {
+          flag = "ServiceMode"
+          //properties = {}
+          value = "Default"
+        }
+      ]
     }
     sku = {
       capacity = 1
@@ -49,7 +56,7 @@ resource "azapi_resource" "signalr_custom_domain" {
   })
 
   ignore_casing = true
-
+  
   depends_on = [
     azapi_resource.signalr_custom_certificate
   ]
@@ -74,4 +81,29 @@ data "azurerm_signalr_service" "signalR" {
   depends_on = [
     azapi_resource.signalR
   ]
+}
+
+resource "azurerm_monitor_diagnostic_setting" "signalR_diag"{
+  name                 = var.name
+  target_resource_id   = data.azurerm_signalr_service.signalR.id
+  storage_account_id = var.storage_account_id
+
+  log {
+    category = "AllLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = false
+    }
+  }
+
+  metric {
+    category = "AllMetrics"
+    enabled  = true
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  
 }
