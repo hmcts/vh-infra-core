@@ -28,10 +28,10 @@ resource "azapi_resource" "signalR" {
       name     = local.sku_name
       tier     = local.sku_type
     }
-    service_mode = "Default"
     kind = "SignalR"
   })
 
+  service_mode = "Default"
   tags = var.tags
 }
 
