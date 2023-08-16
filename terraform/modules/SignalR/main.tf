@@ -17,6 +17,11 @@ resource "azapi_resource" "signalR" {
 
   body = jsonencode({
     properties = {
+      settings = {
+          service_mode = [
+            "Default"
+          ]
+      }
       cors = {
         allowedOrigins = [
           "*"
@@ -74,7 +79,6 @@ data "azurerm_signalr_service" "signalR" {
   depends_on = [
     azapi_resource.signalR
   ]
-  service_mode = "Default"
 }
 
 resource "azurerm_monitor_diagnostic_setting" "signalR_diag"{
