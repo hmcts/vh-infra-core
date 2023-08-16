@@ -307,7 +307,6 @@ module "SignalR" {
   location            = azurerm_resource_group.vh-infra-core.location
   managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
   custom_domain_name  = var.signalr_custom_domain_name
-  storage_account_id  = module.storage.storageaccount_id
   key_vault_cert_name = var.environment == "stg" || var.environment == "prod" ? lookup(local.key_vault_cert_name_wildcard, var.environment) : "wildcard-${var.environment}-platform-hmcts-net"
   key_vault_uri       = data.azurerm_key_vault.acmekv.vault_uri
   tags                = local.common_tags
