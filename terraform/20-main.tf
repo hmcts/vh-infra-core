@@ -300,7 +300,6 @@ locals {
 
 module "SignalR" {
   source = "./modules/SignalR"
-
   name                = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   resource_group_id   = azurerm_resource_group.vh-infra-core.id
