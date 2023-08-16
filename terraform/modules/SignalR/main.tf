@@ -17,9 +17,7 @@ resource "azapi_resource" "signalR" {
 
   body = jsonencode({
     properties = {
-      features = {
-          service_mode = "Default"
-      }
+      sevice_mode = "Default"
       cors = {
         allowedOrigins = [
           "*"
