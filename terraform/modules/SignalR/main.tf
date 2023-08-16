@@ -17,12 +17,18 @@ resource "azapi_resource" "signalR" {
 
   body = jsonencode({
     properties = {
-      service_mode = "Default"
       cors = {
         allowedOrigins = [
           "*"
         ]
       }
+      features = [
+        {
+          flag = "ServiceMode"
+          //properties = {}
+          value = "Default"
+        }
+      ]
     }
     sku = {
       capacity = 1
