@@ -17,7 +17,7 @@ resource "azapi_resource" "signalR" {
 
   body = jsonencode({
     properties = {
-      settings = {
+      features = {
           service_mode = [
             "Default"
           ]
