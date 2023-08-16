@@ -2,7 +2,6 @@ locals {
   sku_name = "Premium_P1"
   sku_type = "Premium"
   sku_size = "P1"
-  signalr_kind = "Default"
 }
 
 resource "azapi_resource" "signalR" {
@@ -29,7 +28,7 @@ resource "azapi_resource" "signalR" {
       name     = local.sku_name
       tier     = local.sku_type
     }
-    kind = local.signalr_kind
+    kind = "SignalR"
   })
 
   tags = var.tags
