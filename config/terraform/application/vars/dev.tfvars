@@ -11,4 +11,14 @@ databases = {
       edition           = "Standard"
       performance_level = "S2"
     }
+    vhnotification = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
+    vhbookings = {
+      collation         = "SQL_Latin1_General_CP1_CI_AS"
+      edition           = "Standard"
+      performance_level = "S0"
+    }
 }
