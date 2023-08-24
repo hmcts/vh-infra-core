@@ -309,6 +309,7 @@ module "SignalR" {
   custom_domain_name  = var.signalr_custom_domain_name
   key_vault_cert_name = var.environment == "stg" || var.environment == "prod" ? lookup(local.key_vault_cert_name_wildcard, var.environment) : "wildcard-${var.environment}-platform-hmcts-net"
   key_vault_uri       = data.azurerm_key_vault.acmekv.vault_uri
+  storage_account_id  = module.storage.storageaccount_id
   tags                = local.common_tags
 }
 
