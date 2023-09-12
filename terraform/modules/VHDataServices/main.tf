@@ -130,6 +130,7 @@ resource "azurerm_servicebus_queue" "vh-infra-core" {
   enable_partitioning   = false
   lock_duration         = "PT5M"
   max_size_in_megabytes = 1024
+  requires_duplicate_detection = true
 }
 
 data "azurerm_user_assigned_identity" "keda_mi" {
