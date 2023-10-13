@@ -32,9 +32,9 @@ variable "environment_to_sku_map" {
       capacity = "0"
       family   = "C"
     }
-    Sandbox = {
-      sku_name = "Basic"
-      capacity = "0"
+    stg = {
+      sku_name = "Standard"
+      capacity = "1"
       family   = "C"
     }
     Test1 = {
