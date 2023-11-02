@@ -35,7 +35,7 @@ variables:
 
 jobs: 
   - ${{each database in parameters.databases}}:
-    - job: backup
+    - job: backup_${{database}}
       steps:
       - task: AzureCLI@2
         inputs:
