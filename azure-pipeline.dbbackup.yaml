@@ -15,7 +15,7 @@ parameters:
     displayName: list the required databases to backup
     type: object
     default:
-    - vhnotifications
+    - vhnotification
     - vhbookings
     - vhvideo
 
