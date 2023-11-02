@@ -47,3 +47,6 @@ jobs:
             $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password --query value
             write-host $username
             write-host $password
+            $key=$(az storage account keys list -n vhinfracore${{ parameters.environment }} --resource-group vh-infra-core-${{parameters.environment}}  -o tsv --query "[0].value")
+            write-host $key
+ 
