@@ -11,7 +11,6 @@ parameters:
     - ithc
     - demo
 
-    # There is no nice way to do a 'multi select' in ADO, so the best thing is to use an object and then a user can delete to ones they dont want
     # The other option is you have a param for each database with a yes/no option, but that will be messy. THe object also lets us loop
   - name: databases
     displayName: list the required databases to backup
