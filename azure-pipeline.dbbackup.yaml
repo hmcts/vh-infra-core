@@ -34,11 +34,12 @@ variables:
 
 
 jobs: 
-  - job: backup
-    steps:
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'echo "Hello World"'
+  - ${{each database in parameters.databases}}:
+    - job: backup
+      steps:
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'
+          inlineScript: 'echo "Hello $(database)"'
