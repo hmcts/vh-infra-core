@@ -43,10 +43,10 @@ jobs:
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
           inlineScript: |
-            $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username --query value
-            $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password --query value
-            write-host $username
-            write-host $password
+            $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username -o tsv --query "value"
+            $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password -o tsv --query "value"
             $key=$(az storage account keys list -n vhinfracore${{ parameters.environment }} --resource-group vh-infra-core-${{parameters.environment}}  -o tsv --query "[0].value")
-            write-host $key
+            $date = get-date -format "yyyy-MM-dd_hhmmss"
+            $uri = "https://vhinfracore${{parameters.environment}}.blob.core.windows.net/db-backup/${{database}}-$date.bacpac"
+            az sql db export -p $password --admin-user $username --storage-key $key --storage-key-type StorageAccessKey --storage-uri $uri --name ${{database}} -g vh-infra-core-${{parameters.environment}} --server vh-infra-core-${{parameters.environment}}
  
