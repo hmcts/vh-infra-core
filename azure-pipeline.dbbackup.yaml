@@ -42,4 +42,4 @@ jobs:
           azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
-          inlineScript: 'echo "Hello ${{database}}"'
+          inlineScript: 'echo "Hello ${{database}} ${{keyvault}}"'
