@@ -42,4 +42,8 @@ jobs:
           azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
-          inlineScript: 'echo "Hello ${{database}} ${{variables.keyvault}}"'
+          inlineScript: |
+            $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username --query value
+            $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password --query value
+            write-host $username
+            write-host $password
