@@ -38,7 +38,7 @@ jobs:
     steps:
     - task: AzureCLI@2
       inputs:
-        azureSubscription: 'DTS-SHAREDSERVICES-DEV-Video Hearings'
+        azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: 'echo "Hello World"'
