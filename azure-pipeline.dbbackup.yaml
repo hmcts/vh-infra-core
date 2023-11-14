@@ -10,6 +10,7 @@ parameters:
     - test
     - ithc
     - demo
+    - prod
 
     # The other option is you have a param for each database with a yes/no option, but that will be messy. THe object also lets us loop
   - name: databases
