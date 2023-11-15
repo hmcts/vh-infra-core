@@ -35,7 +35,17 @@ variables:
 
 
 
-jobs: 
+jobs:
+  - job: Unlock lock
+    steps:
+    -task: AzureCLI@2
+    - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
+    - template: templates/Azure/Common/unlock-lock.yaml@templates
+      parameters:
+        addOrDelete: delete
+        azureSubscription: ${{ parameters.serviceConnection }}
+        lockName: ${{ parameters.environment }}-lock
+        resourceGroup: vh-infra-core-${{ parameters.environment }}
   - ${{each database in parameters.databases}}:
     - job: backup_${{database}}
       steps:
