@@ -2,7 +2,7 @@
 data "azurerm_client_config" "current" {}
 
 locals {
-  dev_kv = var.environment == "dev" ? { for kv in azurerm_key_vault.app_keyvaults : kv => kv } : {}
+  dev_kv = var.environment == "dev" ? azurerm_key_vault.app_keyvaults : {}
 }
 
 #### Per App Key Vault
