@@ -1,6 +1,10 @@
 
 data "azurerm_client_config" "current" {}
 
+locals {
+  dev_kv = var.environment == "dev" ? { for kv in azurerm_key_vault.app_keyvaults : kv => kv } : {}
+}
+
 #### Per App Key Vault
 
 #tfsec:ignore:azure-keyvault-no-Purge
@@ -247,6 +251,29 @@ resource "azurerm_key_vault_access_policy" "user_identity" {
   key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = var.vh_mi_principal_id # vh-ENV-mi 
+
+  certificate_permissions = [
+    "Get",
+  ]
+
+  key_permissions = [
+    "Get",
+  ]
+
+  secret_permissions = [
+    "Get",
+    "List",
+    "Set"
+  ]
+}
+
+# Add stg MI in dev - this is required by PlatOps 
+resource "azurerm_key_vault_access_policy" "user_identity_stg" {
+  for_each = local.dev_kv
+
+  key_vault_id = azurerm_key_vault.app_keyvaults[each.key].id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = "68a48c42-fa75-4488-9bd5-84902eb6e2d7" # vh-stg-mi 
 
   certificate_permissions = [
     "Get",
