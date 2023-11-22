@@ -33,23 +33,16 @@ variables:
   - name: keyvault
     value: "vh-infra-core-${{ parameters.environment }}"
 
-
-
-jobs:
-  - job: Unlock-lock
-  - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
-  steps:
-      - template: templates/Azure/Common/unlock-lock.yaml@templates
-        parameters:
-          addOrDelete: delete
-          azureSubscription: ${{ parameters.serviceConnection }}
-          lockName: ${{ parameters.environment }}-lock
-          resourceGroup: vh-infra-core-${{ parameters.environment }}
-
-
+steps:
   - ${{each database in parameters.databases}}:
-    - job: backup_${{database}}
-      steps:
+     - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
+        - template: templates/Azure/Common/unlock-lock.yaml@templates
+          parameters:
+            addOrDelete: delete
+            azureSubscription: ${{ parameters.serviceConnection }}
+            lockName: ${{ parameters.environment }}-lock
+            resourceGroup: vh-infra-core-${{ parameters.environment }}
+
       - task: AzureCLI@2
         inputs:
           azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
