@@ -33,16 +33,18 @@ variables:
   - name: keyvault
     value: "vh-infra-core-${{ parameters.environment }}"
 
-steps:
-  - ${{each database in parameters.databases}}:
-     - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
-        - template: templates/Azure/Common/unlock-lock.yaml@templates
-          parameters:
+jobs: 
+  - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
+    - template: templates/Azure/Common/unlock-lock.yaml@templates
+      parameters:
             addOrDelete: delete
             azureSubscription: ${{ parameters.serviceConnection }}
             lockName: ${{ parameters.environment }}-lock
             resourceGroup: vh-infra-core-${{ parameters.environment }}
-
+            
+  - ${{each database in parameters.databases}}:
+    - job: backup_${{database}}
+      steps:
       - task: AzureCLI@2
         inputs:
           azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
@@ -57,3 +59,5 @@ steps:
             az sql server firewall-rule create -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services" --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
             az sql db export -p $password --admin-user $username --storage-key $key --storage-key-type StorageAccessKey --storage-uri $uri --name ${{database}} -g vh-infra-core-${{parameters.environment}} --server vh-infra-core-${{parameters.environment}}
             az sql server firewall-rule delete -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services"
+
+ 
