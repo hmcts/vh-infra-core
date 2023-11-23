@@ -21,9 +21,6 @@ parameters:
     - vhbookings
     - vhvideo
 
-  - name: serviceConnection
-    type: string
-
 # Use variables to peice together strings based on your params this can be done as they are set at run time
 variables:
   - name: server
@@ -44,7 +41,7 @@ jobs:
           - template: templates/Azure/Common/unlock-lock.yaml@templates
             parameters:
               addOrDelete: delete
-              azureSubscription: ${{ parameters.serviceConnection }}
+              azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
               lockName: ${{ parameters.environment }}-lock
               resourceGroup: vh-infra-core-${{ parameters.environment }}
 
