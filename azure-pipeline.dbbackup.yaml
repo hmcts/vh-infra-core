@@ -35,30 +35,32 @@ variables:
 
 
 jobs:
-  - job: unlock_resource_lock
-    steps:
-      - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
-          - template: templates/Azure/Common/unlock-lock.yaml@templates
-            parameters:
-              addOrDelete: delete
-              azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-              lockName: ${{ parameters.environment }}-lock
-              resourceGroup: vh-infra-core-${{ parameters.environment }}
-
-  - ${{each database in parameters.databases}}:
-    - job: backup_${{database}}
+  - job: unlock-yaml
+    - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
       steps:
-        - task: AzureCLI@2
-          inputs:
-            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-            scriptType: 'pscore'
-            scriptLocation: 'inlineScript'
-            inlineScript: |
-              $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username -o tsv --query "value"
-              $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password -o tsv --query "value"
-              $key=$(az storage account keys list -n vhinfracore${{ parameters.environment }} --resource-group vh-infra-core-${{parameters.environment}}  -o tsv --query "[0].value")
-              $date = get-date -format "yyyy-MM-dd_hhmmss"
-              $uri = "https://vhinfracore${{parameters.environment}}.blob.core.windows.net/db-backup/${{database}}-$date.bacpac"
-              az sql server firewall-rule create -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services" --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
-              az sql db export -p $password --admin-user $username --storage-key $key --storage-key-type StorageAccessKey --storage-uri $uri --name ${{database}} -g vh-infra-core-${{parameters.environment}} --server vh-infra-core-${{parameters.environment}}
-              az sql server firewall-rule delete -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services"
+        - template: templates/Azure/Common/unlock-lock.yaml@templates
+          parameters:
+          addOrDelete: delete
+          azureSubscription: ${{ parameters.serviceConnection }}
+          lockName: ${{ parameters.environment }}-lock
+          resourceGroup: vh-infra-core-${{ parameters.environment }}
+  
+  - job: backup_${{database}}
+    - ${{each database in parameters.databases}}:
+      steps:
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username -o tsv --query "value"
+            $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password -o tsv --query "value"
+            $key=$(az storage account keys list -n vhinfracore${{ parameters.environment }} --resource-group vh-infra-core-${{parameters.environment}}  -o tsv --query "[0].value")
+            $date = get-date -format "yyyy-MM-dd_hhmmss"
+            $uri = "https://vhinfracore${{parameters.environment}}.blob.core.windows.net/db-backup/${{database}}-$date.bacpac"
+            az sql server firewall-rule create -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services" --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+            az sql db export -p $password --admin-user $username --storage-key $key --storage-key-type StorageAccessKey --storage-uri $uri --name ${{database}} -g vh-infra-core-${{parameters.environment}} --server vh-infra-core-${{parameters.environment}}
+            az sql server firewall-rule delete -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services"
+
+  
