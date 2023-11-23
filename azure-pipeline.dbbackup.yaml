@@ -38,7 +38,7 @@ jobs:
       - template: templates/Azure/Common/unlock-lock.yaml@templates
         parameters:
           addOrDelete: delete
-          azureSubscription: ${{ parameters.serviceConnection }}
+          azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
           lockName: ${{ parameters.environment }}-lock
           resourceGroup: vh-infra-core-${{ parameters.environment }}
 
