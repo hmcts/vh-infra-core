@@ -43,8 +43,8 @@ jobs:
             lockName: ${{ parameters.environment }}-lock
             resourceGroup: vh-infra-core-${{ parameters.environment }}
 
-  - ${{each database in parameters.databases}}:
-    - job: backup_${{database}}
+  - job: backup_${{database}}
+    - ${{each database in parameters.databases}}:
       steps:
         - task: AzureCLI@2
           inputs:
