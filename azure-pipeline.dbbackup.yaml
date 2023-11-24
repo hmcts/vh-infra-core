@@ -34,7 +34,7 @@ variables:
 
 jobs:
   - job: unlock_resource_lock
-    - ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
+    ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
       steps:
         - template: templates/Azure/Common/unlock-lock.yaml@templates
           parameters:
@@ -43,8 +43,8 @@ jobs:
             lockName: ${{ parameters.environment }}-lock
             resourceGroup: vh-infra-core-${{ parameters.environment }}
 
-  - job: backup_${{database}}
-    - ${{each database in parameters.databases}}:
+  - ${{each database in parameters.databases}}:
+    - job: backup_${{database}}
       steps:
         - task: AzureCLI@2
           inputs:
