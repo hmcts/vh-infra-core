@@ -56,3 +56,8 @@ variable "dynatrace_tenant" {
   description = "dynatrace tenant"
   type        = string
 }
+
+variable "product" {
+  description = "product name"
+  type        = string
+}

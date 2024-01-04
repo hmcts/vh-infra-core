@@ -2,7 +2,7 @@ module "application_insights" {
   source = "git::https://github.com/hmcts/terraform-module-application-insights.git?ref=main"
 
 
-  env                 = var.environment
+  env                 = var.env
   product             = var.product
   location            = var.location
   override_name       = var.resource_prefix
