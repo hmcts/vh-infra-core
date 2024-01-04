@@ -51,7 +51,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
 
   evaluation_frequency = "PT6H"
   window_duration      = "PT6H"
-  scopes               = [azurerm_application_insights.vh-infra-core.id]
+  scopes               = [module.application_insights.id]
   severity             = each.value.severity
   criteria {
     query                   = <<-QUERY
