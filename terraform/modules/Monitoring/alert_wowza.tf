@@ -9,7 +9,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "wowza_not_recording" {
     action_group = [azurerm_monitor_action_group.this["dev"].id, azurerm_monitor_action_group.this["devops"].id, azurerm_monitor_action_group.action_group_wowza_not_recording[0].id]
   }
 
-  data_source_id = azurerm_application_insights.vh-infra-core.id
+  data_source_id = module.application_insights.id
   description    = "The message \"[Judge WR] - Should not continue without a recording. Show alert\" has been seen multiple times in the last 48 hours. This likely means recordings are failing, if everything else appears good check the connectivity between Pexip (Kinly) and wowza"
   enabled        = true
 

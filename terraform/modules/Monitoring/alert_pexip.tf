@@ -10,7 +10,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "pexip" {
 
   evaluation_frequency = "PT5M"
   window_duration      = "PT5M"
-  scopes               = [azurerm_application_insights.vh-infra-core.id]
+  scopes               = [module.application_insights.id]
   severity             = 1
   criteria {
     query                   = <<-QUERY

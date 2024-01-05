@@ -22,7 +22,7 @@ parameters:
 
 variables:
 - name: tfVersion
-  value: 1.3.7
+  value: 1.6.6
 - name: azureLocation
   value: 'UK South'
 - group: external
