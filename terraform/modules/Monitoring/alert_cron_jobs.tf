@@ -58,6 +58,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "cron_jobs" {
       exceptions 
         | where cloud_RoleInstance like '${each.key}'
         | where timestamp > ago(1d)
+        | where severityLevel > 2
         | order by timestamp desc
       QUERY
     time_aggregation_method = "Count"
