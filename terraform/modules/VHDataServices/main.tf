@@ -122,7 +122,6 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
 
 resource "azurerm_servicebus_queue" "vh-infra-core" {
   for_each = var.queues
-
   name         = each.key
   namespace_id = azurerm_servicebus_namespace.vh-infra-core.id
   #namespace_name      = azurerm_servicebus_namespace.vh-infra-core.name
@@ -142,4 +141,36 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
   scope                = azurerm_servicebus_namespace.vh-infra-core.id
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
+}
+
+resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
+  name                = "${var.resource_prefix}-${local.environment}-premium"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  sku                 = "Standard"
+  tags                = var.tags
+}
+#Premium Service Bus
+resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
+  for_each = var.queues
+
+  name         = each.key
+  namespace_id = azurerm_servicebus_namespace.vh-infra-core-premium.id
+  #namespace_name      = azurerm_servicebus_namespace.vh-infra-core-premium.name
+
+  enable_partitioning   = false
+  lock_duration         = "PT5M"
+  max_size_in_megabytes = 1024
+}
+
+data "azurerm_user_assigned_identity" "keda_mi_premium" {
+  count               = local.environment == "dev" ? 0 : 1
+  name                = "keda-${local.environment}-mi-premium"
+  resource_group_name = "managed-identities-${local.environment}-rg"
+}
+
+resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
+  scope                = azurerm_servicebus_namespace.vh-infra-core-premium.id
+  role_definition_name = "Azure Service Bus Data Receiver"
+  principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi_premium[0].principal_id
 }
