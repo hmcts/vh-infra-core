@@ -153,7 +153,7 @@ resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
 }
 
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
-  scope                = azurerm_servicebus_namespace.vh-infra-core-premium.id
+  scope                = azurerm_servicebus_namespace.vh-infra-core-premium[0].id
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
