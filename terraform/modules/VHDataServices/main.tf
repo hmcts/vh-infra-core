@@ -151,18 +151,6 @@ resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
   sku                 = "Premium"
   tags                = var.tags
 }
-#Premium Service Bus
-resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
-count               = local.environment == "prod" ? 0 : 1
-for_each = var.queues
-  name         = each.key
-  namespace_id = azurerm_servicebus_namespace.vh-infra-core-premium.id
-  #namespace_name      = azurerm_servicebus_namespace.vh-infra-core-premium.name
-
-  enable_partitioning   = false
-  lock_duration         = "PT5M"
-  max_size_in_megabytes = 1024
-}
 
 data "azurerm_user_assigned_identity" "keda_mi_premium" {
   count               = local.environment == "dev" ? 0 : 1
