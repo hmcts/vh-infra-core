@@ -144,16 +144,17 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
 }
 
 resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
+ count               = local.environment == "prod" ? 0 : 1
   name                = "${var.resource_prefix}-${local.environment}-premium"
   resource_group_name = var.resource_group_name
   location            = var.location
-  sku                 = "Standard"
+  sku                 = "Premium"
   tags                = var.tags
 }
 #Premium Service Bus
 resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
-  for_each = var.queues
-
+count               = local.environment == "prod" ? 0 : 1
+for_each = var.queues
   name         = each.key
   namespace_id = azurerm_servicebus_namespace.vh-infra-core-premium.id
   #namespace_name      = azurerm_servicebus_namespace.vh-infra-core-premium.name
