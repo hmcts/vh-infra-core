@@ -152,14 +152,8 @@ resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
   tags                = var.tags
 }
 
-data "azurerm_user_assigned_identity" "keda_mi_premium" {
-  count               = local.environment == "dev" ? 0 : 1
-  name                = "keda-${local.environment}-mi-premium"
-  resource_group_name = "managed-identities-${local.environment}-rg"
-}
-
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   scope                = azurerm_servicebus_namespace.vh-infra-core-premium.id
   role_definition_name = "Azure Service Bus Data Receiver"
-  principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi_premium[0].principal_id
+  principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
