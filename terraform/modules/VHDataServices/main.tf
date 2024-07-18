@@ -163,6 +163,12 @@ resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
   max_size_in_megabytes = 1024
 }
 
+data "azurerm_user_assigned_identity" "keda_mi_premium" {
+  count               = local.environment == "dev" ? 0 : 1
+  name                = "keda-${local.environment}-mi-premium"
+  resource_group_name = "managed-identities-${local.environment}-rg"
+}
+
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   scope                = azurerm_servicebus_namespace.vh-infra-core-premium.id
   role_definition_name = "Azure Service Bus Data Receiver"
