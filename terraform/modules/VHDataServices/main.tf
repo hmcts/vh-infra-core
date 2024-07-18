@@ -163,8 +163,8 @@ resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
   max_size_in_megabytes = 1024
 }
 
-resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
+resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   scope                = azurerm_servicebus_namespace.vh-infra-core-premium.id
   role_definition_name = "Azure Service Bus Data Receiver"
-  principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
+  principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi_premium[0].principal_id
 }
