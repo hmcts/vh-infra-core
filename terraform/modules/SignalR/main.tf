@@ -2,7 +2,6 @@ locals {
   sku_name = "Premium_P1"
   sku_name_prod = "Premium_P2"
   sku_type = "Premium"
-  environment         = var.environment
 }
 
 resource "azapi_resource" "signalR" {
@@ -33,7 +32,7 @@ resource "azapi_resource" "signalR" {
     }
     sku = {
       capacity = 1
-      name     = local.environment == "prod" ? local.sku_name_prod : local.sku_name 
+      name     = var.environment == "prod" ? local.sku_name_prod : local.sku_name 
       tier     = local.sku_type
     }
     kind = "SignalR"
