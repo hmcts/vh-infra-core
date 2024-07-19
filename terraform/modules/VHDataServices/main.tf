@@ -121,7 +121,7 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
 }
 
 resource "azurerm_servicebus_queue" "vh-infra-core" {
-  for_each = var.queues
+  for_each     = var.queues
   name         = each.key
   namespace_id = azurerm_servicebus_namespace.vh-infra-core.id
   #namespace_name      = azurerm_servicebus_namespace.vh-infra-core.name
@@ -143,8 +143,8 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
 
- resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
- count               = local.environment == "prod" ? 1 : 0
+resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
+  count               = local.environment == "prod" ? 1 : 0
   name                = "vh-infra-core-prod-premium"
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -153,7 +153,7 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
 }
 
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
-  count               = local.environment == "prod" ? 1 : 0
+  count                = local.environment == "prod" ? 1 : 0
   scope                = azurerm_servicebus_namespace.vh-infra-core-premium[0].id
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
