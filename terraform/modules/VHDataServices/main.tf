@@ -145,7 +145,7 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
 
 resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
  count               = local.environment == "prod" ? 1 : 0
-  name                = "${var.resource_prefix}-prod-premium"
+  name                = "vh-infra-core-prod-premium"
   resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = "Premium"
