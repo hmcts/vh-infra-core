@@ -158,11 +158,3 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
-import {
-  to = module.VHDataServices.azurerm_servicebus_namespace.vh-infra-core-premium[0]
-  id = "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/vh-infra-core-prod/providers/Microsoft.ServiceBus/namespaces/vh-infra-core-prod-premium"
-}
-import {
-  to = module.VHDataServices.azurerm_role_assignment.Azure_Service_Bus_Data_Receiver_premium[0]
-  id = "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/vh-infra-core-prod/providers/Microsoft.ServiceBus/namespaces/vh-infra-core-prod-premium/providers/Microsoft.Authorization/roleAssignments/e8f55300-9fae-4d52-940c-66693edef7d1"
-}
