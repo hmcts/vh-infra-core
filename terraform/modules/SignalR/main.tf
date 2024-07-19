@@ -31,7 +31,7 @@ resource "azapi_resource" "signalR" {
       ]
     }
     sku = {
-      capacity = 1
+      capacity = var.environment == "prod" ? 100 : 1
       name     = var.environment == "prod" ? local.sku_name_prod : local.sku_name 
       tier     = local.sku_type
     }
