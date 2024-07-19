@@ -143,7 +143,7 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
 
-resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
+/* resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
  count               = local.environment == "prod" ? 1 : 0
   name                = "vh-infra-core-prod-premium"
   resource_group_name = var.resource_group_name
@@ -158,3 +158,4 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
+ */
