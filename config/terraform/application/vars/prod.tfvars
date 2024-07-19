@@ -15,7 +15,7 @@ databases = {
     vhvideo = {
       collation         = "SQL_Latin1_General_CP1_CI_AS"
       edition           = "Standard"
-      performance_level = "S4"
+      performance_level = "S6"
     }
     vhnotification = {
       collation         = "SQL_Latin1_General_CP1_CI_AS"
