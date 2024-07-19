@@ -54,7 +54,7 @@ variable "environment_to_sku_map" {
     }
     prod = {
       sku_name = "Standard"
-      capacity = "1"
+      capacity = "2"
       family   = "C"
     }
   }
