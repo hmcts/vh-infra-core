@@ -2,6 +2,7 @@ locals {
   sku_name = "Premium_P1"
   sku_name_prod = "Premium_P2"
   sku_type = "Premium"
+  environment         = var.environment
 }
 
 resource "azapi_resource" "signalR" {
