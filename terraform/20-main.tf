@@ -300,6 +300,7 @@ module "SignalR" {
 
   name                = "${local.std_prefix}${local.suffix}"
   resource_group_name = azurerm_resource_group.vh-infra-core.name
+  environment         = var.environment
   resource_group_id   = azurerm_resource_group.vh-infra-core.id
   location            = azurerm_resource_group.vh-infra-core.location
   managed_identities  = [azurerm_user_assigned_identity.vh_mi.id]
