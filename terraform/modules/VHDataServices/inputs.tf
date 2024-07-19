@@ -22,6 +22,7 @@ variable "databases" {
 
 variable "queues" {
   type = map(any)
+  default = {}
 }
 
 variable "location" {
