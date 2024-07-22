@@ -21,7 +21,7 @@ variable "databases" {
 }
 
 variable "queues" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }
 

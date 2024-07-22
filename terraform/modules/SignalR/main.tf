@@ -1,7 +1,7 @@
 locals {
-  sku_name = "Premium_P1"
+  sku_name      = "Premium_P1"
   sku_name_prod = "Premium_P2"
-  sku_type = "Premium"
+  sku_type      = "Premium"
 }
 
 resource "azapi_resource" "signalR" {
@@ -32,7 +32,7 @@ resource "azapi_resource" "signalR" {
     }
     sku = {
       capacity = var.environment == "prod" ? 100 : 1
-      name     = var.environment == "prod" ? local.sku_name_prod : local.sku_name 
+      name     = var.environment == "prod" ? local.sku_name_prod : local.sku_name
       tier     = local.sku_type
     }
     kind = "SignalR"
@@ -56,7 +56,7 @@ resource "azapi_resource" "signalr_custom_domain" {
   })
 
   ignore_casing = true
-  
+
   depends_on = [
     azapi_resource.signalr_custom_certificate
   ]
@@ -83,9 +83,9 @@ data "azurerm_signalr_service" "signalR" {
   ]
 }
 
-resource "azurerm_monitor_diagnostic_setting" "signalR_diag"{
-  name                 = var.name
-  target_resource_id   = data.azurerm_signalr_service.signalR.id
+resource "azurerm_monitor_diagnostic_setting" "signalR_diag" {
+  name               = var.name
+  target_resource_id = data.azurerm_signalr_service.signalR.id
   storage_account_id = var.storage_account_id
 
   log {
@@ -105,5 +105,5 @@ resource "azurerm_monitor_diagnostic_setting" "signalR_diag"{
       enabled = false
     }
   }
-  
+
 }
