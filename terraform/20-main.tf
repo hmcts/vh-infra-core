@@ -32,17 +32,15 @@ locals {
 }
 
 module "KeyVaults" {
-  source             = "./modules/KeyVaults"
-  environment        = var.environment
-  external_passwords = local.external_passwords
-
+  source              = "./modules/KeyVaults"
+  environment         = var.environment
+  external_passwords  = local.external_passwords
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   keyvaults           = local.keyvaults
   vh_mi_principal_id  = azurerm_user_assigned_identity.vh_mi.principal_id
-
-  tags = local.common_tags
+  tags                = local.common_tags
 }
 
 
@@ -53,7 +51,6 @@ module "KeyVaults" {
 data "azurerm_key_vault" "vh-infra-core-kv" {
   name                = azurerm_resource_group.vh-infra-core.name
   resource_group_name = azurerm_resource_group.vh-infra-core.name
-
   depends_on = [
     module.KeyVaults
   ]
@@ -63,8 +60,7 @@ module "KeyVault_Secrets" {
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = module.KeyVaults.keyvault_id
   key_vault_name = module.KeyVaults.keyvault_name
-
-  tags = local.common_tags
+  tags           = local.common_tags
   secrets = [
     {
       name         = "applicationinsights--instrumentationkey"
@@ -201,8 +197,7 @@ module "input_Secrets" {
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = lookup(module.KeyVaults.keyvault_resource, each.value.key_vault_name).resource_id
   key_vault_name = each.value.key_vault_name
-
-  tags = local.common_tags
+  tags           = local.common_tags
   secrets = [
     for secret in each.value.secrets :
     {
@@ -223,7 +218,6 @@ module "input_Secrets_infra_core" {
   source         = "./modules/KeyVaults/Secrets"
   key_vault_id   = module.KeyVaults.keyvault_id
   key_vault_name = each.value.key_vault_name
-
   secrets = [
     for secret in each.value.secrets :
     {
@@ -235,7 +229,6 @@ module "input_Secrets_infra_core" {
   ]
 
   tags = local.common_tags
-
   depends_on = [
     module.KeyVaults
   ]
@@ -254,29 +247,22 @@ locals {
 }
 #tfsec:ignore:azure-storage-default-action-deny
 module "storage" {
-  source = "git::https://github.com/hmcts/cnp-module-storage-account?ref=master"
-
-  env = var.environment
-
-  storage_account_name = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
-  common_tags          = local.common_tags
-
-  default_action = "Allow"
-
-  resource_group_name = azurerm_resource_group.vh-infra-core.name
-  location            = azurerm_resource_group.vh-infra-core.location
-
+  source                          = "git::https://github.com/hmcts/cnp-module-storage-account?ref=master"
+  env                             = var.environment
+  storage_account_name            = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
+  common_tags                     = local.common_tags
+  default_action                  = "Allow"
+  resource_group_name             = azurerm_resource_group.vh-infra-core.name
+  location                        = azurerm_resource_group.vh-infra-core.location
   access_tier                     = "Hot"
   account_kind                    = "StorageV2"
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = "true"
-
-  enable_data_protection = true
-  enable_change_feed     = true
-
-  tables     = local.tables
-  containers = local.containers
+  enable_data_protection          = true
+  enable_change_feed              = true
+  tables                          = local.tables
+  containers                      = local.containers
 }
 
 #--------------------------------------------------------------
@@ -413,20 +399,17 @@ module "Monitoring" {
 
 
 module "VHDataServices" {
-  source      = "./modules/VHDataServices"
-  environment = var.environment
-  public_env  = local.environment == "dev" ? 1 : 0
-
-  databases = var.databases
-  queues    = var.queues
-
+  source              = "./modules/VHDataServices"
+  environment         = var.environment
+  public_env          = local.environment == "dev" ? 1 : 0
+  databases           = var.databases
+  queues              = var.queues
   resource_group_name = azurerm_resource_group.vh-infra-core.name
   location            = azurerm_resource_group.vh-infra-core.location
   resource_prefix     = local.std_prefix
   key_vault_id        = module.KeyVaults.keyvault_id
   keyvault_name       = module.KeyVaults.keyvault_name
-
-  tags = local.common_tags
+  tags                = local.common_tags
 
   depends_on = [
     module.KeyVaults
@@ -586,4 +569,15 @@ module "app_secret_alert" {
   }
 
   tags = local.common_tags
+}
+
+
+import {
+  to = module.VHDataServices.azurerm_servicebus_namespace.vh-infra-core-premium[0]
+  id = "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/vh-infra-core-prod/providers/Microsoft.ServiceBus/namespaces/vh-infra-core-prod-premium"
+}
+
+import {
+  to = module.VHDataServices.azurerm_role_assignment.Azure_Service_Bus_Data_Receiver_premium[0]
+  id = "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/vh-infra-core-prod/providers/Microsoft.ServiceBus/namespaces/vh-infra-core-prod-premium/providers/Microsoft.Authorization/roleAssignments/e8f55300-9fae-4d52-940c-66693edef7d1"
 }
