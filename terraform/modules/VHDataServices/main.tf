@@ -141,7 +141,7 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
-/*
+
 resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
   count               = local.environment == "prod" ? 1 : 0
   name                = "vh-infra-core-prod-premium"
@@ -160,7 +160,7 @@ resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
   lock_duration         = "PT5M"
   max_size_in_megabytes = 1024
 }
-*/
+
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   count                = local.environment == "prod" ? 1 : 0
   scope                = azurerm_servicebus_namespace.vh-infra-core-premium[0].id
