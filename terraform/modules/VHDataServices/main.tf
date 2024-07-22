@@ -150,7 +150,7 @@ resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
   sku                 = "Premium"
   tags                = var.tags
 }
-
+/*
 resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
   for_each     = var.queues
   name         = each.key
@@ -159,7 +159,7 @@ resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
   enable_partitioning   = false
   lock_duration         = "PT5M"
   max_size_in_megabytes = 1024
-}
+} */
 
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   count                = local.environment == "prod" ? 1 : 0
