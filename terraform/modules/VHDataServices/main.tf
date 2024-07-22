@@ -144,8 +144,8 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
 
 resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
   count               = local.environment == "prod" ? 1 : 0
-  capacity  =1 
-  zone_redundant                      = true
+  capacity            = 1
+  zone_redundant      = true
   name                = "vh-infra-core-prod-premium"
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -154,14 +154,14 @@ resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
 }
 
 resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
-  for_each     = var.queues
+  for_each     = local.environment == "prod" ? var.queues : {}
   name         = each.key
   namespace_id = "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/vh-infra-core-prod/providers/Microsoft.ServiceBus/namespaces/vh-infra-core-prod-premium"
   #namespace_name      = azurerm_servicebus_namespace.vh-infra-core.name
   enable_partitioning   = false
   lock_duration         = "PT5M"
   max_size_in_megabytes = 1024
-} 
+}
 
 resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   count                = local.environment == "prod" ? 1 : 0
