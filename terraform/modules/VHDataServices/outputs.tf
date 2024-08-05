@@ -28,7 +28,7 @@ output "test_api_connection_string" {
 }
 
 locals {
-  service_bus_connection_string = var.environment == "prod" ? azurerm_servicebus_namespace.vh-infra-core-premium.default_primary_connection_string : azurerm_servicebus_namespace.vh-infra-core.default_primary_connection_string
+  service_bus_connection_string = var.environment == "prod" ? azurerm_servicebus_namespace.vh-infra-core-premium[0].default_primary_connection_string : azurerm_servicebus_namespace.vh-infra-core.default_primary_connection_string
 }
 
 output "service_bus_connection_string" {
