@@ -64,11 +64,11 @@ provider "azuread" {
 
 provider "azurerm" {
   features {}
-  alias           = "cvp"
-  subscription_id = var.cvp_subscription_id
-  client_id       = var.cvp_client_id
-  client_secret   = var.cvp_client_secret
-  tenant_id       = data.azurerm_client_config.current.tenant_id
+  alias                      = "cvp"
+  subscription_id            = var.cvp_subscription_id
+  client_id                  = var.cvp_client_id
+  client_secret              = var.cvp_client_secret
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
   skip_provider_registration = true
 
 }
