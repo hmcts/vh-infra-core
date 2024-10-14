@@ -944,3 +944,8 @@ variable "emails_devops" {
   type        = string
   default     = ""
 }
+variable "email_slack_vh_sds_alerts" {
+  description = "CSV of Slack vh-sds-alerts Email Address"
+  type        = string
+  default     = ""
+}

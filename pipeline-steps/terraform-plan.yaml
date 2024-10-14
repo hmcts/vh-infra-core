@@ -112,6 +112,7 @@ steps:
         variables="${variables} -var \"emails_kinly=${EMAILS_KINLY} \""
         variables="${variables} -var \"emails_dev=${EMAILS_DEV} \""
         variables="${variables} -var \"emails_devops=${EMAILS_DEVOPS} \""
+        variables="${variables} -var \"email_slack_vh_sds_alerts=${EMAIL_SLACK_VH_SDS_ALERTS} \""
       fi
       echo "Variables set as: "
       echo "${variables}"
@@ -130,6 +131,7 @@ steps:
         EMAILS_KINLY: $(emails_kinly)
         EMAILS_DEV: $(emails_dev)
         EMAILS_DEVOPS: $(emails_devops)
+        EMAIL_SLACK_VH_SDS_ALERTS: $(email_slack_vh_sds_alerts)
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:

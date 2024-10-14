@@ -388,6 +388,8 @@ module "Monitoring" {
     "devops" = {
       emails = split(",", var.emails_devops)
     }
+    "slack-vh-sds-alerts" = {
+      emails = split(",", var.email_slack_vh_sds_alerts)
   }
 
   tags = local.common_tags
