@@ -53,66 +53,47 @@ variables:
 - group: external
 - name: azureLocation
   value: 'UK South'
-- group: vh-tenant-creds
-- template: pipeline-steps/ado-vars.yaml
-  parameters:
-    environment: 'Dev'
 stages:
 
 ################################################
-# Test ext repo.  ##############################
+# Validate Infra Code. #########################
 
-- stage: test_ext_repo
-  displayName: 'Test Ext Repo'
+- stage: Validate_Terraform_Code
+  displayName: 'Validate Terraform Code'
   jobs:
-    - job: test_repo
-      displayName: Test Ext Repo
+    - job: Validate_Terraform_Code
+      displayName: Validate Terraform Code
       steps:
-        - template: pipeline-steps/ado-vars-to-tf.yaml
-          parameters: 
-            environment: ${{ variables.environment }}    
+        - template: pipeline-steps/terraform-validate.yaml
+          parameters:
+            tfversion: ${{ variables.tfversion }}
 
+################################################
+# Terraform Plan & Apply. ######################
 
-# ################################################
-# # Validate Infra Code. #########################
+- ${{ each env in parameters.environment }}:
+  - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
+    - template: pipeline-steps/terraform-plan-apply.yaml
+      parameters:
+        terraformVersion: ${{ variables.tfVersion }}
+        env: ${{ env.name }}
+        location: ${{ variables.azureLocation }}
+        environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
+        product: vh
+        activityName: Video_Hearing_Core
+        tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
+        tfStateStorageAccountName: vhinfracore${{ env.name }}tf
+        dependsOnEnv: ${{ env.dependsOnEnv }}
 
-# - stage: Validate_Terraform_Code
-#   displayName: 'Validate Terraform Code'
-#   jobs:
-#     - job: Validate_Terraform_Code
-#       displayName: Validate Terraform Code
-#       steps:
-#         - template: pipeline-steps/terraform-validate.yaml
-#           parameters:
-#             tfversion: ${{ variables.tfversion }}
-
-
-# ################################################
-# # Terraform Plan & Apply. ######################
-
-# - ${{ each env in parameters.environment }}:
-#   - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
-#     - template: pipeline-steps/terraform-plan-apply.yaml
-#       parameters:
-#         terraformVersion: ${{ variables.tfVersion }}
-#         env: ${{ env.name }}
-#         location: ${{ variables.azureLocation }}
-#         environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
-#         product: vh
-#         activityName: Video_Hearing_Core
-#         tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
-#         tfStateStorageAccountName: vhinfracore${{ env.name }}tf
-#         dependsOnEnv: ${{ env.dependsOnEnv }}
-
-#   - ${{ elseif eq(variables['Build.SourceBranchName'], 'master') }}:
-#       - template: pipeline-steps/terraform-plan-apply.yaml
-#         parameters:
-#           terraformVersion: ${{ variables.tfVersion }}
-#           env: ${{ env.name }}
-#           location: ${{ variables.azureLocation }}
-#           environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
-#           product: vh
-#           activityName: Video_Hearing_Core
-#           tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
-#           tfStateStorageAccountName: vhinfracore${{ env.name }}tf
-#           dependsOnEnv: ${{ env.dependsOnEnv }}
+  - ${{ elseif eq(variables['Build.SourceBranchName'], 'master') }}:
+      - template: pipeline-steps/terraform-plan-apply.yaml
+        parameters:
+          terraformVersion: ${{ variables.tfVersion }}
+          env: ${{ env.name }}
+          location: ${{ variables.azureLocation }}
+          environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
+          product: vh
+          activityName: Video_Hearing_Core
+          tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
+          tfStateStorageAccountName: vhinfracore${{ env.name }}tf
+          dependsOnEnv: ${{ env.dependsOnEnv }}
