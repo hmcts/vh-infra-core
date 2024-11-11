@@ -103,7 +103,7 @@ steps:
           $all_secrets += $infra_core_secrets
           Write-Host $infra_core_secrets
       }
-
+      Write-Host $all_secrets 
       $all_secrets = $all_secrets | ConvertTo-Json  -Compress -Depth 100
       $all_secrets = $all_secrets -replace "`"", "\`""
       Write-Host $all_secrets 
