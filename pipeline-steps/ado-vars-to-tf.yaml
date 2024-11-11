@@ -3,6 +3,8 @@ parameters:
     type: string
 
 steps:
+  - bash: |
+      ls -la
   - powershell: |
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
@@ -133,7 +135,7 @@ steps:
 
       $all_secrets = $all_secrets | ConvertTo-Json  -Compress -Depth 100
       $all_secrets = $all_secrets -replace "`"", "\`""
-      #Write-Host $all_secrets 
+      Write-Host $all_secrets 
       Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true;issecret=true]$all_secrets");
     env:
       bookings_secrets: $(vh-bookings-api-secrets)

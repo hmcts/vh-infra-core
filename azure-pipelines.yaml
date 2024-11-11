@@ -5,6 +5,11 @@ resources:
       name: hmcts/azure-devops-templates
       ref: refs/heads/master
       endpoint: hmcts
+    - repository: vh-setup
+      type: github
+      name: hmcts/vh-setup
+      ref: refs/heads/main
+      endpoint: hmcts
 
 pr: 
   branches:
