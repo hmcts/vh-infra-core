@@ -3,6 +3,8 @@ parameters:
     type: string
 
 steps:
+
+  - checkout: vh-setup
   - bash: |
       ls -la
   - powershell: |
