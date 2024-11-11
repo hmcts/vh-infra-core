@@ -3,18 +3,18 @@ parameters:
     type: string
 
 steps:
-  # - checkout: self
   - checkout: vh-setup
   - bash: |
       ls -la
       cat keyvault-mapping/vh-admin-web-secrets.json
   - powershell: |
+      cd keyvault-mapping
+      ls -la
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
 
-      $ba_obj = $($env:bookings_secrets) | ConvertFrom-Json
-      $ba2_obj = $($env:bookings_secrets_v2) | ConvertFrom-Json
-      $secrets_obj = $($ba_obj + $ba2_obj)
+      $ba_obj = vh-bookings-api-secrets.json | ConvertFrom-Json
+      $secrets_obj = $ba_obj
       if ($null -ne $secrets_obj) {
           $bookings_secrets = [pscustomobject]@{
               "key_vault_name" = "vh-bookings-api"
@@ -23,9 +23,8 @@ steps:
           $all_secrets += $bookings_secrets
       }
 
-      $na2_obj = $($env:notifications_secrets_v2) | ConvertFrom-Json
-      $na_obj = $($env:notifications_secrets) | ConvertFrom-Json
-      $secrets_obj = $($na_obj + $na2_obj)
+      $na_obj = vh-notifications-api-secrets.json | ConvertFrom-Json
+      $secrets_obj = $na_obj
       if ($null -ne $secrets_obj) {
           $notifications_secrets = [pscustomobject]@{
               "key_vault_name" = "vh-notification-api"
@@ -34,8 +33,7 @@ steps:
           $all_secrets += $notifications_secrets
       }
 
-
-      $ua_obj = $($env:user_api_secrets) | ConvertFrom-Json
+      $ua_obj = vh-user-api-secrets.json | ConvertFrom-Json
       $secrets_obj = $ua_obj
       if ($null -ne $secrets_obj) {
           $user_api_secrets = [pscustomobject]@{
@@ -45,7 +43,7 @@ steps:
           $all_secrets += $user_api_secrets
       }
 
-      $va_obj = $($env:video_api_secrets) | ConvertFrom-Json
+      $va_obj = vh-video-api-secrets.json | ConvertFrom-Json
       $secrets_obj = $va_obj
       if ($null -ne $secrets_obj) {
           $video_api_secrets = [pscustomobject]@{
@@ -55,17 +53,7 @@ steps:
           $all_secrets += $video_api_secrets
       }
 
-      $ta_obj = $($env:test_api_secrets) | ConvertFrom-Json
-      $secrets_obj = $ta_obj
-      if ($null -ne $secrets_obj) {
-          $test_api_secrets = [pscustomobject]@{
-              "key_vault_name" = "vh-test-api"
-              "secrets"        = $secrets_obj
-          }
-          $all_secrets += $test_api_secrets
-      }
-
-      $aa_obj = $($env:admin_web_secrets) | ConvertFrom-Json
+      $aa_obj = vh-admin-web-secrets.json | ConvertFrom-Json
       $secrets_obj = $aa_obj
       if ($null -ne $secrets_obj) {
           $admin_web_secrets = [pscustomobject]@{
@@ -75,17 +63,7 @@ steps:
           $all_secrets += $admin_web_secrets
       }
 
-      $sw_obj = $($env:service_web_secrets) | ConvertFrom-Json
-      $secrets_obj = $sw_obj
-      if ($null -ne $secrets_obj) {
-          $service_web_secrets = [pscustomobject]@{
-              "key_vault_name" = "vh-service-web"
-              "secrets"        = $secrets_obj
-          }
-          $all_secrets += $service_web_secrets
-      }
-
-      $vw_obj = $($env:video_web_secrets) | ConvertFrom-Json
+      $vw_obj = vh-video-web-secrets.json | ConvertFrom-Json
       $secrets_obj = $vw_obj
       if ($null -ne $secrets_obj) {
           $video_web_secrets = [pscustomobject]@{
@@ -95,17 +73,7 @@ steps:
           $all_secrets += $video_web_secrets
       }
 
-      $tw_obj = $($env:test_web_secrets) | ConvertFrom-Json
-      $secrets_obj = $tw_obj
-      if ($null -ne $secrets_obj) {
-          $test_web_secrets = [pscustomobject]@{
-              "key_vault_name" = "vh-test-web"
-              "secrets"        = $secrets_obj
-          }
-          $all_secrets += $test_web_secrets
-      }
-
-      $bq_obj = $($env:booking_queue_secrets) | ConvertFrom-Json
+      $bq_obj = vh-booking-queue-secrets.json | ConvertFrom-Json
       $secrets_obj = $bq_obj
       if ($null -ne $secrets_obj) {
           $booking_queue_secrets = [pscustomobject]@{
@@ -115,7 +83,7 @@ steps:
           $all_secrets += $booking_queue_secrets
       }
 
-      $sj_obj = $($env:scheduler_jobs_secrets) | ConvertFrom-Json
+      $sj_obj = vh-scheduler-jobs-secrets.json | ConvertFrom-Json
       $secrets_obj = $sj_obj
       if ($null -ne $secrets_obj) {
           $scheduler_jobs_secrets = [pscustomobject]@{
@@ -125,7 +93,7 @@ steps:
           $all_secrets += $scheduler_jobs_secrets
       }
 
-      $ic_obj = $($env:infra_core_secrets) | ConvertFrom-Json
+      $ic_obj = vh-infra-core-secrets.json | ConvertFrom-Json
       $secrets_obj = $ic_obj
       if ($null -ne $secrets_obj) {
           $infra_core_secrets = [pscustomobject]@{
