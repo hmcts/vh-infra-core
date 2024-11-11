@@ -13,7 +13,7 @@ steps:
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
 
-      $ba_obj = vh-bookings-api-secrets.json | ConvertFrom-Json
+      $ba_obj = Get-Content .\vh-bookings-api-secrets.json | ConvertFrom-Json
       $secrets_obj = $ba_obj
       if ($null -ne $secrets_obj) {
           $bookings_secrets = [pscustomobject]@{
@@ -21,9 +21,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $bookings_secrets
+          Write-Host $bookings_secrets
       }
 
-      $na_obj = vh-notifications-api-secrets.json | ConvertFrom-Json
+      $na_obj = Get-Content .\vh-notifications-api-secrets.json | ConvertFrom-Json
       $secrets_obj = $na_obj
       if ($null -ne $secrets_obj) {
           $notifications_secrets = [pscustomobject]@{
@@ -31,9 +32,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $notifications_secrets
+          Write-Host $notifications_secrets
       }
 
-      $ua_obj = vh-user-api-secrets.json | ConvertFrom-Json
+      $ua_obj = Get-Content .\vh-user-api-secrets.json | ConvertFrom-Json
       $secrets_obj = $ua_obj
       if ($null -ne $secrets_obj) {
           $user_api_secrets = [pscustomobject]@{
@@ -41,9 +43,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $user_api_secrets
+          Write-Host $user_api_secrets
       }
 
-      $va_obj = vh-video-api-secrets.json | ConvertFrom-Json
+      $va_obj = Get-Content .\vh-video-api-secrets.json | ConvertFrom-Json
       $secrets_obj = $va_obj
       if ($null -ne $secrets_obj) {
           $video_api_secrets = [pscustomobject]@{
@@ -51,9 +54,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $video_api_secrets
+          Write-Host $video_api_secrets
       }
 
-      $aa_obj = vh-admin-web-secrets.json | ConvertFrom-Json
+      $aa_obj = Get-Content .\vh-admin-web-secrets.json | ConvertFrom-Json
       $secrets_obj = $aa_obj
       if ($null -ne $secrets_obj) {
           $admin_web_secrets = [pscustomobject]@{
@@ -61,9 +65,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $admin_web_secrets
+          Write-Host $admin_web_secrets
       }
 
-      $vw_obj = vh-video-web-secrets.json | ConvertFrom-Json
+      $vw_obj = Get-Content .\vh-video-web-secrets.json | ConvertFrom-Json
       $secrets_obj = $vw_obj
       if ($null -ne $secrets_obj) {
           $video_web_secrets = [pscustomobject]@{
@@ -71,9 +76,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $video_web_secrets
+          Write-Host $video_web_secrets
       }
 
-      $bq_obj = vh-booking-queue-secrets.json | ConvertFrom-Json
+      $bq_obj = Get-Content .\vh-booking-queue-secrets.json | ConvertFrom-Json
       $secrets_obj = $bq_obj
       if ($null -ne $secrets_obj) {
           $booking_queue_secrets = [pscustomobject]@{
@@ -81,9 +87,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $booking_queue_secrets
+          Write-Host $booking_queue_secrets
       }
 
-      $sj_obj = vh-scheduler-jobs-secrets.json | ConvertFrom-Json
+      $sj_obj = Get-Content .\vh-scheduler-jobs-secrets.json | ConvertFrom-Json
       $secrets_obj = $sj_obj
       if ($null -ne $secrets_obj) {
           $scheduler_jobs_secrets = [pscustomobject]@{
@@ -91,9 +98,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $scheduler_jobs_secrets
+          Write-Host $scheduler_jobs_secrets
       }
 
-      $ic_obj = vh-infra-core-secrets.json | ConvertFrom-Json
+      $ic_obj = Get-Content .\vh-infra-core-secrets.json | ConvertFrom-Json
       $secrets_obj = $ic_obj
       if ($null -ne $secrets_obj) {
           $infra_core_secrets = [pscustomobject]@{
