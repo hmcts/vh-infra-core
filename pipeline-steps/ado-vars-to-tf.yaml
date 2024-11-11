@@ -4,12 +4,8 @@ parameters:
 
 steps:
   - checkout: vh-setup
-  - bash: |
-      ls -la
-      cat keyvault-mapping/vh-admin-web-secrets.json
   - powershell: |
       cd keyvault-mapping
-      ls -la
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
 
@@ -21,7 +17,6 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $bookings_secrets
-          Write-Host $bookings_secrets
       }
 
       $na_obj = Get-Content .\vh-notifications-api-secrets.json | ConvertFrom-Json
@@ -32,7 +27,6 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $notifications_secrets
-          Write-Host $notifications_secrets
       }
 
       $ua_obj = Get-Content .\vh-user-api-secrets.json | ConvertFrom-Json
@@ -43,7 +37,6 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $user_api_secrets
-          Write-Host $user_api_secrets
       }
 
       $va_obj = Get-Content .\vh-video-api-secrets.json | ConvertFrom-Json
@@ -54,7 +47,6 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $video_api_secrets
-          Write-Host $video_api_secrets
       }
 
       $aa_obj = Get-Content .\vh-admin-web-secrets.json | ConvertFrom-Json
@@ -65,7 +57,6 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $admin_web_secrets
-          Write-Host $admin_web_secrets
       }
 
       $vw_obj = Get-Content .\vh-video-web-secrets.json | ConvertFrom-Json
@@ -76,7 +67,6 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $video_web_secrets
-          Write-Host $video_web_secrets
       }
 
       $bq_obj = Get-Content .\vh-booking-queue-secrets.json | ConvertFrom-Json
@@ -87,7 +77,6 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $booking_queue_secrets
-          Write-Host $booking_queue_secrets
       }
 
       $sj_obj = Get-Content .\vh-scheduler-jobs-secrets.json | ConvertFrom-Json
@@ -98,7 +87,6 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $scheduler_jobs_secrets
-          Write-Host $scheduler_jobs_secrets
       }
 
       $ic_obj = Get-Content .\vh-infra-core-secrets.json | ConvertFrom-Json
@@ -109,27 +97,10 @@ steps:
               "secrets"        = $secrets_obj
           }
           $all_secrets += $infra_core_secrets
-          Write-Host $infra_core_secrets
       }
-      Write-Host $all_secrets 
       $all_secrets = $all_secrets | ConvertTo-Json  -Compress -Depth 100
       $all_secrets = $all_secrets -replace "`"", "\`""
       Write-Host $all_secrets 
       Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true;issecret=true]$all_secrets");
-    env:
-      bookings_secrets: $(vh-bookings-api-secrets)
-      bookings_secrets_v2: $(vh-bookings-api-v2-secrets)
-      notifications_secrets: $(vh-notifications-api-secrets)
-      notifications_secrets_v2: $(vh-notifications-api-v2-secrets)
-      user_api_secrets: $(vh-user-api-secrets)
-      video_api_secrets: $(vh-video-api-secrets)
-      test_api_secrets: $(vh-test-api-secrets)
-      admin_web_secrets: $(vh-admin-web-secrets)
-      service_web_secrets: $(vh-service-web-secrets)
-      video_web_secrets: $(vh-video-web-secrets)
-      test_web_secrets: $(vh-test-web-secrets)
-      booking_queue_secrets: $(vh-booking-queue-secrets)
-      scheduler_jobs_secrets: $(vh-scheduler-jobs-secrets)
-      infra_core_secrets: $(vh-infra-core-secrets)
     displayName: "Get Secrets from ADO Library to tf vars"
     name: ado_vars_to_tf
