@@ -1,10 +1,18 @@
 parameters:
   - name: environment
     type: string
+variables:
+  - name: environment
+    value: ${{ parameters.environment }}
+  - group: vh-tenant-creds
+  - template: pipeline-steps/ado-vars.yaml
+    parameters:
+      environment: ${{ parameters.environment }}
 
 steps:
 
-  # - checkout: vh-setup
+  - checkout: self
+  - checkout: vh-setup
   - bash: |
       ls -la
   - powershell: |
