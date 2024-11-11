@@ -53,8 +53,6 @@ variables:
 - group: external
 - name: azureLocation
   value: 'UK South'
-- name: environment
-  value: '${{ parameters.environment }}'
 - group: vh-tenant-creds
 - template: pipeline-steps/ado-vars.yaml
   parameters:
