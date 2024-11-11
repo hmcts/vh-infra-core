@@ -3,7 +3,7 @@ parameters:
     type: string
 
 steps:
-  - checkout: self
+  # - checkout: self
   - checkout: vh-setup
   - bash: |
       ls -la
