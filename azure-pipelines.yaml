@@ -56,7 +56,7 @@ variables:
 - group: vh-tenant-creds
 - template: pipeline-steps/ado-vars.yaml
   parameters:
-    environment: ${{ parameters.environment }}  
+    environment: 'Dev'
 stages:
 
 ################################################
