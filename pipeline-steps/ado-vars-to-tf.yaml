@@ -7,6 +7,7 @@ steps:
   - checkout: vh-setup
   - bash: |
       ls -la
+      cat keyvault-mapping/vh-admin-web-secrets.json
   - powershell: |
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
