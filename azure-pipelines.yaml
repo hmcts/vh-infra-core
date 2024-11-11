@@ -64,7 +64,7 @@ stages:
     - job: test_repo
       displayName: Test Ext Repo
       steps:
-        - template: ado-vars-to-tf.yaml
+        - template: pipeline-steps/ado-vars-to-tf.yaml
           parameters: 
             environment: ${{ variables.environment }}    
 
