@@ -64,6 +64,7 @@ stages:
     - job: test_repo
       displayName: Test Ext Repo
       steps:
+        - checkout: vh-setup
         - bash: |
             ls -la
 
