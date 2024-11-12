@@ -56,22 +56,6 @@ variables:
 stages:
 
 ################################################
-# Checkout Repos. ##############################
-
-- stage: Checkout_Repos
-  displayName: 'Checkout Repos'
-  jobs:
-    - job: Checkout_Repos
-      displayName: Checkout Repos
-      steps:
-        - checkout: self
-          path: vh-infra-core
-        - checkout: vh-setup
-          path: vh-setup
-        - script: pwd
-        - script: dir
-
-################################################
 # Validate Infra Code. #########################
 
 - stage: Validate_Terraform_Code
@@ -80,6 +64,8 @@ stages:
     - job: Validate_Terraform_Code
       displayName: Validate Terraform Code
       steps:
+        - checkout: self
+        - checkout: vh-setup
         - template: pipeline-steps/terraform-validate.yaml
           parameters:
             tfversion: ${{ variables.tfversion }}

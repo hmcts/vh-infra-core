@@ -4,9 +4,9 @@ parameters:
 
 steps:
   # - checkout: vh-setup
-  - script: ls -la $(Build.SourcesDirectory)
+  - script: dir ../$(Build.SourcesDirectory)
   - powershell: |
-      cd keyvault-mapping
+      cd ../vh-setup/keyvault-mapping
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
 
