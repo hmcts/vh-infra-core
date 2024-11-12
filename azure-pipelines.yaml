@@ -55,20 +55,20 @@ variables:
   value: 'UK South'
 stages:
 
-# ################################################
-# # Validate Infra Code. #########################
+################################################
+# Validate Infra Code. #########################
 
-# - stage: Validate_Terraform_Code
-#   displayName: 'Validate Terraform Code'
-#   jobs:
-#     - job: Validate_Terraform_Code
-#       displayName: Validate Terraform Code
-#       steps:
-#         - checkout: self
-#         - checkout: vh-setup
-#         - template: pipeline-steps/terraform-validate.yaml
-#           parameters:
-#             tfversion: ${{ variables.tfversion }}
+- stage: Validate_Terraform_Code
+  displayName: 'Validate Terraform Code'
+  jobs:
+    - job: Validate_Terraform_Code
+      displayName: Validate Terraform Code
+      steps:
+        - checkout: self
+        - checkout: vh-setup
+        - template: pipeline-steps/terraform-validate.yaml
+          parameters:
+            tfversion: ${{ variables.tfversion }}
 
 ################################################
 # Terraform Plan & Apply. ######################
