@@ -56,6 +56,21 @@ variables:
 stages:
 
 ################################################
+# Checkout Repos. ##############################
+
+- stage: Checkout_Repos
+  displayName: 'Checkout Repos'
+  jobs:
+    - job: Checkout_Repos
+      displayName: Checkout Repos
+      steps:
+        - checkout: self
+          path: vh-infra-core
+        - checkout: vh-setup
+          path: vh-setup
+        - script: dir $(Build.SourcesDirectory)  
+
+################################################
 # Validate Infra Code. #########################
 
 - stage: Validate_Terraform_Code

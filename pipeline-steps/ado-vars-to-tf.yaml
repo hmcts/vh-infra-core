@@ -3,9 +3,7 @@ parameters:
     type: string
 
 steps:
-  - checkout: vh-setup
   - powershell: |
-      dir $(Build.SourcesDirectory)
       cd keyvault-mapping
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
