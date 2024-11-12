@@ -68,6 +68,7 @@ stages:
         - script: ls -la
         - checkout: self
         - checkout: vh-setup
+        - script: cd vh-infra-core
         - template: pipeline-steps/terraform-validate.yaml
           parameters:
             tfversion: ${{ variables.tfversion }}
