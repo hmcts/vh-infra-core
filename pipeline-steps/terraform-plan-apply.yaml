@@ -55,8 +55,8 @@ stages:
   ${{ else }}:
     dependsOn: 'Terraform_Apply_${{ parameters.dependsOnEnv }}'
   variables:
-    - template: config/pipeline/vars/${{ lower(parameters.product) }}/common.yaml
-    - template: config/pipeline/vars/${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
+    - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/common.yaml
+    - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
   jobs: 
     - job: 'Terraform_Plan_${{ parameters.env }}'
       displayName: 'Terraform Plan ${{ parameters.env }}'
