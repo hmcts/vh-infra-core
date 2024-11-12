@@ -66,9 +66,6 @@ stages:
       steps:
         - checkout: self
         - checkout: vh-setup
-        - script: cd $(System.DefaultWorkingDirectory)/vh-infra-core
-        - script: pwd
-        - script: ls -la
         - template: pipeline-steps/terraform-validate.yaml
           parameters:
             tfversion: ${{ variables.tfversion }}
