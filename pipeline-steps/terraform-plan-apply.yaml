@@ -74,8 +74,6 @@ stages:
       steps:
       - checkout: self
       - checkout: vh-setup
-      - script: ls -la $(Build.SourcesDirectory)
-      # - script: cd vh-infra-core
       - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
         - template: vh-tenant-replacement.yaml
           parameters:
