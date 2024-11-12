@@ -42,7 +42,7 @@ steps:
       cleanDestinationFolder: false
       overwriteExistingFiles: true
 
-  - task: TerraformCLI@0
+  - task: TerraformCLI@1
     displayName: Terraform Init
     inputs:
       command: init
@@ -65,7 +65,7 @@ steps:
         lockName: ${{ parameters.environment }}-lock
         resourceGroup: vh-infra-core-${{ parameters.environment }}
 
-  - task: TerraformCLI@0
+  - task: TerraformCLI@1
     displayName: Terraform Apply
     inputs:
       command: apply

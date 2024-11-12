@@ -135,7 +135,7 @@ steps:
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
 
-  - task: TerraformCLI@0
+  - task: TerraformCLI@1
     displayName: Terraform Init
     inputs:
           command: init
@@ -151,7 +151,7 @@ steps:
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/core/terraform.tfstate'
 
   - ${{ if eq(parameters.destroyInfra, false) }}:
-    - task: TerraformCLI@0
+    - task: TerraformCLI@1
       displayName: Terraform Plan
       inputs:
         command: plan
@@ -170,7 +170,7 @@ steps:
           $(variableName)
 
   - ${{ if eq(parameters.destroyInfra, true) }}:
-    - task: TerraformCLI@0
+    - task: TerraformCLI@1
       displayName: Terraform Plan Destroy
       inputs:
         command: plan
