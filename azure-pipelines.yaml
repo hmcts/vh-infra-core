@@ -79,7 +79,7 @@ stages:
     - job: Validate_Terraform_Code
       displayName: Validate Terraform Code
       steps:
-        - template: vh-infra-core/pipeline-steps/terraform-validate.yaml
+        - template: pipeline-steps/terraform-validate.yaml
           parameters:
             tfversion: ${{ variables.tfversion }}
 
@@ -88,7 +88,7 @@ stages:
 
 - ${{ each env in parameters.environment }}:
   - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
-    - template: vh-infra-core/pipeline-steps/terraform-plan-apply.yaml
+    - template: pipeline-steps/terraform-plan-apply.yaml
       parameters:
         terraformVersion: ${{ variables.tfVersion }}
         env: ${{ env.name }}
@@ -101,7 +101,7 @@ stages:
         dependsOnEnv: ${{ env.dependsOnEnv }}
 
   - ${{ elseif eq(variables['Build.SourceBranchName'], 'master') }}:
-      - template: vh-infra-core/pipeline-steps/terraform-plan-apply.yaml
+      - template: pipeline-steps/terraform-plan-apply.yaml
         parameters:
           terraformVersion: ${{ variables.tfVersion }}
           env: ${{ env.name }}
