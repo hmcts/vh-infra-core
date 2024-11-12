@@ -72,6 +72,8 @@ stages:
         # so that someone doesn't pick the wrong var in the dropdown
         # same comment as above ^^
       steps:
+      - checkout: self
+      - checkout: vh-setup
       - script: ls -la $(Build.SourcesDirectory)
       # - script: cd vh-infra-core
       - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
