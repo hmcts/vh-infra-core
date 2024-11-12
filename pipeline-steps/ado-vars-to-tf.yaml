@@ -5,7 +5,9 @@ parameters:
 steps:
   # - checkout: vh-setup
   - powershell: |
-      cd ../vh-setup/keyvault-mapping
+      pwd
+      ls -la
+      # cd keyvault-mapping
       $env = "${{ parameters.environment }}"
       $all_secrets = @()
 
@@ -104,3 +106,4 @@ steps:
       Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true;issecret=true]$all_secrets");
     displayName: "Get Secrets from ADO Library to tf vars"
     name: ado_vars_to_tf
+    workingDirectory: $(System.DefaultWorkingDirectory)/vh-setup/keyvault-mapping
