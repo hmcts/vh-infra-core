@@ -55,20 +55,20 @@ variables:
   value: 'UK South'
 stages:
 
-################################################
-# Checkout Repos. ##############################
+# ################################################
+# # Checkout Repos. ##############################
 
-- stage: Checkout_Repos
-  displayName: 'Checkout Repos'
-  jobs:
-    - job: Checkout_Repos
-      displayName: Checkout Repos
-      steps:
-        - checkout: self
-          path: vh-infra-core
-        - checkout: vh-setup
-          path: vh-setup
-        - script: dir $(Build.SourcesDirectory)  
+# - stage: Checkout_Repos
+#   displayName: 'Checkout Repos'
+#   jobs:
+#     - job: Checkout_Repos
+#       displayName: Checkout Repos
+#       steps:
+#         - checkout: self
+#           path: vh-infra-core
+#         - checkout: vh-setup
+#           path: vh-setup
+#         - script: ls -la $(Build.SourcesDirectory)  
 
 ################################################
 # Validate Infra Code. #########################

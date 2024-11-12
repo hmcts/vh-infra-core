@@ -55,8 +55,8 @@ stages:
   ${{ else }}:
     dependsOn: 'Terraform_Apply_${{ parameters.dependsOnEnv }}'
   variables:
-    - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/common.yaml
-    - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
+    - template: config/pipeline/vars/${{ lower(parameters.product) }}/common.yaml
+    - template: config/pipeline/vars/${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
   jobs: 
     - job: 'Terraform_Plan_${{ parameters.env }}'
       displayName: 'Terraform Plan ${{ parameters.env }}'
@@ -72,8 +72,8 @@ stages:
         # so that someone doesn't pick the wrong var in the dropdown
         # same comment as above ^^
       steps:
-      - bash: ls -la
-      - checkout: self
+      - script: ls -la
+      # - script: cd vh-infra-core
       - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
         - template: vh-tenant-replacement.yaml
           parameters:
