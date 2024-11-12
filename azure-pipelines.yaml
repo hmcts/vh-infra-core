@@ -64,6 +64,8 @@ stages:
     - job: Validate_Terraform_Code
       displayName: Validate Terraform Code
       steps:
+        - script: pwd
+        - script: ls -la
         - checkout: self
         - checkout: vh-setup
         - template: pipeline-steps/terraform-validate.yaml
