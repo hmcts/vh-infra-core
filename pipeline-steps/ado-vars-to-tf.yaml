@@ -3,6 +3,8 @@ parameters:
     type: string
 
 steps:
+  - checkout: vh-setup
+  - script: ls -la
   - powershell: |
       cd keyvault-mapping
       $env = "${{ parameters.environment }}"
