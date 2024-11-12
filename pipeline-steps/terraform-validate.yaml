@@ -7,7 +7,9 @@ steps:
 #    parameters:
 #      serviceConnection: $(serviceConnection)
 #      environment: ${{ parameters.environment }}
-      
+  - script: pwd
+  - script: dir
+  - script: dir $(System.DefaultWorkingDirectory)    
   - task: TerraformInstaller@1
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
@@ -18,7 +20,7 @@ steps:
     inputs:
       command: 'init'
       commandOptions: '-backend=false -input=false'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+      workingDirectory: 'terraform'
 
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
