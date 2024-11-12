@@ -4,7 +4,6 @@ parameters:
 
 steps:
   # - checkout: vh-setup
-  - script: dir ../$(Build.SourcesDirectory)
   - powershell: |
       cd ../vh-setup/keyvault-mapping
       $env = "${{ parameters.environment }}"

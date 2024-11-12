@@ -46,7 +46,7 @@ steps:
     displayName: 'Subscription Replacement'
     inputs:
       targetType: 'inline'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/vh-infra-core/terraform'
       script: |
             sed -i 's|REPLACE_ME|$(ARM_SUBSCRIPTION_ID)|g' '00-init.tf'
   - task: AzureCLI@2
@@ -130,7 +130,7 @@ steps:
         EMAILS_KINLY: $(emails_kinly)
         EMAILS_DEV: $(emails_dev)
         EMAILS_DEVOPS: $(emails_devops)
-  - task: TerraformInstaller@0
+  - task: TerraformInstaller@1
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
           terraformVersion: ${{ parameters.tfversion }}
@@ -140,7 +140,7 @@ steps:
     inputs:
           command: init
           terraformVersion: ${{ parameters.tfversion }}
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/vh-infra-core/terraform'
           backendType: azurerm
           backendServiceArm: ${{ parameters.serviceConnection }}
           backendAzureRmResourceGroupName: ${{ lower(parameters.tfStateResourceGroup) }}
@@ -156,7 +156,7 @@ steps:
       inputs:
         command: plan
         terraformVersion: ${{ parameters.tfversion }}
-        workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+        workingDirectory: $(System.DefaultWorkingDirectory)/vh-infra-core/terraform
         environmentServiceName: ${{ parameters.serviceConnection }}
         commandOptions: >
           -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
@@ -175,7 +175,7 @@ steps:
       inputs:
         command: plan
         terraformVersion: ${{ parameters.tfversion }}
-        workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+        workingDirectory: $(System.DefaultWorkingDirectory)/vh-infra-core/terraform
         environmentServiceName: ${{ parameters.serviceConnection }}
         commandOptions: >
           -destroy
@@ -186,13 +186,13 @@ steps:
           -var builtFrom=${{ parameters.builtFrom }}
           -var product=${{ parameters.product }}
           -var activity_name=${{ parameters.activity_name }}
-          -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/$(env).tfvars
+          -var-file $(System.DefaultWorkingDirectory)/vh-infra-core/config/terraform/${{ parameters.project }}/vars/$(env).tfvars
           $(variableName)
 
   - task: ArchiveFiles@2
     displayName: 'Zip Terraform Files'
     inputs:
-      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform'
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/vh-infra-core/terraform'
       archiveType: zip
       archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.zip'
 
