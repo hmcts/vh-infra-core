@@ -73,7 +73,7 @@ stages:
         # same comment as above ^^
       steps:
       - bash: ls -la
-      # - checkout: self
+      - checkout: self
       - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
         - template: vh-tenant-replacement.yaml
           parameters:
