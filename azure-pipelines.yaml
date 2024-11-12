@@ -68,7 +68,8 @@ stages:
           path: vh-infra-core
         - checkout: vh-setup
           path: vh-setup
-        - script: ls -la $(Build.SourcesDirectory)  
+        - script: pwd
+        - script: dir
 
 ################################################
 # Validate Infra Code. #########################
