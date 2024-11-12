@@ -6,7 +6,7 @@ steps:
     displayName: 'VH Tenant Cred Replacement'
     inputs:
       targetType: 'inline'
-      workingDirectory: '../config/terraform/application/vars'
+      workingDirectory: 'config/terraform/application/vars'
       script: |
             ls -la
             sed -i 's|replace_vh_tenant_id|$(VH_TENANT_ID)|gI' $FILE_PATH
