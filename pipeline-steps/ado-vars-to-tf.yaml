@@ -3,7 +3,7 @@ parameters:
     type: string
 
 steps:
-  - checkout: vh-setup
+  # - checkout: vh-setup
   - script: ls -la $(Build.SourcesDirectory)
   - powershell: |
       cd keyvault-mapping
