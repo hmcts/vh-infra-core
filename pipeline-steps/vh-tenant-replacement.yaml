@@ -8,10 +8,8 @@ steps:
       targetType: 'inline'
       workingDirectory: '$(System.DefaultWorkingDirectory)/vh-infra-core/config/terraform/application/vars'
       script: |
-            ls -la
             sed -i 's|replace_vh_tenant_id|$(VH_TENANT_ID)|gI' $FILE_PATH
             sed -i 's|replace_vh_client_id|$(VH_CLIENT_ID)|gI' $FILE_PATH
             sed -i 's|replace_vh_client_secret|$(VH_CLIENT_SECRET)|gI' $FILE_PATH
-            cat $FILE_PATH
     env:
       FILE_PATH: "${{ lower(parameters.environment )}}.tfvars"
