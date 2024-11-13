@@ -63,12 +63,12 @@ resource "azurerm_resource_group_template_deployment" "sqlbackup" {
 
   name                = "db-backup"
   resource_group_name = var.resource_group_name
-  template_content = file("${path.module}/sql_rentention.json")
+  template_content    = file("${path.module}/sql_rentention.json")
 
-  parameters_content = {
+  parameters_content = jsonencode({
     databaseServerName = azurerm_mssql_server.vh-infra-core.name
     database           = join(",", keys(var.databases))
-  }
+  })
 
   deployment_mode = "Incremental"
 }
