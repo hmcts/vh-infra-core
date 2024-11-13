@@ -73,6 +73,23 @@ resource "azurerm_resource_group_template_deployment" "sqlbackup" {
   deployment_mode = "Incremental"
 }
 
+import {
+  for_each = var.databases
+  to       = azurerm_mssql_database.vh-infra-core[each.key]
+  id       = each.value
+}
+
+resource "azurerm_mssql_database" "vh-infra-core" {
+  for_each = var.databases
+
+  name      = each.key
+  server_id = azurerm_mssql_server.vh-infra-core.id
+  collation = each.value.collation
+  sku_name  = each.value.performance_level
+
+  tags = var.tags
+}
+
 resource "azurerm_sql_database" "vh-infra-core" {
   for_each = var.databases
 
