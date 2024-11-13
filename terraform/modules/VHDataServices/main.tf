@@ -58,15 +58,14 @@ resource "azurerm_mssql_server_extended_auditing_policy" "vh-infra-core-sec-pol"
   server_id = azurerm_mssql_server.vh-infra-core.id
 }
 
-resource "azurerm_template_deployment" "sqlbackup" {
+resource "azurerm_resource_group_template_deployment" "sqlbackup" {
   count = terraform.workspace == "Prod" ? 1 : 0
 
   name                = "db-backup"
   resource_group_name = var.resource_group_name
+  template_content = file("${path.module}/sql_rentention.json")
 
-  template_body = file("${path.module}/sql_rentention.json")
-
-  parameters = {
+  parameters_content = {
     databaseServerName = azurerm_mssql_server.vh-infra-core.name
     database           = join(",", keys(var.databases))
   }

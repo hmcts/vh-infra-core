@@ -87,23 +87,12 @@ resource "azurerm_monitor_diagnostic_setting" "signalR_diag"{
   name                 = var.name
   target_resource_id   = data.azurerm_signalr_service.signalR.id
   storage_account_id = var.storage_account_id
-
-  log {
+  enabled_log {
     category = "AllLogs"
-    enabled  = true
-
-    retention_policy {
-      enabled = false
-    }
   }
 
   metric {
     category = "AllMetrics"
     enabled  = true
-
-    retention_policy {
-      enabled = false
-    }
   }
-  
 }
