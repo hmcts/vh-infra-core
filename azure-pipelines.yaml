@@ -74,7 +74,7 @@ stages:
 # Terraform Plan & Apply. ######################
 
 - ${{ each env in parameters.environment }}:
-  - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
+  # - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
   - ${{ if eq(env.name, 'Dev') }}:
     - template: pipeline-steps/terraform-plan-apply.yaml
       parameters:
