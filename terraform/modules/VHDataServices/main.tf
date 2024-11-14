@@ -87,7 +87,6 @@ resource "azurerm_mssql_database" "vh-infra-core" {
   server_id          = azurerm_mssql_server.vh-infra-core.id
   collation          = each.value.collation
   sku_name           = each.value.performance_level
-  geo_backup_enabled = each.value.geo_backup_enabled
 
   tags = var.tags
 }
