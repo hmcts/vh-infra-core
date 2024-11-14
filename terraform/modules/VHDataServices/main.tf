@@ -83,10 +83,11 @@ resource "azurerm_resource_group_template_deployment" "sqlbackup" {
 resource "azurerm_mssql_database" "vh-infra-core" {
   for_each = var.databases
 
-  name               = each.key
-  server_id          = azurerm_mssql_server.vh-infra-core.id
-  collation          = each.value.collation
-  sku_name           = each.value.performance_level
+  name                 = each.key
+  server_id            = azurerm_mssql_server.vh-infra-core.id
+  collation            = each.value.collation
+  sku_name             = each.value.performance_level
+  storage_account_type = each.value.backup_storage_redundancy
 
   tags = var.tags
 }
