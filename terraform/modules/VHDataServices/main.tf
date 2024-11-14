@@ -72,13 +72,14 @@ resource "azurerm_resource_group_template_deployment" "sqlbackup" {
 
   deployment_mode = "Incremental"
 }
+# tried this, doesn't work ("Import blocks are only allowed in the root module.")
+# import {
+#   for_each = var.databases
+#   to       = azurerm_mssql_database.vh-infra-core[each.key]
+#   id       = each.value
+# }
 
-import {
-  for_each = var.databases
-  to       = azurerm_mssql_database.vh-infra-core[each.key]
-  id       = each.value
-}
-
+#new resource
 resource "azurerm_mssql_database" "vh-infra-core" {
   for_each = var.databases
 
@@ -90,20 +91,21 @@ resource "azurerm_mssql_database" "vh-infra-core" {
   tags = var.tags
 }
 
-resource "azurerm_sql_database" "vh-infra-core" {
-  for_each = var.databases
+# # old resource
+# resource "azurerm_sql_database" "vh-infra-core" {
+#   for_each = var.databases
 
-  name                = each.key
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  server_name         = azurerm_mssql_server.vh-infra-core.name
+#   name                = each.key
+#   resource_group_name = var.resource_group_name
+#   location            = var.location
+#   server_name         = azurerm_mssql_server.vh-infra-core.name
 
-  edition                          = each.value.edition
-  collation                        = each.value.collation
-  requested_service_objective_name = each.value.performance_level
+#   edition                          = each.value.edition
+#   collation                        = each.value.collation
+#   requested_service_objective_name = each.value.performance_level
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
 module "db_secrets" {
   source         = "../KeyVaults/Secrets"
