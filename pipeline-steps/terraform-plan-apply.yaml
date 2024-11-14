@@ -137,7 +137,8 @@ stages:
         runOnce:
           deploy:
             steps:
-
+            - checkout: self
+            - checkout: vh-setup
             - template: terraform-apply.yaml
               parameters:
                 environment: ${{ parameters.env }}
