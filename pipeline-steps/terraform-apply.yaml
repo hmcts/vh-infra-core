@@ -34,6 +34,12 @@ steps:
     inputs:
       terraformVersion: ${{ parameters.tfversion }}
 
+  - script: dir $(Pipeline.Workspace)
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
+
   - task: ExtractFiles@1
     displayName: 'Extract Terraform Artifacts'
     inputs:
@@ -42,6 +48,8 @@ steps:
       cleanDestinationFolder: false
       overwriteExistingFiles: true
 
+  - script: dir $(Pipeline.Workspace)
+  
   - task: TerraformCLI@0
     displayName: Terraform Init
     inputs:
