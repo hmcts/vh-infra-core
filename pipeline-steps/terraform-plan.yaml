@@ -151,6 +151,7 @@ steps:
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/core/terraform.tfstate'
 
   - ${{ if eq(parameters.destroyInfra, false) }}:
+    - script: mkdir $(Pipeline.Workspace)/plan
     - task: TerraformCLI@0
       displayName: Terraform Plan
       inputs:
@@ -170,6 +171,7 @@ steps:
           $(variableName)
 
   - ${{ if eq(parameters.destroyInfra, true) }}:
+    - script: mkdir $(Pipeline.Workspace)/plan
     - task: TerraformCLI@0
       displayName: Terraform Plan Destroy
       inputs:
