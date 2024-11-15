@@ -61,7 +61,7 @@ steps:
         azureSubscription: ${{ parameters.serviceConnection }}
         lockName: ${{ parameters.environment }}-lock
         resourceGroup: vh-infra-core-${{ parameters.environment }}
-
+  - script: dir $(Pipeline.Workspace)
   - task: TerraformCLI@0
     displayName: Terraform Apply
     inputs:
