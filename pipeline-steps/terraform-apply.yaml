@@ -65,6 +65,8 @@ steps:
         lockName: ${{ parameters.environment }}-lock
         resourceGroup: vh-infra-core-${{ parameters.environment }}
 
+  - script: dir $(System.DefaultWorkingDirectory)/vh-infra-core/terraform
+
   - task: TerraformCLI@0
     displayName: Terraform Apply
     inputs:

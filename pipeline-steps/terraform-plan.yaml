@@ -189,6 +189,8 @@ steps:
           -var-file $(System.DefaultWorkingDirectory)/vh-infra-core/config/terraform/${{ parameters.project }}/vars/$(env).tfvars
           $(variableName)
 
+  - script: dir $(System.DefaultWorkingDirectory)/vh-infra-core/terraform
+
   - task: ArchiveFiles@2
     displayName: 'Zip Terraform Files'
     inputs:
