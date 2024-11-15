@@ -34,22 +34,10 @@ steps:
     inputs:
       terraformVersion: ${{ parameters.tfversion }}
 
-  - script: dir $(Pipeline.Workspace)
-
   - task: DownloadPipelineArtifact@2
     inputs:
       artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
       targetPath: '$(Pipeline.Workspace)/plan'
-
-  # - task: ExtractFiles@1
-  #   displayName: 'Extract Terraform Artifacts'
-  #   inputs:
-  #     archiveFilePatterns: '$(Pipeline.Workspace)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.zip'
-  #     destinationFolder: '$(Pipeline.Workspace)/plan'
-  #     cleanDestinationFolder: false
-  #     overwriteExistingFiles: true
-
-  - script: dir $(Pipeline.Workspace)/plan
 
   - task: TerraformCLI@0
     displayName: Terraform Init
@@ -73,8 +61,6 @@ steps:
         azureSubscription: ${{ parameters.serviceConnection }}
         lockName: ${{ parameters.environment }}-lock
         resourceGroup: vh-infra-core-${{ parameters.environment }}
-
-  - script: dir $(System.DefaultWorkingDirectory)/vh-infra-core/terraform
 
   - task: TerraformCLI@0
     displayName: Terraform Apply
