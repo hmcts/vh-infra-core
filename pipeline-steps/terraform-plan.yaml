@@ -151,8 +151,8 @@ steps:
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/${{ lower(parameters.environment) }}/core/terraform.tfstate'
 
   - ${{ if eq(parameters.destroyInfra, false) }}:
-    - script: mkdir $(Pipeline.Workspace)/plan
-      displayName: Create Plan Directory
+    # - script: mkdir $(Pipeline.Workspace)/plan
+    #   displayName: Create Plan Directory
     - task: TerraformCLI@0
       displayName: Terraform Plan
       inputs:
@@ -161,7 +161,7 @@ steps:
         workingDirectory: $(System.DefaultWorkingDirectory)/vh-infra-core/terraform
         environmentServiceName: ${{ parameters.serviceConnection }}
         commandOptions: >
-          -out $(Pipeline.Workspace)/plan/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
+          -out $(Pipeline.Workspace)/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
           -var control_vault=$(controlKeyVault)
           -var environment=${{ lower(parameters.environment) }}
           -var project=${{ parameters.project }}
@@ -172,8 +172,8 @@ steps:
           $(variableName)
 
   - ${{ if eq(parameters.destroyInfra, true) }}:
-    - script: mkdir $(Pipeline.Workspace)/plan
-      displayName: Create Plan Directory
+    # - script: mkdir $(Pipeline.Workspace)/plan
+    #   displayName: Create Plan Directory
     - task: TerraformCLI@0
       displayName: Terraform Plan Destroy
       inputs:
@@ -183,7 +183,7 @@ steps:
         environmentServiceName: ${{ parameters.serviceConnection }}
         commandOptions: >
           -destroy
-          -out $(Pipeline.Workspace)/plan/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
+          -out $(Pipeline.Workspace)/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
           -var control_vault=$(controlKeyVault)
           -var environment=${{ lower(parameters.environment) }}
           -var project=${{ parameters.project }}
@@ -196,7 +196,7 @@ steps:
   - task: PublishPipelineArtifact@1
     displayName: 'Publish Terraform Artifacts'
     inputs:
-      targetPath: '$(Pipeline.Workspace)/plan/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
+      targetPath: '$(Pipeline.Workspace)/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
       publishLocation: pipeline
       artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
 

@@ -34,10 +34,10 @@ steps:
     inputs:
       terraformVersion: ${{ parameters.tfversion }}
 
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
-      targetPath: '$(Pipeline.Workspace)/plan'
+  # - task: DownloadPipelineArtifact@2
+  #   inputs:
+  #     artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
+  #     targetPath: '$(Pipeline.Workspace)/plan'
 
   - task: TerraformCLI@0
     displayName: Terraform Init
@@ -69,7 +69,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/vh-infra-core/terraform'
       environmentServiceName: ${{ parameters.serviceConnection }}
-      commandOptions: '-input=false $(Pipeline.Workspace)/plan/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
+      commandOptions: '-input=false $(Pipeline.Workspace)/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
 
   - template: templates\Azure\Storage\break-lease.yaml@templates
     parameters:
