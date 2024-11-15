@@ -179,7 +179,7 @@ steps:
         environmentServiceName: ${{ parameters.serviceConnection }}
         commandOptions: >
           -destroy
-          -out $(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
+          -out $(Pipeline.Workspace)/plan/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan
           -var control_vault=$(controlKeyVault)
           -var environment=${{ lower(parameters.environment) }}
           -var project=${{ parameters.project }}
@@ -189,23 +189,24 @@ steps:
           -var-file $(System.DefaultWorkingDirectory)/vh-infra-core/config/terraform/${{ parameters.project }}/vars/$(env).tfvars
           $(variableName)
 
-  - script: dir $(System.DefaultWorkingDirectory)/vh-infra-core/terraform
+  - script: dir $(Pipeline.Workspace)
+  - script: dir $(Pipeline.Workspace)/plan
 
-  - task: ArchiveFiles@2
-    displayName: 'Zip Terraform Files'
-    inputs:
-      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/vh-infra-core/terraform'
-      archiveType: zip
-      archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.zip'
+  # - task: ArchiveFiles@2
+  #   displayName: 'Zip Terraform Files'
+  #   inputs:
+  #     rootFolderOrFile: '$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
+  #     archiveType: zip
+  #     archiveFile: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.zip'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish Terraform Artifacts'
     inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.zip'
+      targetPath: '$(Pipeline.Workspace)/plan/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
       publishLocation: pipeline
       artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
 
-  - script: dir $(Pipeline.Workspace)
+  - script: dir $(Pipeline.Workspace)/plan
 
   - template: templates\Azure\Storage\break-lease.yaml@templates
     parameters:
