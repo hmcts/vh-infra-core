@@ -34,11 +34,6 @@ steps:
     inputs:
       terraformVersion: ${{ parameters.tfversion }}
 
-  # - task: DownloadPipelineArtifact@2
-  #   inputs:
-  #     artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
-  #     targetPath: '$(Pipeline.Workspace)/plan'
-
   - task: TerraformCLI@0
     displayName: Terraform Init
     inputs:
