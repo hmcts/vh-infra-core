@@ -1,28 +1,22 @@
 # vh-infra-core
 Repository for the Video Hearings Core Infrastructure. 
+# vh-setup
+Repository for the Video Hearings variable-to-secret mappings.
 
 ### Adding ADO Librarys to Key Vault
 
-#### Create a ADO Variable
+#### Create or Update an ADO Variable
 
-1. Go to the ADO Library and edit `vh-key-vault-vars` group
-2. Add a new variable with the value in the format of an array of object. Call the variable the name of the key vault plus `-secrets` <br/>
-**You must have at least two secrets to add in the object**
+1. Go to the [vh-setup](https://github.com/hmcts/vh-setup/tree/main/keyvault-mapping) repo and update the corresponding JSON secrets file.
+2. If this is for a new app, create a new file with JSON-formatted secret references, as per the existing apps, names as the corresponding Key Vault, suffixed with "-secrets".
 3. Format your value as
 ```json
 [
     {
-        "name": "NotifyConfiguration--secret-name", # Key Vault Secret
-        "value": "$(secret-test-ba)" # Key Vault Value
+        { "name": "NotifyConfiguration--ApiKey", "value": "$(notify-api-key)" }, # Key Vault Secret name, Key Vault Secret value
     }
 ]
 ```
-
-#### Updating a ADO Variable
-
-1. Go to the ADO Library and edit `vh-key-vault-vars` group
-2. Copy out the current value and format to JSON.
-3. Add your secret as per the above.
 
 #### Adding Library to the list
 
@@ -44,7 +38,7 @@ If there is a new Key Vault that is added to the Terraform then you can add a ne
 3. Add in the powershell at the bottom a new block. Replace the respective names below to your required name.
 
 ```powershell
-$sj_obj = $($env:scheduler_jobs_secrets) | ConvertFrom-Json
+$sj_obj = Get-Content .\vh-scheduler-jobs-secrets.json | ConvertFrom-Json
 $secrets_obj = $sj_obj
 if ($null -ne $secrets_obj) {
     $scheduler_jobs_secrets = [pscustomobject]@{

@@ -5,6 +5,11 @@ resources:
       name: hmcts/azure-devops-templates
       ref: refs/heads/master
       endpoint: hmcts
+    - repository: vh-setup
+      type: github
+      name: hmcts/vh-setup
+      ref: refs/heads/main
+      endpoint: hmcts
 
 pr: 
   branches:
@@ -59,16 +64,18 @@ stages:
     - job: Validate_Terraform_Code
       displayName: Validate Terraform Code
       steps:
+        - checkout: self
+        - checkout: vh-setup
         - template: pipeline-steps/terraform-validate.yaml
           parameters:
             tfversion: ${{ variables.tfversion }}
-
 
 ################################################
 # Terraform Plan & Apply. ######################
 
 - ${{ each env in parameters.environment }}:
-  - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
+  # - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
+  - ${{ if eq(env.name, 'Dev') }}:
     - template: pipeline-steps/terraform-plan-apply.yaml
       parameters:
         terraformVersion: ${{ variables.tfVersion }}

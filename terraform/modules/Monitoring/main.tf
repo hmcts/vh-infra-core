@@ -11,10 +11,10 @@ module "application_insights" {
   common_tags = var.tags
 }
 
-moved {
-  from = azurerm_application_insights.vh-infra-core
-  to   = module.application_insights.azurerm_application_insights.this
-}
+# moved {
+#   from = azurerm_application_insights.vh-infra-core
+#   to   = module.application_insights.azurerm_application_insights.this
+# }
 
 resource "azurerm_log_analytics_workspace" "loganalytics" {
   name                = var.resource_prefix

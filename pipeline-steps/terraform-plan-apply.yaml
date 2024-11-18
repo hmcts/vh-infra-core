@@ -55,8 +55,8 @@ stages:
   ${{ else }}:
     dependsOn: 'Terraform_Apply_${{ parameters.dependsOnEnv }}'
   variables:
-    - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/common.yaml
-    - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
+    - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/common.yaml
+    - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
   jobs: 
     - job: 'Terraform_Plan_${{ parameters.env }}'
       displayName: 'Terraform Plan ${{ parameters.env }}'
@@ -72,6 +72,8 @@ stages:
         # so that someone doesn't pick the wrong var in the dropdown
         # same comment as above ^^
       steps:
+      - checkout: self
+      - checkout: vh-setup
       - ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
         - template: vh-tenant-replacement.yaml
           parameters:
@@ -124,8 +126,8 @@ stages:
       # so that someone doesn't pick the wrong var in the dropdown
     # same comment as above ^^
     
-    - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/common.yaml
-    - template: ../config\pipeline\vars\${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
+    - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/common.yaml
+    - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
   jobs:
     - deployment: 'Terraform_Apply_${{ parameters.env }}'
       displayName: Terraform Apply ${{ parameters.env }}
@@ -135,7 +137,8 @@ stages:
         runOnce:
           deploy:
             steps:
-
+            - checkout: self
+            - checkout: vh-setup
             - template: terraform-apply.yaml
               parameters:
                 environment: ${{ parameters.env }}

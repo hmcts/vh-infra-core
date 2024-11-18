@@ -6,19 +6,19 @@ vh_client_secret = "replace_vh_client_secret"
 
 signalr_custom_domain_name = "signalr.dev.platform.hmcts.net"
 databases = {
-    vhvideo = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S2"
-    }
-    vhnotification = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
-    vhbookings = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
-    }
+  vhvideo = {
+    collation                 = "SQL_Latin1_General_CP1_CI_AS"
+    sku_name                  = "S2"
+    backup_storage_redundancy = "Geo"
+  }
+  vhnotification = {
+    collation                 = "SQL_Latin1_General_CP1_CI_AS"
+    sku_name                  = "S0"
+    backup_storage_redundancy = "Geo"
+  }
+  vhbookings = {
+    collation                 = "SQL_Latin1_General_CP1_CI_AS"
+    sku_name                  = "S0"
+    backup_storage_redundancy = "Local"
+  }
 }

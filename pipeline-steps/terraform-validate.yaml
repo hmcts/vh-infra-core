@@ -7,19 +7,19 @@ steps:
 #    parameters:
 #      serviceConnection: $(serviceConnection)
 #      environment: ${{ parameters.environment }}
-      
-  - task: TerraformInstaller@0
+
+  - task: TerraformInstaller@1
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
-          terraformVersion: ${{ parameters.tfversion }}
+      terraformVersion: ${{ parameters.tfversion }}
 
-  - task: TerraformCLI@0
+  - task: TerraformCLI@1
     displayName: 'Terraform init'
     inputs:
       command: 'init'
       commandOptions: '-backend=false -input=false'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/vh-infra-core/terraform'
 
   - template: templates/tests/terraform/allTests.yaml@templates
     parameters:
-      terraformPath: '$(System.DefaultWorkingDirectory)/terraform'
+      terraformPath: '$(System.DefaultWorkingDirectory)/vh-infra-core/terraform'

@@ -58,33 +58,29 @@ resource "azurerm_mssql_server_extended_auditing_policy" "vh-infra-core-sec-pol"
   server_id = azurerm_mssql_server.vh-infra-core.id
 }
 
-resource "azurerm_template_deployment" "sqlbackup" {
+resource "azurerm_resource_group_template_deployment" "sqlbackup" {
   count = terraform.workspace == "Prod" ? 1 : 0
 
   name                = "db-backup"
   resource_group_name = var.resource_group_name
+  template_content    = file("${path.module}/sql_rentention.json")
 
-  template_body = file("${path.module}/sql_rentention.json")
-
-  parameters = {
+  parameters_content = jsonencode({
     databaseServerName = azurerm_mssql_server.vh-infra-core.name
     database           = join(",", keys(var.databases))
-  }
+  })
 
   deployment_mode = "Incremental"
 }
 
-resource "azurerm_sql_database" "vh-infra-core" {
+resource "azurerm_mssql_database" "vh-infra-core" {
   for_each = var.databases
 
-  name                = each.key
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  server_name         = azurerm_mssql_server.vh-infra-core.name
-
-  edition                          = each.value.edition
-  collation                        = each.value.collation
-  requested_service_objective_name = each.value.performance_level
+  name                 = each.key
+  server_id            = azurerm_mssql_server.vh-infra-core.id
+  collation            = each.value.collation
+  sku_name             = each.value.sku_name
+  storage_account_type = each.value.backup_storage_redundancy
 
   tags = var.tags
 }

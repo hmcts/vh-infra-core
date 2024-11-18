@@ -45,19 +45,19 @@ variable "databases" {
   type = map(any)
   default = {
     vhbookings = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
+      collation                 = "SQL_Latin1_General_CP1_CI_AS"
+      sku_name                  = "S0"
+      backup_storage_redundancy = "Geo"
     }
     vhvideo = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
+      collation                 = "SQL_Latin1_General_CP1_CI_AS"
+      sku_name                  = "S0"
+      backup_storage_redundancy = "Geo"
     }
     vhnotification = {
-      collation         = "SQL_Latin1_General_CP1_CI_AS"
-      edition           = "Standard"
-      performance_level = "S0"
+      collation                 = "SQL_Latin1_General_CP1_CI_AS"
+      sku_name                  = "S0"
+      backup_storage_redundancy = "Geo"
     }
   }
 }

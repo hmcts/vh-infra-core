@@ -416,6 +416,10 @@ module "VHDataServices" {
   ]
 }
 
+# import {
+#   to = module.VHDataServices.azurerm_mssql_database.vh-infra-core
+#   id = module.VHDataServices.azurerm_mssql_database.vh-infra-core.id
+# }
 
 #--------------------------------------------------------------
 # VH - AppConfiguration
