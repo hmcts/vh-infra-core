@@ -194,7 +194,7 @@ steps:
     inputs:
       targetPath: '$(Pipeline.Workspace)/$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core.tfplan'
       publishLocation: pipeline
-      artifact: 'tfplan'
+      artifact: 'tfplan-$(Build.BuildId)-${{ parameters.project }}-${{ lower(parameters.environment) }}-core'
 
   - template: templates\Azure\Storage\break-lease.yaml@templates
     parameters:
