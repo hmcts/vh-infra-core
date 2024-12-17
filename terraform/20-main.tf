@@ -252,7 +252,7 @@ locals {
 }
 #tfsec:ignore:azure-storage-default-action-deny
 module "storage" {
-  source                          = "git::https://github.com/hmcts/cnp-module-storage-account?ref=master"
+  source                          = "git::https://github.com/hmcts/cnp-module-storage-account?ref=4.x"
   env                             = var.environment
   storage_account_name            = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
   common_tags                     = local.common_tags
