@@ -46,14 +46,14 @@ resource "azapi_resource" "signalr_custom_domain" {
   name      = var.custom_domain_name
   parent_id = azapi_resource.signalR.id
 
-  body = jsonencode({
+  body = {
     properties = {
       customCertificate = {
         id = azapi_resource.signalr_custom_certificate.id
       }
       domainName = var.custom_domain_name
     }
-  })
+  }
 
   ignore_casing = true
   
