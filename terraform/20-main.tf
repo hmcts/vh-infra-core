@@ -241,13 +241,18 @@ locals {
   containers = [{
     name        = local.elinks_container_name
     access_type = "private"
+    },
+    {
+      name        = local.perf_test_container_name
+      access_type = "private"
   }]
-  tables                = []
-  elinks_container_name = "elinks-people"
+  tables                   = []
+  elinks_container_name    = "elinks-people"
+  perf_test_container_name = "vh-perf-test-${var.environment}"
 }
 #tfsec:ignore:azure-storage-default-action-deny
 module "storage" {
-  source                          = "git::https://github.com/hmcts/cnp-module-storage-account?ref=master"
+  source                          = "git::https://github.com/hmcts/cnp-module-storage-account?ref=4.x"
   env                             = var.environment
   storage_account_name            = replace(lower("${local.std_prefix}${local.suffix}"), "-", "")
   common_tags                     = local.common_tags

@@ -15,7 +15,7 @@ resource "azapi_resource" "signalR" {
     identity_ids = var.managed_identities
   }
 
-  body = jsonencode({
+  body = {
     properties = {
       cors = {
         allowedOrigins = [
@@ -36,7 +36,7 @@ resource "azapi_resource" "signalR" {
       tier     = local.sku_type
     }
     kind = "SignalR"
-  })
+  }
 
   tags = var.tags
 }
@@ -46,14 +46,14 @@ resource "azapi_resource" "signalr_custom_domain" {
   name      = var.custom_domain_name
   parent_id = azapi_resource.signalR.id
 
-  body = jsonencode({
+  body = {
     properties = {
       customCertificate = {
         id = azapi_resource.signalr_custom_certificate.id
       }
       domainName = var.custom_domain_name
     }
-  })
+  }
 
   ignore_casing = true
   
@@ -67,12 +67,12 @@ resource "azapi_resource" "signalr_custom_certificate" {
   name      = var.key_vault_cert_name
   parent_id = azapi_resource.signalR.id
 
-  body = jsonencode({
+  body = {
     properties = {
       keyVaultBaseUri    = var.key_vault_uri
       keyVaultSecretName = var.key_vault_cert_name
     }
-  })
+  }
 }
 
 data "azurerm_signalr_service" "signalR" {

@@ -6,15 +6,14 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.81.0"
+      version = ">= 4"
     }
     azuread = {
       source  = "hashicorp/azuread"
       version = "~> 2.33.0"
     }
     azapi = {
-      source  = "Azure/azapi"
-      version = "1.2.0"
+      source = "Azure/azapi"
     }
   }
 }
@@ -24,7 +23,6 @@ provider "azapi" {
 
 provider "azurerm" {
   features {}
-  skip_provider_registration = true
 }
 
 provider "azurerm" {
@@ -40,9 +38,8 @@ provider "azurerm" {
 
 provider "azurerm" {
   features {}
-  alias                      = "private-endpoint-dns"
-  skip_provider_registration = "true"
-  subscription_id            = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
+  alias           = "private-endpoint-dns"
+  subscription_id = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
 }
 
 
@@ -64,11 +61,9 @@ provider "azuread" {
 
 provider "azurerm" {
   features {}
-  alias                      = "cvp"
-  subscription_id            = var.cvp_subscription_id
-  client_id                  = var.cvp_client_id
-  client_secret              = var.cvp_client_secret
-  tenant_id                  = data.azurerm_client_config.current.tenant_id
-  skip_provider_registration = true
-
+  alias           = "cvp"
+  subscription_id = var.cvp_subscription_id
+  client_id       = var.cvp_client_id
+  client_secret   = var.cvp_client_secret
+  tenant_id       = data.azurerm_client_config.current.tenant_id
 }

@@ -11,7 +11,7 @@ resource "azurerm_redis_cache" "redis_cache_standard" {
   family   = local.sku.family
   sku_name = local.sku.sku_name
 
-  enable_non_ssl_port = var.redis_cache_enable_non_ssl_port
+  non_ssl_port_enabled = var.redis_cache_enable_non_ssl_port
 
   redis_configuration {
     # Unable to set due to using Basic SKU for lower environments
