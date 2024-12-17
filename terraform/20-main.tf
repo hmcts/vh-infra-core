@@ -241,10 +241,10 @@ locals {
   containers = [{
     name        = local.elinks_container_name
     access_type = "private"
+  }
   {
     name        = local.perf_test_container_name
     access_type = "private"
-  }
   }]
   tables                = []
   elinks_container_name = "elinks-people"
