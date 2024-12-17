@@ -242,8 +242,13 @@ locals {
     name        = local.elinks_container_name
     access_type = "private"
   }]
+  containers = [{
+    name        = local.perf_test_container_name
+    access_type = "private"
+  }]
   tables                = []
   elinks_container_name = "elinks-people"
+  perf_test_container_name = "vh-perf-test-${var.environment}"
 }
 #tfsec:ignore:azure-storage-default-action-deny
 module "storage" {
