@@ -15,7 +15,7 @@ resource "azapi_resource" "signalR" {
     identity_ids = var.managed_identities
   }
 
-  body = jsonencode({
+  body = {
     properties = {
       cors = {
         allowedOrigins = [
@@ -36,7 +36,7 @@ resource "azapi_resource" "signalR" {
       tier     = local.sku_type
     }
     kind = "SignalR"
-  })
+  }
 
   tags = var.tags
 }
