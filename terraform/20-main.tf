@@ -248,7 +248,7 @@ locals {
   }]
   tables                   = []
   elinks_container_name    = "elinks-people"
-  perf_test_container_name = "vh-perf-test-${var.environment}"
+  perf_test_container_name = "vh-perf-${var.environment}"
 }
 #tfsec:ignore:azure-storage-default-action-deny
 module "storage" {
