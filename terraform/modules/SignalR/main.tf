@@ -67,12 +67,12 @@ resource "azapi_resource" "signalr_custom_certificate" {
   name      = var.key_vault_cert_name
   parent_id = azapi_resource.signalR.id
 
-  body = jsonencode({
+  body = {
     properties = {
       keyVaultBaseUri    = var.key_vault_uri
       keyVaultSecretName = var.key_vault_cert_name
     }
-  })
+  }
 }
 
 data "azurerm_signalr_service" "signalR" {
