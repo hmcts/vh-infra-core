@@ -117,11 +117,10 @@ resource "azurerm_servicebus_namespace" "vh-infra-core" {
 }
 
 resource "azurerm_servicebus_queue" "vh-infra-core" {
-  for_each     = var.queues
-  name         = each.key
-  namespace_id = azurerm_servicebus_namespace.vh-infra-core.id
-  #namespace_name      = azurerm_servicebus_namespace.vh-infra-core.name
-  partitioning_enabled   = false
+  for_each              = var.queues
+  name                  = each.key
+  namespace_id          = azurerm_servicebus_namespace.vh-infra-core.id
+  partitioning_enabled  = false
   lock_duration         = "PT5M"
   max_size_in_megabytes = 1024
 }
@@ -139,21 +138,21 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver" {
 }
 
 resource "azurerm_servicebus_namespace" "vh-infra-core-premium" {
-  count               = local.environment == "prod" ? 1 : 0
-  capacity            = 1
-  name                = "vh-infra-core-prod-premium"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  sku                 = "Premium"
-  tags                = var.tags
+  name                         = "${var.resource_prefix}-${local.environment}-premium"
+  count                        = local.environment == "prod" ? 1 : 0
+  sku                          = local.environment == "prod" ? "Premium" : "Standard"
+  capacity                     = local.environment == "prod" ? 1 : 0
+  premium_messaging_partitions = local.environment == "prod" ? 1 : null
+  resource_group_name          = var.resource_group_name
+  location                     = var.location
+  tags                         = var.tags
 }
 
 resource "azurerm_servicebus_queue" "vh-infra-core-premium" {
-  for_each     = local.environment == "prod" ? var.queues : {}
-  name         = each.key
-  namespace_id = "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/vh-infra-core-prod/providers/Microsoft.ServiceBus/namespaces/vh-infra-core-prod-premium"
-  #namespace_name      = azurerm_servicebus_namespace.vh-infra-core.name
-  partitioning_enabled   = false
+  for_each              = local.environment == "prod" ? var.queues : {}
+  name                  = each.key
+  namespace_id          = azurerm_servicebus_namespace.vh-infra-core-premium[0].id
+  partitioning_enabled  = false
   lock_duration         = "PT5M"
   max_size_in_megabytes = 1024
 }
@@ -164,3 +163,4 @@ resource "azurerm_role_assignment" "Azure_Service_Bus_Data_Receiver_premium" {
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = local.environment == "dev" ? "8e65726d-ee0f-46e7-9105-f97ab9f5e70b" : data.azurerm_user_assigned_identity.keda_mi[0].principal_id
 }
+
