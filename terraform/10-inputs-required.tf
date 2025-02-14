@@ -324,23 +324,6 @@ locals {
         var.environment == "stg" ? ["https://video.staging.hearings.reform.hmcts.net/home", "https://video.staging.hearings.reform.hmcts.net/logout"] : []
       )
     }
-    vh-test-web = {
-      available_to_other_tenants     = false
-      oauth2_allow_implicit_flow     = true
-      type                           = "webapp/api"
-      identifier_uris                = ["https://vh-test-web.${local.environment}.platform.hmcts.net"]
-      requested_access_token_version = 2
-      reply_urls_web                 = []
-      optional_claims                = []
-      reply_urls_spa = concat([
-        "https://vh-test-web.${local.environment}.platform.hmcts.net/home",
-        "https://vh-test-web.${local.environment}.platform.hmcts.net/logout",
-        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/home",
-        "https://vh-test-web.${local.environment}.hearings.reform.hmcts.net/logout"],
-        var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
-        var.environment == "stg" ? ["https://test.staging.hearings.reform.hmcts.net/home", "https://test.staging.hearings.reform.hmcts.net/logout"] : []
-      )
-    }
     vh-admin-web = {
       available_to_other_tenants     = false
       oauth2_allow_implicit_flow     = true
@@ -417,26 +400,6 @@ locals {
         "https://vh-notification-api.${local.environment}.hearings.reform.hmcts.net/logout"],
         var.environment == "dev" ? ["http://localhost/home", "http://localhost/logout"] : [],
       )
-    }
-    vh-test-api = {
-      available_to_other_tenants     = false
-      oauth2_allow_implicit_flow     = false
-      type                           = "webapp/api"
-      identifier_uris                = ["https://vh-test-api.${local.environment}.platform.hmcts.net"]
-      requested_access_token_version = 1
-      reply_urls_spa                 = []
-      optional_claims                = []
-      reply_urls_web = [
-        #"https://vh-test-api.${local.environment}.platform.hmcts.net",
-        #"https://vh-test-api.${local.environment}.platform.hmcts.net/login",
-        #"https://vh-test-api.${local.environment}.platform.hmcts.net/home",
-        #"https://vh-test-api.${local.environment}.hearings.reform.hmcts.net",
-        #"https://vh-test-api.${local.environment}.hearings.reform.hmcts.net/login",
-        #"https://vh-test-api.${local.environment}.hearings.reform.hmcts.net/home",
-        #"https://localhost/home",
-        #"https://localhost/login",
-        #"https://localhost",
-      ]
     }
     vh-video-api = {
       available_to_other_tenants     = false
@@ -548,8 +511,6 @@ locals {
     "vh-user-api"         = {}
     "vh-video-api"        = {}
     "vh-notification-api" = {}
-    "vh-test-web"         = {}
-    "vh-test-api"         = {}
 
   }
 
@@ -689,28 +650,6 @@ locals {
     }
     "vh-notification-api" = {
     }
-    "vh-test-web" = {
-      "Azure AD Graph" = {
-        id = "00000002-0000-0000-c000-000000000000"
-        access = {
-          UserRead = {
-            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
-            type = "Scope"
-          }
-        }
-      }
-    }
-    "vh-test-api" = {
-      "Azure AD Graph" = {
-        id = "00000002-0000-0000-c000-000000000000"
-        access = {
-          UserRead = {
-            id   = "311a71cc-e848-46a1-bdf8-97ff7156d8e6"
-            type = "Scope"
-          }
-        }
-      }
-    }
   }
 
   /*   
@@ -792,18 +731,6 @@ locals {
         id = "f3340a0e-2ea2-45c6-b19c-d601b8dac13f"
       }
     }
-    # Test Web
-    "vh-test-web" = {
-      "Video Hearing QA" = {
-        description = "Video Hearing QA"
-        is_enabled  = true
-        value       = "VHQA"
-        allowed_member_types = [
-          "User",
-        ],
-        id = "48207c0c-5239-482b-8400-6ff9ae02b1f3"
-      }
-    }
     # Admin Web
     "vh-admin-web" = {
       "Citizen" = {
@@ -845,7 +772,6 @@ locals {
       }
     }
     "vh-notification-api" = {}
-    "vh-test-api"         = {}
     "vh-video-api"        = {}
     "vh-bookings-api"     = {}
     "vh-user-api"         = {}
@@ -855,7 +781,6 @@ locals {
 
   app_directory_roles = {
     "vh-notification-api" = []
-    "vh-test-api"         = []
     "vh-video-api"        = []
     "vh-bookings-api"     = []
     "vh-user-api"         = ["729827e3-9c14-49f7-bb1b-9608f156bbb8"] # Helpdesk Admins
@@ -868,11 +793,9 @@ locals {
     vh-video-api        = "vh-video-api"
     vh-bookings-api     = "vh-bookings-api"
     vh-notification-api = "vh-notification-api"
-    vh-test-api         = "vh-test-api"
     vh-admin-web        = "vh-admin-web"
     vh-service-web      = "vh-service-web"
     vh-video-web        = "vh-video-web"
-    vh-test-web         = "vh-test-web"
     vh-booking-queue    = "vh-booking-queue"
     vh-scheduler-jobs   = "vh-scheduler-jobs"
   }

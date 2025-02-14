@@ -3,7 +3,6 @@ parameters:
     type: string
 
 variables:
-  - group: vh-test-api
   - group: vh-bookings-api
   - group: vh-key-vault-vars
   - group: vh-user-api
@@ -13,7 +12,6 @@ variables:
   - group: govuk-notify-${{ parameters.environment }}
   - group: vh-booking-queue-subscriber
   - group: vh-video-web-${{ parameters.environment }}
-  - group: vh-test-web
   - group: vh-user-groups
   - group: vh-video-api
   - group: QuickLinks_${{ parameters.environment }}
