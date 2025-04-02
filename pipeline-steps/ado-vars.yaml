@@ -9,7 +9,6 @@ variables:
   - group: vh-admin-web
   - group: vh-test-users
   - group: Saucelabs
-  - group: vh-booking-queue-subscriber
   - group: vh-video-web-${{ parameters.environment }}
   - group: vh-user-groups
   - group: vh-video-api
