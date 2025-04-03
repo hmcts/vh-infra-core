@@ -21,8 +21,10 @@ variables:
     - group: vh-scheduler-jobs-prod
     - group: govuk-notify-prod
     - group: vh-common-prod
+    - group: FeatureFlags_Prod
   - ${{ else }}:
     - group: vh-scheduler-jobs-non-prod
     - group: govuk-notify-dev
     - group: vh-common
+    - group: FeatureFlags_Non-Prod
   - group: DOM1_${{ parameters.environment }}
