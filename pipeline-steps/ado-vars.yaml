@@ -5,30 +5,24 @@ parameters:
 variables:
   - group: vh-bookings-api
   - group: vh-key-vault-vars
-  - group: vh-user-api
   - group: vh-admin-web
-  - group: vh-test-users
   - group: Saucelabs
-  - group: govuk-notify-${{ parameters.environment }}
-  - group: vh-booking-queue-subscriber
   - group: vh-video-web-${{ parameters.environment }}
   - group: vh-user-groups
   - group: vh-video-api
   - group: QuickLinks_${{ parameters.environment }}
   - group: QuickLinks_Common
-  - group: FeatureFlags_${{ parameters.environment }}
   - group: vh-video-web
   - group: Ejud_${{ parameters.environment }}
   - group: Dynatrace_${{ parameters.environment }}
   - group: KinlyConfiguration_${{ parameters.environment }}
   - group: VodafoneConfiguration_${{ parameters.environment }}
-  - group: vh-scheduler-jobs # Common values for vh-scheduler-jobs, prod/non-prod set below
   - ${{ if eq(parameters.environment, 'prod') }}:
     - group: vh-scheduler-jobs-prod
+    - group: govuk-notify-prod
+    - group: vh-common-prod
   - ${{ else }}:
     - group: vh-scheduler-jobs-non-prod
-  - ${{ if eq(parameters.environment, 'prod') }}:
-    - group: vh-common-${{ parameters.environment }}
-  - ${{ else }}:
+    - group: govuk-notify-dev
     - group: vh-common
   - group: DOM1_${{ parameters.environment }}
