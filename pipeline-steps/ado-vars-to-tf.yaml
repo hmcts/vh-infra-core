@@ -98,7 +98,7 @@ steps:
       }
       $all_secrets = $all_secrets | ConvertTo-Json  -Compress -Depth 100
       $all_secrets = $all_secrets -replace "`"", "\`""
-      #Write-Host $all_secrets 
+      Write-Host $all_secrets 
       Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true;issecret=true]$all_secrets");
     displayName: "Get Secrets from ADO Library to tf vars"
     name: ado_vars_to_tf
