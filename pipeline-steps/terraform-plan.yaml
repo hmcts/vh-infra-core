@@ -131,7 +131,7 @@ steps:
         EMAILS_DEV: $(emails_dev)
         EMAILS_DEVOPS: $(emails_devops)
   - pwsh: |
-      "kv_secrets: $(variableName)" | Out-File -FilePath  $(Build.ArtifactStagingDirectory)\DisplaySecret.txt
+      "kv_secrets: ${{ parameters.additional_tf_var }}" | Out-File -FilePath  $(Build.ArtifactStagingDirectory)\DisplaySecret.txt
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
