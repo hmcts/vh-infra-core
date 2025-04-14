@@ -4,7 +4,6 @@ parameters:
 
 variables:
   - group: vh-bookings-api
-  - group: vh-key-vault-vars
   - group: vh-admin-web
   - group: Saucelabs
   - group: vh-video-web-${{ parameters.environment }}
