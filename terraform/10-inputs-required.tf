@@ -816,20 +816,6 @@ variable "network_tenant_id" {
   type        = string
 }
 
-## Key Vault Secrets
-variable "kv_secrets" {
-  description = "Collection of Secrets to import into the Key Vaults"
-  type = list(object({
-    key_vault_name = string
-    secrets = list(object({
-      name  = string
-      value = string
-    }))
-  }))
-  default = []
-  #sensitive = true
-}
-
 
 # CVP Client Details
 variable "cvp_client_id" {
