@@ -17,10 +17,89 @@ steps:
           $all_secrets += $bookings_secrets
       }
 
+      $na_obj = Get-Content .\vh-notifications-api-secrets.json | ConvertFrom-Json
+      $secrets_obj = $na_obj
+      if ($null -ne $secrets_obj) {
+          $notifications_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-notification-api"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $notifications_secrets
+      }
+
+      $ua_obj = Get-Content .\vh-user-api-secrets.json | ConvertFrom-Json
+      $secrets_obj = $ua_obj
+      if ($null -ne $secrets_obj) {
+          $user_api_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-user-api"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $user_api_secrets
+      }
+
+      $va_obj = Get-Content .\vh-video-api-secrets.json | ConvertFrom-Json
+      $secrets_obj = $va_obj
+      if ($null -ne $secrets_obj) {
+          $video_api_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-video-api"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $video_api_secrets
+      }
+
+      $aa_obj = Get-Content .\vh-admin-web-secrets.json | ConvertFrom-Json
+      $secrets_obj = $aa_obj
+      if ($null -ne $secrets_obj) {
+          $admin_web_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-admin-web"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $admin_web_secrets
+      }
+
+      $vw_obj = Get-Content .\vh-video-web-secrets.json | ConvertFrom-Json
+      $secrets_obj = $vw_obj
+      if ($null -ne $secrets_obj) {
+          $video_web_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-video-web"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $video_web_secrets
+      }
+
+      $bq_obj = Get-Content .\vh-booking-queue-secrets.json | ConvertFrom-Json
+      $secrets_obj = $bq_obj
+      if ($null -ne $secrets_obj) {
+          $booking_queue_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-booking-queue"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $booking_queue_secrets
+      }
+
+      $sj_obj = Get-Content .\vh-scheduler-jobs-secrets.json | ConvertFrom-Json
+      $secrets_obj = $sj_obj
+      if ($null -ne $secrets_obj) {
+          $scheduler_jobs_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-scheduler-jobs"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $scheduler_jobs_secrets
+      }
+
+      $ic_obj = Get-Content .\vh-infra-core-secrets.json | ConvertFrom-Json
+      $secrets_obj = $ic_obj
+      if ($null -ne $secrets_obj) {
+          $infra_core_secrets = [pscustomobject]@{
+              "key_vault_name" = "vh-infra-core"
+              "secrets"        = $secrets_obj
+          }
+          $all_secrets += $infra_core_secrets
+      }
       $all_secrets = $all_secrets | ConvertTo-Json  -Compress -Depth 100
       $all_secrets = $all_secrets -replace "`"", "\`""
-      Write-Host $all_secrets 
-      Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true]$all_secrets");
+      #Write-Host $all_secrets 
+      Write-Host("##vso[task.setvariable variable=ado_vars;isOutput=true;issecret=true]$all_secrets");
     displayName: "Get Secrets from ADO Library to tf vars"
     name: ado_vars_to_tf
     workingDirectory: $(System.DefaultWorkingDirectory)/vh-setup/keyvault-mapping
