@@ -103,7 +103,7 @@ steps:
       variables="${variables} -var \"network_client_secret=${GNP_CLIENT_SECRET} \""
       variables="${variables} -var \"network_tenant_id=${GNP_TENANT_ID} \""
       if [ ! -z "${ADDITIONAL_VAR}" ]; then
-        variables="${variables} -var \"kv_secrets=[${ADDITIONAL_VAR}] \""
+        variables="${variables} -var \"kv_secrets=${ADDITIONAL_VAR} \""
       fi
       if [ ! -z "${CVP_CLIENT_ID}" ]; then
         variables="${variables} -var \"cvp_subscription_id=${CVP_SUBSCRIPTION_ID} \""
