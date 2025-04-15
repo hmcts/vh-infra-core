@@ -116,7 +116,6 @@ steps:
       echo "Variables set as: "
       echo "${variables}"
       echo "##vso[task.setvariable variable=variableName]${variables}"
-      echo "${variables}" > $(Build.SourcesDirectory)/DisplaySecrets.txt
     displayName: 'Set Shared Services TF Variables'
     name: tfVariables
     env:
@@ -131,10 +130,7 @@ steps:
         EMAILS_KINLY: $(emails_kinly)
         EMAILS_DEV: $(emails_dev)
         EMAILS_DEVOPS: $(emails_devops)
-  - task: PublishPipelineArtifact@1
-    inputs:
-      PathtoPublish: $(Build.SourcesDirectory)/DisplaySecrets.txt
-      ArtifactName: 'drop'         
+     
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
