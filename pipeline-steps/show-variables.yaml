@@ -121,7 +121,7 @@ steps:
         EMAILS_DEV: $(emails_dev)
         EMAILS_DEVOPS: $(emails_devops)
 
-  - task: PublishBuildArtifact@1
+  - task: PublishPipelineArtifact@1
     inputs:
       PathtoPublish: $(Build.SourcesDirectory)/
       ArtifactName: 'drop'   
