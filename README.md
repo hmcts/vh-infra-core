@@ -17,6 +17,7 @@ Repository for the Video Hearings variable-to-secret mappings.
     }
 ]
 ```
+4. IMPORTANT! Terraform plan will fail if there is no more than 1 secret in each mapping file, because it will be passed as an object rather than a list to the input variable.
 
 #### Adding Library to the list
 

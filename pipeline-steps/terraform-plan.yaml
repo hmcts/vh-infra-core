@@ -130,6 +130,7 @@ steps:
         EMAILS_KINLY: $(emails_kinly)
         EMAILS_DEV: $(emails_dev)
         EMAILS_DEVOPS: $(emails_devops)
+     
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
