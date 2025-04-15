@@ -91,8 +91,7 @@ stages:
           ${{ else }}:
             resourceGroupName: "vh-infra-core-${{variables.environment}}" 
           lockName: "${{variables.environment}}-lock"
-
-      - template: terraform-plan.yaml
+      - template: show-variables.yaml
         parameters:
           environment: ${{ variables.environment }}
           location: ${{ parameters.location }}
@@ -105,80 +104,95 @@ stages:
           tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
           activity_name: ${{ parameters.activityName  }}
           destroyInfra: ${{ parameters.destroyInfra }}
-          ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
-            additional_tf_var: $(ado_vars_to_tf.ado_vars)
+          additional_tf_var: $(ado_vars_to_tf.ado_vars)
 
-################################################
-# Terraform Apply Dev. #########################
+#       - template: terraform-plan.yaml
+#         parameters:
+#           environment: ${{ variables.environment }}
+#           location: ${{ parameters.location }}
+#           project: ${{ parameters.project }}
+#           product: ${{ parameters.product }}
+#           builtFrom: $(Build.Repository.Name)
+#           tfversion: ${{ parameters.terraformVersion }}
+#           serviceConnection: ${{ parameters.environmentServiceConnection }}
+#           tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
+#           tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
+#           activity_name: ${{ parameters.activityName  }}
+#           destroyInfra: ${{ parameters.destroyInfra }}
+#           ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
+#             additional_tf_var: $(ado_vars_to_tf.ado_vars)
 
-- stage: 'Terraform_Apply_${{ parameters.env }}'
-  displayName: 'Terraform Apply ${{ parameters.env }}'
-  dependsOn: 'Terraform_Plan_${{ parameters.env }}'
-  variables:
-    - name: environment
-      value: ${{ parameters.env }}
-    - group: vh-tenant-creds
-    - template: ado-vars.yaml
-      parameters:
-        environment: ${{ parameters.env }}
-      # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
-      # but it might be better to template the pipeline more and have a different pipeline file
-      # so that someone doesn't pick the wrong var in the dropdown
-    # same comment as above ^^
+# ################################################
+# # Terraform Apply Dev. #########################
+
+# - stage: 'Terraform_Apply_${{ parameters.env }}'
+#   displayName: 'Terraform Apply ${{ parameters.env }}'
+#   dependsOn: 'Terraform_Plan_${{ parameters.env }}'
+#   variables:
+#     - name: environment
+#       value: ${{ parameters.env }}
+#     - group: vh-tenant-creds
+#     - template: ado-vars.yaml
+#       parameters:
+#         environment: ${{ parameters.env }}
+#       # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+#       # but it might be better to template the pipeline more and have a different pipeline file
+#       # so that someone doesn't pick the wrong var in the dropdown
+#     # same comment as above ^^
     
-    - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/common.yaml
-    - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
-  jobs:
-    - deployment: 'Terraform_Apply_${{ parameters.env }}'
-      displayName: Terraform Apply ${{ parameters.env }}
-      continueOnError: false
-      environment: ${{ parameters.env }}
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-            - checkout: self
-            - checkout: vh-setup
-            - template: terraform-apply.yaml
-              parameters:
-                environment: ${{ parameters.env }}
-                location: ${{ parameters.location }}
-                project: ${{ parameters.project }}
-                product: ${{ parameters.product }}
-                builtFrom: $(Build.Repository.Name)
-                tfversion: ${{ parameters.terraformVersion }}
-                serviceConnection: ${{ parameters.environmentServiceConnection }}
-                tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
-                tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
-                activity_name: ${{ parameters.activityName  }}
-                ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
-                  additional_tf_var: $(ado_vars_to_tf.ado_vars)
+#     - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/common.yaml
+#     - template: ../config/pipeline/vars/${{ lower(parameters.product) }}/${{ lower(parameters.env) }}.yaml
+#   jobs:
+#     - deployment: 'Terraform_Apply_${{ parameters.env }}'
+#       displayName: Terraform Apply ${{ parameters.env }}
+#       continueOnError: false
+#       environment: ${{ parameters.env }}
+#       strategy:
+#         runOnce:
+#           deploy:
+#             steps:
+#             - checkout: self
+#             - checkout: vh-setup
+#             - template: terraform-apply.yaml
+#               parameters:
+#                 environment: ${{ parameters.env }}
+#                 location: ${{ parameters.location }}
+#                 project: ${{ parameters.project }}
+#                 product: ${{ parameters.product }}
+#                 builtFrom: $(Build.Repository.Name)
+#                 tfversion: ${{ parameters.terraformVersion }}
+#                 serviceConnection: ${{ parameters.environmentServiceConnection }}
+#                 tfStateResourceGroup: ${{ lower(parameters.tfStateResourceGroup) }}
+#                 tfStateStorageAccountName: ${{ lower(parameters.tfStateStorageAccountName) }}
+#                 activity_name: ${{ parameters.activityName  }}
+#                 ${{ if eq(parameters.activityName, 'Video_Hearing_Core') }}:
+#                   additional_tf_var: $(ado_vars_to_tf.ado_vars)
 
-    - ${{ if eq(parameters.destroyInfra, false) }}:
-      - job: SqlAccess
-        displayName: SQL AD Access 
-        dependsOn: Terraform_Apply_${{ parameters.env }}
-        steps:
-          - template: sql-access.yaml
-            parameters:
-              azureSubscription: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
-              sqlServerResourceGroup: vh-infra-core-${{ parameters.env }}
-              sqlServerName: vh-infra-core-${{ parameters.env }}
-              dbAccess:
-                - user: 'DTS SDS Developers'
-                  databaseNames: 
-                    - vhbookings
-                    - vhnotification
-                    - vhvideo
-                  roles:
-                    - db_datareader
-                    - ${{ if ne(lower(parameters.env), 'prod') }}:
-                      - db_datawriter
-                - ${{ if ne(lower(parameters.env), 'demo') }}:
-                  - user: mi-ingestion-adf-${{ lower(parameters.env)}}
-                    databaseNames:
-                      - vhbookings
-                      - vhnotification
-                      - vhvideo
-                    roles:
-                      - db_datareader
+#     - ${{ if eq(parameters.destroyInfra, false) }}:
+#       - job: SqlAccess
+#         displayName: SQL AD Access 
+#         dependsOn: Terraform_Apply_${{ parameters.env }}
+#         steps:
+#           - template: sql-access.yaml
+#             parameters:
+#               azureSubscription: DTS-SHAREDSERVICES-${{ parameters.env }}-Video Hearings
+#               sqlServerResourceGroup: vh-infra-core-${{ parameters.env }}
+#               sqlServerName: vh-infra-core-${{ parameters.env }}
+#               dbAccess:
+#                 - user: 'DTS SDS Developers'
+#                   databaseNames: 
+#                     - vhbookings
+#                     - vhnotification
+#                     - vhvideo
+#                   roles:
+#                     - db_datareader
+#                     - ${{ if ne(lower(parameters.env), 'prod') }}:
+#                       - db_datawriter
+#                 - ${{ if ne(lower(parameters.env), 'demo') }}:
+#                   - user: mi-ingestion-adf-${{ lower(parameters.env)}}
+#                     databaseNames:
+#                       - vhbookings
+#                       - vhnotification
+#                       - vhvideo
+#                     roles:
+#                       - db_datareader

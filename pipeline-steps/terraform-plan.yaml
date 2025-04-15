@@ -130,13 +130,6 @@ steps:
         EMAILS_KINLY: $(emails_kinly)
         EMAILS_DEV: $(emails_dev)
         EMAILS_DEVOPS: $(emails_devops)
-  # - pwsh: |
-  #     "kv_secrets: $(ado_vars_to_tf.ado_vars)" | Out-File -FilePath  $(Build.ArtifactStagingDirectory)\DisplaySecret.txt
-  # - task: PublishBuildArtifacts@1
-  #   inputs:
-  #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-  #     ArtifactName: 'drop'
-  #     publishLocation: 'Container'      
   - task: TerraformInstaller@0
     displayName: 'Install Terraform ${{ parameters.tfversion }}'
     inputs:
