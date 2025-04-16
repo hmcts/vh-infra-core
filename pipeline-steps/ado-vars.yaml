@@ -27,3 +27,4 @@ variables:
     - group: vh-common
     - group: FeatureFlags_Non-Prod
   - group: DOM1_${{ parameters.environment }}
+  - group: vh-user-api-tests
