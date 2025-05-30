@@ -1,9 +1,112 @@
+# resources:
+#   repositories:
+#     - repository: templates
+#       type: github
+#       name: hmcts/azure-devops-templates
+#       ref: refs/heads/master
+#       endpoint: hmcts
+#     - repository: vh-setup
+#       type: github
+#       name: hmcts/vh-setup
+#       ref: refs/heads/main
+#       endpoint: hmcts
+
+# pr: 
+#   branches:
+#     include:
+#     - master
+#   paths:
+#     exclude:
+#     - terraform/10-video-hearing-wowza/*
+
+# pool: 
+#   vmImage: ubuntu-22.04
+
+# trigger:
+#   branches:
+#     include:
+#     - master
+#   paths:
+#     exclude:
+#     - terraform/10-video-hearing-wowza/*
+
+# parameters:
+#   - name: environment
+#     type: object
+#     default:
+#     - name: Dev
+#       dependsOnEnv: ""
+#     - name: Demo
+#       dependsOnEnv: "Dev"
+#     - name: ITHC
+#       dependsOnEnv: "Dev"
+#     - name: Stg
+#       dependsOnEnv: "Dev"
+#     - name: Test
+#       dependsOnEnv: "Dev"
+#     - name: Prod
+#       dependsOnEnv: "Stg"
+
+# variables:
+# - name: tfVersion
+#   value: 1.6.6
+# - group: external
+# - name: azureLocation
+#   value: 'UK South'
+# stages:
+
+# ################################################
+# # Validate Infra Code. #########################
+
+# - stage: Validate_Terraform_Code
+#   displayName: 'Validate Terraform Code'
+#   jobs:
+#     - job: Validate_Terraform_Code
+#       displayName: Validate Terraform Code
+#       steps:
+#         - checkout: self
+#         - checkout: vh-setup
+#         - template: pipeline-steps/terraform-validate.yaml
+#           parameters:
+#             tfversion: ${{ variables.tfversion }}
+
+# ################################################
+# # Terraform Plan & Apply. ######################
+
+# - ${{ each env in parameters.environment }}:
+#   # - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
+#   - ${{ if eq(env.name, 'Dev') }}:
+#     - template: pipeline-steps/terraform-plan-apply.yaml
+#       parameters:
+#         terraformVersion: ${{ variables.tfVersion }}
+#         env: ${{ env.name }}
+#         location: ${{ variables.azureLocation }}
+#         environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
+#         product: vh
+#         activityName: Video_Hearing_Core
+#         tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
+#         tfStateStorageAccountName: vhinfracore${{ env.name }}tf
+#         dependsOnEnv: ${{ env.dependsOnEnv }}
+
+#   - ${{ elseif eq(variables['Build.SourceBranchName'], 'master') }}:
+#       - template: pipeline-steps/terraform-plan-apply.yaml
+#         parameters:
+#           terraformVersion: ${{ variables.tfVersion }}
+#           env: ${{ env.name }}
+#           location: ${{ variables.azureLocation }}
+#           environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
+#           product: vh
+#           activityName: Video_Hearing_Core
+#           tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
+#           tfStateStorageAccountName: vhinfracore${{ env.name }}tf
+#           dependsOnEnv: ${{ env.dependsOnEnv }}
+
 resources:
   repositories:
     - repository: templates
       type: github
       name: hmcts/azure-devops-templates
-      ref: refs/heads/master
+      ref: refs/heads/master 
       endpoint: hmcts
     - repository: vh-setup
       type: github
@@ -11,92 +114,42 @@ resources:
       ref: refs/heads/main
       endpoint: hmcts
 
-pr: 
-  branches:
-    include:
-    - master
-  paths:
-    exclude:
-    - terraform/10-video-hearing-wowza/*
+trigger: none
+pr: none
 
-pool: 
-  vmImage: ubuntu-22.04
-
-trigger:
-  branches:
-    include:
-    - master
-  paths:
-    exclude:
-    - terraform/10-video-hearing-wowza/*
+pool:
+  vmImage: 'ubuntu-latest'
 
 parameters:
-  - name: environment
-    type: object
-    default:
-    - name: Dev
-      dependsOnEnv: ""
-    - name: Demo
-      dependsOnEnv: "Dev"
-    - name: ITHC
-      dependsOnEnv: "Dev"
-    - name: Stg
-      dependsOnEnv: "Dev"
-    - name: Test
-      dependsOnEnv: "Dev"
-    - name: Prod
-      dependsOnEnv: "Stg"
+- name: environment
+  type: string
+  values:
+  - 'Dev'
+  - 'Stg'
+  - 'ITHC'
+  - 'Test'
+  - 'Demo'
+  - 'Prod'
 
 variables:
 - name: tfVersion
   value: 1.6.6
-- group: external
 - name: azureLocation
   value: 'UK South'
+- group: external
+
+################################################
+# Terraform Plan & Destroy. ####################
 stages:
-
-################################################
-# Validate Infra Code. #########################
-
-- stage: Validate_Terraform_Code
-  displayName: 'Validate Terraform Code'
-  jobs:
-    - job: Validate_Terraform_Code
-      displayName: Validate Terraform Code
-      steps:
-        - checkout: self
-        - checkout: vh-setup
-        - template: pipeline-steps/terraform-validate.yaml
-          parameters:
-            tfversion: ${{ variables.tfversion }}
-
-################################################
-# Terraform Plan & Apply. ######################
-
-- ${{ each env in parameters.environment }}:
-  # - ${{ if and( eq(env.name, 'Dev'), contains(variables['Build.SourceBranch'], 'refs/pull')) }}:
-  - ${{ if eq(env.name, 'Dev') }}:
-    - template: pipeline-steps/terraform-plan-apply.yaml
-      parameters:
-        terraformVersion: ${{ variables.tfVersion }}
-        env: ${{ env.name }}
-        location: ${{ variables.azureLocation }}
-        environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
-        product: vh
-        activityName: Video_Hearing_Core
-        tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
-        tfStateStorageAccountName: vhinfracore${{ env.name }}tf
-        dependsOnEnv: ${{ env.dependsOnEnv }}
-
-  - ${{ elseif eq(variables['Build.SourceBranchName'], 'master') }}:
-      - template: pipeline-steps/terraform-plan-apply.yaml
-        parameters:
-          terraformVersion: ${{ variables.tfVersion }}
-          env: ${{ env.name }}
-          location: ${{ variables.azureLocation }}
-          environmentServiceConnection: DTS-SHAREDSERVICES-${{ env.name }}-Video Hearings
-          product: vh
-          activityName: Video_Hearing_Core
-          tfStateResourceGroup: vh-infra-core-${{ env.name }}-tf
-          tfStateStorageAccountName: vhinfracore${{ env.name }}tf
-          dependsOnEnv: ${{ env.dependsOnEnv }}
+  - template: pipeline-steps/terraform-plan-apply.yaml
+    parameters:
+      terraformVersion: ${{ variables.tfVersion }}
+      env: ${{ parameters.environment }}
+      location: ${{ variables.azureLocation }}
+      environmentServiceConnection: DTS-SHAREDSERVICES-${{ parameters.environment }}-Video Hearings
+      product: vh
+      activityName: Video_Hearing_Core
+      tfStateResourceGroup: vh-infra-core-${{ parameters.environment }}-tf
+      tfStateStorageAccountName: vhinfracore${{ parameters.environment }}tf
+      dependsonEnv: '[]'
+      destroyInfra: true
