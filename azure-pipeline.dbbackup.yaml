@@ -76,7 +76,7 @@ jobs:
               resourceGroup="vh-infra-core-backups-${{ parameters.environment }}"  
               storageAccountName="vhinfracorebackups${{ parameters.environment }}"
               containerName="db-backup"
-              location="UK South"
+              location="uksouth"
 
               echo "Creating Resource Group $rgName"
               oid=$(oid)
