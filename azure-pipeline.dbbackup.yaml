@@ -51,6 +51,46 @@ jobs:
             lockName: ${{ parameters.environment }}-lock
             resourceGroup: vh-infra-core-${{ parameters.environment }}
 
+        - task: AzurePowerShell@5
+          displayName: 'Get Service Principal Details'
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            ScriptType: 'InlineScript'
+            Inline: |
+              $Context = Get-AzContext
+              $AzureDevOpsServicePrincipal = Get-AzADServicePrincipal -ApplicationId $Context.Account.Id
+              $ObjectId = $AzureDevOpsServicePrincipal.Id
+
+              echo "##vso[task.setvariable variable=oid]$ObjectId"
+            azurePowerShellVersion: 'LatestVersion'
+            pwsh: true 
+
+        - task: AzureCLI@2
+          displayName: 'Create Backups Resource Group'
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              rgName="vh-infra-core-backups-${{ parameters.environment }}"  
+              storageAccountName="vhinfracorebackups${{ parameters.environment }}"
+              containerName="db-backup"
+              location="UK South"
+
+              echo "Creating Resource Group $rgName"
+              oid=$(oid)
+              echo "Logged in as oid $oid"
+
+              echo "Creating Backups RG $rgName"
+              $containerName="${{ parameters.containerName }}"
+              $tags=@("application=video-hearings-service", "builtFrom=hmcts/vh-infra-core", "businessArea=Cross-Cutting", "criticality=High", "environment=${{ parameters.environment }}")
+              az group create --name $resourceGroup --location $location --tags $tags
+              az storage account create --name $storageAccountName --resource-group $resourceGroup `
+                                        --location $location --kind "StorageV2" --allow-blob-public-access "false" `
+                                        --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
+                                        
+              az storage container create --name $containerName --account-name $storageAccountName --auth-mode "login"
+
   - ${{each database in parameters.databases}}:
     - job: backup_${{database}}
       steps:
@@ -64,7 +104,7 @@ jobs:
               $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password -o tsv --query "value"
               $key=$(az storage account keys list -n vhinfracore${{ parameters.environment }} --resource-group vh-infra-core-${{parameters.environment}}  -o tsv --query "[0].value")
               $date = get-date -format "yyyy-MM-dd_hhmmss"
-              $uri = "https://vhinfracore${{parameters.environment}}.blob.core.windows.net/db-backup/${{database}}-$date.bacpac"
+              $uri = "https://vhinfracorebackups${{parameters.environment}}.blob.core.windows.net/db-backup/${{database}}-$date.bacpac"
               az sql server firewall-rule create -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services" --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
               az sql db export -p $password --admin-user $username --storage-key $key --storage-key-type StorageAccessKey --storage-uri $uri --name ${{database}} -g vh-infra-core-${{parameters.environment}} --server vh-infra-core-${{parameters.environment}}
               az sql server firewall-rule delete -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services"
