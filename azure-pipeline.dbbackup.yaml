@@ -73,7 +73,7 @@ jobs:
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
-              rgName="vh-infra-core-backups-${{ parameters.environment }}"  
+              resourceGroup="vh-infra-core-backups-${{ parameters.environment }}"  
               storageAccountName="vhinfracorebackups${{ parameters.environment }}"
               containerName="db-backup"
               location="UK South"
@@ -85,6 +85,7 @@ jobs:
               echo "Creating Backups RG $rgName"
               $tags="application=video-hearings-service builtFrom=hmcts/vh-infra-core businessArea=Cross-Cutting criticality=High environment=${{ parameters.environment }}"
               az group create --name $resourceGroup --location $location --tags $tags
+              echo "Creating Backups Storage $storageAccountName"
               az storage account create --name $storageAccountName --resource-group $resourceGroup \
                                         --location $location --kind "StorageV2" --allow-blob-public-access "false" \
                                         --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
