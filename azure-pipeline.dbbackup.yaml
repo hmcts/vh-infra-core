@@ -83,7 +83,6 @@ jobs:
               echo "Logged in as oid $oid"
 
               echo "Creating Backups RG $rgName"
-              $containerName=$containerName
               $tags=@("application=video-hearings-service", "builtFrom=hmcts/vh-infra-core", "businessArea=Cross-Cutting", "criticality=High", "environment=${{ parameters.environment }}")
               az group create --name $resourceGroup --location $location --tags $tags
               az storage account create --name $storageAccountName --resource-group $resourceGroup `
