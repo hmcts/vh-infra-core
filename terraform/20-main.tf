@@ -9,8 +9,16 @@ resource "azurerm_resource_group" "vh-infra-core" {
 }
 
 ###############################################################
-# Wowza RG Group Access #######################################
+# Core RG Group Access ########################################
 ###############################################################
+
+data "azuread_group" "dts_vh_contributors_prod" {
+  display_name = "DTS VH Contributor (env:prod)"
+}
+
+data "azuread_group" "dts_vh_storage_blob_data_readers_prod" {
+  display_name = "DTS VH Wowza Storage Blob Data Reader (env:prod)"
+}
 
 resource "azurerm_role_assignment" "dts_vh_contributors_prod_access" {
   count                = var.environment == "prod" ? 1 : 0
@@ -279,6 +287,13 @@ module "storage" {
   enable_change_feed              = true
   tables                          = local.tables
   containers                      = local.containers
+}
+
+resource "azurerm_role_assignment" "dts_vh_storage_blob_data_readers_prod_access" {
+  count                = var.environment == "prod" ? 1 : 0
+  scope                = module.storage.storageaccount_id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azuread_group.dts_vh_storage_blob_data_readers_prod.object_id
 }
 
 #--------------------------------------------------------------
