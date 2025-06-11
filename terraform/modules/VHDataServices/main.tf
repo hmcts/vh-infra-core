@@ -16,6 +16,15 @@ data "azuread_group" "directory_readers" {
   display_name     = "DTS Directory Readers"
   security_enabled = true
 }
+
+data "azuread_group" "dts_vh_contributors_prod" {
+  display_name = "DTS VH Contributor (env:prod)"
+}
+
+data "azuread_group" "dts_vh_storage_blob_data_readers_prod" {
+  display_name = "DTS VH Wowza Storage Blob Data Reader (env:prod)"
+}
+
 resource "azuread_group_member" "directory_readers" {
   group_object_id  = data.azuread_group.directory_readers.id
   member_object_id = azurerm_user_assigned_identity.sqluser.principal_id
