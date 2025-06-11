@@ -85,8 +85,8 @@ jobs:
               echo "Creating Backups RG $rgName"
               $tags="application=video-hearings-service builtFrom=hmcts/vh-infra-core businessArea=Cross-Cutting criticality=High environment=${{ parameters.environment }}"
               az group create --name $resourceGroup --location $location --tags $tags
-              az storage account create --name $storageAccountName --resource-group $resourceGroup `
-                                        --location $location --kind "StorageV2" --allow-blob-public-access "false" `
+              az storage account create --name $storageAccountName --resource-group $resourceGroup \
+                                        --location $location --kind "StorageV2" --allow-blob-public-access "false" \
                                         --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
                                         
               az storage container create --name $containerName --account-name $storageAccountName --auth-mode "login"
