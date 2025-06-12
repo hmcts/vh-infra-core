@@ -67,6 +67,19 @@ jobs:
             pwsh: true 
 
         - task: AzureCLI@2
+          displayName: 'Create Backups Key Vault'
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            scriptType: pscore
+            scriptLocation: inlineScript
+            inlineScript: |
+              $resourceGroup = "vh-infra-core-backups-${{ parameters.environment }}"
+              $keyVaultName = "vh-infra-core-backups-${{ parameters.environment }}"
+              $location = "uksouth"
+              Write-Host "Creating Key Vault $keyVaultName in $resourceGroup"
+              az keyvault create --name $keyVaultName --resource-group $resourceGroup --location $location
+
+        - task: AzureCLI@2
           displayName: 'Create Backups Resource Group'
           inputs:
             azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
