@@ -81,7 +81,6 @@ jobs:
               echo "Creating Resource Group $resourceGroup"
               tags="application=video-hearings-service builtFrom=hmcts/vh-infra-core businessArea=Cross-Cutting criticality=High environment=${{ parameters.environment }}"
               echo "Tags: $tags"
-              az group exists --name $resourceGroup && echo "Resource Group $resourceGroup already exists" || \
               az group create --name $resourceGroup --location $location --tags $tags
               echo "Creating Backups Storage $storageAccountName"
               az storage account create --name $storageAccountName --resource-group $resourceGroup --location $location --kind "StorageV2" --allow-blob-public-access "false" --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
