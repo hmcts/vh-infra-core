@@ -110,7 +110,7 @@ jobs:
             inlineScript: |
               $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username -o tsv --query "value"
               $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password -o tsv --query "value"
-              $key=$(az storage account keys list -n vhinfracore${{ parameters.environment }} --resource-group vh-infra-core-${{parameters.environment}}  -o tsv --query "[0].value")
+              $key=$(az storage account keys list -n vhinfracorebackups${{ parameters.environment }} --resource-group vh-infra-core-backups-${{parameters.environment}}  -o tsv --query "[0].value")
               $date = get-date -format "yyyy-MM-dd_hhmmss"
               $uri = "https://vhinfracorebackups${{parameters.environment}}.blob.core.windows.net/db-backup/${{database}}-$date.bacpac"
               az sql server firewall-rule create -g vh-infra-core-${{parameters.environment}} -s vh-infra-core-${{parameters.environment}} -n "allow-azure-services" --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
