@@ -50,96 +50,96 @@ jobs:
             addOrDelete: delete
             azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
             lockName: ${{ parameters.environment }}-lock
-            resourceGroup: vh-infra-core-backups-${{ parameters.environment }}
+            resourceGroup: vh-infra-core-${{ parameters.environment }}
 
-        # - task: AzurePowerShell@5
-        #   displayName: 'Get Service Principal Details'
-        #   inputs:
-        #     azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-        #     ScriptType: 'InlineScript'
-        #     Inline: |
-        #       $Context = Get-AzContext
-        #       $AzureDevOpsServicePrincipal = Get-AzADServicePrincipal -ApplicationId $Context.Account.Id
-        #       $ObjectId = $AzureDevOpsServicePrincipal.Id
+        - task: AzurePowerShell@5
+          displayName: 'Get Service Principal Details'
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            ScriptType: 'InlineScript'
+            Inline: |
+              $Context = Get-AzContext
+              $AzureDevOpsServicePrincipal = Get-AzADServicePrincipal -ApplicationId $Context.Account.Id
+              $ObjectId = $AzureDevOpsServicePrincipal.Id
 
-        #       echo "##vso[task.setvariable variable=oid]$ObjectId"
-        #     azurePowerShellVersion: 'LatestVersion'
-        #     pwsh: true 
+              echo "##vso[task.setvariable variable=oid]$ObjectId"
+            azurePowerShellVersion: 'LatestVersion'
+            pwsh: true 
 
-        # - task: AzureCLI@2
-        #   displayName: 'Create Backups Key Vault'
-        #   inputs:
-        #     azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-        #     scriptType: pscore
-        #     scriptLocation: inlineScript
-        #     inlineScript: |
-        #       echo "Fetching SQL credentials from Key Vault vh-infra-core-${{parameters.environment}}..."
-        #       $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username -o tsv --query "value"
-        #       $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password -o tsv --query "value"
-        #       $resourceGroup = "vh-infra-core-backups-${{ parameters.environment }}"
-        #       $keyVaultName = "vh-backups-${{ parameters.environment }}"
-        #       $location = "uksouth"
+        - task: AzureCLI@2
+          displayName: 'Create Backups Key Vault'
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            scriptType: pscore
+            scriptLocation: inlineScript
+            inlineScript: |
+              echo "Fetching SQL credentials from Key Vault vh-infra-core-${{parameters.environment}}..."
+              $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username -o tsv --query "value"
+              $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password -o tsv --query "value"
+              $resourceGroup = "vh-infra-core-backups-${{ parameters.environment }}"
+              $keyVaultName = "vh-backups-${{ parameters.environment }}"
+              $location = "uksouth"
 
-        #       echo "Creating Key Vault $keyVaultName in $resourceGroup..."
-        #       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location $location
+              echo "Creating Key Vault $keyVaultName in $resourceGroup..."
+              az keyvault create --name $keyVaultName --resource-group $resourceGroup --location $location
 
-        #       echo "Adding SQL credentials to Key Vault $keyVaultName..."
-        #       az keyvault secret set --vault-name $keyVaultName --name db-admin-username --value $username
-        #       az keyvault secret set --vault-name $keyVaultName --name db-admin-password --value $password
+              echo "Adding SQL credentials to Key Vault $keyVaultName..."
+              az keyvault secret set --vault-name $keyVaultName --name db-admin-username --value $username
+              az keyvault secret set --vault-name $keyVaultName --name db-admin-password --value $password
 
-        # - task: AzureCLI@2
-        #   displayName: 'Assign Key Vault Secrets User to Contributor Group'
-        #   inputs:
-        #     azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-        #     scriptType: pscore
-        #     scriptLocation: inlineScript
-        #     inlineScript: |
-        #       $keyVaultName = "vh-backups-${{ parameters.environment }}"
-        #       $groupName = "DTS VH Contributor (env:${{ parameters.environment }})"
-        #       $groupId = az ad group show --group "$groupName" --query id -o tsv
-        #       $keyVaultId = az keyvault show --name $keyVaultName --query id -o tsv
-        #       az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Key Vault Secrets User" --scope $keyVaultId
+        - task: AzureCLI@2
+          displayName: 'Assign Key Vault Secrets User to Contributor Group'
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            scriptType: pscore
+            scriptLocation: inlineScript
+            inlineScript: |
+              $keyVaultName = "vh-backups-${{ parameters.environment }}"
+              $groupName = "DTS VH Contributor (env:${{ parameters.environment }})"
+              $groupId = az ad group show --group "$groupName" --query id -o tsv
+              $keyVaultId = az keyvault show --name $keyVaultName --query id -o tsv
+              az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Key Vault Secrets User" --scope $keyVaultId
 
-        # - task: AzureCLI@2
-        #   displayName: 'Create Backups Resource Group'
-        #   inputs:
-        #     azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-        #     scriptType: pscore
-        #     scriptLocation: inlineScript
-        #     inlineScript: |
-        #       $resourceGroup="vh-infra-core-backups-${{ parameters.environment }}"  
-        #       $storageAccountName="vhinfracorebackups${{ parameters.environment }}"
-        #       $containerName="db-backup"
-        #       $location="uksouth"
-        #       switch -Wildcard ($resourceGroup)
-        #       {
-        #         '*dev*'  { $envTag = "development"}
-        #         '*prod*' { $envTag = "production"}
-        #         '*stg*'  { $envTag = "staging"}
-        #         '*ithc*' { $envTag = "ITHC"}
-        #         '*test*' { $envTag = "testing"}
-        #         '*sbox*' { $envTag = "sandbox"}
-        #         '*demo*' { $envTag = "demo"}
-        #       }
+        - task: AzureCLI@2
+          displayName: 'Create Backups Resource Group'
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            scriptType: pscore
+            scriptLocation: inlineScript
+            inlineScript: |
+              $resourceGroup="vh-infra-core-backups-${{ parameters.environment }}"  
+              $storageAccountName="vhinfracorebackups${{ parameters.environment }}"
+              $containerName="db-backup"
+              $location="uksouth"
+              switch -Wildcard ($resourceGroup)
+              {
+                '*dev*'  { $envTag = "development"}
+                '*prod*' { $envTag = "production"}
+                '*stg*'  { $envTag = "staging"}
+                '*ithc*' { $envTag = "ITHC"}
+                '*test*' { $envTag = "testing"}
+                '*sbox*' { $envTag = "sandbox"}
+                '*demo*' { $envTag = "demo"}
+              }
 
-        #       echo "Creating Resource Group $resourceGroup..."
-        #       $tags=@("application=video-hearings-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=$envTag")
-        #       echo "Tags: $tags"
-        #       az group create --name $resourceGroup --location $location --tags $tags
+              echo "Creating Resource Group $resourceGroup..."
+              $tags=@("application=video-hearings-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=$envTag")
+              echo "Tags: $tags"
+              az group create --name $resourceGroup --location $location --tags $tags
 
-        #       echo "Creating Backups Storage $storageAccountName..."
-        #       az storage account create --name $storageAccountName --resource-group $resourceGroup --location $location --kind "StorageV2" --allow-blob-public-access "false" --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
+              echo "Creating Backups Storage $storageAccountName..."
+              az storage account create --name $storageAccountName --resource-group $resourceGroup --location $location --kind "StorageV2" --allow-blob-public-access "false" --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
                                         
-        #       az storage container create --name $containerName --account-name $storageAccountName --auth-mode "login"
-        #       echo "Setting permissions for group to access Storage Account..."
-        #       $groupName = "DTS VH Wowza Storage Blob Data Reader (env:${{ parameters.environment }})"
-        #       $groupId = az ad group show --group "$groupName" --query id -o tsv
-        #       $storageAccountId = az storage account show --name $storageAccountName --resource-group $resourceGroup --query id -o tsv
-        #       az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Storage Blob Data Contributor" --scope $storageAccountId
+              az storage container create --name $containerName --account-name $storageAccountName --auth-mode "login"
+              echo "Setting permissions for group to access Storage Account..."
+              $groupName = "DTS VH Wowza Storage Blob Data Reader (env:${{ parameters.environment }})"
+              $groupId = az ad group show --group "$groupName" --query id -o tsv
+              $storageAccountId = az storage account show --name $storageAccountName --resource-group $resourceGroup --query id -o tsv
+              az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Storage Blob Data Contributor" --scope $storageAccountId
 
-        #       # $lockName = "${{ parameters.environment }}-backups-nodelock"
-        #       # Write-Host "Adding 'CanNotDelete' lock ($lockName) to $resourceGroup"
-        #       # az lock create --name $lockName --lock-type CanNotDelete --resource-group $resourceGroup
+              $lockName = "${{ parameters.environment }}-backups-nodelock"
+              Write-Host "Adding 'CanNotDelete' lock ($lockName) to $resourceGroup"
+              az lock create --name $lockName --lock-type CanNotDelete --resource-group $resourceGroup
 
   # - ${{each database in parameters.databases}}:
   #   - job: backup_${{database}}
