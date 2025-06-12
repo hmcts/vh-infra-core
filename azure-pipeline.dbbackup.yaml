@@ -73,15 +73,15 @@ jobs:
             scriptType: pscore
             scriptLocation: inlineScript
             inlineScript: |
-              echo "Fetching SQL credentials from Infra Core Key Vault..."
+              echo "Fetching SQL credentials from Key Vault vh-infra-core-${{parameters.environment}}..."
               $username = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-username -o tsv --query "value"
               $password = az keyvault secret show --vault-name vh-infra-core-${{parameters.environment}} -n db-admin-password -o tsv --query "value"
               $resourceGroup = "vh-infra-core-backups-${{ parameters.environment }}"
-              $keyVaultName = "vh-infra-core-backups-${{ parameters.environment }}"
+              $keyVaultName = "vh-backups-${{ parameters.environment }}"
               $location = "uksouth"
-              echo "Creating Key Vault $keyVaultName in $resourceGroup"
+              echo "Creating Key Vault $keyVaultName in $resourceGroup..."
               az keyvault create --name $keyVaultName --resource-group $resourceGroup --location $location
-              echo "Adding SQL credentials to Key Vault $keyVaultName"
+              echo "Adding SQL credentials to Key Vault $keyVaultName..."
               az keyvault secret set --vault-name $keyVaultName --name db-admin-username --value $username
               az keyvault secret set --vault-name $keyVaultName --name db-admin-password --value $password
 
@@ -107,15 +107,15 @@ jobs:
                 '*demo*' { $envTag = "demo"}
               }
 
-              echo "Creating Resource Group $resourceGroup"
+              echo "Creating Resource Group $resourceGroup..."
               $tags=@("application=video-hearings-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=$envTag")
               echo "Tags: $tags"
               az group create --name $resourceGroup --location $location --tags $tags
-              echo "Creating Backups Storage $storageAccountName"
+              echo "Creating Backups Storage $storageAccountName..."
               az storage account create --name $storageAccountName --resource-group $resourceGroup --location $location --kind "StorageV2" --allow-blob-public-access "false" --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
                                         
               az storage container create --name $containerName --account-name $storageAccountName --auth-mode "login"
-              echo "Setting permissions for group to access Storage Account"
+              echo "Setting permissions for group to access Storage Account..."
               $groupName = "DTS VH Wowza Storage Blob Data Reader (env:${{ parameters.environment }})"
               $groupId = az ad group show --group "$groupName" --query id -o tsv
               $storageAccountId = az storage account show --name $storageAccountName --resource-group $resourceGroup --query id -o tsv
