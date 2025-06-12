@@ -79,11 +79,26 @@ jobs:
               $resourceGroup = "vh-infra-core-backups-${{ parameters.environment }}"
               $keyVaultName = "vh-backups-${{ parameters.environment }}"
               $location = "uksouth"
+
               echo "Creating Key Vault $keyVaultName in $resourceGroup..."
               az keyvault create --name $keyVaultName --resource-group $resourceGroup --location $location
+
               echo "Adding SQL credentials to Key Vault $keyVaultName..."
               az keyvault secret set --vault-name $keyVaultName --name db-admin-username --value $username
               az keyvault secret set --vault-name $keyVaultName --name db-admin-password --value $password
+
+        - task: AzureCLI@2
+          displayName: 'Assign Key Vault Secrets User to Contributor Group'
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            scriptType: pscore
+            scriptLocation: inlineScript
+            inlineScript: |
+              $keyVaultName = "vh-backups-${{ parameters.environment }}"
+              $groupName = "DTS VH Contributor (env:${{ parameters.environment }})"
+              $groupId = az ad group show --group "$groupName" --query id -o tsv
+              $keyVaultId = az keyvault show --name $keyVaultName --query id -o tsv
+              az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Key Vault Secrets User" --scope $keyVaultId
 
         - task: AzureCLI@2
           displayName: 'Create Backups Resource Group'
@@ -111,6 +126,7 @@ jobs:
               $tags=@("application=video-hearings-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=$envTag")
               echo "Tags: $tags"
               az group create --name $resourceGroup --location $location --tags $tags
+
               echo "Creating Backups Storage $storageAccountName..."
               az storage account create --name $storageAccountName --resource-group $resourceGroup --location $location --kind "StorageV2" --allow-blob-public-access "false" --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
                                         
@@ -120,6 +136,10 @@ jobs:
               $groupId = az ad group show --group "$groupName" --query id -o tsv
               $storageAccountId = az storage account show --name $storageAccountName --resource-group $resourceGroup --query id -o tsv
               az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Storage Blob Data Contributor" --scope $storageAccountId
+
+              $lockName = "${{ parameters.environment }}-backups-nodelock"
+              Write-Host "Adding 'CanNotDelete' lock ($lockName) to $resourceGroup"
+              az lock create --name $lockName --lock-type CanNotDelete --resource-group $resourceGroup
 
   # - ${{each database in parameters.databases}}:
   #   - job: backup_${{database}}
