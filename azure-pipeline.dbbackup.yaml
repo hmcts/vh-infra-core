@@ -70,13 +70,13 @@ jobs:
           displayName: 'Create Backups Resource Group'
           inputs:
             azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-            scriptType: 'bash'
-            scriptLocation: 'inlineScript'
+            scriptType: pscore
+            scriptLocation: inlineScript
             inlineScript: |
-              resourceGroup="vh-infra-core-backups-${{ parameters.environment }}"  
-              storageAccountName="vhinfracorebackups${{ parameters.environment }}"
-              containerName="db-backup"
-              location="uksouth"
+              $resourceGroup="vh-infra-core-backups-${{ parameters.environment }}"  
+              $storageAccountName="vhinfracorebackups${{ parameters.environment }}"
+              $containerName="db-backup"
+              $location="uksouth"
               switch -Wildcard ($resourceGroup)
               {
                 '*dev*'  { $envTag = "development"}
@@ -89,7 +89,7 @@ jobs:
               }
 
               echo "Creating Resource Group $resourceGroup"
-              tags="application=video-hearings-service builtFrom=hmcts/vh-infra-core businessArea=Cross-Cutting criticality=High environment=$envTag"
+              $tags=@("application=video-hearings-service", "builtFrom=hmcts/vh-shared-infrastructure", "businessArea=Cross-Cutting", "criticality=High", "environment=$envTag")
               echo "Tags: $tags"
               az group create --name $resourceGroup --location $location --tags $tags
               echo "Creating Backups Storage $storageAccountName"
