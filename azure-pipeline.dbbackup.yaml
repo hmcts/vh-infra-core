@@ -50,7 +50,7 @@ jobs:
             addOrDelete: delete
             azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
             lockName: ${{ parameters.environment }}-lock
-            resourceGroup: vh-infra-core-${{ parameters.environment }}
+            resourceGroup: vh-infra-core-backups-${{ parameters.environment }}
 
         - task: AzurePowerShell@5
           displayName: 'Get Service Principal Details'
@@ -137,9 +137,9 @@ jobs:
               $storageAccountId = az storage account show --name $storageAccountName --resource-group $resourceGroup --query id -o tsv
               az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Storage Blob Data Contributor" --scope $storageAccountId
 
-              $lockName = "${{ parameters.environment }}-backups-nodelock"
-              Write-Host "Adding 'CanNotDelete' lock ($lockName) to $resourceGroup"
-              az lock create --name $lockName --lock-type CanNotDelete --resource-group $resourceGroup
+              # $lockName = "${{ parameters.environment }}-backups-nodelock"
+              # Write-Host "Adding 'CanNotDelete' lock ($lockName) to $resourceGroup"
+              # az lock create --name $lockName --lock-type CanNotDelete --resource-group $resourceGroup
 
   # - ${{each database in parameters.databases}}:
   #   - job: backup_${{database}}
