@@ -77,9 +77,19 @@ jobs:
               storageAccountName="vhinfracorebackups${{ parameters.environment }}"
               containerName="db-backup"
               location="uksouth"
+              switch -Wildcard ($resourceGroup)
+              {
+                '*dev*'  { $envTag = "development"}
+                '*prod*' { $envTag = "production"}
+                '*stg*'  { $envTag = "staging"}
+                '*ithc*' { $envTag = "ITHC"}
+                '*test*' { $envTag = "testing"}
+                '*sbox*' { $envTag = "sandbox"}
+                '*demo*' { $envTag = "demo"}
+              }
 
               echo "Creating Resource Group $resourceGroup"
-              tags="application=video-hearings-service builtFrom=hmcts/vh-infra-core businessArea=Cross-Cutting criticality=High environment=${{ parameters.environment }}"
+              tags="application=video-hearings-service builtFrom=hmcts/vh-infra-core businessArea=Cross-Cutting criticality=High environment=$envTag"
               echo "Tags: $tags"
               az group create --name $resourceGroup --location $location --tags $tags
               echo "Creating Backups Storage $storageAccountName"
