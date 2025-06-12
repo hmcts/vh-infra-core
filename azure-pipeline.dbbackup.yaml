@@ -96,6 +96,11 @@ jobs:
               az storage account create --name $storageAccountName --resource-group $resourceGroup --location $location --kind "StorageV2" --allow-blob-public-access "false" --tags $tags --sku "Standard_LRS" --min-tls-version "TLS1_2"
                                         
               az storage container create --name $containerName --account-name $storageAccountName --auth-mode "login"
+              echo "Setting permissions for group to access Storage Account"
+              $groupName = "DTS VH Wowza Storage Blob Data Reader (env:${{ parameters.environment }})"
+              $groupId = az ad group show --group "$groupName" --query id -o tsv
+              $storageAccountId = az storage account show --name $storageAccountName --resource-group $resourceGroup --query id -o tsv
+              az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Storage Blob Data Contributor" --scope $storageAccountId
 
   - ${{each database in parameters.databases}}:
     - job: backup_${{database}}
