@@ -93,7 +93,7 @@ jobs:
             scriptType: pscore
             scriptLocation: inlineScript
             inlineScript: |
-              $resourceGroupName = "vh-infra-wowza-${{ parameters.environment }}"
+              $resourceGroupName = "vh-infra-core-backups-${{ parameters.environment }}"
               $groupName = "DTS VH Contributor (env:${{ parameters.environment }})"
               $groupId = az ad group show --group "$groupName" --query id -o tsv
               $resourceGroupId = az group show --name $resourceGroupName --query id -o tsv
