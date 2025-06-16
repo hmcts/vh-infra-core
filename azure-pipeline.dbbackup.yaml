@@ -43,14 +43,13 @@ variables:
 jobs:
   - job: prepare_target_storage
     displayName: 'Prepare Target Storage for Backups'
-    ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
-      steps:
-        - template: templates/Azure/Common/unlock-lock.yaml@templates
-          parameters:
-            addOrDelete: delete
-            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-            lockName: ${{ parameters.environment }}-lock
-            resourceGroup: vh-infra-core-${{ parameters.environment }}
+    steps:
+      - template: templates/Azure/Common/unlock-lock.yaml@templates
+        parameters:
+          addOrDelete: delete
+          azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+          lockName: ${{ parameters.environment }}-lock
+          resourceGroup: vh-infra-core-${{ parameters.environment }}-tf
 
         # - task: AzurePowerShell@5
         #   displayName: 'Get Service Principal Details'
