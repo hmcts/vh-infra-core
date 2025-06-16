@@ -49,7 +49,7 @@ jobs:
           addOrDelete: delete
           azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
           lockName: ${{ parameters.environment }}-lock
-          resourceGroup: vh-infra-core-${{ parameters.environment }}-tf
+          resourceGroup: vh-perf-test-${{ parameters.environment }}
 
         # - task: AzurePowerShell@5
         #   displayName: 'Get Service Principal Details'
