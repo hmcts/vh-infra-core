@@ -45,12 +45,12 @@ jobs:
     displayName: 'Prepare Target Storage for Backups'
     ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
       steps:
-        # - template: templates/Azure/Common/unlock-lock.yaml@templates
-        #   parameters:
-        #     addOrDelete: delete
-        #     azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-        #     lockName: ${{ parameters.environment }}-lock
-        #     resourceGroup: vh-infra-core-${{ parameters.environment }}
+        - template: templates/Azure/Common/unlock-lock.yaml@templates
+          parameters:
+            addOrDelete: delete
+            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+            lockName: ${{ parameters.environment }}-lock
+            resourceGroup: vh-infra-core-${{ parameters.environment }}
 
         # - task: AzurePowerShell@5
         #   displayName: 'Get Service Principal Details'
@@ -86,18 +86,18 @@ jobs:
         #       echo "Adding SQL credentials to Key Vault $keyVaultName..."
         #       az keyvault secret set --vault-name $keyVaultName --name db-admin-username --value $username
         #       az keyvault secret set --vault-name $keyVaultName --name db-admin-password --value $password
-        - task: AzureCLI@2
-          displayName: 'Assign Contributor Role to Contributor Group'
-          inputs:
-            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-            scriptType: pscore
-            scriptLocation: inlineScript
-            inlineScript: |
-              $resourceGroupName = "vh-infra-core-${{ parameters.environment }}"
-              $groupName = "DTS VH Contributor (env:${{ parameters.environment }})"
-              $groupId = az ad group show --group "$groupName" --query id -o tsv
-              $resourceGroupId = az group show --name $resourceGroupName --query id -o tsv
-              az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Contributor" --scope $resourceGroupId
+        # - task: AzureCLI@2
+        #   displayName: 'Assign Contributor Role to Contributor Group'
+        #   inputs:
+        #     azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+        #     scriptType: pscore
+        #     scriptLocation: inlineScript
+        #     inlineScript: |
+        #       $resourceGroupName = "vh-infra-core-${{ parameters.environment }}"
+        #       $groupName = "DTS VH Contributor (env:${{ parameters.environment }})"
+        #       $groupId = az ad group show --group "$groupName" --query id -o tsv
+        #       $resourceGroupId = az group show --name $resourceGroupName --query id -o tsv
+        #       az role assignment create --assignee-object-id $groupId --assignee-principal-type Group --role "Contributor" --scope $resourceGroupId
 
         # - task: AzureCLI@2
         #   displayName: 'Assign Key Vault Secrets User to Contributor Group'
