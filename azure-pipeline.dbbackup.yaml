@@ -58,7 +58,7 @@ jobs:
           scriptType: pscore
           scriptLocation: inlineScript
           inlineScript: |
-            $resourceGroup = "vh-infra-core-${{ parameters.environment }}-tf"
+            $resourceGroup = "vh-infra-ado-${{ parameters.environment }}-rg"
             Write-Host "Deleting resource group $resourceGroup"
             az group delete --name $resourceGroup --yes --no-wait
    
