@@ -43,24 +43,24 @@ variables:
 jobs:
   - job: unlock_resource_lock
     # ${{ if or(eq(parameters.environment, 'Stg'), eq(parameters.environment, 'Prod')) }}:
-      steps:
-        # - template: templates/Azure/Common/unlock-lock.yaml@templates
-        #   parameters:
-        #     addOrDelete: delete
-        #     azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-        #     lockName: ${{ parameters.environment }}-lock
-        #     resourceGroup: vh-infra-core-${{ parameters.environment }}
+    steps:
+      # - template: templates/Azure/Common/unlock-lock.yaml@templates
+      #   parameters:
+      #     addOrDelete: delete
+      #     azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+      #     lockName: ${{ parameters.environment }}-lock
+      #     resourceGroup: vh-infra-core-${{ parameters.environment }}
 
-        - task: AzureCLI@2
-          displayName: 'Delete Resource Group'
-          inputs:
-            azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
-            scriptType: pscore
-            scriptLocation: inlineScript
-            inlineScript: |
-              $resourceGroup = "vh-infra-core-${{ parameters.environment }}-tf"
-              Write-Host "Deleting resource group $resourceGroup"
-              az group delete --name $resourceGroup --yes --no-wait
+      - task: AzureCLI@2
+        displayName: 'Delete Resource Group'
+        inputs:
+          azureSubscription: 'DTS-SHAREDSERVICES-${{parameters.environment}}-Video Hearings'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            $resourceGroup = "vh-infra-core-${{ parameters.environment }}-tf"
+            Write-Host "Deleting resource group $resourceGroup"
+            az group delete --name $resourceGroup --yes --no-wait
    
 
   # - ${{each database in parameters.databases}}:
